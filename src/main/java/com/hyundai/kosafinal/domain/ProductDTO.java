@@ -1,4 +1,4 @@
-package com.hyundai.kosafinal.entity;
+package com.hyundai.kosafinal.domain;
 
 public class Product {
     private String id;

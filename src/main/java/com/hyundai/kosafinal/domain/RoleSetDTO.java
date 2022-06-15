@@ -1,6 +1,6 @@
-package com.hyundai.kosafinal.entity;
+package com.hyundai.kosafinal.domain;
 
-public class RoleSet {
+public class RoleSetDTO {
     private String roleSet;
     private String userEmail;
 

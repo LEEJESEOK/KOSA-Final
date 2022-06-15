@@ -1,4 +1,4 @@
-package com.hyundai.kosafinal.entity;
+package com.hyundai.kosafinal.domain;
 
 import java.util.Date;
 
