@@ -1,6 +1,6 @@
 package com.hyundai.kosafinal.domain;
 
-public class OrderItem {
+public class OrderItemDTO {
     private String id;
     private String pid;
     private String psize;

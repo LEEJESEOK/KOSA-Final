@@ -2,7 +2,7 @@ package com.hyundai.kosafinal.domain;
 
 import java.util.Date;
 
-public class User {
+public class UserDTO {
     private String email;
     private String password;
     private String name;

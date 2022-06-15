@@ -2,7 +2,7 @@ package com.hyundai.kosafinal.domain;
 
 import java.util.Date;
 
-public class MypageReview {
+public class MypageReviewDTO {
     private int id;
     private String title;
     private String content;
