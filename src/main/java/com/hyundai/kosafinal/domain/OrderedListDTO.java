@@ -2,7 +2,7 @@ package com.hyundai.kosafinal.domain;
 
 import java.util.Date;
 
-public class OrderedList {
+public class OrderedListDTO {
     private String id;
     private String zipcode;
     private String address1;

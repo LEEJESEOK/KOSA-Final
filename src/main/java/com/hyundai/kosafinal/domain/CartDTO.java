@@ -1,6 +1,6 @@
 package com.hyundai.kosafinal.domain;
 
-public class Cart {
+public class CartDTO {
     private String pid;
     private String pcolor;
     private String psize;

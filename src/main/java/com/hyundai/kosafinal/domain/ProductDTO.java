@@ -1,6 +1,6 @@
 package com.hyundai.kosafinal.domain;
 
-public class Product {
+public class ProductDTO {
     private String id;
     private String name;
     private String detail;

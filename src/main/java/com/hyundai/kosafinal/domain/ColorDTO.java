@@ -1,6 +1,6 @@
 package com.hyundai.kosafinal.domain;
 
-public class Color {
+public class ColorDTO {
     private String id;
     private String colorName;
     private int r;
