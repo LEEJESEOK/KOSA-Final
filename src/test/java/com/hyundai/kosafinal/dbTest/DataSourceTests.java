@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
@@ -16,13 +17,42 @@ public class DataSourceTests {
     }
   }//end static
 
+  @Value("${spring.db1.datasource.url}")
+  String productURL;
+
+  @Value("${spring.db2.datasource.url}")
+  String userOrderURL;
+
+  @Value("${spring.db1.datasource.username}")
+  String productUsername;
+
+  @Value("${spring.db2.datasource.username}")
+  String userOrderUsername;
+
+  @Value("${spring.db1.datasource.password}")
+  String productPassword;
+
+  @Value("${spring.db2.datasource.password}")
+  String userOrderPassword;
+
   @Test
-  public void TestConnection() {
+  public void product_TestConnection() {
     try {
       Connection con =
         DriverManager.getConnection(
-          "jdbc:oracle:thin:@finaldb_high?TNS_ADMIN=//Users//yujihun/Documents//wallet//Wallet_finaldb"
-          ,"kosafinal","Guseo4rlghkdlxld");
+          productURL, productUsername, productPassword);
+      System.out.println("con: " + con);
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }//end try
+  }//end test
+
+  @Test
+  public void userOrder_TestConnection() {
+    try {
+      Connection con =
+        DriverManager.getConnection(
+          userOrderURL, userOrderUsername, userOrderPassword);
       System.out.println("con: " + con);
     } catch (SQLException e) {
       System.out.println(e.getMessage());
