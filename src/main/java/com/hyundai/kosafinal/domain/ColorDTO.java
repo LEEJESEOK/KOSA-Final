@@ -1,10 +1,9 @@
 package com.hyundai.kosafinal.domain;
 
+import lombok.Data;
+
+@Data
 public class ColorDTO {
     private String id;
     private String colorName;
-    private int r;
-    private int g;
-    private int b;
-
 }

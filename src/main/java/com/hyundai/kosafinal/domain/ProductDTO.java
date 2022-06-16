@@ -1,11 +1,14 @@
 package com.hyundai.kosafinal.domain;
 
+import lombok.Data;
+
+@Data
 public class ProductDTO {
     private String id;
+    private String size;
+    private String colorId;
     private String name;
     private String detail;
-    private String colorId;
-    private String size;
     private String large;
     private String medium;
     private String small;
@@ -17,5 +20,5 @@ public class ProductDTO {
     private int price;
     private String brand;
     private int categoryCategoryId;
-
+    private String colorchipUri;
 }
