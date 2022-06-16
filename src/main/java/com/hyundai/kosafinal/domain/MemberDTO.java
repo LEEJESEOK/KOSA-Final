@@ -1,8 +1,10 @@
 package com.hyundai.kosafinal.domain;
 
+import lombok.Data;
 import java.util.Date;
 
-public class UserDTO {
+@Data
+public class MemberDTO {
     private String email;
     private String password;
     private String name;
@@ -19,5 +21,4 @@ public class UserDTO {
     private Date signUpDate;
     private int status;
     private int gradeId;
-
 }

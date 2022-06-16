@@ -1,5 +1,8 @@
 package com.hyundai.kosafinal.domain;
 
+import lombok.Data;
+
+@Data
 public class CartDTO {
     private String pid;
     private String pcolor;

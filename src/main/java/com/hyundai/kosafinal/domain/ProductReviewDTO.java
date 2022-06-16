@@ -1,10 +1,13 @@
 package com.hyundai.kosafinal.domain;
 
+import lombok.Data;
+
 import java.util.Date;
 
+@Data
 public class ProductReviewDTO {
     private int id;
-    private Date date;
+    private Date editDate;
     private int rate;
     private String title;
     private String content;

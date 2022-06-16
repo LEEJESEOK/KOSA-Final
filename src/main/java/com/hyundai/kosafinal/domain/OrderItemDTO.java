@@ -1,5 +1,8 @@
 package com.hyundai.kosafinal.domain;
 
+import lombok.Data;
+
+@Data
 public class OrderItemDTO {
     private String id;
     private String pid;
