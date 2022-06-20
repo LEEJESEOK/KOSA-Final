@@ -3,12 +3,13 @@
 
 <configuration>
 
-  <settings>
-    <setting name="jdbcTypeForNull" value="NULL"/>
-  </settings>
+    <settings>
+        <setting name="jdbcTypeForNull" value="NULL"/>
+    </settings>
 
-  <typeAliases>
-  </typeAliases>
+    <typeAliases>
+        <typeAlias type="com.hyundai.kosafinal.domain.ProductDTO" alias="Product"/>
+    </typeAliases>
 </configuration>
 
 

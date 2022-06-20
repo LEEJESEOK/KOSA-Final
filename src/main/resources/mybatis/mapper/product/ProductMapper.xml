@@ -1,7 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.hyundai.kosafinal.mapper.product.ProductMapper">
 
+    <resultMap id="ProductMap" type="com.hyundai.kosafinal.domain.ProductDTO">
+        <result property="id" column="ID"/>
+        <result property="name" column="NAME"/>
+        <result property="brand" column="BRAND"/>
+        <result property="price" column="PRICE"/>
+        <result property="categoryLarge" column="CATEGORY_LARGE"/>
+        <result property="categoryMedium" column="CATEGORY_MEDIUM"/>
+        <result property="categorySmall" column="CATEGORY_SMALL"/>
+    </resultMap>
+    <select id="selectSimpleProductListByCategory" resultMap="ProductMap">
+        <![CDATA[
+        SELECT *
+        FROM sf_display_product_list_by_category(#{large}, #{medium}, #{small})
+        ]]>
+    </select>
+    <select id="selectSimpleProductListByCategoryWithPage" resultMap="ProductMap">
+
+    </select>
+
+    <!--    <select id="selectSimpleProductListById" resultMap="productMap">-->
+    <!--        SELECT ID, NAME, BRAND, PRICE-->
+    <!--        FROM VIEW_SIMPLE_PRODUCT V-->
+    <!--        WHERE V.ID LIKE '%'||#{ID}||'%';-->
+    <!--    </select>-->
+
+    <!--    <select id="selectSimpleProductListByName" resultMap="productMap">-->
+    <!--        select ID, NAME, BRAND, PRICE-->
+    <!--        from (select row_number() over (partition by ID ORDER BY "SIZE", COLOR_ID, CATEGORY_LARGE, CATEGORY_MEDIUM, CATEGORY_SMALL) as row_num, P.ID,-->
+    <!--                     P.NAME,-->
+    <!--                     P.BRAND,-->
+    <!--                     P.CATEGORY_LARGE,-->
+    <!--                     P.CATEGORY_MEDIUM,-->
+    <!--                     P.CATEGORY_SMALL,-->
+    <!--                     P.PRICE-->
+    <!--              from PRODUCT P)-->
+    <!--        where row_num = 1-->
+    <!--          and NAME = #{name}-->
+    <!--    </select>-->
+
+
+    <!--    <select id="selectSimpleProductListByCategory" resultMap="productMap">-->
+    <!--        select ID, NAME, BRAND, PRICE-->
+    <!--        from (select row_number() over (partition by ID ORDER BY "SIZE", COLOR_ID, CATEGORY_LARGE, CATEGORY_MEDIUM, CATEGORY_SMALL) as row_num, P.ID,-->
+    <!--                     P.NAME,-->
+    <!--                     P.BRAND,-->
+    <!--                     P.CATEGORY_LARGE,-->
+    <!--                     P.CATEGORY_MEDIUM,-->
+    <!--                     P.CATEGORY_SMALL,-->
+    <!--                     P.PRICE-->
+    <!--              from PRODUCT P)-->
+    <!--        where row_num = 1-->
+    <!--          and CATEGORY_LARGE = #{}-->
+    <!--          and CATEGORY_MEDIUM = #{}-->
+    <!--          and CATEGORY_SMALL = #{}-->
+    <!--    </select>-->
 </mapper>
