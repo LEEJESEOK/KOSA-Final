@@ -1,14 +1,14 @@
-<div id="headerWrap" th:fragment="header">
+<div id="headerWrap" th:fragment="header_logo">
     <div class="header header_fixed header_main1903">
         <script type="text/javascript" th:src="@{/js/SsoAjax.js}"></script>
 
         <script type="text/javascript">
-            $(document).ready(function() {
+            $(document).ready(function () {
 
-                $('.gnb_nav.hscene1906 .cate_m .hscene').mouseover(function(){ // 툴팁
+                $('.gnb_nav.hscene1906 .cate_m .hscene').mouseover(function () { // 툴팁
                     $('.gnb_nav.hscene1906 .cate_m li .delch_box').addClass('on');
                 });
-                $('.gnb_nav.hscene1906 .cate_m .hscene').mouseout(function(){
+                $('.gnb_nav.hscene1906 .cate_m .hscene').mouseout(function () {
                     $('.gnb_nav.hscene1906 .cate_m li .delch_box').removeClass('on');
                 });
 
@@ -16,65 +16,65 @@
                 var startDate = new Date('2018/05/29 00:00:01'), endDate = new Date('2018/06/17 23:59:59');
                 if (todayDate.getTime() >= startDate.getTime() && todayDate.getTime() <= endDate.getTime()) {
                     $("#athome_header_event").show();
-                }else{
+                } else {
                     $("#athome_header_org").show();
                 }
 
                 //IE8버젼 체크
-                if(getCookie("ie8AlertHideYN") != "on") {
-                    if(navigator.appVersion.indexOf('MSIE 8.0') >= 0 || navigator.appVersion.indexOf('Trident/4.0') >= 0){
+                if (getCookie("ie8AlertHideYN") != "on") {
+                    if (navigator.appVersion.indexOf('MSIE 8.0') >= 0 || navigator.appVersion.indexOf('Trident/4.0') >= 0) {
                         var html = "<div style='position:relative; width: 100%; height: 30px;'><div style='position:fixed;width:100%;background:#ffffbc none repeat scroll 0% 0%; text-align: center; z-index: 999; line-height: 30px;'>";
                         html += "Thehandsome.com은 인터넷 익스플로러 10 이상에 최적화되어 있습니다.";
                         html += " <a href='http://windows.microsoft.com/ko-kr/windows/downloads'><strong>[브라우저 업데이트 바로가기]</strong></a>";
                         html += "<a href='#' onclick='ie8AlertHide();' style='display:block;float:right;padding-right:10px'>X</a></div></div>";
-                        $(".loading_bar").before("<div align='center' id='alertIE8'>"+html+"</div>");
+                        $(".loading_bar").before("<div align='center' id='alertIE8'>" + html + "</div>");
                     }
                 }
 
                 settingCookie = getCookie("searchSaveYN");
 
-                if(settingCookie == ""){
+                if (settingCookie == "") {
                     setCookie("searchSaveYN", "on", 365);
                 }
 
                 $('#gnbsearch').click(function () {
                     var searchwords = $('#gnbsearchwords').val();
-                    searchwords = searchwords.replace(/(^\s*)|(\s*$)/g,"");
+                    searchwords = searchwords.replace(/(^\s*)|(\s*$)/g, "");
 
-                    if(searchwords!=""){
-                        location.href="/ko/hssearch?searchwords="+searchwords;
-                    }else{
+                    if (searchwords != "") {
+                        location.href = "/ko/hssearch?searchwords=" + searchwords;
+                    } else {
                         $('#gnbsearchwords').val("");
                         alert("검색어를 입력해주세요.");
                     }
                 });
 
                 $('.btn_svclose').click(function () {
-                    settingCookie	= getCookie("searchSaveYN");
-                    if($(this).children('span').text() == "끄기"){
+                    settingCookie = getCookie("searchSaveYN");
+                    if ($(this).children('span').text() == "끄기") {
                         $(this).children('span').text("저장");
                     } else {
                         $(this).children('span').text("끄기");
                     }
-                    if(settingCookie == "off"){
-                        $(this).children('span').attr("save","on");
+                    if (settingCookie == "off") {
+                        $(this).children('span').attr("save", "on");
                         setCookie("searchSaveYN", "on", 365);
                     } else {
-                        $(this).children('span').attr("save","off");
+                        $(this).children('span').attr("save", "off");
                         setCookie("searchSaveYN", "off", 365);
                     }
 
                 });
-                $('.favBtn').click(function(){
+                $('.favBtn').click(function () {
 
                     words = $(this).text();
-                    location.href="/ko/hssearch?searchwords="+words;
+                    location.href = "/ko/hssearch?searchwords=" + words;
 
                 });
-                $('.newlyBtn').click(function(){
+                $('.newlyBtn').click(function () {
 
                     words = $(this).text();
-                    location.href="/ko/hssearch?searchwords="+words;
+                    location.href = "/ko/hssearch?searchwords=" + words;
 
                 });
 
@@ -90,25 +90,25 @@
                 var sw4_date = sw4 != "" ? sw4.split("_")[1] : "";
                 var sw5_date = sw5 != "" ? sw5.split("_")[1] : "";
 
-                var arr = [sw1,sw2,sw3,sw4,sw5];
-                var arr_date = [sw1_date,sw2_date,sw3_date,sw4_date,sw5_date];
+                var arr = [sw1, sw2, sw3, sw4, sw5];
+                var arr_date = [sw1_date, sw2_date, sw3_date, sw4_date, sw5_date];
 
                 arr_date.sort(compStringReverse);
 
-                for(var i=0; i<arr_date.length;i++){
-                    for(var j=0; j<arr.length;j++){
-                        if(arr_date[i] != ""){
-                            if(arr[j].indexOf(arr_date[i]) > 0){
-                                $("#searchWord"+(i+1)).text(arr[j].split("_")[0]);
-                                $('.searchWord'+(i+1)).css("display", "block");
+                for (var i = 0; i < arr_date.length; i++) {
+                    for (var j = 0; j < arr.length; j++) {
+                        if (arr_date[i] != "") {
+                            if (arr[j].indexOf(arr_date[i]) > 0) {
+                                $("#searchWord" + (i + 1)).text(arr[j].split("_")[0]);
+                                $('.searchWord' + (i + 1)).css("display", "block");
 
-                                $("#searchWord"+(i+1)).next().attr("onclick","deletecookie('HS_Seachwords"+(j+1)+"')");
+                                $("#searchWord" + (i + 1)).next().attr("onclick", "deletecookie('HS_Seachwords" + (j + 1) + "')");
                             }
                         }
                     }
 
-                    if(arr_date[i] == ""){
-                        $("#searchWord"+(i+1)).text("");
+                    if (arr_date[i] == "") {
+                        $("#searchWord" + (i + 1)).text("");
                     }
                 }
 
@@ -120,7 +120,7 @@
 
 
                 //vip 채팅 서비스
-                if("PASS" != ""){
+                if ("PASS" != "") {
                     var pag = "myManToManInquiryPage";
 
                     var chkPag = ["svCenterMainPage", "noticePage", "manToManInquiryPage", "faqPage",
@@ -130,26 +130,26 @@
                     var vipPassCheck = "N"; // VVIP/THESTAR/STAR 등급 체크
                     var timePassCheck = "N"; // 평일 0900~1800 체크
 
-                    if("" == "VVIP" || ("" == "THESTAR" || "" == "STAR" )){
+                    if ("" == "VVIP" || ("" == "THESTAR" || "" == "STAR")) {
                         vipPassCheck = "Y";
                     }
 
-                    if(vipPassCheck == "N" && "PASS" == "PASS"){ // MANIA 이하 등급, 평일 체크
+                    if (vipPassCheck == "N" && "PASS" == "PASS") { // MANIA 이하 등급, 평일 체크
                         // chatbotInfo "PASS" : 등급이 VVIP/THESTAR/STAR/MANIA 이거나 평일 0900~1800
                         var hour = new Date().format("HHmm");
                         var weekName = new Date().format("E");
-                        if(weekName != "일요일" && weekName != "토요일" && hour >= "0900" && hour <= "1800"){
+                        if (weekName != "일요일" && weekName != "토요일" && hour >= "0900" && hour <= "1800") {
                             $.ajax({
-                                type:"POST",
-                                url:"/ko/chatbot/chkholiday",
-                                data: {"CSRFToken":"873f1ef0-6048-44e3-bfa2-15b52ff60d0c"},
-                                async : false,
-                                success:function(result){
-                                    if(result == true) {
+                                type: "POST",
+                                url: "/ko/chatbot/chkholiday",
+                                data: {"CSRFToken": "873f1ef0-6048-44e3-bfa2-15b52ff60d0c"},
+                                async: false,
+                                success: function (result) {
+                                    if (result == true) {
                                         timePassCheck = "Y";
                                     }
                                 },
-                                error:function(request,statuss,error){
+                                error: function (request, statuss, error) {
                                     ;
                                 }
                             });
@@ -158,29 +158,29 @@
 
                     if ((vipPassCheck == "Y" || timePassCheck == "Y") && "myManToManInquiryPage" == "main201903Page") {
                         $('#chatbotMain').show();
-                    }else{
+                    } else {
                         $('#chatbotMain').hide();
                     }
 
                     if (chkPag.indexOf(pag) > -1) {
-                        if(vipPassCheck == "Y" || timePassCheck == "Y"){
+                        if (vipPassCheck == "Y" || timePassCheck == "Y") {
                             $('#chatbot').show();
-                        }else{
+                        } else {
                             $('#chatbot').hide();
                         }
-                    }else{
+                    } else {
                         $('#chatbot').hide();
                     }
                 }
 
                 //athome
-                if("" != ""){
+                if ("" != "") {
                     // #1067 - 메인 개편
 
-                    $('.ico.athome').mouseenter(function(){
+                    $('.ico.athome').mouseenter(function () {
                         $('.athome_info').show();
                     });
-                    $('.athome_header').mouseleave(function(){
+                    $('.athome_header').mouseleave(function () {
                         $('.athome_info').hide();
                     });
                 }
@@ -192,33 +192,34 @@
                 chkFavoriteBrand();
             });
 
-            function athomeBlink(){
-                $('.ico.athome').css('opacity','0');
-                setTimeout(function(){
-                    $('.ico.athome').css('opacity','1');
-                },500);
-            }
-            function athomeEventBlink(){
-                $('.athome_event').css('opacity','0');
-                setTimeout(function(){
-                    $('.athome_event').css('opacity','1');
-                },500);
+            function athomeBlink() {
+                $('.ico.athome').css('opacity', '0');
+                setTimeout(function () {
+                    $('.ico.athome').css('opacity', '1');
+                }, 500);
             }
 
-            function hpAutoLogin(data){
+            function athomeEventBlink() {
+                $('.athome_event').css('opacity', '0');
+                setTimeout(function () {
+                    $('.athome_event').css('opacity', '1');
+                }, 500);
+            }
+
+            function hpAutoLogin(data) {
                 //console.log("data.succYn:"+data.succYn);
                 if (data.succYn == "Y") {
                     $.ajax({
-                        type:"GET",
-                        url:"/ko/hpoint/simpleJoinMember",
-                        data: {"mcustNo":data.mcustNo},
-                        success:function(data){
-                            if(data.resultCode == "L"){
+                        type: "GET",
+                        url: "/ko/hpoint/simpleJoinMember",
+                        data: {"mcustNo": data.mcustNo},
+                        success: function (data) {
+                            if (data.resultCode == "L") {
                                 $("#hcid").val(data.uid);
                                 $("#autologinForm").submit();
                             }
                         },
-                        error:function(e){
+                        error: function (e) {
                         }
                     });
                 }
@@ -230,14 +231,14 @@
                 return 0;
             }
 
-            function EnterSearchHeader(){
+            function EnterSearchHeader() {
 
                 var searchwords = $('#gnbsearchwords').val();
-                searchwords = searchwords.replace(/(^\s*)|(\s*$)/g,"");
+                searchwords = searchwords.replace(/(^\s*)|(\s*$)/g, "");
 
-                if(searchwords!=""){
-                    location.href="/ko/hssearch?searchwords="+searchwords;
-                }else{
+                if (searchwords != "") {
+                    location.href = "/ko/hssearch?searchwords=" + searchwords;
+                } else {
                     $('#gnbsearchwords').val("");
                     alert("검색어를 입력해주세요.");
                 }
@@ -246,57 +247,57 @@
             }
 
             function language(isoCode) {
-                if(location.href.indexOf("/handsome/") > -1){
+                if (location.href.indexOf("/handsome/") > -1) {
 
                     $.ajax({
-                        type : "post",
-                        url : "/ko/logout?"+getCSRFToken(),
-                        error : function( request, status, error ){
+                        type: "post",
+                        url: "/ko/logout?" + getCSRFToken(),
+                        error: function (request, status, error) {
                             //console.log( "code:" + request.status+"\n" + "message:" + request.responseText+"\n" + "error:" + error );
                             $.ajax({
-                                type : "post",
-                                url : "/ko/_s/language" + "?" + "code="+isoCode,
-                                dataType : "json",
-                                error : function( request, status, error ){
-                                    console.log( "code:" + request.status+"\n" + "message:" + request.responseText+"\n" + "error:" + error );
+                                type: "post",
+                                url: "/ko/_s/language" + "?" + "code=" + isoCode,
+                                dataType: "json",
+                                error: function (request, status, error) {
+                                    console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
                                 },
-                                success : function( result ){
+                                success: function (result) {
                                     location.href = "/ko/";
                                 }
                             });
                         },
-                        success : function( result ){
+                        success: function (result) {
 
                             $.ajax({
-                                type : "post",
-                                url : "/ko/_s/language" + "?" + "code="+isoCode,
-                                dataType : "json",
-                                error : function( request, status, error ){
-                                    console.log( "code:" + request.status+"\n" + "message:" + request.responseText+"\n" + "error:" + error );
+                                type: "post",
+                                url: "/ko/_s/language" + "?" + "code=" + isoCode,
+                                dataType: "json",
+                                error: function (request, status, error) {
+                                    console.log("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
                                 },
-                                success : function( result ){
+                                success: function (result) {
                                     location.href = "/ko/";
                                 }
                             });
                         }
                     });
 
-                }else{
-                    location.href = "/"+isoCode;
+                } else {
+                    location.href = "/" + isoCode;
                 }
             }
 
-            function getCSRFToken(){
-                return "CSRFToken="+$("#CSRFForm [name='CSRFToken']").first().val();
+            function getCSRFToken() {
+                return "CSRFToken=" + $("#CSRFForm [name='CSRFToken']").first().val();
             }
 
 
-            function setLogout(){
+            function setLogout() {
                 var ssoUrl = 'https://sso.h-point.co.kr:29865' + "/co/setDscdToknJSONP.hd";
                 gfnSsoDscdToknReqAjax(ssoUrl, hplogoutSuccess);
             }
 
-            function hplogoutSuccess(data){
+            function hplogoutSuccess(data) {
                 deletecookie("UID");
                 deletecookie("criteoEmail");
                 deletecookie("memberGb");
@@ -304,17 +305,17 @@
             }
 
 
-            function chkFavoriteBrand(){
+            function chkFavoriteBrand() {
 
             }
 
-            function brazeCustomAttribut(target){
-                if(favoriteBrands.length > 0){
+            function brazeCustomAttribut(target) {
+                if (favoriteBrands.length > 0) {
                     // REMOVE 체크
-                    for(var i = 0; i < favoriteBrands.length; i++){
-                        if(target.indexOf(favoriteBrands[i]) > -1){
+                    for (var i = 0; i < favoriteBrands.length; i++) {
+                        if (target.indexOf(favoriteBrands[i]) > -1) {
                             //skip
-                        }else{
+                        } else {
                             appboy.getUser().removeFromCustomAttributeArray(
                                 "likeBrand",
                                 favoriteBrands[i]
@@ -323,19 +324,19 @@
                     }
 
                     // ADD 체크
-                    for(var j = 0; j < target.length; j++){
-                        if(favoriteBrands.indexOf(target[j]) > -1){
+                    for (var j = 0; j < target.length; j++) {
+                        if (favoriteBrands.indexOf(target[j]) > -1) {
                             //skip
-                        }else{
+                        } else {
                             appboy.getUser().addToCustomAttributeArray(
                                 "likeBrand",
                                 target[j]
                             );
                         }
                     }
-                }else{
-                    if(target.length > 0){
-                        for(var x = 0; x < target.length; x++){
+                } else {
+                    if (target.length > 0) {
+                        for (var x = 0; x < target.length; x++) {
                             appboy.getUser().addToCustomAttributeArray(
                                 "likeBrand",
                                 target[x]
@@ -347,7 +348,7 @@
 
             //START OF 메인 검색창////////////////////////
             // #1067 - 201803 메인 개편
-            $(function(){
+            $(function () {
 
 
                 getNotLoginMyKeyWord($("#query").val(), 10);
@@ -357,22 +358,27 @@
         getLoginMyKeyWord($("#query").val());
      */
 
-                if(navigator.userAgent.toLowerCase().indexOf("firefox") > -1) {
+                if (navigator.userAgent.toLowerCase().indexOf("firefox") > -1) {
                     $("#searchBox").on("keypress", function (event) {
                         var keyCode = event.which || event.keyCode;
                     });
                 }
 
-                $('#query').click(function(){
+                $('#query').click(function () {
                     // 스타일 서치 아이템
                     doStyleItem();
-                    $('.search_box_wrap').click(function(){
-                        if(!$('.search_box_wrap').hasClass('on')){
+                    $('.search_box_wrap').click(function () {
+                        if (!$('.search_box_wrap').hasClass('on')) {
                             var dataHeight = $('.data_react').height();
                             $("#transparent_mask").show();
 
-                            GA_Event('공통','유틸_메뉴','검색');
-                            $('.search_box_wrap').stop().animate({width:'406px',height:'+= dataHeight +"px"',"max-height":"430px","opacity":1},'fast');
+                            GA_Event('공통', '유틸_메뉴', '검색');
+                            $('.search_box_wrap').stop().animate({
+                                width: '406px',
+                                height: '+= dataHeight +"px"',
+                                "max-height": "430px",
+                                "opacity": 1
+                            }, 'fast');
 
                             $('.search_box_wrap').addClass('on');
                             $('.btn_search_tab').stop().show();
@@ -385,66 +391,66 @@
 
                             //검색창 텝 >> style search slider
                             $(document).find('#styleSearchSlider').flexslider({
-                                animation:"slide",
-                                slideshow:false,
-                                directionNav:true,
-                                after: function(slider){
-                                    $("#styleSearchSlider .slides li").not(".clone").each(function(idx){
-                                        if($(this).hasClass("flex-active-slide")){
+                                animation: "slide",
+                                slideshow: false,
+                                directionNav: true,
+                                after: function (slider) {
+                                    $("#styleSearchSlider .slides li").not(".clone").each(function (idx) {
+                                        if ($(this).hasClass("flex-active-slide")) {
                                             $(".ss_txt_list li a").removeClass("on");
-                                            $(".ss_txt_list li:eq("+idx+") a").addClass('on');
+                                            $(".ss_txt_list li:eq(" + idx + ") a").addClass('on');
                                         }
                                     });
                                 }
                             });
                             var styleTotal = $("#styleSearchSlider .slides li").size();
-                            if(styleTotal <= 1) {
+                            if (styleTotal <= 1) {
                                 $("#styleSearchSlider .flex-direction-nav").hide();
                             }
 
                             //keyup 자동완성 리스트
 
                             //keyup 자동완성 리스트
-                            $('#query').keyup(function(e){
-                                if(!$('#query').val() == ""){
+                            $('#query').keyup(function (e) {
+                                if (!$('#query').val() == "") {
                                     $('.search_tab').hide();
 
-                                    $('.search_box_wrap').stop().animate({width:'477px'},'fast',function(){
+                                    $('.search_box_wrap').stop().animate({width: '477px'}, 'fast', function () {
                                         $('.search_autocomplete').show();
                                     });
-                                    $('.search_box_wrap.on .search_box input[type="search"]').stop().animate({width:'461px'},'fast');
+                                    $('.search_box_wrap.on .search_box input[type="search"]').stop().animate({width: '461px'}, 'fast');
                                     /*  var atcRightHeight = $(".autocomplete_right").height();//자동완성리스트 높이 조절
                     var atctxtHeight = $(".autocomplete_txt").height();
                     if(atcRightHeight < atctxtHeight){
                         $(".autocomplete_right").height(atctxtHeight);
                     } */
 
-                                }else{
+                                } else {
                                     $('.search_autocomplete').hide();
                                     $('.search_tab').show();
 
-                                    $('.search_box_wrap').stop().animate({width:'406px'});
-                                    $('.search_box_wrap.on .search_box input[type="search"]').stop().animate({width:'390px'});
+                                    $('.search_box_wrap').stop().animate({width: '406px'});
+                                    $('.search_box_wrap.on .search_box input[type="search"]').stop().animate({width: '390px'});
 
                                 }
-                                $('.autocomplete_txt li a').each(function(){
-                                    if(!$(this).hasClass('brand_main')){
-                                        $(this).html($(this).html().replace("<strong>",""));
-                                        $(this).html($(this).html().replace("</strong>",""));
+                                $('.autocomplete_txt li a').each(function () {
+                                    if (!$(this).hasClass('brand_main')) {
+                                        $(this).html($(this).html().replace("<strong>", ""));
+                                        $(this).html($(this).html().replace("</strong>", ""));
 
-                                        if($(this).html().indexOf($('#searchBox').val()) > -1){
-                                            $(this).html($(this).html().replace($('#searchBox').val(),"<strong>"+$('#searchBox').val()+"</strong>"));
+                                        if ($(this).html().indexOf($('#searchBox').val()) > -1) {
+                                            $(this).html($(this).html().replace($('#searchBox').val(), "<strong>" + $('#searchBox').val() + "</strong>"));
                                         }
                                     }
                                 });
                             });
 
                             //검색창 click시 이미 value 값이 있을 때
-                            if(!$('#query').val() == ""){
-                                $('.search_box_wrap').stop().animate({width:'477px','opacity':1},'fast');
-                                $('.search_box_wrap.on .search_box input[type="search"]').stop().animate({width:'461px'},'fast');
-                            }else{
-                                $('.search_box_wrap.on .search_box input[type="search"]').stop().animate({width:'390px'},'fast');
+                            if (!$('#query').val() == "") {
+                                $('.search_box_wrap').stop().animate({width: '477px', 'opacity': 1}, 'fast');
+                                $('.search_box_wrap.on .search_box input[type="search"]').stop().animate({width: '461px'}, 'fast');
+                            } else {
+                                $('.search_box_wrap.on .search_box input[type="search"]').stop().animate({width: '390px'}, 'fast');
                             }
 
                         }
@@ -452,16 +458,20 @@
                         $('#styleSearchSlider').fadeIn();
 
                         //close button
-                        $('.search_box a span.btn_close').on('click',function(){
+                        $('.search_box a span.btn_close').on('click', function () {
 
-                            $('.search_box_wrap').stop().animate({width:'30px',height:'-= dataHeight +"px"',"opacity":0});
+                            $('.search_box_wrap').stop().animate({
+                                width: '30px',
+                                height: '-= dataHeight +"px"',
+                                "opacity": 0
+                            });
 
                             $('.data_react').stop().hide();
                             $('.btn_search_tab').stop().hide();
                             $('.search_box_wrap').removeClass('on');
                             $("#transparent_mask").hide();
                             $('.search_box .search').stop().fadeOut('fast');
-                            if(!$('#query').val() == ""){
+                            if (!$('#query').val() == "") {
                                 $('#query').val("");
                                 $('.search_autocomplete').hide();
                                 $('.search_tab').show();
@@ -469,10 +479,14 @@
                             return false;
                         });
                     });
-                    $("#transparent_mask").click(function(){
-                        if($('.search_box_wrap').hasClass('on')){
+                    $("#transparent_mask").click(function () {
+                        if ($('.search_box_wrap').hasClass('on')) {
 
-                            $('.search_box_wrap').stop().animate({width:'30px',height:'-= dataHeight +"px"',"opacity":0});
+                            $('.search_box_wrap').stop().animate({
+                                width: '30px',
+                                height: '-= dataHeight +"px"',
+                                "opacity": 0
+                            });
 
                             $('.data_react').stop().hide();
                             $('.btn_search_tab').stop().hide();
@@ -482,7 +496,7 @@
                         }
                     });
                     //검색창 텝
-                    $(document).on('click','.btn_search_tab a',function(){
+                    $(document).on('click', '.btn_search_tab a', function () {
                         $(this).addClass('on');
                         $(this).siblings().removeClass('on');
                         $('.data_react .s_tab').stop().hide();
@@ -493,35 +507,35 @@
             });
 
             //##1141 - 카테고리 개편
-            function outletGnbNav(){//아울렛 gnb
-                $('.outlet_brand1803 .sub_menu > ul > li > ul > li > a').on('mouseenter focus',function(){
+            function outletGnbNav() {//아울렛 gnb
+                $('.outlet_brand1803 .sub_menu > ul > li > ul > li > a').on('mouseenter focus', function () {
                     $('.outlet_brand1803 .sub_menu > ul > li > ul > li > a').removeClass('on');
                     $('.outlet_brand1803 .sub_menu > ul > li > ul > li > div').stop().hide();
                     $(this).addClass('on');
-                    $(this).parent('li').children('div').stop().css('display','inline-block');
+                    $(this).parent('li').children('div').stop().css('display', 'inline-block');
                     var liWidthSumDep3 = 0;
-                    $(this).next('div').children('ul').children('li').each(function(idx3){
+                    $(this).next('div').children('ul').children('li').each(function (idx3) {
                         var liWidth = $(this).width();
                         var liLength = $(this).length;
-                        if(idx3 > 0){
+                        if (idx3 > 0) {
                             liWidthSumDep3 = liWidthSumDep3 + (liWidth + 25);
                         }
                         $(this).width(liWidth);
                     });
-                    $(this).next('div').children('ul').width(liWidthSumDep3 -10);
+                    $(this).next('div').children('ul').width(liWidthSumDep3 - 10);
                 });
-                $('.outlet_brand1803 .sub_menu > ul > li > ul > li').on('mouseleave blur',function(){
+                $('.outlet_brand1803 .sub_menu > ul > li > ul > li').on('mouseleave blur', function () {
                     $('.outlet_brand1803 .sub_menu > ul > li > ul > li > a').removeClass('on');
                     $('.outlet_brand1803 .sub_menu > ul > li > ul > li > div').stop().hide();
                 });
             }
 
-            function GA_search(){
+            function GA_search() {
 
                 var searchForm = document.search;
                 var searchwords = escape(searchForm.query.value);
 
-                GA_Event('검색','직접입력',searchwords);
+                GA_Event('검색', '직접입력', searchwords);
             }
 
             //]]>
@@ -534,14 +548,16 @@
                         <!-- 선호 브랜드 없음 -->
                         <li><span class="on"><a href="/" onclick="GA_Event('공통','탑_네비게이션','HOME')">HOME</a></span></li>
                         <!-- 로그인 상태 -->
-                        <p class="brand_menu_guide_text">아래 '브랜드' 메뉴에서 좋아하는 브랜드를 <span style="margin-top:-1px; display:inline-block;">♥</span>해주세요</p>
+                        <p class="brand_menu_guide_text">아래 '브랜드' 메뉴에서 좋아하는 브랜드를 <span
+                                style="margin-top:-1px; display:inline-block;">♥</span>해주세요</p>
                         <!-- 비로그인 상태 -->
                     </ul>
                 </div>
                 <div class="gnb_sh_wrap" style="display:none;">
                     <!-- search box -->
                     <div class="gnb_sh_box">
-                        <input type="text" class="input" id="gnbsearchwords" title="검색어 입력" value="" onkeypress="if(event.keyCode==13) {EnterSearchHeader(); return false;}">
+                        <input type="text" class="input" id="gnbsearchwords" title="검색어 입력" value=""
+                               onkeypress="if(event.keyCode==13) {EnterSearchHeader(); return false;}">
                         <a href="javascript:void(0);" id="gnbsearch">검색</a>
                     </div>
                     <!-- //search box -->
@@ -550,22 +566,48 @@
                         <div class="tab">
                             <a href="javascript:void(0);" class="menu on">최근검색어</a>
                             <div class="result_list on">
-                                <div class="searchWord1" style="display: none;"><a href="javascript:void(0);" class="ml newlyBtn" id="searchWord1"></a><a href="javascript:void(0);" class="close" onclick="deletecookie('HS_Seachwords1')">닫기</a></div>
-                                <div class="searchWord2" style="display: none;"><a href="javascript:void(0);" class="ml newlyBtn" id="searchWord2"></a><a href="javascript:void(0);" class="close" onclick="deletecookie('HS_Seachwords2')">닫기</a></div>
-                                <div class="searchWord3" style="display: none;"><a href="javascript:void(0);" class="ml newlyBtn" id="searchWord3"></a><a href="javascript:void(0);" class="close" onclick="deletecookie('HS_Seachwords3')">닫기</a></div>
-                                <div class="searchWord4" style="display: none;"><a href="javascript:void(0);" class="ml newlyBtn" id="searchWord4"></a><a href="javascript:void(0);" class="close" onclick="deletecookie('HS_Seachwords4')">닫기</a></div>
-                                <div class="searchWord5" style="display: none;"><a href="javascript:void(0);" class="ml newlyBtn" id="searchWord5"></a><a href="javascript:void(0);" class="close" onclick="deletecookie('HS_Seachwords5')">닫기</a></div>
+                                <div class="searchWord1" style="display: none;"><a href="javascript:void(0);"
+                                                                                   class="ml newlyBtn"
+                                                                                   id="searchWord1"></a><a
+                                        href="javascript:void(0);" class="close"
+                                        onclick="deletecookie('HS_Seachwords1')">닫기</a></div>
+                                <div class="searchWord2" style="display: none;"><a href="javascript:void(0);"
+                                                                                   class="ml newlyBtn"
+                                                                                   id="searchWord2"></a><a
+                                        href="javascript:void(0);" class="close"
+                                        onclick="deletecookie('HS_Seachwords2')">닫기</a></div>
+                                <div class="searchWord3" style="display: none;"><a href="javascript:void(0);"
+                                                                                   class="ml newlyBtn"
+                                                                                   id="searchWord3"></a><a
+                                        href="javascript:void(0);" class="close"
+                                        onclick="deletecookie('HS_Seachwords3')">닫기</a></div>
+                                <div class="searchWord4" style="display: none;"><a href="javascript:void(0);"
+                                                                                   class="ml newlyBtn"
+                                                                                   id="searchWord4"></a><a
+                                        href="javascript:void(0);" class="close"
+                                        onclick="deletecookie('HS_Seachwords4')">닫기</a></div>
+                                <div class="searchWord5" style="display: none;"><a href="javascript:void(0);"
+                                                                                   class="ml newlyBtn"
+                                                                                   id="searchWord5"></a><a
+                                        href="javascript:void(0);" class="close"
+                                        onclick="deletecookie('HS_Seachwords5')">닫기</a></div>
                                 <a href="javascript:void(0);" class="btn_svclose">검색어 <span id="searchSaveYN" save="on">끄기</span></a>
                                 <a href="javascript:void(0);" class="btn_allclose on" onclick="searchOff()">닫기</a>
                             </div>
                             <a href="javascript:void(0);" class="menu">인기검색어</a>
                             <div class="result_list">
-                                <div><a href="javascript:void(0);" class="ml favBtn">jacket</a><!-- <a href="javascript:void(0);" class="close">닫기</a> --></div>
-                                <div><a href="javascript:void(0);" class="ml favBtn">blouse</a><!-- <a href="javascript:void(0);" class="close">닫기</a> --></div>
-                                <div><a href="javascript:void(0);" class="ml favBtn">stripe</a><!-- <a href="javascript:void(0);" class="close">닫기</a> --></div>
-                                <div><a href="javascript:void(0);" class="ml favBtn">ribbon</a><!-- <a href="javascript:void(0);" class="close">닫기</a> --></div>
-                                <div><a href="javascript:void(0);" class="ml favBtn">blouson</a><!-- <a href="javascript:void(0);" class="close">닫기</a> --></div>
-                                <a href="javascript:void(0);" class="btn_svclose">검색어 <span id="searchSaveYNfame" save="on">끄기</span></a>
+                                <div><a href="javascript:void(0);" class="ml favBtn">jacket</a>
+                                    <!-- <a href="javascript:void(0);" class="close">닫기</a> --></div>
+                                <div><a href="javascript:void(0);" class="ml favBtn">blouse</a>
+                                    <!-- <a href="javascript:void(0);" class="close">닫기</a> --></div>
+                                <div><a href="javascript:void(0);" class="ml favBtn">stripe</a>
+                                    <!-- <a href="javascript:void(0);" class="close">닫기</a> --></div>
+                                <div><a href="javascript:void(0);" class="ml favBtn">ribbon</a>
+                                    <!-- <a href="javascript:void(0);" class="close">닫기</a> --></div>
+                                <div><a href="javascript:void(0);" class="ml favBtn">blouson</a>
+                                    <!-- <a href="javascript:void(0);" class="close">닫기</a> --></div>
+                                <a href="javascript:void(0);" class="btn_svclose">검색어 <span id="searchSaveYNfame"
+                                                                                            save="on">끄기</span></a>
                                 <a href="javascript:void(0);" class="btn_allclose" onclick="searchOff()">닫기</a>
                             </div>
                         </div>
@@ -574,7 +616,8 @@
                 </div>
                 <!-- 201705 search_box_wrap -->
                 <div class="search_box_wrap sbw1803" id="searchBox">
-                    <form name="search" id="search" action="/ko/hssearch/searchCount" method="post" onsubmit="return false;">
+                    <form name="search" id="search" action="/ko/hssearch/searchCount" method="post"
+                          onsubmit="return false;">
                         <input type="hidden" name="CSRFToken" value="873f1ef0-6048-44e3-bfa2-15b52ff60d0c">
                         <input type="hidden" name="searchwords" value="">
                         <input type="hidden" name="startCount" value="">
@@ -598,7 +641,9 @@
                         <input type="hidden" id="brand_url" name="brand_url" value="">
                         <div class="search_box">
                             <label for="query" class="hidden">search</label>
-                            <input type="search" id="query" name="query" value="" onkeypress="javascript:pressCheck((event),this);" style="margin-top: 0.2px;" autocomplete="off">
+                            <input type="search" id="query" name="query" value=""
+                                   onkeypress="javascript:pressCheck((event),this);" style="margin-top: 0.2px;"
+                                   autocomplete="off">
                             <span class="placeholder"></span>
                             <a href="javascript:void(0);"><span class="btn_close">닫기</span></a>
                             <a href="javascript:GA_search();doSearch();" class="search"><span class="ico">검색</span></a>
@@ -609,19 +654,28 @@
                         <!-- tab 검색어 입력 전 -->
                         <div class="search_tab">
                             <div class="btn_search_tab" style="display:none;">
-                                <a href="javascript:void(0);" rel="recent_search" class="btn_recent_search on" onclick="GA_Event('검색','최근 검색어','클릭')">최근 검색어</a>
-                                <a href="javascript:void(0);" rel="style_search" class="btn_style_search" id="btn_style_search">Style Search</a>
-                                <a href="javascript:void(0);" rel="popular_search" class="btn_style_search" id="btn_top_search" style="display:none;" onclick="GA_Event('검색','인기검색어','클릭')">인기검색어</a>
+                                <a href="javascript:void(0);" rel="recent_search" class="btn_recent_search on"
+                                   onclick="GA_Event('검색','최근 검색어','클릭')">최근 검색어</a>
+                                <a href="javascript:void(0);" rel="style_search" class="btn_style_search"
+                                   id="btn_style_search">Style Search</a>
+                                <a href="javascript:void(0);" rel="popular_search" class="btn_style_search"
+                                   id="btn_top_search" style="display:none;"
+                                   onclick="GA_Event('검색','인기검색어','클릭')">인기검색어</a>
                             </div>
                             <!-- 최근 검색어 -->
                             <div class="recent_search s_tab">
-                                <ul id="mykeyword"><div class="clear_search_hs"><a href="javascript:removeAllMyKeyword()">검색기록전체삭제</a></div></ul>
+                                <ul id="mykeyword">
+                                    <div class="clear_search_hs"><a href="javascript:removeAllMyKeyword()">검색기록전체삭제</a>
+                                    </div>
+                                </ul>
                             </div>
                             <!-- style search -->
-                            <form id="searchStyle" name="searchStyle" action="/ko/hssearch/searchCount" method="post" onsubmit="return false;">
+                            <form id="searchStyle" name="searchStyle" action="/ko/hssearch/searchCount" method="post"
+                                  onsubmit="return false;">
                                 <input type="hidden" name="query" value="">
                                 <input type="hidden" name="collection" value="">
-                                <input type="hidden" id="CSRFToken" name="CSRFToken" value="873f1ef0-6048-44e3-bfa2-15b52ff60d0c">
+                                <input type="hidden" id="CSRFToken" name="CSRFToken"
+                                       value="873f1ef0-6048-44e3-bfa2-15b52ff60d0c">
                                 <input type="hidden" id="searchStyleYn" name="searchStyleYn" value="searchStyle">
                             </form>
 
@@ -632,7 +686,9 @@
                                     </ul>
                                 </div>
                                 <div class="ss_img_list" id="styleSearchSlider">
-                                    <ul class="slides"><li></li></ul>
+                                    <ul class="slides">
+                                        <li></li>
+                                    </ul>
                                 </div>
                             </div>
 
@@ -663,7 +719,11 @@
                                     <ul>
                                     </ul>
                                 </div>
-                                <div id="ark" style="height:170px;"><div class="ark_wrap" id="ark_wrap" style="display: none;"><ul id="ark_content_list"></ul></div></div>
+                                <div id="ark" style="height:170px;">
+                                    <div class="ark_wrap" id="ark_wrap" style="display: none;">
+                                        <ul id="ark_content_list"></ul>
+                                    </div>
+                                </div>
                             </div>
                             <div class="autocomplete_right">
                                 <div class="category_brand">
@@ -697,13 +757,22 @@
                             <a href="/mypage" class="btn" onclick="GA_Event('공통','헤더_메뉴','마이페이지')">마이페이지</a>
                             <div class="list">
                                 <ul>
-                                    <li><a href="/mypage/order/myorders" onclick="GA_Event('공통','헤더_메뉴','마이페이지_주문조회')">주문조회<!-- 주문조회 --></a></li>
-                                    <li><a href="/mypage/myGradeInfo" onclick="GA_Event('공통','헤더_메뉴','마이페이지_나의회원등급')">나의회원등급<!-- 온라인등급 --></a></li>
-                                    <li><a href="/mypage/voucher" onclick="GA_Event('공통','헤더_메뉴','마이페이지_쿠폰조회')">쿠폰조회<!-- 쿠폰조회 --></a></li>
-                                    <li><a href="/mypage/mypoint" onclick="GA_Event('공통','헤더_메뉴','마이페이지_마일리지조회')">마일리지조회<!-- 포인트조회 --></a></li>
-                                    <li><a href="/mypage/myEGiftCard" onclick="GA_Event('공통','헤더_메뉴','마이페이지_e-Gift Card')">e-Gift Card<!-- e-Gfit Card --></a></li>
-                                    <li><a href="/mypage/personInfomationChangePWCheck" onclick="GA_Event('공통','헤더_메뉴','마이페이지_회원정보변경')">회원정보변경<!-- 회원정보변경 --></a></li>
-                                    <li><a href="/mypage/review" onclick="GA_Event('공통','헤더_메뉴','마이페이지_온라인상담')">온라인상담<!-- 온라인 상담 --></a></li>
+                                    <li><a href="/mypage/order/myorders" onclick="GA_Event('공통','헤더_메뉴','마이페이지_주문조회')">주문조회
+                                        <!-- 주문조회 --></a></li>
+                                    <li><a href="/mypage/myGradeInfo" onclick="GA_Event('공통','헤더_메뉴','마이페이지_나의회원등급')">나의회원등급
+                                        <!-- 온라인등급 --></a></li>
+                                    <li><a href="/mypage/voucher" onclick="GA_Event('공통','헤더_메뉴','마이페이지_쿠폰조회')">쿠폰조회
+                                        <!-- 쿠폰조회 --></a></li>
+                                    <li><a href="/mypage/mypoint" onclick="GA_Event('공통','헤더_메뉴','마이페이지_마일리지조회')">마일리지조회
+                                        <!-- 포인트조회 --></a></li>
+                                    <li><a href="/mypage/myEGiftCard"
+                                           onclick="GA_Event('공통','헤더_메뉴','마이페이지_e-Gift Card')">e-Gift Card
+                                        <!-- e-Gfit Card --></a></li>
+                                    <li><a href="/mypage/personInfomationChangePWCheck"
+                                           onclick="GA_Event('공통','헤더_메뉴','마이페이지_회원정보변경')">회원정보변경<!-- 회원정보변경 --></a>
+                                    </li>
+                                    <li><a href="/mypage/review" onclick="GA_Event('공통','헤더_메뉴','마이페이지_온라인상담')">온라인상담
+                                        <!-- 온라인 상담 --></a></li>
                                 </ul>
                             </div>
                         </li>
@@ -711,11 +780,15 @@
                         <li>
                             <div class="header_dropmemu lang_switch lang_1911">
                                 <a href="javascript:void(0);" class="btn" onclick="GA_Event('공통','헤더_메뉴','LANGUAGE')">LANGUAGE</a>
-                                <div class="list" style="display: none; height: 87px; padding-top: 0px; margin-top: 0px; padding-bottom: 0px; margin-bottom: 0px;">
+                                <div class="list"
+                                     style="display: none; height: 87px; padding-top: 0px; margin-top: 0px; padding-bottom: 0px; margin-bottom: 0px;">
                                     <ul>
-                                        <li><a href="javascript:language('ko')" onclick="GA_Event('공통','헤더_메뉴','LANGUAGE_한국어')">한국어</a></li>
-                                        <li><a href="javascript:language('en')" onclick="GA_Event('공통','헤더_메뉴','LANGUAGE_ENGLISH')">ENGLISH</a></li>
-                                        <li><a href="javascript:language('zh')" onclick="GA_Event('공통','헤더_메뉴','LANGUAGE_中文')">中文</a></li>
+                                        <li><a href="javascript:language('ko')"
+                                               onclick="GA_Event('공통','헤더_메뉴','LANGUAGE_한국어')">한국어</a></li>
+                                        <li><a href="javascript:language('en')"
+                                               onclick="GA_Event('공통','헤더_메뉴','LANGUAGE_ENGLISH')">ENGLISH</a></li>
+                                        <li><a href="javascript:language('zh')"
+                                               onclick="GA_Event('공통','헤더_메뉴','LANGUAGE_中文')">中文</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -751,27 +824,34 @@
         <input type="hidden" id="deliveryOkMsg" value="확인">
         <input type="hidden" id="deliveryCancelMsg" value="취소">
 
-        <form id="chatbotForm" action="https://talk.thehandsome.com/front/v1/jsp/view/chat.jsp" method="post" target="chatwindow"><input type="hidden" name="token" id="chatbot_token">
+        <form id="chatbotForm" action="https://talk.thehandsome.com/front/v1/jsp/view/chat.jsp" method="post"
+              target="chatwindow"><input type="hidden" name="token" id="chatbot_token">
             <input type="hidden" name="talkId" id="chatbot_talkId">
             <div>
                 <input type="hidden" name="CSRFToken" value="873f1ef0-6048-44e3-bfa2-15b52ff60d0c">
-            </div></form><!-- //headerWrap --><div class="gnbwarp new201608 clearfix">
-        <h1 class="logo logo1903">
-            <a href="/" onclick="GA_Event('공통', '로고', '상단');">thehandsome.com</a>
-        </h1>
-        <!-- 첫번째 c:if -->
+            </div>
+        </form>
+        <!--         //headerWrap-->
+        <div class="gnbwarp new201608 clearfix">
+            <h1 class="logo logo1903">
+                <a href="/" onclick="GA_Event('공통', '로고', '상단');">thehandsome.com</a>
+            </h1>
+            <!-- 첫번째 c:if -->
 
 
-        <div id="transparent_mask"></div>
-        <!-- 201803 util menu -->
-        <div class="util_menu util_menu1803">
-            <ul class="clearfix">
-                <li><a href="javascript:void(0);"><span class="ico_sh">search</span></a></li>
-                <li><a href="/mypage/myWish" onclick="GA_Event('공통','유틸_메뉴','위시리스트');"><span class="ico wishlist">wish list</span> <span class="count">(<span id="wishlistCount">0</span>)</span></a></li>
-                <li><a href="/shoppingbag" onclick="GA_Event('공통','유틸_메뉴','쇼핑백');"><span class="ico cart">장바구니</span> <span class="count">(<span id="cartCount">0</span>)</span></a></li>
-            </ul>
+            <div id="transparent_mask"></div>
+            <!-- 201803 util menu -->
+            <div class="util_menu util_menu1803">
+                <ul class="clearfix">
+                    <li><a href="javascript:void(0);"><span class="ico_sh">search</span></a></li>
+                    <li><a href="/mypage/myWish" onclick="GA_Event('공통','유틸_메뉴','위시리스트');"><span class="ico wishlist">wish list</span>
+                        <span class="count">(<span id="wishlistCount">0</span>)</span></a></li>
+                    <li><a href="/shoppingbag" onclick="GA_Event('공통','유틸_메뉴','쇼핑백');"><span
+                            class="ico cart">장바구니</span> <span class="count">(<span id="cartCount">0</span>)</span></a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
         <!-- //201803 util menu -->
     </div>
 </div>
