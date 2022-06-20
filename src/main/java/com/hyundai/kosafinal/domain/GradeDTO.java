@@ -1,5 +1,6 @@
 package com.hyundai.kosafinal.domain;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,5 +13,4 @@ public class GradeDTO {
     private String name;
     private int min;
     private int max;
-
 }
