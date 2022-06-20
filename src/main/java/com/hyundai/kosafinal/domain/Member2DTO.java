@@ -3,13 +3,12 @@ package com.hyundai.kosafinal.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.util.Date;
-
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class MemberDTO {
+public class Member2DTO {
     private String email;
     private String password;
     private String name;
@@ -27,4 +26,6 @@ public class MemberDTO {
     private int status;
     private int gradeId;
     private int login_type;
+    private String role_set;
+
 }

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>LoginPage</title>
+</head>
+<body>
+<div class="border_box1">
+    <div class="inner_box">
+        <div class="title_wrap">
+            <h4>회원</h4>
+        </div>
+        <div id="hpIPLogin">
+            <form  id="loginForm"  name="loginForm" action="/login" method="post">
+                <input type="hidden" name="inputId" id="inputId" value = "" />
+                <fieldset>
+                    <legend>로그인 입력항목</legend>
+                    <div class="login_section">
+
+                        <p class="login_err_txt" id="hpErrMsg" style="margin-left:0px;"> </p>
+                        <div>
+                            <div>
+                                <input type="text" id="email" name="email" placeholder="아이디 / 이메일을 입력하세요." title="아이디" value=""/>
+                            </div>
+                            <div>
+                                <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요." title="비밀번호" />
+                            </div>
+                        </div>
+                        <button class="loginBtn" type="submit">로그인</button>
+
+                        <div class="id_save">
+                            <input type="checkbox" id="id_save" name="id_save" value="Y"> <label for="id_save">아이디 저장</label>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+            <form action="/member/signUp" method="GET">
+                <button id="joinBtn1" type="submit">회원가입</button>
+            </form>
+
+            <a href="/oauth2/authorization/google"><img src="/images/google.jpeg" width="30px" alt="구글"/>Google</a>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
