@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hyundai.kosafinal.mapper.userorder.MemberMapper">
+
+    <select id="findByEmail" resultType="com.hyundai.kosafinal.domain.Member2DTO">
+        select c1.email,
+               c1.password,
+               c1.name,
+               c1.gender,
+               c1.birth,
+               c1.tel,
+               c1.address1,
+               c1.address2,
+               c1.zipcode,
+               c1.height,
+               c1.weight,
+               c1.point,
+               c1.status,
+               c1.grade_Id,
+               c1.login_type,
+               c2.role_set,
+               c1.recent_Login_Date,
+               c1.sign_Up_Date
+        from member c1
+                 join role_set c2
+                      on c1.email = c2.user_email
+        where c1.email = #{email}
+
+    </select>
+    <insert id="insertMember">
+
+        {call sp_member_insert(#{email}, #{password}, #{name}, #{gender,jdbcType=NUMERIC}, #{birth, jdbcType=DATE}, #{tel, jdbcType=VARCHAR}, #{address1, jdbcType=VARCHAR}, #{address2, jdbcType=VARCHAR},
+                               #{zipcode,jdbcType=NUMERIC}, #{height, jdbcType=NUMERIC}, #{weight, jdbcType=NUMERIC}, #{point,jdbcType=INTEGER}, #{login_type})}
+
+    </insert>
+
+    <insert id="insertRoleSet">
+        {call sp_member_insert_role_set(#{role_set}, #{user_email})}
+    </insert>
+
+    <select id="checkId" resultType="int">
+        select sf_check_id(#{email})
+        from dual
+    </select>
+    <update id="updateMember">
+        {call sp_member_update(#{email}, #{password},#{name}, #{gender}, #{birth}, #{tel}, #{address1}, #{address2},
+                               #{height}, #{weight})}
+    </update>
+
+    <delete id="deleteMember">
+        {call sp_member_delete(#{email)})}
+    </delete>
+
+    <insert id="insertGrade">
+        insert into GRADE(id, name, min, max)
+        values (#{id}, #{name}, #{min}, #{max})
+
+    </insert>
+</mapper>

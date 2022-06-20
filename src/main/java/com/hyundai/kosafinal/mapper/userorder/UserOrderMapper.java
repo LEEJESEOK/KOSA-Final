@@ -1,4 +1,4 @@
 package com.hyundai.kosafinal.mapper.userorder;
 
-public interface UserOrderMapper {
+public class UserOrderMapper {
 }
