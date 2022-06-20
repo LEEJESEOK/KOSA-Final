@@ -25,37 +25,37 @@ public class UserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email)
             throws UsernameNotFoundException {
+        log.info("userDetailsService...............");
         // 입력한 이메일로 Member 찾음
         Member2DTO result = null;
         try {
             log.info(email);
+
             result = mapper.findByEmail(email);
+
         } catch (Exception e) {
+            e.printStackTrace();
+
             throw new UsernameNotFoundException("Check Email or Social!!");
         } // end try
 
-        // Member2 생성
-        Member2DTO Member2DTO = result;
-        log.info("-------------------");
-        log.info(Member2DTO);
-        log.info(Member2DTO.getRole_set().toString());
+        log.info("result"+result);
+        log.info("role set : " +result.getRole_set());
 
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + Member2DTO.getRole_set()));
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + result.getRole_set()));
 
         // clubMember --> AuthMemberDTO 변환
-        AuthMemberDTO  AuthMemberDTO = new
-                AuthMemberDTO(Member2DTO.getEmail(), Member2DTO.getPassword(),
-                Member2DTO.getLogin_type(), authorities);
-        // AuthMemberDTO 값 세팅
-        AuthMemberDTO.setName((Member2DTO.getName()));
-        AuthMemberDTO.setLogin_type(Member2DTO.getLogin_type());
+        AuthMemberDTO  authMemberDTO = new
+                AuthMemberDTO(result.getEmail(), result.getPassword(),result.getName(),
+                result.getLogin_type(), authorities);
 
-        log.info(AuthMemberDTO);
-        log.info(AuthMemberDTO.getAuthorities());
+        authMemberDTO.setPassword(result.getPassword());
 
+        log.info(authMemberDTO);
+        log.info(authMemberDTO.getAuthorities());
         // AuthMemberDTO는 UserDetails 타입으로 처리됨
-        return AuthMemberDTO;
+        return authMemberDTO;
     }// end load..
 
 }// end Cla...
