@@ -1,0 +1,7 @@
+DB1_URL=jdbc:oracle:thin:@123.142.252.25:40017/xepdb1
+DB1_USERNAME=product
+DB1_PASSWORD=Guseo4rlghkdlxld
+
+DB2_URL=jdbc:oracle:thin:@123.142.252.25:40017/xepdb1
+DB2_USERNAME=user_order
+DB2_PASSWORD=Guseo4rlghkdlxld

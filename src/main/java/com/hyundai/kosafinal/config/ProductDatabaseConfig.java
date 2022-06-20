@@ -35,6 +35,7 @@ public class ProductDatabaseConfig {
     final SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
     sessionFactory.setDataSource(db1DataSource);
     sessionFactory.setMapperLocations(applicationContext.getResources("classpath:mybatis/mapper/product/*.xml")); //쿼리작성용 mapper.xml위치 설정.
+    sessionFactory.setConfigLocation(applicationContext.getResource("classpath:mybatis/mapper-config.xml"));
     sessionFactory.setTypeAliasesPackage("com.hyundai.kosafinal.domain");
     return sessionFactory.getObject();
   }
