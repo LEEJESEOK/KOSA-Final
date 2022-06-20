@@ -7,6 +7,16 @@
         select c1.email,
                c1.password,
                c1.name,
+               c1.gender,
+               c1.birth,
+               c1.tel,
+               c1.address1,
+               c1.address2,
+               c1.zipcode,
+               c1.height,
+               c1.weight,
+               c1.point,
+               c1.status,
                c1.grade_Id,
                c1.login_type,
                c2.role_set,
@@ -20,8 +30,8 @@
     </select>
     <insert id="insertMember">
 
-        {call sp_member_insert(#{email}, #{password}, #{name}, #{gender}, #{birth}, #{tel}, #{address1}, #{address2},
-                               #{zipcode}, #{height}, #{weight}, #{point}, #{login_type})}
+        {call sp_member_insert(#{email}, #{password}, #{name}, #{gender,jdbcType=NUMERIC}, #{birth, jdbcType=DATE}, #{tel, jdbcType=VARCHAR}, #{address1, jdbcType=VARCHAR}, #{address2, jdbcType=VARCHAR},
+                               #{zipcode,jdbcType=NUMERIC}, #{height, jdbcType=NUMERIC}, #{weight, jdbcType=NUMERIC}, #{point,jdbcType=INTEGER}, #{login_type})}
 
     </insert>
 
@@ -42,7 +52,7 @@
         {call sp_member_delete(#{email)})}
     </delete>
 
-    <insert id="Grade">
+    <insert id="insertGrade">
         insert into GRADE(id, name, min, max)
         values (#{id}, #{name}, #{min}, #{max})
 

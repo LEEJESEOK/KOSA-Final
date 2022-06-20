@@ -12,10 +12,10 @@ public interface MemberMapper{
     public void insertRoleSet(RoleSetDTO roleSet); //DB에 회원 권한 삽입
     public void loginMember(@Param("email")String email, @Param("password")String password); // 로그인
     public int checkId(String email); //회원가입 시, 중복 여부 체크
-    public Member2DTO findByEmail(@Param("email") String email);
+    public Member2DTO findByEmail(String email);
     public void updateMember(MemberDTO member);
     public void deleteMember(String email);
-    public void Grade(GradeDTO grade);
+    public void insertGrade(GradeDTO grade);
 
 
 

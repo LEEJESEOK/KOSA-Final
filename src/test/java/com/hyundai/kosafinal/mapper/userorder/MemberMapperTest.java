@@ -1,6 +1,6 @@
 package com.hyundai.kosafinal.mapper.userorder;
 
-import com.hyundai.kosafinal.domain.GradeDTO;
+
 import com.hyundai.kosafinal.domain.Member2DTO;
 import com.hyundai.kosafinal.domain.MemberDTO;
 import com.hyundai.kosafinal.domain.RoleSetDTO;
@@ -11,9 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Date;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 
 @SpringBootTest
 class MemberMapperTest {
@@ -27,7 +24,7 @@ class MemberMapperTest {
     void insertMember() {
         MemberDTO member = new MemberDTO();
 
-        member.setEmail("TEST3");
+        member.setEmail("TEST4");
         member.setPassword(passwordencoder.encode("1111"));
         member.setName("이승연");
         member.setGender(0);
@@ -45,8 +42,8 @@ class MemberMapperTest {
         member.setStatus(0);
         member.setGradeId(1);
         member.setLogin_type(0);
-
-        mapper.insertMember(member);
+        System.out.println(member);
+        //mapper.insertMember(member);
 
         }
 
@@ -56,8 +53,8 @@ class MemberMapperTest {
     void insertRoleSet() {
             RoleSetDTO roleset = new RoleSetDTO();
             String role = null;
-            roleset.setUser_email("TEST1");
-            roleset.setRole_set(MemberRole.USER.name());
+            roleset.setUser_email("TEST3");
+            roleset.setRole_set(MemberRole.USER.toString());
             mapper.insertRoleSet(roleset);
         }
 
@@ -75,7 +72,7 @@ class MemberMapperTest {
     @Test
     void updateMember() {
         MemberDTO member = new MemberDTO();
-        member.setEmail("TEST1");
+        member.setEmail("TEST4");
         member.setPassword(passwordencoder.encode("1121"));
         member.setName("이제석");
         member.setGender(0);

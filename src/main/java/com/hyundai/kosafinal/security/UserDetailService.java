@@ -1,4 +1,4 @@
-package com.hyundai.kosafinal.service;
+package com.hyundai.kosafinal.security;
 
 import com.hyundai.kosafinal.mapper.userorder.MemberMapper;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -35,7 +35,7 @@ public class UserDetailService implements UserDetailsService {
 
         } catch (Exception e) {
             e.printStackTrace();
-
+            //로직 처리만 0이면 가입, 1이면 탈퇴, 2면 휴면상태
             throw new UsernameNotFoundException("Check Email or Social!!");
         } // end try
 

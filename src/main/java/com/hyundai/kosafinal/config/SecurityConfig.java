@@ -10,6 +10,7 @@ package com.hyundai.kosafinal.config;
  ***********************************************************/
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -22,43 +23,50 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 //Security 설정
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
+    @Bean
+    public RoleHierarchyImpl roleHierarchyImpl() {
+        log.info("실행");
+        RoleHierarchyImpl roleHierarchyImpl = new RoleHierarchyImpl();
+        roleHierarchyImpl.setHierarchy("ROLE_ADMIN > ROLE_MANAGER > ROLE_USER");
+        return roleHierarchyImpl;
+    }
     @Bean // Bean 등록
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+
+
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-//        http.authorizeRequests()
-//                .antMatchers("/login/login").permitAll() //login.html은 모든 사용자가 볼 수 있다.
-//                .antMatchers("/board").hasRole("USER"); //게시판은 USER 권한만 가진 사용자가 볼 수 있다.
-//
-//
-//        //일반 사용자 로그인
-//        http.formLogin().loginPage("/login/login")
-//                .loginProcessingUrl("/login")
-//                .usernameParameter("mid") //DB의 Member 테이블과 연동하기 위해 username을 mid로 설정한다.
-//                .passwordParameter("mpassword")//DB의 Member 테이블과 연동하기 위해 username을 mpassword로 설정한다.
-//                .defaultSuccessUrl("/board")//로그인 성공 후 이동할 URL
-//                .failureUrl("/login/login?error=true"); //로그인 실패시 URL
-//
-//
-//        //소셜 로그인 (구글)
-//        http.oauth2Login().defaultSuccessUrl("/board");
-//
-//        //소셜 로그인 (네이버)
-//
-//        //소셜 로그인 (카카오)
-//
-//        // csrf 토큰 비활성화
-//        http.csrf().disable();
-//
-//
-//        //로그아웃
-//        http.logout().logoutUrl("/logout")
-//                .logoutSuccessUrl("/login/login");
+        http.authorizeRequests()
+                .antMatchers("/member/login").permitAll() //login.html은 모든 사용자가 볼 수 있다.
+                .antMatchers("/board/board").hasRole("USER"); //게시판은 USER 권한만 가진 사용자가 볼 수 있다.
+
+
+        //일반 사용자 로그인, 로그인 페이지 우회
+        http.formLogin().loginPage("/member/login")
+                .loginProcessingUrl("/login")
+                .usernameParameter("email") //DB의 Member 테이블과 연동하기 위해 username을 email로 설정한다.
+                .passwordParameter("password")//DB의 Member 테이블과 연동하기 위해 password를 password 로 설정한다.
+                .defaultSuccessUrl("/board/board")//로그인 성공 후 이동할 URL
+                .failureUrl("/member/login?error=true"); //로그인 실패시 URL
+        //소셜 로그인 (구글)
+        http.oauth2Login().defaultSuccessUrl("/board/board");
+
+        //소셜 로그인 (네이버)
+
+        //소셜 로그인 (카카오)
+
+        // csrf 토큰 비활성화
+        http.csrf().disable();
+
+
+        //로그아웃
+        http.logout().logoutUrl("/logout")
+                .logoutSuccessUrl("/member/login");
 
     }
 
