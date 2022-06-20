@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th=http://www.thymeleaf.org
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+  <title> 상품 리뷰 </title>
+  <link rel="stylesheet"
+        th:href="@{/productReview/css/popup.css}" />
+  <link rel="stylesheet"
+        th:href="@{/productReview/css/common.css}" />
+</head>
+<body>
+<div id="bodyWrap" class="item_detail">
+<div class="popwrap w_type_4" id="customerReviewDiv" style="top: 1226.5px; position: absolute; z-index: 101;">
+  <!--마일리지 안내영역 1906 -->
+  <div class="mileage_info_wrap1906">
+    <p class="wrap_heading">상품평 작성 시 추가 마일리지를 드려요!</p>
+    <div class="mileage_info_box">
+      <div class="review_w">
+        <p class="review_w_tit">• 온라인 구매 상품평 작성 시</p>
+        <ul>
+          <li>
+            <div class="ico_mileage1906">
+              정상상품
+            </div>
+            <p><strong>정상상품</strong><br>구매금액의 <b>0.5%</b></p>
+          </li>
+          <li>
+            <div class="ico_mileage1906">
+              아울렛상품
+            </div>
+            <p><strong>아울렛상품</strong><br>구매금액의 <b>0.1%</b></p>
+          </li>
+          <li>
+            <div class="ico_mileage1906">
+              포토상품평
+            </div>
+            <p><strong>포토상품평</strong><br>(상품별 최초)<br><b>2,000마일리지</b></p>
+          </li>
+        </ul>
+      </div>
+      <div class="best_review">
+        <p class="review_w_tit">• 온라인/오프라인 구매</p>
+        <ul>
+          <li>
+            <div class="ico_mileage1906">
+              베스트리뷰
+            </div>
+            <p><strong>베스트리뷰</strong><br>매월 5명 <b>10만원</b> 바우처</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="noti_box" style="">
+      <ul class="bul_sty01_li">
+        <li>마일리지는 배송 완료일로부터 30일 이내, 작성한 상품평에 한하여 제공됩니다.</li>
+        <li>상품평 작성 시, 제공되는 추가 마일리지는 온라인에서 구입한 상품에 한하여 제공됩니다.</li>
+        <li>베스트 리뷰는 온라인/오프라인에서 구매한 상품의 상품평 전체를 대상으로 선정합니다.</li>
+        <li>할인, 쿠폰 적용 후 실결제금액이 5,000원 이상인 상품에 한하여 지급됩니다.</li>
+        <li>판매가 종료된 상품의 경우, 상품 상세페이지가 소멸되어 상품평 작성 및 마일리지 적립이 불가능합니다.</li>
+      </ul>
+    </div>
+    <div class="btn_noti_box on"><span>닫기</span></div>
+  </div>
+  <!--//마일리지 안내영역 1906 -->
+  <div class="pop_tltwrap2 pb0 customerreviewdiv1905">
+
+    <h3>
+      상품평(<span id="review_cnt" class="review_cnt">0</span>)
+    </h3>
+    <div class="star_score1807" id="totalStarScoreWrapper" style="display: none;">
+            <span class="cmt_star">
+                 <!-- 별점에 따라 class명 변경 (star1, star2 ,star3, star4, star5) -->
+                <span class="cmt_per" id="totalStarScore">별점</span>
+            </span>
+    </div>
+    <a href="#;" class="btn_evaluation1905" id="customerReviewWrite" onclick="GA_Event('상품평','상품평 작성하기','클릭');">상품평 작성하기</a>
+  </div>
+  <!-- pop_cnt-->
+  <div class="pop_cnt evaluation_list1807 options">
+    <div class="tab_a m3 mt20">
+      <input type="hidden" id="review_tab_active" value="ALL">
+      <ul id="review_tab">
+        <li id="ALL"><a href="#;" class="active" onclick="GA_Event('상품평','탭','전체');">전체 (0)</a></li>
+        <li id="PHOTO"><a href="#;" class="" onclick="GA_Event('상품평','탭','포토상품평');">포토 상품평 (0)</a></li>
+        <li id="TEXT"><a href="#;" onclick="GA_Event('상품평','탭','일반상품평');">일반 상품평 (0)</a></li>
+      </ul>
+    </div>
+    <div class="clearfix review_tab1_1807">
+      <ul><li class="evaluation_view no_list_data1905" style="text-align:center">등록된 상품평이 없습니다.<br>이 상품에 대한 첫 번재 리뷰 글을 작성해주세요~</li></ul>
+    </div>
+    <!-- paging -->
+    <div class="paging mt30" id="reviewPagingDiv"><a class="prev2" href="javascript:void(0);" onclick="GA_Event('상품평', '페이지', 'PREV2')">처음 페이지로 이동</a><a href="javascript:void(0);" class="prev" onclick="GA_Event('상품평', '페이지', 'PREV')">이전 페이지로 이동</a><span class="num"><a href="javascript:void(0);" class="pageBtn" pagenum="1" onclick="GA_Event('상품평', '페이지', '1')">1</a></span><a href="javascript:void(0);" class="next" onclick="GA_Event('상품평', '페이지', 'NEXT')">다음 페이지로 이동</a><a href="javascript:void(0);" class="next2" onclick="GA_Event('상품평', '페이지', 'NEXT2')">마지막 페이지로 이동</a></div>
+    <!-- //paging -->
+  </div>
+  <!--// pop_cnt-->
+  <a href="javascript:void(0);" class="btn_close"><img src="http://cdn.thehandsome.com/_ui/desktop/common/images/popup/ico_close.png" alt="닫기"></a>
+</div>
+</div>
+</body>
+</html>

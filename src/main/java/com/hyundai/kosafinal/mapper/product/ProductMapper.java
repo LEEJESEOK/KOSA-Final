@@ -1,4 +1,7 @@
 package com.hyundai.kosafinal.mapper.product;
 
-public class ProductMapper {
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface ProductMapper {
 }
