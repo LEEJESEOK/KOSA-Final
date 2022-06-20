@@ -4,7 +4,7 @@
 <head>
     <title>더한섬닷컴</title>
 
-    <link rel="shortcut icon" th:href="@{/images/thehandsome_ic_16x16.ico}">
+    <link rel="shortcut icon" href="http://cdn.thehandsome.com/_ui/desktop/common/images/common/thehandsome_ic_16x16.ico">
 
     <link rel="stylesheet" th:href="@{/css/brand.css}" />
     <link rel="stylesheet" th:href="@{/css/common.css}" />
@@ -43,7 +43,7 @@
 <body oncontextmenu="return false">
 
 <!-- headerWrap -->
-<th:block th:replace="~{/header_logo :: header_logo}"></th:block>
+<th:block th:replace="~{/header :: header}"></th:block>
 <!-- //headerWrap -->
 
 <script>
@@ -122,6 +122,41 @@
                     });
 
                     $('button.ui-datepicker-trigger').addClass('ico_cld');
+
+                    $('#setDateBtn1').click(function(){
+                        var today = new Date();
+                        var endDate = today.format("yyyy-MM-dd");
+                        $('#eterm').val(endDate);
+                        var startDate = today;
+                        startDate.setDate(today.getDate()-7);
+                        startDate = startDate.format("yyyy-MM-dd");
+                        $('#sterm').val(startDate);
+
+                    });
+                    $('#setDateBtn1').click();
+
+                    $('#setDateBtn2').click(function(){
+                        var today = new Date();
+                        var endDate = today.format("yyyy-MM-dd");
+                        $('#eterm').val(endDate);
+                        var startDate = today;
+                        startDate.setMonth(today.getMonth()-1);
+                        startDate = startDate.format("yyyy-MM-dd");
+                        $('#sterm').val(startDate);
+
+                    });
+
+                    $('#setDateBtn3').click(function(){
+                        var today = new Date();
+                        var endDate = today.format("yyyy-MM-dd");
+                        $('#eterm').val(endDate);
+                        var startDate = today;
+                        startDate.setMonth(today.getMonth()-3);
+                        startDate = startDate.format("yyyy-MM-dd");
+                        $('#sterm').val(startDate);
+
+                    });
+
 
                     var mymantomaninquirylist = new BoardListController('mantomaninquiryListForm', '#listBody', '.paging', 10, 'searchBtn');
                     mymantomaninquirylist.setRowHtml = function(results){
