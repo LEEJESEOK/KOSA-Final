@@ -31,7 +31,7 @@
     <insert id="insertMember">
 
         {call sp_member_insert(#{email}, #{password}, #{name}, #{gender,jdbcType=NUMERIC}, #{birth, jdbcType=DATE}, #{tel, jdbcType=VARCHAR}, #{address1, jdbcType=VARCHAR}, #{address2, jdbcType=VARCHAR},
-                               #{zipcode,jdbcType=NUMERIC}, #{height, jdbcType=NUMERIC}, #{weight, jdbcType=NUMERIC}, #{point,jdbcType=INTEGER}, #{login_type})}
+                               #{zipcode,jdbcType=NUMERIC}, #{height, jdbcType=NUMERIC}, #{weight, jdbcType=NUMERIC}, #{point,jdbcType=NUMERIC}, #{login_type})}
 
     </insert>
 
@@ -45,7 +45,7 @@
     </select>
     <update id="updateMember">
         {call sp_member_update(#{email}, #{password},#{name}, #{gender}, #{birth}, #{tel}, #{address1}, #{address2},
-                               #{height}, #{weight})}
+                        #{height}, #{weight})}
     </update>
 
     <delete id="deleteMember">

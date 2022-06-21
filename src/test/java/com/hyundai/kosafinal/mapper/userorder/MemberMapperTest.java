@@ -27,36 +27,35 @@ class MemberMapperTest {
         member.setEmail("TEST4");
         member.setPassword(passwordencoder.encode("1111"));
         member.setName("이승연");
-        member.setGender(0);
-        Date date=new Date();
-        member.setBirth(date);
-        member.setTel("01088888888");
-        member.setAddress1("동작구");
-        member.setAddress2("보라매로");
-        member.setZipcode("14122");
-        member.setHeight(178);
-        member.setWeight(80);
-        member.setPoint(111111);
-        member.setRecentLoginDate(date);
-        member.setSignUpDate(date);
-        member.setStatus(0);
-        member.setGradeId(1);
-        member.setLogin_type(0);
+//        member.setGender(0);
+        Date date = new Date();
+//        member.setBirth(date);
+//        member.setTel("01088888888");
+//        member.setAddress1("동작구");
+//        member.setAddress2("보라매로");
+//        member.setZipcode("14122");
+//        member.setHeight(178);
+//        member.setWeight(80);
+//        member.setPoint(111111);
+//        member.setRecentLoginDate(date);
+//        member.setSignUpDate(date);
+//        member.setStatus(0);
+//        member.setGradeId(1);
+//        member.setLogin_type(0);
         System.out.println(member);
-        //mapper.insertMember(member);
+        mapper.insertMember(member);
 
-        }
-
+    }
 
 
     @Test
     void insertRoleSet() {
-            RoleSetDTO roleset = new RoleSetDTO();
-            String role = null;
-            roleset.setUser_email("TEST3");
-            roleset.setRole_set(MemberRole.USER.toString());
-            mapper.insertRoleSet(roleset);
-        }
+        RoleSetDTO roleset = new RoleSetDTO();
+        String role = null;
+        roleset.setUser_email("TEST3");
+        roleset.setRole_set(MemberRole.USER.toString());
+        mapper.insertRoleSet(roleset);
+    }
 
     @Test
     void loginMember() {
@@ -65,7 +64,7 @@ class MemberMapperTest {
     @Test
     void checkId() {
         MemberDTO MemberDTO = new MemberDTO();
-        int result=mapper.checkId("TEST1");
+        int result = mapper.checkId("TEST1");
         System.out.println(result);
     }
 
@@ -76,7 +75,7 @@ class MemberMapperTest {
         member.setPassword(passwordencoder.encode("1121"));
         member.setName("이제석");
         member.setGender(0);
-        Date date=new Date();
+        Date date = new Date();
         member.setBirth(date);
         member.setTel("01058585858");
         member.setAddress1("인천");
@@ -89,15 +88,15 @@ class MemberMapperTest {
 
     @Test
     void deleteMember() {
-        String email="test2";
+        String email = "test2";
         mapper.deleteMember(email);
     }
 
     @Test
-    void findByEmail(){
-        String email="TEST1";
-        int login_type=0;
-        Member2DTO result=mapper.findByEmail(email);
+    void findByEmail() {
+        String email = "TEST1";
+        int login_type = 0;
+        Member2DTO result = mapper.findByEmail(email);
         System.out.println(result);
     }
 }

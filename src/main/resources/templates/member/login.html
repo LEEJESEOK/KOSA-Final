@@ -5,45 +5,103 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>LoginPage</title>
+    <link rel="stylesheet" th:href="@{/css/brand.css}"/>
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
+    <link rel="stylesheet" th:href="@{/css/contents.css}"/>
+    <link rel="stylesheet" th:href="@{/css/font_443.css}"/>
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
+    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
+    <link rel="stylesheet" th:href="@{/css/popup.css}"/>
+    <link rel="stylesheet" th:href="@{/css/jquery-ui.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/brand.css}"/>
+    <link rel="stylesheet" th:href="@{/css/footer.css}"/>
+    <link rel="stylesheet" th:href="@{/css/contents.css}"/>
+    <link rel="stylesheet" th:href="@{/css/print.css}"/>
+
+    <script type="text/javascript" th:src="@{/js/actions.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery-1.11.2.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.vticker.js}"></script>
+    <script type="text/javascript" th:src="@{/js/common.js}"></script>
+    <script type="text/javascript" th:src="@{/js/html5shiv-printshiv.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.flexslider.js}"></script>
+    <script type="text/javascript" th:src="@{/js/ui.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.form-3.51.js}"></script>
+    <script type="text/javascript" th:src="@{/js/common_function.js}"></script>
+    <script type="text/javascript" th:src="@{/js/videojs-ie8.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/html5shiv.js}"></script>
+    <script type="text/javascript" th:src="@{/js/respond.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery-ui-1.11.2.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/instagramAPI.js}"></script>
+    <script type="text/javascript" th:src="@{/js/makePCookie.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/netfunnel.js}" charset="UTF-8"></script>
+    <script type="text/javascript" th:src="@{/js/netfunnel_skin.js}" charset="UTF-8"></script>
+    <script type="text/javascript" th:src="@{/js/unorm.js}"></script>
+    <script type="text/javascript" th:src="@{/js/appboy.min.js}"></script>
+
+<!--    <script>-->
+<!--        function check_form(){-->
+<!--            if(document.getElementById("email").value==''){-->
+<!--                alert("아이디 /이메일을 입력해주십시오.");-->
+<!--                return false;-->
+<!--            }-->
+<!--            if(document.getElementById("password").value=='') {-->
+<!--                alert("비밀번호를 입력해주십시오.");-->
+<!--                return false;-->
+<!--            }-->
+<!--            document.getElementById('loginForm').submit();-->
+<!--        }-->
+
+<!--    </script>-->
 </head>
 <body>
-<div class="border_box1">
-    <div class="inner_box">
-        <div class="title_wrap">
-            <h4>회원</h4>
-        </div>
-        <div id="hpIPLogin">
-            <form  id="loginForm"  name="loginForm" action="/login" method="post">
-                <input type="hidden" name="inputId" id="inputId" value = "" />
-                <fieldset>
-                    <legend>로그인 입력항목</legend>
-                    <div class="login_section">
-
-                        <p class="login_err_txt" id="hpErrMsg" style="margin-left:0px;"> </p>
-                        <div>
-                            <div>
-                                <input type="text" id="email" name="email" placeholder="아이디 / 이메일을 입력하세요." title="아이디" value=""/>
-                            </div>
-                            <div>
-                                <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요." title="비밀번호" />
-                            </div>
-                        </div>
-                        <button class="loginBtn" type="submit">로그인</button>
-
-                        <div class="id_save">
-                            <input type="checkbox" id="id_save" name="id_save" value="Y"> <label for="id_save">아이디 저장</label>
-                        </div>
+<div id="bodyWrap" class="login">
+    <h3 class="cnts_title"><span>로그인</span></h3>
+    <div class="sub_container">
+        <div id="handsomeCust" class="login_wrap box_type_1 renewal1904" style="display: flex; justify-content: center;">
+            <div class="border_box1">
+                <div class="inner_box">
+                    <div class="title_wrap">
+                        <h4>회원</h4>
                     </div>
-                </fieldset>
-            </form>
-            <form action="/member/signUp" method="GET">
-                <button id="joinBtn1" type="submit">회원가입</button>
-            </form>
+                    <div id="hpIPLogin">
+                        <form  id="loginForm"  name="loginForm" action="/login" method="post">
+                            <input type="hidden" name="inputId" id="inputId" value = "" />
+                            <fieldset>
+                                <legend>로그인 입력항목</legend>
+                                <div class="login_section">
 
-            <a href="/oauth2/authorization/google"><img src="/images/google.jpeg" width="30px" alt="구글"/>Google</a>
+                                    <p class="login_err_txt" id="hpErrMsg" style="margin-left:0px;"> </p>
+                                    <div>
+                                        <div>
+                                            <input type="text" id="email" name="email" placeholder="아이디 / 이메일을 입력하세요." title="아이디" value=""/>
+                                        </div>
+                                        <div>
+                                            <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요." title="비밀번호" />
+                                        </div>
+                                    </div>
+                                    <button class="btn_login" id="login_btn">로그인</button>
+                                    <a href="/member/signUp" class="btn_login" id="login_btn">회원가입</a>
+                                </div>
+                            </fieldset>
+                        </form>
 
+
+                        <div class="login1905">
+                            <div>
+                                <a href="/oauth2/authorization/google" class="otp"><img src="/images/google.PNG" width="60px" alt="구글"/></a>
+                            </div>
+                            <div>
+                                <a href="#"><img src="/images/naver.PNG" width="60px" alt="네이버"/></a>
+                            </div>
+                        </div>
+                        <div
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
 </body>
 </html>

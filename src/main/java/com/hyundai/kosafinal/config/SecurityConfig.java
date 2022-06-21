@@ -43,8 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers("/member/login").permitAll() //login.html은 모든 사용자가 볼 수 있다.
-                .antMatchers("/board/board").hasRole("USER"); //게시판은 USER 권한만 가진 사용자가 볼 수 있다.
-
+                .antMatchers("/board/board").hasRole("USER")//게시판은 USER 권한만 가진 사용자가 볼 수 있다.
+                .antMatchers("/member/modify").hasRole("USER");
 
         //일반 사용자 로그인, 로그인 페이지 우회
         http.formLogin().loginPage("/member/login")

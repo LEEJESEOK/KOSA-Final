@@ -31,7 +31,15 @@ public class MemberServiceImpl implements MemberService {
             return false;
         }
         member.setPassword(passwordencoder.encode(member.getPassword())); //암호 인코딩
+        System.out.println(member);
         mapper.insertMember(member); //mapper 연동
         return true;
+    }
+
+
+    @Override
+    public int checkId(String email){
+        int result=mapper.checkId(email);
+        return result;
     }
 }
