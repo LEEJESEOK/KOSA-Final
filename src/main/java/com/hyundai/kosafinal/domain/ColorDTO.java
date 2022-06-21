@@ -6,4 +6,6 @@ import lombok.Data;
 public class ColorDTO {
     private String id;
     private String colorName;
+    private String colorChipUri;
+    private String productId;
 }
