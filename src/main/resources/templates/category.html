@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>카테고리</title>
+    <data th:replace="/head.html::head"></data>
+</head>
+<body>
+<script type="text/javascript">
+    const rowMax = 3;
+    const colMax = 4;
+
+    let large = [[${category.large}]];
+    let medium = [[${category.medium}]];
+    let small = [[${category.small}]];
+    let color = "";
+    let size = "";
+    let brand = "";
+    let minPrice = 0, maxPrice = Number.MAX_SAFE_INTEGER;
+    let sortType = 0;
+    let pageNum = 1;
+
+
+    $().ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "/api/category/" + makeFilterUri(large, medium, small, pageNum, brand, color, size, minPrice, maxPrice, sortType),
+            contentType: "application/json",
+            success: function (data) {
+                console.log(data);
+                console.log(data.count);
+                $("#num").text(data.count);
+            },
+            error: function (request, status, error) {
+                ajaxError(request, status, error);
+            }
+        })
+    });
+
+    function makeFilterUri(large, medium, small, pageNum = 1, brand = '', color = '', size = '', minPrice = '', maxPrice = '', sortType = 0) {
+        let uri = large + "_" + medium + "_" + small + "_" + pageNum + "_" + brand + "_" + color + "_" + size;
+        return uri;
+        +"_" + minPrice + "_" + maxPrice + "_" + sortType;
+    }
+
+    function ajaxError(request, status, error) {
+        let message = "code : " + request + "\n";
+        message += "message : " + request.responseText + "\n";
+        message += "error : " + error;
+
+        console.log(message);
+    }
+
+</script>
+
+<div class="bodyWrap">
+    <h3 class="cnts_title ou1804">
+        <span>
+            <a th:href="@{/category/{large}__(large=${category.large})}" th:text="${category.large}"></a>
+
+            <img th:if="${not #strings.isEmpty(category.medium)}"
+                 alt="location arr"
+                 src="http://cdn.thehandsome.com/_ui/desktop/common/images/products/ou_location_arr.png">
+            <a th:if="${not #strings.isEmpty(category.medium)}"
+               th:href="@{/category/{large}_{medium}_(large=${category.large}, medium=${category.medium})}"
+               th:text="${category.medium}"></a>
+
+            <img th:if="${not #strings.isEmpty(category.small)}"
+                 alt="location arr"
+                 src="http://cdn.thehandsome.com/_ui/desktop/common/images/products/ou_location_arr.png">
+            <a th:if="${not #strings.isEmpty(category.small)}"
+               th:href="@{/category/{large}_{medium}_{small}(large=${category.large}, medium=${category.medium}, small=${category.small})}"
+               th:text="${category.small}"></a>
+        </span>
+    </h3>
+    <div class="adaptive_wrap">
+        <div class="filterWrap">
+            <ul class="clearfix float_left">
+
+            </ul>
+            <div class="items_count float_right">
+                <span class="num" id="num"></span>
+                <span>전체</span>
+            </div>
+        </div>
+        <div class="items_list cate_item4" id="listContent" style="display: block">
+            <ul class="clearfix" id="listBody">
+                <li>
+                    <div class="item_box">
+                        <a class="item_info1" href=""></a>
+                        <a class="item_info2" href=""></a>
+                        <div class="color_more_wrap">
+
+                        </div>
+                    </div>
+                </li>
+                <!--                <li>-->
+                <!--                    <div class="item_box">-->
+                <!--                        <a class="item_info1" href="/ko/p/IL2C5WJC385WP_OT?categoryCode=we051"-->
+                <!--                           onclick="setEcommerceData('0', 'CATEGORY');">-->
+                <!--            <span class="item_img">-->
+                <!--                <img alt="[LUX LEISURE] 린넨 블렌드 싱글 재킷" class="respon_image"-->
+                <!--                     id="T01_IMG_0"-->
+                <!--                     onerror="this.src='http://cdn.thehandsome.com/_ui/desktop/common/images/products/no_img3.jpg'"-->
+                <!--                     src="http://newmedia.thehandsome.com/IL/2C/SS/IL2C5WJC385WP_OT_T01.jpg"-->
+                <!--                     targetcode="IL2C5WJC385WP_OT">-->
+                <!--                <img alt="[LUX LEISURE] 린넨 블렌드 싱글 재킷" class="respon_image on"-->
+                <!--                     id="T02_IMG_0"-->
+                <!--                     onerror="this.src='http://cdn.thehandsome.com/_ui/desktop/common/images/products/no_img3.jpg'"-->
+                <!--                     src="http://newmedia.thehandsome.com/IL/2C/SS/IL2C5WJC385WP_OT_T02.jpg"-->
+                <!--                     style="display: none; opacity: 1;"-->
+                <!--                     targetcode="IL2C5WJC385WP_OT">-->
+                <!--                <input id="newImage1_0" type="hidden"-->
+                <!--                       value="http://newmedia.thehandsome.com/IL/2C/SS/IL2C5WJC385WP_OT_T01.jpg">                <input-->
+                <!--                    id="newImage2_0" type="hidden"-->
+                <!--                    value="http://newmedia.thehandsome.com/IL/2C/SS/IL2C5WJC385WP_OT_T02.jpg">            </span>-->
+                <!--                            <span class="item_size" id="itemsize_0"-->
+                <!--                                  style="display: none; height: 20px; padding-top: 15px; margin-top: 0px; padding-bottom: 15px; margin-bottom: 0px;">-->
+                <!--                <div id="IL2C5WJC385WP_OT"> <span>82</span><span>88</span></div>-->
+                <!--            </span>-->
+                <!--                        </a>-->
+                <!--                        <a class="item_info2" href="/ko/p/IL2C5WJC385WP_OT?categoryCode=we051"-->
+                <!--                           onclick="setEcommerceData('0', 'CATEGORY');">-->
+                <!--                            <span class="brand">LÄTT</span>-->
+                <!--                            <span class="title">[LUX LEISURE] 린넨 블렌드 싱글 재킷</span>-->
+                <!--                            <span class="price"><span id="price_IL2C5WJC385WP_OT"><span>￦595,000</span></span></span>-->
+                <!--                            <span class="flag">-->
+                <!--                <span class="product">NEW</span>-->
+                <!-- <span class="hsDelivery1902 ch1904">한섬딜리버리</span>-->
+                <!--            </span>-->
+                <!--                        </a>-->
+                <!--                        <div class="color_more_wrap">-->
+                <!--                            <a class="cl wt" href="javascript:void(0);"-->
+                <!--                               onclick="GA_Event('카테고리_리스트','컬러칩','OT')"-->
+                <!--                               style="background:#e5dcd5 url('http://newmedia.thehandsome.com/IL/2C/SS/IL2C5WJC385WP_OT_C01.jpg/dims/resize/13x14');"></a>-->
+                <!--                        </div>-->
+                <!--                        <a class="add_wishlist " data-value="IL2C5WJC385WP_OT"-->
+                <!--                           href="javascript:addWishListClick('IL2C5WJC385WP');"-->
+                <!--                           id="wish_IL2C5WJC385WP" onclick="GA_Category('wish', $(this));brazeLogCustomEvent('0');">위시리스트-->
+                <!--                            담기</a>-->
+                <!--                    </div>-->
+                <!--                </li>-->
+            </ul>
+        </div>
+    </div>
+
+</div>
+</div>
+
+</body>
+</html>
