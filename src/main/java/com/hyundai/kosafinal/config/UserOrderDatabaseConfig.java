@@ -33,6 +33,7 @@ public class UserOrderDatabaseConfig {
     sessionFactory.setDataSource(db2DataSource);
     sessionFactory.setMapperLocations(applicationContext.getResources("classpath:mybatis/mapper/userorder/*.xml"));
     sessionFactory.setConfigLocation(applicationContext.getResource("classpath:mybatis/mapper-config.xml"));
+
     return sessionFactory.getObject();
   }
 
