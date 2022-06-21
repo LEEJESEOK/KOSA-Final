@@ -43,7 +43,7 @@
 <body oncontextmenu="return false">
 
 <!-- headerWrap -->
-<th:block th:replace="~{/header_category :: header_category}"></th:block>
+<th:block th:replace="~{/header_logo :: header_logo}"></th:block>
 <!-- //headerWrap -->
 
 <script>
@@ -82,7 +82,6 @@
 
         // 이메일 변경
         $("#uidDomainSel").change(function () {
-            $("#email").val('');
             $("#emailDomain").val($("#uidDomainSel").val());
         });
 
@@ -91,7 +90,7 @@
         $("#cancleBtn").click(function () {
             var lc = new layerConfirm("문의 내용 작성을 취소하시겠습니까?");
             lc.confirmAction = function () {
-                location.href = "/mypage/reviewList";
+                location.href = "/mypage/review/list";
             };
         });
 
@@ -173,16 +172,29 @@
                 }
             }
 
-            $("#emailAddress").val('$("#email").val()+"@"+$("#emailDomain").val()');
-            $("#mobilePhoneNumber").val($("select[name=hp1]").val() + "-" + $("#hp2").val() + "-" + $("#hp3").val());
-
             // 문의 내용 개행 넣어서 재설정
-            var tUrl = "";
             var dbTxt = $('#contents').val();
             var replacement = replaceAll(dbTxt, /\n/g, '<br/>');
             $('#contents').val(replacement);
 
-            $("#mypageReviewForm").submit();
+            $.ajax({
+                type: "POST",
+                url: "/mypage/review/register",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify({
+                    title : $('#subject').val(),
+                    content : $('#contents').val(),
+                    category : $("#largeClassificationCode option:checked").text()
+                }),
+                success: function () {
+                    location.replace("/mypage/review/complete");
+                },
+                error: function (request, status, error) {
+                    alert("Ajax 통신 에러 발생");
+                    alert(error);
+                }
+            });
 
         }
 
@@ -206,452 +218,19 @@
         $("select#hp1 option").each(function () {
             this.selected = (this.text == hp1);
         });
-        $("#mantomanFile").on('change', function () {
-            $("#textManToManFile").val($("#mantomanFile").val());
-        });
-
-        //check file
-        $(document).on('change', 'input[type=file]', function () {
-            var fileName = $(this)[0].files[0].name.split(".");
-            var fileSize = $(this)[0].files[0].size;
-            var maxSize = 10 * 1024 * 1024;
-            var fileExtension = fileName[parseInt(fileName.length - 1)].toUpperCase();
-            if (fileExtension == 'JPG' || fileExtension == 'JPEG' || fileExtension == 'GIF' || fileExtension == 'PNG') {
-            } else {
-                $(this).val('');
-                $("input[name=fileText]").val('');
-                var la = new layerAlert("파일 확장자를 확인해 주세요");
-                la.confirmAction = function () {
-                    return;
-                };
-            }
-
-            if (fileSize > maxSize) {
-                $(this).val('');
-                $("input[name=fileText]").val('');
-                var la = new layerAlert("10MB 미만의 jpg,gif,png 파일만 첨부하실 수 있습니다.");
-                la.confirmAction = function () {
-                    return;
-                };
-            }
-            $("input[name=fileText]").val($(this).val());
-        });
-        var u_email = $('#emailAddress');
-        var u_phone = $('#mobilePhoneNumber');
 
         $(".btn_close").on("click", function () {
             hideShowLayer();
             $(".popwrap").hide();
         });
 
-        $('.chooseDel').on('click', function () {
-            var tabId = $(this).attr("id");
-            var checkVal = $('input:checkbox[name="chkedprodcuct"]:checked').val();
-            if (checkVal == undefined) {
-                layerAlert("선택된 상품이 없습니다. <br /> 삭제할 상품을 선택해 주세요.");
-            } else {
-                var array = [];
-                $("input:checkbox[name='chkedprodcuct']:checked").each(function () {
-                    var prodCd = "";
-                    if (tabId == "btnApplyTabWish") {
-                        var tmpProdCd = $(this).siblings("img").attr("src");
-                        tmpProdCd = tmpProdCd.substring(tmpProdCd.lastIndexOf("/") + 1, tmpProdCd.lastIndexOf("_"));
-                        prodCd = tmpProdCd;
-                    } else {
-                        prodCd = $(this).attr("code");
-                    }
-
-                    var prd = {
-                        prdCode: prodCd,
-                        prdName: $(this).attr("prdName"),
-                        brdName: $(this).attr("brand"),
-                        ordNo: $(this).attr("orderCd"),
-                        image: $(this).siblings("img").attr("src"),
-                        orderPk: $(this).attr("orderPk")
-                    }
-                    array.push(prd);
-                });
-
-                var totalProdLenght = array.length + $("#productSelected ul").children().length;
-                var removeCnt = 0;
-                if (totalProdLenght > 3) {
-                    layerAlert("상품은 최대 3개까지 첨부할 수 있습니다.");
-                    removeCnt = totalProdLenght - 3;
-                }
-
-                $($("#productSelected ul").children("li").get().reverse()).each(function (i, elem) {
-                    if (i < removeCnt) {
-                        $(this).remove();
-                    }
-                });
-
-                var lc = new layerConfirm("선택한 상품을 적용하시겠습니까?", '확인', '취소'); // 확인, 취소
-                lc.confirmAction = function () {
-                    var searchResultHtml = "";
-                    var addPrdCnt = 0;
-                    for (var i in array) {
-                        addPrdCnt++;
-                        searchResultHtml += '	<li id="' + array[i].prdCode + '" class="search_res_prod" orderPk="' + array[i].orderPk + '" data-prdCd="' + array[i].prdCode + '">';
-                        searchResultHtml += '		<img src="' + array[i].image + '" alt="">';
-                        searchResultHtml += '			<p><span>' + array[i].brdName + '</span><br>' + array[i].prdName + '</p>';
-                        searchResultHtml += '		<a onclick="removeEl(this);" href="javascript:;">삭제</a>';
-                        searchResultHtml += '	</li>';
-                    }
-                    if ($("#productSelected ul").children().length > 0) {
-                        $('.shpro_wrap ul li:first-child').before(searchResultHtml);
-                    } else {
-                        $('.shpro_wrap ul').append(searchResultHtml);
-                    }
-
-                    addPrdCnt = 0;
-                    hideShowLayer();
-                }
-            }
-        });
-
-        $("#optionPd").change(function () {
-            var optionpd = $("#optionPd").val();
-            $('#searchWord').val('');
-            $('#searchCode').val('');
-            if ($(this).val() == 'productNm') {
-                $('#searchWord').val($('#findkeyword').val());
-            } else if ($(this).val() == 'productCd') {
-                $('#searchCode').val($('#findkeyword').val());
-            } else {
-                $('#searchWord').val($('#findkeyword').val());
-                $('#searchCode').val($('#findkeyword').val());
-            }
-            findProductList();
-            return false;
-        });
-        findProductList();
-
-        // 수정할 경우 값 세팅 하기
-        setContents();
     });
-
-
-    // 값 셋팅
-    function setContents() {
-
-        var pkInquiry = "";
-        var subject = "";
-        var contents = "";
-        var largeClassificationCode = "";
-        var smallClassificationCode = "";
-        var smsAlarmReceiveYN = "";
-        var textManToManFile = "";
-        var orderNumber = "";
-
-        // 자동으로 붙는 html 태그 삭제
-        contents = contents.replace(/&lt;/gim, '<');
-        contents = contents.replace(/&gt;/gim, '>');
-        contents = contents.replace(/<br\/>/gim, '\n');
-        contents = contents.replace(/<br>/gim, '\n');
-        contents = contents.replace(/<div class='shpro_wrap'>/gim, '');
-        contents = contents.replace(/<span>/gim, '');
-        contents = contents.replace(/<\/span>/gim, '');
-        contents = contents.replace(/<\/div>/gim, '');
-
-
-        //XSS필터로 인한 특수문자 치환
-        contents = contents.replace(/&#40;/gim, '(');
-        contents = contents.replace(/&#41;/gim, ')');
-        contents = contents.replace(/&#39;/gim, '\'');
-
-
-        $("#pkInquiry").val(pkInquiry);
-        $("#subject").val(subject);
-        $("#contents").val(contents);
-        if (smsAlarmReceiveYN === "true") {
-            $("#smsAlarmReceiveYN").prop('checked', true);
-        } else {
-            $("#smsAlarmReceiveYN").remove('checked');
-        }
-        $("#textManToManFile").val(textManToManFile);
-        //$("#productSelected").text(orderNumber);
-        if (largeClassificationCode !== null && largeClassificationCode !== "") {
-            $.ajax({
-                type: "GET",
-                url: "/ko/svcenter/getsmallclass?lcode=" + largeClassificationCode,
-                success: function (data) {
-                    var rows = data.rows.length;
-                    var combo = "";
-                    for (i = 0; i < rows; i++) {
-                        var code = data.rows[i].smallClassificationCode;
-                        var name = data.rows[i].smallClassificationName;
-                        $('#smallClassificationCode').empty();
-                        $("#smallClassificationCode").append("<option value=''>소분류</option>");
-                        combo += "<option value='" + code + "'>" + name + "</option>";
-                    }
-                    $("#smallClassificationCode").append(combo);
-                    $("#largeClassificationCode").val(largeClassificationCode).attr("selected", "selected");
-                    $("#smallClassificationCode").val(smallClassificationCode).attr("selected", "selected");
-                },
-                error: function (e) {
-                    //console.log(e);
-                }
-            });
-        }
-    }
 
     //팝업레이아웃숨김
     function hideShowLayer() {
         $("#productLayer .layerBg").removeClass("white");
         $("#productLayer").hide();
         $("#popwrap").hide();
-    }
-
-    //상품검색
-    function findProductList(param) {
-
-        /* 글로벌 원화 단위 변경_20200325
-           use exchangePrice(price)
-        */
-
-        // 국문일 때
-        function exchangePrice(productPrice) {
-            return "￦" + addComma(productPrice);
-        }
-
-        if (typeof (param) != 'undefined' && $("#findkeyword").val().trim() == "") {
-            layerAlert("검색할 상품명 또는 상품코드를 입력해 주세요.");
-        }
-
-        $('input:checkbox[name="chkedprodcuct"]:checked').prop("checked", false);
-        var optionpd = $("#optionPd").val();
-        if (optionpd == 'productNm') {
-            $('#searchWord').val($('#findkeyword').val());
-            $('#searchCode').val("");
-        } else if (optionpd == 'productCd') {
-            $('#searchWord').val("");
-            $('#searchCode').val($('#findkeyword').val());
-        } else {
-            $('#searchWord').val($('#findkeyword').val());
-            $('#searchCode').val($('#findkeyword').val());
-        }
-
-        if ($('#searchWord').val() == "" && $('#searchCode').val() == "") {
-            return false;
-        }
-
-        var searchproduct = new BoardListController('searchProductForm', '#productListBody', '.paging', 8);
-        searchproduct.setRowHtml = function (results) {
-            var productFlagTemp = "";
-            if (this.productFlag != undefined) {
-                var productFlagTemp = this.productFlag.split(',');
-            }
-            var brandTag = "";
-            var brandTotal = 0;
-            var categoryTag = "";
-            var categoryTotal = 0;
-            var makeB = false;
-            var totalNumberOfResults = 0;
-            var rows = "";
-            var totalCound = 0;
-            totalNumberOfResults = searchproduct.PARAMS.jsonObjectData.pagination.totalNumberOfResults;
-            if (totalNumberOfResults == 0) {
-                resultLayout_none();
-            } else {
-                resultLayout_Exist();
-            }
-            $('#lookBooktot').html("<p>" + totalNumberOfResults + " 전체</p>");
-            if (totalNumberOfResults > 0) {
-                $.each(results, function () {
-                    var index = i.toString();
-
-                    if (index.length < 2) {
-                        index = "0" + index;
-                    }
-                    var listTag = "<li>";
-                    listTag += '	<input type="checkbox" name="chkedprodcuct" id="gl_check_s' + index + '" code="' + this.productStyleCode + '" brand="' + this.productBrandName + '" prdName="' + this.productName + '" orderCd="" onclick="checkboxChecked(this);">';
-                    listTag += "	<img src=\"" + this.productImage + "\" alt=\"" + this.productName + "\" />";
-                    listTag += "	<div class=\"info\">";
-                    listTag += "		<p class=\"tlt\">" + this.productBrandName + "</p>";
-                    listTag += "		<p class=\"sb_tlt\">" + this.productName + "</p>";
-                    listTag += "		<div class=\"prie_wrap\">";
-                    listTag += "			<p class=\"prie\"><span> " + exchangePrice(this.productPrice) + " </span></p>";
-                    listTag += "		</div>";
-                    listTag += "	</div>";
-                    listTag += "</li>";
-                    rows += listTag;
-                });
-            } else {
-                rows = "<li></li>";
-            }
-            return rows;
-        };
-        searchproduct.doWork();
-    }
-
-    //위쉬리스트검색
-    function myWishList() {
-
-        /* 글로벌 원화 단위 변경_20200325
-           use exchangePrice(price)
-        */
-
-        // 국문일 때
-        function exchangePrice(productPrice) {
-            return "￦" + addComma(productPrice);
-        }
-
-
-        $('input:checkbox[name="chkedprodcuct"]:checked').prop("checked", false);
-        var mywishlist = new BoardListController('mywishListForm', '#myWishListBody', '.paging', 8);
-        mywishlist.setRowHtml = function (results) {
-            var rows = "";
-            var currentPage = 0;
-            var numberOfPages = 0;
-            var pageSize = 0;
-            var totalNumberOfResults = 0;
-            var pageNum = 0;
-            var num = 0;
-            var totNum = 0;
-            currentPage = mywishlist.PARAMS.jsonObjectData.pagination.currentPage;
-            numberOfPages = mywishlist.PARAMS.jsonObjectData.pagination.numberOfPages;
-            pageSize = mywishlist.PARAMS.jsonObjectData.pagination.pageSize;
-            totalNumberOfResults = mywishlist.PARAMS.jsonObjectData.pagination.totalNumberOfResults;
-            if (totalNumberOfResults == 0) {
-                rows += "<li class='no_data'>위시리스트에 담은 상품이 없습니다.</li>";
-            } else {
-                $.each(results, function () {
-                    var index = i.toString();
-                    if (index.length < 2) {
-                        index = "0" + index;
-                    }
-                    $('#mywishtot').html("<p>" + totalNumberOfResults + " 전체</p>");
-
-                    var listTag = "<li>";
-                    listTag += '	<input type="checkbox" name="chkedprodcuct" id="gl_check_w' + index + '" code="' + this.productCode + '" brand="' + this.brandName + '" prdName="' + this.productName + '" orderCd="" onclick="checkboxChecked(this);">';
-                    if (this.productImage != null) {
-                        listTag += "	<img src=\"" + this.productImage + "\" alt=\"상품 이미지\" />";
-                    } else {
-                        listTag += "	<img src=\"\" alt=\"상품 이미지\" />";
-                    }
-                    listTag += "	<div class=\"info\">";
-                    listTag += "		<p class=\"tlt\">" + this.brandName + "</p>";
-                    listTag += "		<p class=\"sb_tlt\">" + this.productName + "</p>";
-                    listTag += "		<div class=\"prie_wrap\">";
-                    listTag += "			<p class=\"prie\"><span> " + exchangePrice(this.productPrice) + " </span></p>";
-                    listTag += "		</div>";
-                    listTag += "	</div>";
-                    listTag += "</li>";
-                    rows += listTag;
-                });
-            }
-
-            return rows;
-        };
-
-        mywishlist.doWork();
-    }
-
-    //주문내역검색
-    function myOrderList() {
-
-        /* 글로벌 원화 단위 변경_20200325
-           use exchangePrice(price)
-        */
-
-        // 국문일 때
-        function exchangePrice(productPrice) {
-            return "￦" + addComma(productPrice);
-        }
-
-
-        var today = new Date();
-        var endDate = today.format("yyyy-MM-dd");
-        $('#eterm').val(endDate);
-        var startDate = today;
-        startDate.setMonth(today.getMonth() - 3);
-        startDate = startDate.format("yyyy-MM-dd");
-        $('#sterm').val(startDate);
-        $('input:checkbox[name="chkedprodcuct"]:checked').prop("checked", false);
-        var orderList = new BoardListController('myorderListForm', '#orderListBody', '.paging', 8, 'searchBtn');
-        orderList.setRowHtml = function (results) {
-            var orderThis = this;
-            var rows = "";
-            var currentPage = 0;
-            var numberOfPages = 0;
-            var pageSize = 0;
-            var totalNumberOfResults = 0;
-            var pageNum = 0;
-            var num = 0;
-            var totNum = 0;
-            currentPage = orderList.PARAMS.jsonObjectData.pagination.currentPage;
-            numberOfPages = orderList.PARAMS.jsonObjectData.pagination.numberOfPages;
-            pageSize = orderList.PARAMS.jsonObjectData.pagination.pageSize;
-            totalNumberOfResults = orderList.PARAMS.jsonObjectData.pagination.totalNumberOfResults;
-//  		$('#myordertot').html("<p>"+totalNumberOfResults+" 전체</p>");
-            if (totalNumberOfResults == 0) {
-                $('#myordertot').html("<p> 0 전체</p>");
-                rows += "<li class='no_data'>최근 3개월 간 주문하신 상품이 없습니다.</li>";
-            } else {
-                $.each(results, function () {
-                    if (num == 0) {
-                        $('#myordertot').html("<p>" + this.totalNumberOfProduct + " 전체</p>");
-                        num++;
-                    }
-                    var date = new Date(this.placed).format("yyyy.MM.dd");
-                    var ordercode = this.code;
-                    var orderPk = this.orderPk;
-                    $.each(this.entries, function () {
-                        if (this.orderStatus == null) {
-                            $.extend(this, {"orderStatus": {"code": ""}, "orderStatusName": ""});
-                        }
-                        var productImageUrl = "";
-                        if (this.product.productImages != null) {
-                            $.each(this.product.productImages, function () {
-                                if (this.imageDivisionCode != null) {
-                                    if (this.imageDivisionCode.code == 'S01') {
-                                        productImageUrl = this.image.url;
-                                    }
-                                }
-                            });
-                        }
-                        var index = i.toString();
-                        if (index.length < 2) {
-                            index = "0" + index;
-                        }
-                        var listTag = "<li>";
-                        listTag += '	<input type="checkbox" name="chkedprodcuct" id="gl_check_m' + index + '" orderPk="' + orderPk + '" code="' + this.product.code + '" brand="' + this.product.brandName + '" prdName="' + this.product.name + '" orderCd="' + ordercode + '"  onclick="checkboxChecked(this);">';
-                        listTag += '	<img src="' + productImageUrl + '" alt="상품 이미지"> ';
-                        listTag += "	<div class=\"info\">";
-                        listTag += "		<p class=\"tlt\">" + this.product.brandName + "</p>";
-                        listTag += "		<p class=\"sb_tlt\">" + this.product.name + "</p>";
-                        listTag += "		<p class=\"color_op\">";
-                        var color = this.product.baseOptions[0].selected.variantOptionQualifiers[0].value;
-                        if (color != null) {
-                            listTag += "COLOR : " + color + "<span class=\"and_line\">/</span>";
-                        }
-                        var size = this.product.baseOptions[0].selected.variantOptionQualifiers[1].value;
-                        if (size != null) {
-                            listTag += "SIZE : " + size + "<span class=\"and_line\">/</span> " + this.quantity + "</p>";
-                        }
-                        listTag += "		<div class=\"prie_wrap\">";
-                        listTag += "			<p class=\"prie\"><span> " + exchangePrice(this.totalPrice.value) + " </span></p>";
-                        listTag += "		</div>";
-                        listTag += "		<div class=\"date_wrap\">";
-                        listTag += "			<span class=\"sum_date\">주문일자 : </span>";
-                        listTag += "			<span class=\"sum_date\" style=\"vertical-align: baseline;\">" + date + "</span>";
-                        if (this.returnStatus != null) {
-                            listTag += '			<span class="sum_date">(' + this.returnStatusName + ')</span>';
-                        } else {
-                            listTag += '			<span class="sum_date"> (' + this.orderStatusName + ')</span>';
-                        }
-                        listTag += "		</div>";
-                        listTag += "	</div>";
-                        listTag += "</li>";
-
-                        rows += listTag;
-                    });
-                });
-            }
-            return rows;
-        };
-
-        orderList.doWork();
     }
 
     function replaceAll(str, target, replacement) {
@@ -681,38 +260,6 @@
                 return false;
             }
         });
-    }
-
-    //페이징 숨심
-    function resultLayout_none() {
-        $('.paging').css("display", "none");
-    }
-
-    //페이징 표시
-    function resultLayout_Exist() {
-        $('.paging').css("display", "block");
-    }
-
-    function openImgWindows(imgUrl) {
-        window.open(imgUrl, '첨부파일', 'width=1000, height=800');
-    }
-
-    //선택한 상담 상품 삭제
-    function removeEl(el) {
-        var el = el;
-        $(el).parents("li").remove();
-    }
-
-    function checkboxChecked(el) {
-        var el = el;
-        var cnt = 0;
-        $(el).parents("ul").children("li").each(function () {
-            if ($(this).children("input").prop("checked")) cnt++;
-        });
-        if (cnt == 4) {
-            $(el).prop("checked", false);
-            var lc = new layerAlert("상품은 최대 3개까지 첨부할 수 있습니다.");
-        }
     }
 
     //]]>
@@ -762,7 +309,7 @@
                     <!-- <dd><a href="#">회원등급</a></dd> -->
                     <dd><a href="/mypage/myreview" onclick="GA_Event('마이페이지','LNB','내 상품평');">내 상품평</a></dd>
                     <dd><a href="/mypage/myqna" onclick="GA_Event('마이페이지','LNB','상품 Q&amp;A');">상품 Q&amp;A</a></dd>
-                    <dd><a href="/mypage/mymantomaninquiry" onclick="GA_Event('마이페이지','LNB','1:1 문의');">1:1 문의</a></dd>
+                    <dd><a href="/mypage/review/list" onclick="GA_Event('마이페이지','LNB','1:1 문의');">1:1 문의</a></dd>
                     <!-- <dd><a href="#">이벤트 참여현황</a></dd> -->
                 </dl>
             </div>
@@ -779,305 +326,12 @@
         <!-- cnts -->
         <div class="sub_cnts">
 
-
             <style type="text/css">
                 tr.hidden {
                     display: none;
                 }
 
             </style>
-            <script type="text/javascript">
-
-                $(document).ready(function () {
-                    $("#menuTitle").text("1:1 문의");
-                    $("#sterm, #eterm").datepicker({
-                        showOn: "button",
-                        dateFormat: "yy-mm-dd"
-                    });
-
-                    $('button.ui-datepicker-trigger').addClass('ico_cld');
-
-                    $('#setDateBtn1').click(function () {
-                        var today = new Date();
-                        var endDate = today.format("yyyy-MM-dd");
-                        $('#eterm').val(endDate);
-                        var startDate = today;
-                        startDate.setDate(today.getDate() - 7);
-                        startDate = startDate.format("yyyy-MM-dd");
-                        $('#sterm').val(startDate);
-
-                    });
-                    $('#setDateBtn1').click();
-
-                    $('#setDateBtn2').click(function () {
-                        var today = new Date();
-                        var endDate = today.format("yyyy-MM-dd");
-                        $('#eterm').val(endDate);
-                        var startDate = today;
-                        startDate.setMonth(today.getMonth() - 1);
-                        startDate = startDate.format("yyyy-MM-dd");
-                        $('#sterm').val(startDate);
-
-                    });
-
-                    $('#setDateBtn3').click(function () {
-                        var today = new Date();
-                        var endDate = today.format("yyyy-MM-dd");
-                        $('#eterm').val(endDate);
-                        var startDate = today;
-                        startDate.setMonth(today.getMonth() - 3);
-                        startDate = startDate.format("yyyy-MM-dd");
-                        $('#sterm').val(startDate);
-
-                    });
-
-
-                    var mymantomaninquirylist = new BoardListController('mantomaninquiryListForm', '#listBody', '.paging', 10, 'searchBtn');
-                    mymantomaninquirylist.setRowHtml = function (results) {
-
-                        var rows = "";
-                        var currentPage = 0;
-                        var numberOfPages = 0;
-                        var pageSize = 0;
-                        var totalNumberOfResults = 0;
-                        var pageNum = 0;
-                        var num = 0;
-                        var totNum = 0;
-
-                        currentPage = mymantomaninquirylist.PARAMS.jsonObjectData.pagination.currentPage;
-                        numberOfPages = mymantomaninquirylist.PARAMS.jsonObjectData.pagination.numberOfPages;
-                        pageSize = mymantomaninquirylist.PARAMS.jsonObjectData.pagination.pageSize;
-                        totalNumberOfResults = mymantomaninquirylist.PARAMS.jsonObjectData.pagination.totalNumberOfResults;
-
-                        if (results.length < 1) {
-                            // totalNumberOfResults--;
-                            //totNum = (totalNumberOfResults - (currentPage * pageSize )) + 1 ;
-                            var listTag = "";
-                            listTag += "<tr>";
-                            listTag += "<td colspan='4' class='no_data'>";
-                            listTag += '등록된 게시글이 없습니다.';
-                            listTag += "</td>";
-                            listTag += "</tr>";
-                            rows += listTag;
-                        } else {
-                            $.each(results, function () {
-                                var processStatus = this.processStatus;
-                                if (processStatus == "신청완료") {
-                                    processStatus = "접수완료";
-                                }
-                                totalNumberOfResults--;
-                                totNum = (totalNumberOfResults - (currentPage * pageSize)) + 1;
-                                //console.log("this.pk", this);
-                                var listTag = "";
-                                if (this.manToManProductInfo != null && this.manToManProductInfo != '') {
-                                    var cdList = this.productCdList;
-                                    listTag += '<tr class="al_middle" id="clickme' + totNum + '" cdList="' + this.manToManProductInfo + '" pk="' + this.pkInquiry + '" onClick="show1(' + totNum + ',this)">';
-                                } else {
-                                    listTag += "<tr class=\"al_middle\" id=\"clickme" + totNum + "\" onClick=\"show1(" + totNum + ")\">";
-                                }
-                                listTag += "<td class=\"frt\">" + this.creationTime + "</td>";
-                                listTag += "<td>" + this.largeClassificationCode + "</td>";
-                                var subject1 = this.subject.replace(/&amp;/g, '&');
-                                listTag += "<td class=\"al_left\"><a href=\"javascript:void(0);\">" + subject1 + "</a></td>";
-                                listTag += "<td>[" + processStatus + "]</td>";
-                                listTag += "</tr>";
-                                listTag += "<tr class=\"info3\" style=\"display:none\" id=\"hideme" + totNum + "\">";
-                                listTag += "Q&A";
-                                listTag += "<td class=\"qna_wrap\"  colspan=\"4\">";
-                                listTag += "<div class=\"qna_box ch\">";
-
-                                if (this.attachingImageName == null || this.attachingImage == null) {
-                                    listTag += '<p></p>';
-                                } else {
-                                    var imgUrl = this.attachingImageUrl;
-                                    listTag += "<div class=\"qna_thing rev\">";
-                                    listTag += "    <ul>";
-                                    listTag += "        <li>";
-                                    listTag += "            <img src=\"" + this.attachingImage + "\">";
-                                    listTag += "        </li>";
-                                    listTag += "    </ul>";
-                                    listTag += "</div>";
-                                }
-
-                                listTag += "<div class=\"qt\">";
-                                listTag += "<span class=\"ico\">quest</span>";
-                                listTag += "<div class=\"txt\">";
-                                if (this.contents == null || this.contents == "") {
-                                    listTag += "<p></p>";
-                                } else {
-                                    var contents = this.contents;
-                                    var contents1 = contents.replace(/&amp;/g, '&');
-                                    contents1 = contents1.replace(/&lt;/g, '&lt');
-                                    contents1 = contents1.replace(/&gt;/g, '&gt');
-                                    //XSS필터로 인한 특수문자 치환
-                                    contents1 = contents1.replace(/&#40;/gim, '(');
-                                    contents1 = contents1.replace(/&#41;/gim, ')');
-                                    contents1 = contents1.replace(/&#39;/gim, '\'');
-                                    contents1 = contents1.replace(/<script>/gim, '');
-                                    contents1 = contents1.replace(/<\/script>/gim, '');
-                                    listTag += "<p style=\"word-wrap:break-word\">" + contents1 + "</p>";
-                                }
-
-                                listTag += "</div>";
-                                listTag += "</div>";
-                                listTag += "<div class=\"an\">";
-                                listTag += "<span class=\"ico\">answer</span>";
-                                listTag += "<div class=\"txt\">";
-
-                                // 답변 등록 전 수정/삭제 허용
-                                if (this.replyContent == null || this.replyContent == "") {
-                                    listTag += "<div class=\"btnwrap mt40\" style=\"text-align:right\">";
-                                    listTag += "    <a href=\"javascript:fn_manToManInquiryEdit('E','" + this.pkInquiry + "');\" id=\"qnaWriteSend\">수정</a> ";
-                                    listTag += "    <a href=\"javascript:fn_manToManInquiryEdit('D','" + this.pkInquiry + "');\" id=\"qnaCancle\">삭제</a>";
-                                    listTag += "</div>";
-                                } else {
-                                    var replyContext = this.replyContent;
-                                    var replyContext1 = replyContext.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
-                                    //XSS필터로 인한 특수문자 치환
-                                    replyContext1 = replyContext1.replace(/&#40;/gim, '(');
-                                    replyContext1 = replyContext1.replace(/&#41;/gim, ')');
-                                    replyContext1 = replyContext1.replace(/&#39;/gim, '\'');
-                                    replyContext1 = replyContext1.replace(/<script>/gim, '');
-                                    replyContext1 = replyContext1.replace(/<\/script>/gim, '');
-                                    listTag += "<p style=\" word-wrap: break-word\">" + replyContext1 + "<br/></p>";
-                                }
-                                if (this.replyDate == null || this.replyDate == "") {
-                                    listTag += "<p class=\"date\"></p>";
-                                } else {
-                                    listTag += "<p class=\"date\">답변일 : " + this.replyDate + "</p>";
-                                }
-                                listTag += "</div>";
-                                listTag += "</div>";
-                                listTag += "</div>";
-                                listTag += "</td>";
-                                listTag += "</tr>";
-
-                                rows += listTag;
-                            });
-                        }
-
-                        return rows;
-                    };
-                    mymantomaninquirylist.doWork();
-
-                    // 수정/삭제하기
-                    function fn_manToManInquiryEdit(act, pkInquiry) {
-                        //로그인이 되어 있는지 확인한다.
-
-                        // 수정하기
-                        if (act === "E") {
-                            var lc = new layerConfirm("해당 글을 수정하시겠습니까?", "확인", "취소");
-                            lc.confirmAction = function () {
-                                $("#pkInquiry").val(pkInquiry);
-                                $("#mantomaninquiryForm").submit();
-                            };
-                            // 삭제하기
-                        } else if (act === "D") {
-                            var lc = new layerConfirm("해당 글을 삭제하시겠습니까?", "확인", "취소");
-                            lc.confirmAction = function () {
-                                $.ajax({
-                                    url: '/ko/mypage/manTomanInquiryDelete?pkInquiry=' + pkInquiry,
-                                    type: "GET",
-                                    success: function (data) {
-                                        location.href = "/ko/mypage/mymantomaninquiry";
-                                    },
-                                    error: function (xhr, Status, error) {
-                                        var la = new layerAlert(error);
-                                        la.confirmAction = function () {
-                                            return;
-                                        };
-                                    }
-                                });
-                            };
-                        }
-                    }
-
-                    $(document).keypress(function (event) {
-                        var keycode = (event.keyCode ? event.keyCode : event.which);
-                        if (keycode == '13') {
-                            $("#mantomaninquiryListForm").attr("action", "/ko/mypage/mymantomaninquiry");
-                            $("#mantomaninquiryListForm").submit();
-                        }
-                        event.stopPropagation();
-                    });
-
-                    function show1(id, target) {
-                        $('#listBody').each(function () {
-                            $('#listBody').find(".info3").not('#hideme' + id).css("display", "none");
-                        });
-                        var $this = $(target);
-                        var pk = $this.attr("pk");
-                        if ($this.next().find(".prod_list").length > 0 || typeof ($this.attr("cdList")) == 'undefined' || pk == "") {
-                            $('#hideme' + id).slideToggle();
-                            return;
-                        } else {
-                            $.ajax({
-                                url: '/ko/mypage/mymantomaninquiryProductList.ajax?productListString=' + pk,
-                                type: "GET",
-                                success: function (data) {
-                                    if (data != null && data.length > 0) {
-                                        var prdList = "";
-                                        prdList += "<div class=\"qna_thing prod_list\">";
-                                        prdList += "    <ul>";
-                                        for (var i = 0; i < data.length; i++) {
-                                            prdList += "        <li>";
-                                            for (j in data[i].productImages) {
-                                                if (data[i].productImages[j].imageDivisionCode.code == "S01") {
-                                                    prdList += '<img src="' + data[i].productImages[j].image.url + '" alt="' + data[i].productImages[j].image.altText + '">';
-                                                }
-                                            }
-                                            prdList += "            <p>";
-                                            prdList += "                <span>" + data[i].brandName + "</span><br>" + data[i].name + "";
-                                            prdList += "            </p>";
-                                            prdList += "        </li>";
-                                        }
-                                        prdList += "    </ul>";
-                                        prdList += "</div>";
-                                    }
-
-                                    $this.next().find(".prod_list").remove();
-                                    $this.next().find(".qt").before(prdList);
-                                },
-                                error: function (xhr, Status, error) {
-//                     var la = new layerAlert(error);
-//                        la.confirmAction = function(){
-//                            return;
-//                        };
-                                }
-                            });
-                            $('#hideme' + id).slideToggle();
-                        }
-
-
-                        return;
-                    }
-
-                    function close1(id) {
-                        $('#hideme' + id).hide();
-                        return false;
-                    }
-
-                    function close2(id) {
-                        $('#hidemeTop' + id).hide();
-                        return false;
-                    }
-
-                    function openImgWindows(imgUrl) {
-                        window.open(imgUrl, '첨부파일', 'width=557, height=500');
-                    }
-
-                    function replaceAll(str, target, replacement) {
-                        return str.split(target).join(replacement);
-                    };
-
-                    function convert(str) {
-                        str = str.replace(/&amp/g, "&");
-                        str = str.replace(/&quot/g, "\"");
-                        str = str.replace(/&gt/g, ">");
-                        str = str.replace(/&lt/g, "<");
-                        return str;
-                    }
-            </script>
 
             <div class="sub_cnts mt30 ml20">
                 <div class="title_wrap clearfix">
@@ -1087,8 +341,6 @@
                 <!-- (박주영) 1:1 문의 등록 폼 -->
                 <form id="mypageReviewForm" name="mypageReviewForm"
                       action="/mypage/review/register" method="POST">
-                    <input type="hidden" id="mobilePhoneNumber" name="mobilePhoneNumber" value="">
-                    <input type="hidden" id="emailAddress" name="emailAddress" value="">
                     <fieldset>
                         <legend>1:1 문의 입력</legend>
                         <div class="tblwrap">
@@ -1164,10 +416,10 @@
                                             <option value="019">019</option>
                                         </select>
                                         <div class="form_hyphen">-</div>
-                                        <input type="text" id="hp2" name="hp2" value="6371" title="휴대폰 번호 가운데자리"
+                                        <input type="text" id="hp2" name="hp2" value="" title="휴대폰 번호 가운데자리"
                                                class="hp_num2" numberonly="true" maxlength="4">
                                         <div class="form_hyphen">-</div>
-                                        <input type="text" id="hp3" name="hp3" value="0945" title="휴대폰 번호 뒷자리"
+                                        <input type="text" id="hp3" name="hp3" value="" title="휴대폰 번호 뒷자리"
                                                class="hp_num2" numberonly="true" maxlength="4">
                                         <!-- //hp -->
                                         <!-- check -->
@@ -1182,10 +434,10 @@
                                     <th scope="row"><strong class="reqd">*</strong>이메일 답변받기</th>
                                     <td>
                                         <!-- email -->
-                                        <input type="text" id="email" name="email" value="juzero98" title="이메일 아이디"
+                                        <input type="text" id="email" name="email" value="" title="이메일 아이디"
                                                class="em_form">
                                         <span class="andmail">@</span>
-                                        <input type="text" id="emailDomain" name="emailDomain" value="naver.com"
+                                        <input type="text" id="emailDomain" name="emailDomain" value=""
                                                title="이메일 도메인" class="em_form">
                                         <select id="uidDomainSel" name="uidDomainSel" class="em_select">
                                             <option value="">직접입력</option>
@@ -1220,12 +472,9 @@
                         </div>
                         <!-- //btn -->
                     </fieldset>
-                    <div>
-                        <input type="hidden" name="CSRFToken" value="8db85c73-c0d8-4549-adcb-8ef1c5744aaa">
-                    </div>
                 </form>
                 <ul class="bul_sty01_li mt60">
-                    <li>문의하신 내용에 대한 답변은 이메일 또는 <a href="/ko/mypage/mymantomaninquiry"><em class="ft_point01">마이페이지 &gt;
+                    <li>문의하신 내용에 대한 답변은 이메일 또는 <a href="/mypage/review/list"><em class="ft_point01">마이페이지 &gt;
                         1:1 문의내역</em></a>에서 확인하실 수 있습니다.
                     </li>
                     <li>SMS 문자와 이메일로 답변 완료 알림을 받아보실 수 있습니다.</li>
@@ -1237,197 +486,6 @@
     <div class="layerArea" id="productLayer" style="display:none">
         <div class="layerBg" tabindex="-1"></div>
     </div>
-    <!-- <div class="layerArea" id="productLayer" style="display:none;"><div class="layerBg" ></div></div> -->
-
-    <script type="text/javascript">
-        $(function () { // 오프라인 매장 문의 팝업
-            $("#productLayer").hide();
-            $("#storeQue_popwrap").hide();
-            $("#productLayer .layerBg").removeClass("white");
-
-            $(".storeQue_btn").on("click", function () {
-                $(".popwrap.storeQue").show();
-                $("#productLayer").show();
-                $("#storeQue_popwrap").show();
-            });
-
-            /* $("#productLayer .layerBg").removeClass("white");
-            $("#productLayer").hide();
-            $("#popwrap").hide(); */
-            $(".popwrap.storeQue .btn_close, .popwrap.storeQue .btn.wt_s").on("click", function () {
-                $(".popwrap.storeQue").hide();
-                $("#productLayer").hide();
-                $("#storeQue_popwrap").hide();
-                $("#productLayer .layerBg").removeClass("white");
-            });
-
-            $(".popwrap.storeQue .btn.gray_s.mr0").on("click", function () {
-                location.href = "/ko/footer/vocProvision?mantoChk=Y";
-            });
-        });
-    </script>
-
-    <!--layer pop-->
-    <div class="popwrap w_type_3" id="popwrap" style="display:none">
-        <!-- Title1 -->
-        <div class="pop_tltwrap mb20">
-            <h3>상품검색</h3>
-        </div>
-        <!-- //Title1 -->
-        <div class="pop_cnt ">
-            <div class="tab_a m3" id="del_tab">
-                <ul>
-                    <li><a href="javascript:void(0);" class="active" onclick="findProductList();">상품검색</a></li>
-                    <li><a href="javascript:void(0);" onclick="myWishList();">위시리스트</a></li>
-                    <li><a href="javascript:void(0);" onclick="myOrderList();">나의 주문상품</a></li>
-                </ul>
-            </div>
-            <div class="del_tab_container">
-                <!-- tab1 -->
-                <div>
-                    <!-- search -->
-                    <div class="sh_pop_wrap">
-                        <form id="searchProductForm" action="/ko/hssearch/findproduct">
-                            <input type="hidden" id="searchWord" name="searchWord" value="">
-                            <input type="hidden" id="brandCode" name="brandCode" value="">
-                            <input type="hidden" id="brandName" name="brandName" value="">
-                            <input type="hidden" id="categoryCode" name="categoryCode" value="">
-                            <input type="hidden" id="basePcode" name="basePcode" value="">
-                            <input type="hidden" id="repProdColorCode" name="repProdColorCode" value="">
-                            <input type="hidden" id="repSizeEnumCode" name="repSizeEnumCode" value="">
-                            <input type="hidden" id="priceOrderCode" name="priceOrderCode" value="">
-                            <input type="hidden" id="productOrderCode" name="productOrderCode" value="">
-                            <input type="hidden" id="svcenterFlag" name="svcenterFlag" value="yes">
-                            <input type="hidden" id="searchCode" name="searchCode" value="">
-                            <dl>
-                                <dt>상품명 / 상품코드</dt>
-                                <dd>
-                                    <select name="optionPd" id="optionPd" title="상품명 선택" class="select">
-                                        <option value="searchAll">전체</option>
-                                        <option value="productNm">상품명</option>
-                                        <option value="productCd">상품코드</option>
-                                    </select>
-                                    <input type="text" id="findkeyword" name="findkeyword" title="상품명"
-                                           placeholder="검색어를 입력해 주세요.">
-                                </dd>
-                            </dl>
-                            <div class="btnwrap">
-                                <a class="btn gray_s" id="btnSearch" href="javascript:void(0);"
-                                   onclick="findProductList('real');">검색</a>
-                            </div>
-                        </form>
-                    </div>
-                    <!-- //search -->
-                    <div class="total_pop" id="lookBooktot"></div>
-
-                    <!-- list -->
-                    <div class="pt_pop_wrap hall">
-                        <ul id="productListBody"></ul>
-                    </div>
-                    <!-- //list -->
-
-                    <!--paging-->
-                    <div class="paging"></div>
-                    <!--//paging-->
-                    <div class="btnwrap">
-                        <a href="javascript:void(0);" id="btnApply" class="btn gray_s chooseDel">적용</a>
-                    </div>
-                </div>
-                <!--// tab1 -->
-
-                <!-- tab2 -->
-                <div style="display: none;">
-                    <form id="mywishListForm" action="/ko/mypage/myWishList">
-                    </form>
-
-                    <div class="total_pop" id="mywishtot"></div>
-                    <!-- list -->
-                    <div class="pt_pop_wrap hall">
-                        <ul id="myWishListBody"></ul>
-                    </div>
-                    <!-- //list -->
-                    <!--paging-->
-                    <div class="paging"></div>
-                    <!--//paging-->
-                    <div class="btnwrap">
-                        <a href="javascript:void(0);" id="btnApplyTabWish" class="btn gray_s chooseDel">적용</a>
-                    </div>
-                </div>
-                <!--// tab2 -->
-
-                <!-- tab3 -->
-                <div style="display: none;">
-                    <form id="myorderListForm" action="/ko/mypage/order/myorderlist">
-                        <input type="hidden" name="sterm" id="sterm" value="">
-                        <input type="hidden" name="eterm" id="eterm" value="">
-                        <input type="hidden" name="searchType" id="searchType" value="">
-                        <input type="hidden" name="serchKeyword" id="serchKeyword" value="">
-                        <input type="hidden" name="serchYn" id="serchYn" value="Y">
-                        <input type="hidden" id="orderNumber" name="orderNumber" value="">
-                    </form>
-                    <div class="total_pop" id="myordertot"></div>
-                    <!-- list -->
-                    <div class="pt_pop_wrap hall">
-                        <ul id="orderListBody"></ul>
-                    </div>
-                    <!-- //list -->
-                    <!--paging-->
-                    <div class="paging"></div>
-                    <!--//paging-->
-                    <div class="btnwrap">
-                        <a href="javascript:void(0);" id="btnApplyTabOrder" class="btn gray_s chooseDel">적용</a>
-                    </div>
-                </div>
-                <!--// tab3 -->
-            </div>
-        </div>
-        <!-- btn_close -->
-        <a href="javascript:void(0);" class="btn_close"><img
-                src="http://cdn.thehandsome.com/_ui/desktop/common/images/popup/ico_close.png" alt="닫기"></a>
-        <!-- //btn_close -->
-    </div>
-    <!--//layer pop-->
-
-    <!-- footerWrap -->
-
-    <script type="text/javascript">
-        //<![CDATA[
-
-        $(document).ready(function () {
-            var ua = navigator.userAgent.toLowerCase();
-            // 익스플로러 브라우저 아닐 때만 인스타 링크버튼 노출
-            if ((ua.indexOf('trident') == -1) && (ua.indexOf("msie") == -1)) {
-                $("#f_insta").show();
-            }
-        });
-
-        getNewsList("/ko/magazine");
-
-
-        // 2022.03.29 푸터 공지사항 추가
-        getFooterNotices("/ko/svcenter");
-
-
-        function moveMobile() {
-// 	location.href = location.href.replace("?uiel=Desktop", "") + "?uiel=Mobile";
-            location.href = "/ko/?uiel=Mobile";
-        }
-
-
-        function setLogout() {
-            var ssoUrl = 'https://sso.h-point.co.kr:29865' + "/co/setDscdToknJSONP.hd";
-            gfnSsoDscdToknReqAjax(ssoUrl, hplogoutSuccess);
-        }
-
-        function hplogoutSuccess(data) {
-            deletecookie("UID");
-            deletecookie("criteoEmail");
-            deletecookie("memberGb");
-            location.href = "/ko/logout";
-        }
-
-        //]]>
-    </script>
 
     <!-- footerWrap -->
     <th:block th:replace="~{/footer :: footer}"></th:block>

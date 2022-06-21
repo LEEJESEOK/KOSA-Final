@@ -7,6 +7,7 @@
     <!-- 게시글 목록 조회 -->
     <select id="getList" resultType="com.hyundai.kosafinal.domain.MypageReviewDTO">
         SELECT * FROM mypage_review WHERE user_email = #{userEmail}
+        ORDER BY id DESC
     </select>
 
     <!-- 게시글 조회 -->
@@ -20,8 +21,13 @@
         <selectKey resultType="int" keyProperty="id" order="BEFORE">
             SELECT SQ_MYPAGE_REVIEW.nextval FROM dual
         </selectKey>
-        { CALL SP_MYPAGE_REVIEW_INSERT(#{id}, #{userEmail}, #{title}, #{content}, #{category1}, #{category2}) }
+        { CALL SP_MYPAGE_REVIEW_INSERT(#{id}, #{userEmail}, #{title}, #{content}, #{category}) }
     </insert>
+
+    <!-- 게시글 답글 조회 -->
+    <select id="getReply" resultType="com.hyundai.kosafinal.domain.ReplyDTO">
+        SELECT * FROM reply WHERE origin_id = #{id}
+    </select>
 
 
 
