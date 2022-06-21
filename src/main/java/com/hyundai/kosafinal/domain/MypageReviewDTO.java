@@ -13,9 +13,7 @@ public class MypageReviewDTO {
     private int id;
     private String title;
     private String content;
-    private int replyId;
-    private String category1;
-    private String category2;
+    private String category;
     private String userEmail;
     private int status;
     private Date editDate;
