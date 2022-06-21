@@ -1,6 +1,7 @@
 package com.hyundai.kosafinal.service;
 
 import com.hyundai.kosafinal.domain.MypageReviewDTO;
+import com.hyundai.kosafinal.domain.ReplyDTO;
 import com.hyundai.kosafinal.mapper.userorder.MypageReviewMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,5 +31,10 @@ public class MypageReviewServiceImpl implements MypageReviewService {
     @Override
     public void insert(MypageReviewDTO dto) {
         mapper.insert(dto);
+    }
+
+    // 게시글 답글 조회
+    public ReplyDTO getReply(int id) {
+        return mapper.getReply(id);
     }
 }
