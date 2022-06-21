@@ -52,7 +52,7 @@
     <!--필터에 해당하는 제품의 색상 목록-->
     <select id="selectFilteredColorListWithPaging" resultType="ColorDTO">
         SELECt ID                                                 productId,
-               COLOR_ID                                           colorId,
+               COLOR_ID                                           id,
                (select COLOR_NAME FROM COLOR WHERE ID = COLOR_ID) colorName,
                COLOR_CHIP_URI                                     colorChipUri
         FROM VIEW_PRODUCT_LIST_COLOR_NO_DUPLICATES

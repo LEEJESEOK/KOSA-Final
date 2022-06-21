@@ -2,22 +2,22 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>카테고리</title>
-    <data th:replace="/head.html::head"></data>
+    <div th:replace="/head.html::head"></div>
 </head>
 <body>
 <script type="text/javascript">
     const rowMax = 3;
     const colMax = 4;
 
-    let large = [[${category.large}]];
-    let medium = [[${category.medium}]];
-    let small = [[${category.small}]];
-    let color = "";
-    let size = "";
-    let brand = "";
+    let large = "[[${category.large}]]";
+    let medium = "[[${category.medium}]]";
+    let small = "[[${category.small}]]";
+    let pageNum = "[[${pageNum}]]";
+    let brand = "[[${brand}]]";
+    let color = "[[${color}]]";
+    let size = "[[${size}]]";
     let minPrice = 0, maxPrice = Number.MAX_SAFE_INTEGER;
     let sortType = 0;
-    let pageNum = 1;
 
 
     $().ready(function () {
@@ -27,8 +27,13 @@
             contentType: "application/json",
             success: function (data) {
                 console.log(data);
-                console.log(data.count);
-                $("#num").text(data.count);
+                $("#count").text(data.count);
+                // productList
+                console.log(data.productList);
+                // colorList
+                console.log(data.colorList);
+                // sizeList
+                console.log(data.sizeList);
             },
             error: function (request, status, error) {
                 ajaxError(request, status, error);
@@ -39,7 +44,7 @@
     function makeFilterUri(large, medium, small, pageNum = 1, brand = '', color = '', size = '', minPrice = '', maxPrice = '', sortType = 0) {
         let uri = large + "_" + medium + "_" + small + "_" + pageNum + "_" + brand + "_" + color + "_" + size;
         return uri;
-        +"_" + minPrice + "_" + maxPrice + "_" + sortType;
+        // +"_" + minPrice + "_" + maxPrice + "_" + sortType;
     }
 
     function ajaxError(request, status, error) {
@@ -52,36 +57,50 @@
 
 </script>
 
-<div class="bodyWrap">
+<div class="products" id="bodyWrap">
     <h3 class="cnts_title ou1804">
         <span>
-            <a th:href="@{/category/{large}__(large=${category.large})}" th:text="${category.large}"></a>
+            <a th:href="@{/category/{large}_{medium}_{small}_{pageNum}_{brand}_{color}_{size}
+            (large=${category.large}, medium=${null}, small=${null}, pageNum=${pageNum}, brand=${brand}, color=${color}, size=${size})}"
+               th:text="${category.large}"></a>
 
-            <img th:if="${not #strings.isEmpty(category.medium)}"
-                 alt="location arr"
-                 src="http://cdn.thehandsome.com/_ui/desktop/common/images/products/ou_location_arr.png">
-            <a th:if="${not #strings.isEmpty(category.medium)}"
-               th:href="@{/category/{large}_{medium}_(large=${category.large}, medium=${category.medium})}"
+            <img alt="location arr"
+                 src="http://cdn.thehandsome.com/_ui/desktop/common/images/products/ou_location_arr.png"
+                 th:if="${not #strings.isEmpty(category.medium)}">
+            <a th:href="@{/category/{large}_{medium}_{small}_{pageNum}_{brand}_{color}_{size}
+            (large=${category.large}, medium=${category.medium}, small=${null}, pageNum=${pageNum}, brand=${brand}, color=${color}, size=${size})}"
+               th:if="${not #strings.isEmpty(category.medium)}"
                th:text="${category.medium}"></a>
 
-            <img th:if="${not #strings.isEmpty(category.small)}"
-                 alt="location arr"
-                 src="http://cdn.thehandsome.com/_ui/desktop/common/images/products/ou_location_arr.png">
-            <a th:if="${not #strings.isEmpty(category.small)}"
-               th:href="@{/category/{large}_{medium}_{small}(large=${category.large}, medium=${category.medium}, small=${category.small})}"
+            <img alt="location arr"
+                 src="http://cdn.thehandsome.com/_ui/desktop/common/images/products/ou_location_arr.png"
+                 th:if="${not #strings.isEmpty(category.small)}">
+            <a th:href="@{/category/{large}_{medium}_{small}_{pageNum}_{brand}_{color}_{size}
+            (large=${category.large}, medium=${category.medium}, small=${category.small}, pageNum=${pageNum}, brand=${brand}, color=${color}, size=${size})}"
+               th:if="${not #strings.isEmpty(category.small)}"
                th:text="${category.small}"></a>
         </span>
     </h3>
     <div class="adaptive_wrap">
-        <div class="filterWrap">
-            <ul class="clearfix float_left">
-
-            </ul>
-            <div class="items_count float_right">
-                <span class="num" id="num"></span>
-                <span>전체</span>
+        <form action="" id="categoryListForm">
+            <!--TODO input hidden filter data-->
+            <div class="filterWrap hsDelivery1902">
+                <ul class="clearfix float_left">
+                    <li class="brand"></li>
+                    <li class="color"></li>
+                    <li class="size"></li>
+                    <li class="sortby"></li>
+                    <li class="btn">
+                        <a href="">초기화</a>
+                        <a href="">적용</a>
+                    </li>
+                </ul>
+                <div class="items_count float_right">
+                    <span class="num" id="count"></span>
+                    <span>전체</span>
+                </div>
             </div>
-        </div>
+        </form>
         <div class="items_list cate_item4" id="listContent" style="display: block">
             <ul class="clearfix" id="listBody">
                 <li>
@@ -140,6 +159,10 @@
                 <!--                    </div>-->
                 <!--                </li>-->
             </ul>
+            <div class="paging" style="display: block">
+            </div>
+            <div class="sh_result none" id="searchResult_None" style="display: none;">
+                조건에 맞는 상품 정보가 없습니다.</div>
         </div>
     </div>
 
