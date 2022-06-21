@@ -32,6 +32,7 @@ public class UserOrderDatabaseConfig {
     final SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
     sessionFactory.setDataSource(db2DataSource);
     sessionFactory.setMapperLocations(applicationContext.getResources("classpath:mybatis/mapper/userorder/*.xml"));
+    sessionFactory.setTypeAliasesPackage("com.hyundai.kosafinal.domain");
     return sessionFactory.getObject();
   }
 
