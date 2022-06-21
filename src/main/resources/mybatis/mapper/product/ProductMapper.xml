@@ -23,6 +23,12 @@
 
     </select>
 
+    <select id="selectProductDetailById" resultType="com.hyundai.kosafinal.domain.ProductDTO">
+        <![CDATA[
+        SELECT * FROM TABLE(SF_PRODUCT_BY_ID(#{productId}))
+        ]]>
+    </select>
+
     <!--    <select id="selectSimpleProductListById" resultMap="productMap">-->
     <!--        SELECT ID, NAME, BRAND, PRICE-->
     <!--        FROM VIEW_SIMPLE_PRODUCT V-->

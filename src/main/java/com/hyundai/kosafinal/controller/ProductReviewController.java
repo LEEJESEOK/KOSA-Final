@@ -1,21 +1,18 @@
 package com.hyundai.kosafinal.controller;
 
-import com.hyundai.kosafinal.domain.ProductDTO;
 import com.hyundai.kosafinal.domain.ProductReviewDTO;
 import com.hyundai.kosafinal.service.ProductReviewService;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@Controller
+@RestController
 public class ProductReviewController {
 
   private ProductReviewService productReviewService;
@@ -37,11 +34,4 @@ public class ProductReviewController {
     productReviewService.saveProductReview(productReviewDTO, imgFile);
     return productReviewDTO;
   }
-
-  @GetMapping("product/detail/{productId}")
-  @ResponseBody
-  public List<ProductDTO> getProductByProductId(@PathVariable("productId")String productId){
-    return Collections.emptyList();
-  }
-
 }

@@ -4,6 +4,7 @@ import com.hyundai.kosafinal.domain.CategoryDTO;
 import com.hyundai.kosafinal.domain.Criteria;
 import com.hyundai.kosafinal.domain.ProductDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import sun.util.resources.cldr.to.CalendarData_to_TO;
 
 import java.util.List;
@@ -21,8 +22,7 @@ public interface ProductMapper {
 
     List<ProductDTO> selectSimpleProductListByCategoryWithPage(CategoryDTO categoryDTO, Criteria criteria);
 
-
     ProductDTO selectDetailProduct(String id, String size, String colorId, String large, String medium, String small);
 
-
+    List<ProductDTO> selectProductDetailById(@Param("productId")String productId);
 }

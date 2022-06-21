@@ -3,7 +3,10 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+
+  <th:block th:replace="~{/header_category :: header_category}"></th:block>
+
+
 </head>
 <body oncontextmenu="return false">
 <link rel="stylesheet" th:href="@{/css/brand.css}" />
@@ -47,6 +50,12 @@
       <div class="clearfix image_view3">
         <a href="javascript:imageZoom()" id="btn_zoom" class="btn_zoom" onclick="GA_Event('상품_상세','크게보기','클릭')">크게보기</a><!-- 버튼 클릭시 item_visual 에 zoom 클래스 추가 -->
         <!-- 2021.08.18 동영상 재생 수정, 상품 imageDivisionCode에 VOD가 있는 경우 동영상 url 세팅 -->
+
+        <script>
+
+        </script>
+
+
         <div class="image_view1" id="image_view1">
           <div class="item_visual" id="imageDiv" style="margin-top: 20px;">
             <ul>
@@ -82,840 +91,839 @@
         <!--  2021.08.18 동영상 재생 영역  -->
       </div><script type="text/javascript" src="/_ui/desktop/common/js/wpay.js"></script>
       <!-- 품절상품포함 여부 -->
-      <script type="text/javascript">
-        //<![CDATA[
-        var stockOnlineStockpile = {};
-        var warehouseStockpile = {};
-
-        $(document).ready(function() {
-          cartQuantity = {};
-
-          var vsProductId = $("#vs-product-id").length;
-          if(vsProductId > 0){
-            var vsProductCodeType = $('form[name=addToCartForm] input[name=productCodeType]').val();
-            if(vsProductCodeType == "ApparelSizeVariantProduct") {
-              var vsProductCodePost = $('form[name=addToCartForm] input[name=productCodePost]').val();
-              if(vsProductCodePost != "" && vsProductCodePost.indexOf("_") > -1){
-                $("#vs-product-id").val(vsProductCodePost.substr(0,vsProductCodePost.lastIndexOf("_")));
-              }
-            }
-          }
-
-
-          $(".btn_star_score li a").on("click", function(){
-            $("#rating").val($(this).attr('value'));
-          });
-
-          $('#customerReview').click(function(){
-            fn_popupCustomerReview();
-          });
-
-          $('#offlineQty').click(function(){
-            fn_stockconfirm();
-          });
-
-          var productCode = $("#productCode").val();
-          $.ajax({
-            url: '/ko/p/review',
-            type: "GET",
-            data: {"productCode":productCode},
-            success: function(data){
-              var starWidth = 0;
-              if(data.reviewList.results.length > 0){
-                starWidth = getStarScore(data.reviewAvg);
-              }
-              if(starWidth==0){
-                $("#prodTotalStarScoreWrapper").css("display","none");
-              }else{
-                $("#prodTotalStarScore").css("width",starWidth+"%")
-              }
-            },
-            error: function(xhr, Status, error) {
-              var la = new layerAlert(error);
-              la.confirmAction = function(){
-                return;
-              };
-            }
-          });
-
-
-          stockOnlineStockpile["TH2B9WJM335N_BK_95"] = "11";
-          warehouseStockpile["TH2B9WJM335N_BK_95"] = "0";
-
-          stockOnlineStockpile["TH2B9WJM335N_BK_100"] = "19";
-          warehouseStockpile["TH2B9WJM335N_BK_100"] = "0";
-
-          stockOnlineStockpile["TH2B9WJM335N_BK_105"] = "20";
-          warehouseStockpile["TH2B9WJM335N_BK_105"] = "0";
-
-          stockOnlineStockpile["TH2B9WJM335N_BK_110"] = "0";
-          warehouseStockpile["TH2B9WJM335N_BK_110"] = "0";
-
-          $(".btn_close").on("click", function(){
-            hideProductLayer();
-            $(".popwrap").hide();
-          });
-
-          $('.toggle_type1>dt').click(function() {
-
-            $(this).addClass('on');
-            $(this).siblings('dt').removeClass('on');
-
-            var beforeHeight = $(".toggle_type1").height();
-            var afterHeight = 0;
-            var scrolltop = $(window).scrollTop();
-
-            var checkElement = $(this).next();
-
-            if((checkElement.is('dd')) && (checkElement.is(':visible'))) {
-              $(this).removeClass('on');
-              checkElement.slideUp('fast',
-                  function(){
-                    afterHeight = $(".toggle_type1").height();
-// 	 					bodyScroll();
-                  });
-
-            }
-            var fitGuide = false;
-            if((checkElement.is('dd')) && (!checkElement.is(':visible'))) {
-              var v_label = "";
-              var v_type = $(this).children().attr("id");
-              //21.11.03 상품상세 정보 영역 변경 관련 GA이벤트태깅 추가 및 변경
-              if(v_type == "NEW_DETAIL_INFO_EVT"){
-                v_label = "상품상세정보";
-              }else if(v_type == "DETAIL_INFO_EVT"){
-                if ('ko' == 'ko') {
-                  v_label = "상품정보제공고시";
-                }else{
-                  v_label = "상품상세정보";
-                }
-              }else if(v_type == "REAL_SIZE_EVT"){
-                v_label = "실측사이즈";
-              }else if(v_type == "DELI_RETURN_EVT"){
-                v_label = "배송 및 반품";
-              }else if(v_type == "FIT_GUIDE_EVT"){
-                fitGuide = true;
-              }
-
-              if(!fitGuide) {
-                GA_Event('상품_상세','정보',v_label);
-              }
-
-              $('.toggle_type1>dd:visible').slideUp('fast');
-
-              checkElement.slideDown('fast',
-                  function(){
-                    afterHeight = $(".toggle_type1").height();
-// 					bodyScroll();
-                  });
-            }
-
-            if(fitGuide) {
-              fitGuide_Swiper_Slide(1);
-            }
-
-            var bodyScroll = function(){
-
-              $('body,html').animate({scrollTop:parseFloat(scrolltop + (beforeHeight - afterHeight))},
-                  function(){
-                    bodyReSize();
-                  }
-              );
-            }
-
-            if($(this).next('dd').length == 0) {
-              return true;
-            } else {
-              return false;
-            }
-          });
-
-          if ( 'en' == 'ko' || 'zh' == 'ko' ) {
-            showExchangeRate();
-          }
-
-          $("#restock_tlt").mouseover(function(){
-// // 		showExchangeRate();
-            $("#restock_delch_box").css("display","block");
-          });
-
-          $("#restock_tlt").mouseout(function(){
-            $("#restock_delch_box").css("display","none");
-          });
-
-          if($('#referencesListContent ul:eq(0) > li').length > 3) {
-            matchItemSlider();
-          }else {
-            $(".related_evt .matches_list > ul > li").css("margin-right", "10px");
-          }
-
-          //타임옴므 실측사이즈
-          if("BR06" == "BR06"){
-            var checkShow = false;
-            var checkCode = "TH2B9WJM335N";
-            var checkLanguage = "ko";
-            if(checkCode == "TH1H7WPC500M" || checkCode == "TH1I3WPC505M" || checkCode == "TH1H8WPC503M" || checkCode == "TH1HAWPC505M"  || checkCode == "TH1HAWPC505MP1" ){
-              $(".timehomme_pants_fit").addClass("slim");
-              $(".timehomme_pants_fit").removeClass("straight");
-              $(".timehomme_pants_fit").removeClass("comfort");
-              checkShow = true;
-            }else if(checkCode == "TH1H8WPC510M" || checkCode == "TH1H8WPC530M" || checkCode == "TH1H8WPC540M" || checkCode == "TH1HBWPC535M" || checkCode == "TH1HAWPC545M" || checkCode == "TH1HAWPC525M"  || checkCode == "TH1HAWPC525MP1" ){
-              $(".timehomme_pants_fit").removeClass("slim");
-              $(".timehomme_pants_fit").addClass("straight");
-              $(".timehomme_pants_fit").removeClass("comfort");
-              checkShow = true;
-            }
-
-            if(checkShow){
-              if(checkLanguage == "ko"){
-                $(".timehomme_pants_fit").addClass("ko");
-              }else if(checkLanguage == "en"){
-                $(".timehomme_pants_fit").addClass("en");
-              }else if(checkLanguage == "zh"){
-                $(".timehomme_pants_fit").addClass("zh");
-              }
-
-              $(".timehomme_pants_fit").show();
-            }
-          }
-
-          //at home,quick 배송지 변경
-          $(".btn_chg").on("click",function(){
-            if($(this).parent().parent().attr("id") == "athome_svc"){
-              searchAddressLayer("streetname","streetnumber","postalcode");
-            }else if($(this).parent().parent().attr("id") == "quick_svc"){
-              searchAddressLayer("quickStreetname","quickStreetnumber","quickPostalcode");
-            }
-          });
-
-          // 예약주문 토스트팝업 190507
-          /* if($("#erpWorkOrderProdCode").val() != "") {
-              clearTimeout(toastPopupPreOrderInit);
-              clearTimeout(toastPopupPreOrderAfter);
-              clearTimeout(toastPopupPreOrderStop);
-          }
-
-          if("N" == "Y") {
-              toastPopupPreOrder();
-          } */
-
-
-
-          $('#vs-placeholder-cart').on('DOMSubtreeModified',function(){
-            var label = escape('TIME HOMME')+"_"+escape('후드 패딩 플라이트 점퍼');
-
-            if($('#vs-placeholder-cart div').hasClass('demonstration-overlay')){
-              if($(".demonstration-overlay").attr('onclick') == undefined || $(".demonstration-overlay").attr('onclick') == ""){
-                $(".demonstration-overlay").attr('onclick', 'GA_Event(\'상품_상세\',\'버츄사이즈\', \''+label+'\')');
-              }
-            }
-
-            if($('#vs-placeholder-cart td').hasClass('col-user-product')){
-              if($(".col-user-product .sample").attr('onclick')==undefined || $(".col-user-product .sample").attr('onclick') ==""){
-                $(".col-user-product .sample").attr('onclick', 'GA_Event(\'상품_상세\',\'버츄사이즈\', \''+label+'\')');
-              }
-            }
-          });
-
-
-
-          swiperslideForLookbook();
-
-
-        });
-
-        function swiperslideForLookbook(){
-
-          var slideBox_Idx = $('.sub-slide-zone .slide-box');
-          var smallSwiperLeng = $('.sub-slide-zone .slide-box').length;
-          var smallSlideArr = new Array();
-
-          for(var i = 0; i < smallSwiperLeng; i++){
-            var smallSlideLeng = $(slideBox_Idx[i]).find('.swiper-slide').length
-            smallSlideArr.push(smallSlideLeng);
-          }
-
-          // 룩북보기 sub 배너 슬라이드 옵션
-          var subSlideOption = {
-            slidesPerView: 3,
-            slidesPerGroup: 3,
-            spaceBetween: 10,
-            loop: true,
-            loopFillGroupWithBlank: true,
-            observer: true,
-            observeParents: true,
-            simulateTouch:false,
-            navigation: {
-              nextEl: '.swiper-button-next.sub-nav-right',
-              prevEl: '.swiper-button-prev.sub-nav-left',
-            },
-          };
-
-          // 룩북보기 sub 배너 슬라이드
-          var cdNlb_sub_swiper = new Swiper('.sub-slide-zone .swiper-container', subSlideOption);
-
-          for(var i = 0; i < smallSwiperLeng; i++){
-            if( smallSlideArr[i] <= 2 ){
-              if(cdNlb_sub_swiper.length !== undefined && cdNlb_sub_swiper.length > 0){
-                $(cdNlb_sub_swiper[i].$el).parent().addClass('destroy');
-                cdNlb_sub_swiper[i].destroy();
-              }else{
-                $(cdNlb_sub_swiper.$el).parent().addClass('destroy');
-                cdNlb_sub_swiper.destroy();
-              }
-            }
-          }
-
-
-          // 룩북보기 title 배너 슬라이드 옵션
-          var titleSlideOption = {
-            slidesPerView: 1,
-            slidesPerGroup: 1,
-            spaceBetween: 0,
-            loop: true,
-            simulateTouch:false,
-            navigation: {
-              nextEl: '.swiper-button-next.tt-nav-right',
-              prevEl: '.swiper-button-prev.tt-nav-left',
-            },
-            pagination: {
-              el: '.swiper-pagination.tt-nav-page',
-              clickable: true,
-            },
-            on: {
-              slideChange: function() {
-                var $subSlide = $('.detail-pg-lookbook-aside-box .sub-slide-zone .slide-box');
-                var slideIndex = this.realIndex;
-
-                //console.log(slideIndex);
-
-                $subSlide.hide();
-                $($subSlide[slideIndex]).show();
-
-              }
-              /* ,slideChangeTransitionStart: function(){
-                // 202010623 auto height 기능 추가
-                var slide_Wrap = $(".title-slide-zone .swiper-wrapper");
-                var target_Height = $(this.$wrapperEl).find('.swiper-slide-active img').height();
-
-                slide_Wrap.height(target_Height);
-              }, */
-            }
-          };
-
-
-          if($(".cd-n-lb-tab a").attr("href") == "#cd-n-lb-tab-02"){
-
-            var ttSlideBox_Idx = $('.title-slide-zone .swiper-wrapper'); // [0, 1]
-            var ttSwiperLeng = $('.title-slide-zone .swiper-slide').length;
-
-            var small_new_slide = document.querySelector('.sub-slide-zone .swiper-container').swiper;
-            if (small_new_slide != null) small_new_slide.destroy();
-
-            var cdNlb_sub_swiper_new = new Swiper('.sub-slide-zone .swiper-container', subSlideOption);
-            var cdNlb_tt_swiper = new Swiper('.title-slide-zone .swiper-container', titleSlideOption);
-
-            var $subSlide = $('.detail-pg-lookbook-aside-box .sub-slide-zone .slide-box');
-
-            if( ttSwiperLeng <= 1 ){
-              if(cdNlb_tt_swiper.length !== undefined && cdNlb_tt_swiper.length > 0){
-                $(cdNlb_tt_swiper[i].$el).parent().addClass('destroy');
-                cdNlb_tt_swiper[i].destroy();
-              }else{
-                $(cdNlb_tt_swiper.$el).parent().addClass('destroy');
-                cdNlb_tt_swiper.destroy();
-              }
-
-              // title slide가 하나일 경우 sub-slide show
-              $($subSlide[0]).show();
-
-            }
-
-
-
-          }
-
-
-
-
-          // 함께코디한 상품 & 룩북보기 tab
-          $(".related_evt .cd-n-lb-tab").find("a").off().on("click", function(e){
-            var $this = $(this);
-            var $all_tab_nav = $this.parents(".cd-n-lb-tab").find("li");
-            var $tab_contents = $this.parents(".related_evt").find(".cd-n-lb-content-box");
-            var id = $this.attr("href");
-            var tabIndex = $this.parent().index();
-
-            e.preventDefault();
-            $all_tab_nav.removeClass("on");
-            $this.parent().addClass("on");
-            $tab_contents.hide();
-            $(id).show();
-
-            var thisTab = $(this).parent('li').index();
-
-            if ( thisTab === 0 ) {
-              var title_new_slide = document.querySelector('.title-slide-zone .swiper-container').swiper;
-              var small_new_slide = document.querySelector('.sub-slide-zone .swiper-container').swiper;
-              if (title_new_slide != null) title_new_slide.destroy();
-              if (small_new_slide != null) small_new_slide.destroy();
-            }else {
-              var ttSlideBox_Idx = $('.title-slide-zone .swiper-wrapper'); // [0, 1]
-              var ttSwiperLeng = $('.title-slide-zone .swiper-slide').length;
-
-              var small_new_slide = document.querySelector('.sub-slide-zone .swiper-container').swiper;
-              if (small_new_slide != null) small_new_slide.destroy();
-
-              var cdNlb_sub_swiper_new = new Swiper('.sub-slide-zone .swiper-container', subSlideOption);
-              var cdNlb_tt_swiper = new Swiper('.title-slide-zone .swiper-container', titleSlideOption);
-
-              if( ttSwiperLeng <= 1 ){
-                if(cdNlb_tt_swiper.length !== undefined && cdNlb_tt_swiper.length > 0){
-                  $(cdNlb_tt_swiper[i].$el).parent().addClass('destroy');
-                  cdNlb_tt_swiper[i].destroy();
-                }else{
-                  $(cdNlb_tt_swiper.$el).parent().addClass('destroy');
-                  cdNlb_tt_swiper.destroy();
-                }
-              }
-
-
-
-            }
-          });
-        }
-
-
-        var popupOneclick
-        $(document).ready(function() {
-
-        })
-
-        function fn_oneClickProcess(){
-          var productCode = $('form[name=addToCartForm] input[name=productCodePost]').val();
-          var productType = $('form[name=addToCartForm] input[name=productCodeType]').val();
-          var qty = $("#txtqty").val();
-
-          if(parseInt($("#productPrice").val()) == 0) {
-            var la = new layerAlert('선택 상품은 일시적인 시스템 장애로 구매하실 수 없습니다.<br/>고객센터(1800-5700)로 문의주세요.');
-            oneClickProcess = true;
-            return;
-          }
-          if(productType != 'ApparelSizeVariantProduct'){
-            var la = new layerAlert('사이즈를 선택해 주세요.');
-            oneClickProcess = true;
-            return;
-          }
-
-          if(qty < 1){
-            var la = new layerAlert('productdetail.basket.errormag.qty');
-            oneClickProcess = true;
-            return;
-          }
-
-          if($("#storePickupCheck").is(":checked") || $("#athomeCheck").is(":checked") || $("#quickCheck").is(":checked")){
-            var la = new layerAlert('퀵배송/매장수령은 배송특화 서비스로</br>원클릭 결제가 불가능합니다.');
-            la.confirmAction = function(){
-              return;
-            };
-            oneClickProcess = true;
-            return;
-          }
-
-          var check4pmProcess = false;
-          var check4pmOver = false;
-          var vipDeliAvail = true;
-          if($("#fourpmCheck").is(":checked")){
-            vipDeliAvail = false;
-            $("#deliveryKind").val("4pm");
-            $.ajax({
-              url: '/ko/shoppingbag/check4pm',
-              type: "GET",
-              data: $('form[name=addToCartForm]').serialize(),
-              async : false,
-              success: function(data){
-                //data가 0 또는 4pm의 경우 담기
-                if(data == "normal"){
-                  var scrollTop = $(document).scrollTop();
-                  var la = new layerAlert('쇼핑백에 {0}PM 상품이 아닌 일반배송 상품이 담겨 있습니다. 쇼핑백에서 일반배송 상품을&nbsp; 삭제 후 {0}PM 버튼을 클릭해 주세요.');
-                  var top = $(".popwrap.w_type_1").css("margin-top").replace("px","");
-                  $(document).scrollTop(scrollTop);
-                  $(".popwrap.w_type_1").css("margin-top",Number(scrollTop)+Number(top)+"px");
-                  la.confirmAction = function(){
-                    return;
-                  };
-                  check4pmProcess = true;
-                }else if(data == "pm_over"){
-                  check4pmOver = true;
-                  $("#deliveryKind").val("");
-                }else if(data == "store"){
-                  var scrollTop = $(document).scrollTop();
-                  var la = new layerAlert('쇼핑백에 {0}PM 상품이 아닌 매장수령 상품이 담겨 있습니다. 쇼핑백에서 매장수령 상품을&nbsp; 삭제 후 {0}PM 버튼을 클릭해 주세요.');
-                  var top = $(".popwrap.w_type_1").css("margin-top").replace("px","");
-                  $(document).scrollTop(scrollTop);
-                  $(".popwrap.w_type_1").css("margin-top",Number(scrollTop)+Number(top)+"px");
-                  la.confirmAction = function(){
-                    return;
-                  };
-                  check4pmProcess = true;
-                }else if(data == "athome"){
-                  var scrollTop = $(document).scrollTop();
-                  var la = new layerAlert('쇼핑백에 {0}PM 상품이 아닌 앳홈 상품이 담겨 있습니다. 쇼핑백에서 앳홈 상품을&nbsp; 삭제 후 {0}PM 버튼을 클릭해 주세요.');
-                  var top = $(".popwrap.w_type_1").css("margin-top").replace("px","");
-                  $(document).scrollTop(scrollTop);
-                  $(".popwrap.w_type_1").css("margin-top",Number(scrollTop)+Number(top)+"px");
-                  la.confirmAction = function(){
-                    return;
-                  };
-                  check4pmProcess = true;
-                }
-              },
-              error: function(xhr, Status, error) {
-                var la = new layerAlert(error);
-                la.confirmAction = function(){
-                  return;
-                };
-              }
-            });
-          }
-
-          if(check4pmProcess){
-            $("#deliveryKind").val("");
-            oneClickProcess = true;
-            return false;
-          }
-
-          if(check4pmOver){
-            var la = new layerAlert('오후{0}시 이후 주문시 일반배송으로 변경됩니다.');
-            la.confirmAction = function(){
-              return;
-            };
-          }
-
-          $('form[name=addToCartForm] input[name=qty]').val(qty);
-          $('form[name=addToCartForm] input[name=buyNowYn]').val(false);
-
-          if("false" == "true" && "ko" == "ko"){
-            NetFunnel_Action({action_id:"buy_now"},function(ev,ret){
-              oneclickLoadingStart(vipDeliAvail);
-            });
-          }else{
-            oneclickLoadingStart(vipDeliAvail);
-          }
-        }
-
-        function oneclickLoadingStart(vipDeliAvail){
-          $("body").append('<div class="layerArea" id="oneclickPopupLayer"><div class="layerBg"></div></div>');
-
-          var loadingHtml = "";
-          loadingHtml += '<div class="layerLoading_bar" id="oneclickLoadingDiv" style="width: 100%;height: 100%;top:0; z-index: 102">';
-          loadingHtml += '    <div class="ly_oneclick">';
-          loadingHtml += '        <img src="http://cdn.thehandsome.com/pc/order/loading_spinner_007s_190827.gif" alt="loading">';
-          loadingHtml += '                <p class="ly_ld_main" >최대할인 혜택을 계산 중 입니다</p>';
-          loadingHtml += '                <p class="ly_ld_sub">최대할인 혜택을 원클릭결제에 자동 적용하여<br>';
-          loadingHtml += '                   편리한 결제가 가능합니다</p>';
-          loadingHtml += '    </div>';
-          loadingHtml += '</div>';
-
-          $("#oneclickPopupLayer").append(loadingHtml);
-
-
-          var products ="";
-          products +=$("#productCode").val();
-          products +=","+ $("input[name=qty]").val();
-          $.ajax({
-            url : '/checkout/oneclick?products='+products+'&vipDeliAvail='+vipDeliAvail ,
-            type : 'GET',
-            success : function(data){
-              $('#oneclickPopupLayer').append(data);
-            },
-            error : function(err){
-              console.log(err.responseText);
-            }
-          })
-          setEcommerceData("Checkout1(원클릭결제)");
-          oneClickProcess = true;
-        }
-
-        function loadingOff(){
-          //로딩바제거
-          if($("#loadingBarDiv").length > 0){
-            $(".layerLoading_bar").remove();
-          }
-
-          if($(".layerArea:last").length > 0){
-            $(".layerArea:last").remove();
-          }
-        }
-
-        function oneClickTargetBlankPopup(wpayData){//원클릭결제 새창 팝업 2001
-          WPAY.checkoutAuthSubmit(wpayData);
-        }
-
-
-        var starscore = 0;
-        function getStarScore(starscore){
-          var average = starscore;
-          var starWidth=0;
-          if(1 <= average && average < 1.25){
-            starWidth=20;
-          } else if(1.25 <= average && average < 1.75){
-            starWidth=30;
-          } else if(1.75 <= average && average < 2.25){
-            starWidth=40;
-          } else if(2.25 <= average && average < 2.75){
-            starWidth=50;
-          } else if(2.75 <= average && average < 3.25){
-            starWidth=60;
-          } else if(3.25 <= average && average < 3.75){
-            starWidth=70;
-          } else if(3.75 <= average && average < 4.25){
-            starWidth=80;
-          } else if(4.25 <= average && average < 4.75){
-            starWidth=90;
-          } else if(4.75 <= average && average <= 5){
-            starWidth=100;
-          }
-          return starWidth;
-        }
-
-        function setOneClick(){
-
-        }
-
-        function fnSharePin(sUrl){
-          var sImg = "http://newmedia.thehandsome.com/TH/2B/FW/TH2B9WJM335N_BK_C01.jpg";
-          var sTxt = "[TIME HOMME] 후드 패딩 플라이트 점퍼";
-
-          if(sImg.indexOf("_C01") > 0) {
-            sImg = sImg.replace("_C01", "_W01");
-          }
-
-          var href = "http://www.pinterest.com/pin/create/button/?url="+sUrl+"&media="+sImg+"&description="+encodeURIComponent(sTxt);
-          var a = window.open(href, 'pinterest', 'width=800, height=500');
-          if ( a ) {
-            a.focus();
-          }
-        }
-
-        function matchItemSlider(){
-          var widthLi = $("#referencesListContent").width() / 3;
-          var productTotal = $("#referencesListContent .slides li").size();
-          if(productTotal <= 3) {
-            $("#referencesControls .prev").hide();
-            $("#referencesControls .next").hide();
-            $("#referencesListContent ul").removeClass("slides");
-            $("#referencesListContent > ul li").css("margin-right","10px");
-          }
-          var mySlider = $("#referencesListContent .slides").bxSlider({
-            mode:"horizontal",
-            speed:500,
-            pager:false,
-            moveSlides:1,
-            slideWidth:widthLi,
-            minSlides:3,
-            maxSlides:3,
-            slideMargin:10,
-            auto:false,
-            autoHover:false,
-            controls:false,
-            adaptiveHeight:true,
-            adaptiveHeightSpeed:10
-          });
-          $("#referencesControls .prev").on("click",function(){
-            mySlider.goToPrevSlide();
-            return false;
-          });
-          $("#referencesControls .next").on("click",function(){
-            mySlider.goToNextSlide();
-            return false;
-          });
-          $(".rmd_pb .tlt").mouseenter(function(){
-            $("#productEctTab .rmd_pb_popup").show();
-          });
-          $(".rmd_pb .tlt").mouseleave(function(){
-            $("#productEctTab .rmd_pb_popup").hide();
-          });
-
-        };
-
-        function addHidden(ptag, hname, hvl) {
-
-          if($("#"+hname).length >0){
-            $("#"+hname).remove();
-          }
-          return $('<input/>').attr('type'    , 'hidden')
-          .attr('id'      , hname)
-          .attr('name'    , hname)
-          .attr('value'   , hvl)
-          .appendTo(ptag);
-        }
-
-        /* 주문서간편결제 : 결제 인증 후 콜백
-        원클릭구매 : iframe 안에서 실행되기 때문에, target 을 _top으로 지정합니다
-         */
-        var checkoutPaymentAuthCallback = function (resultCode, resultMsg, result) {
-          console.log(document.cookie);
-          switch(resultCode) {
-            case "2406": // 쿠키정보가 없습니다.
-              //layerWpayCookieSettingView();
-              //WPAY.close();
-              //window.parent.postMessage({layerClose:'layerClose'},'*');
-              //window.parent.postMessage({inicisPopOpen:'inicisPopOpen'},'*');
-
-              console.log("쿠키 정보가 없음");
-              break;
-            case "0000":
-              $("body").append('<div class="layerArea" id="productLayer"><div class="layerBg"></div></div>');
-
-              $(".layerArea .layerBg").css('background','none');
-
-              // 토스트 팝업 추가
-              var toastPopup = '<div class="pop_loading_oneclick200210" style="background:#444;width:290px;height:120px;position:fixed;top:30%;left:50%;margin-left:-145px;margin-top:-60px;z-index:9999;">';
-              toastPopup += '<img src="http://cdn.thehandsome.com/_ui/handsomemobile/images/common/Spinner_1s_105px.png" alt="loading" style="display:block;width:32px;height:32px;margin:30px auto 15px auto;">';
-              toastPopup += '<p style="color:#fff;text-align:center;">';
-              toastPopup += '<span style="background:url(\'http://cdn.thehandsome.com/pc/products/one_click_pay_w.png\') left 2px no-repeat;color:#fff;font-size:15px;padding-left:93px;">가 진행중입니다.</span>';
-              toastPopup += '</p>';
-              toastPopup += '</div>';
-
-              $("body").append(toastPopup);
-
-              //상품상세와 결제페이지 구분이 안되기 때문에
-              //window.parent.postMessage({loadingShow:'loadingShow'},'*');
-
-              var $PAY_FORM = $("#PAY_FORM");
-              addHidden($PAY_FORM, 'wtid'	, result.wtid);
-
-              $PAY_FORM.attr({
-                'method': 'POST',
-                'action': '/ko/inicis/inipaywpay/sop/response',
-                'target': '_top'
-              });
-
-              $PAY_FORM.submit();
-              break;
-            default:
-              new layerAlert(resultMsg);
-              //WPAY.close();
-              //window.parent.postMessage({layerClose:'layerClose'},'*');
-              break;
-          }
-        }
-
-
-
-        function addWishListProdClick(productBaseCode) {
-
-          var lc = new layerConfirm("로그인이 필요합니다", "확인", "취소");
-          lc.cancleAction = function(){//취소 호출 펑션
-            $("."+productBaseCode+"Like").each(function(index, ele){
-              $(ele).removeClass("on");
-            })
-          };
-
-          lc.confirmAction = function(){//확인 호출 펑션
-            location.href = "/ko/member/login";
-          };
-
-
-          addWishListProd(productBaseCode);
-        }
-
-        function addWishListProd(productBaseCode){
-          $.ajax({
-            url: "/ko/wishlist/add-product-action",
-            type: "GET",
-            data: {productCode: productBaseCode ,type: 'toggle'},
-            success: function(msg){
-
-              if(msg !== 'erroor1'){
-                if(productBaseCode === 'TH2B9WJM335N_BK'){
-                  $('.wishlist1803').toggleClass('on');
-                }
-                $('.' + productBaseCode + 'LIKE').each(function(index, ele){
-                  $(ele).toggleClass('on');
-                })
-              }
-            }
-          });
-        }
-
-
-        function chngColorChip(ele, sourceProd, targetProd) {
-
-          var $this = $('#chipbtn_' + targetProd);
-          var $thisChips = $this.closest('.we-codi-colorchip');
-          //$thisChips.find('a').removeClass('on');
-
-          $.ajax({
-            url		: '/ko/product/reloadCoordiSize',
-            type	: 'GET',
-            datatype: 'json',
-            data	: {
-              'productcode'	: targetProd
-            },
-            success	: function(data) {
-              var product = data.product;
-              var images;
-
-              var txtHtml = '';
-              var lookbookTxtHtml = '';
-              /* 가격변경 */
-              var priceHtml = '';
-
-              priceHtml = product.price.formattedValue;
-
-              if(priceHtml != ''){
-                $('#prod_'+sourceProd+' .info_wrap .price').html(priceHtml);
-              }
-
-              if ( product.productImages != null ) {
-
-                for ( var i=0; i<product.productImages.length; i++ ) {
-                  images = product.productImages[i];
-
-                  if ( images.imageDivisionCode.code === 'S01' ) {
-                    txtHtml = images.image.url;
-                    break;
-                  }
-                }
-              }
-
-
-              $(ele).parent().closest('#prod_'+sourceProd).find('img').attr('src', txtHtml);
-
-
-            }
-          });
-
-
-        }
-
-        // 210728 oera 신규 추가 S
-        function fn_popupOeraMileage(){
-          //fn_parentLayer();
-          $("#popupOeraMileage").show();
-        }
-
-        //211101 체험단 리뷰 추가 S
-        function fn_popupTesterReview(){ // 체험단 팝업
-          if($("#testerReviewDiv").css("display") == "none"){
-            testerReviewReset();
-            viewPopup("#testerReviewDiv");
-            GA_Event('상품_상세','정보','체험단');
-          }
-        }
-
-        function testerReviewReset() { //팝업초기화
-          if($('.review_more_1807 a').parents('.evaluation_view').hasClass('on')) {
-            $('.review_more_1807 a').parents('.evaluation_view').removeClass('on');
-          }
-          $("#testerReviewDiv .paging .pageBtn:eq(0)").trigger("click");
-        }
-        // 211101 체험단 리뷰 추가 E
-
-        //]]>
-      </script>
+<!--      <script type="text/javascript">-->
+<!--        //<![CDATA[-->
+<!--        var stockOnlineStockpile = {};-->
+<!--        var warehouseStockpile = {};-->
+
+<!--        $(document).ready(function() {-->
+<!--          cartQuantity = {};-->
+
+<!--          var vsProductId = $("#vs-product-id").length;-->
+<!--          if(vsProductId > 0){-->
+<!--            var vsProductCodeType = $('form[name=addToCartForm] input[name=productCodeType]').val();-->
+<!--            if(vsProductCodeType == "ApparelSizeVariantProduct") {-->
+<!--              var vsProductCodePost = $('form[name=addToCartForm] input[name=productCodePost]').val();-->
+<!--              if(vsProductCodePost != "" && vsProductCodePost.indexOf("_") > -1){-->
+<!--                $("#vs-product-id").val(vsProductCodePost.substr(0,vsProductCodePost.lastIndexOf("_")));-->
+<!--              }-->
+<!--            }-->
+<!--          }-->
+
+
+<!--          $(".btn_star_score li a").on("click", function(){-->
+<!--            $("#rating").val($(this).attr('value'));-->
+<!--          });-->
+
+<!--          $('#customerReview').click(function(){-->
+<!--            fn_popupCustomerReview();-->
+<!--          });-->
+
+<!--          $('#offlineQty').click(function(){-->
+<!--            fn_stockconfirm();-->
+<!--          });-->
+
+<!--          var productCode = $("#productCode").val();-->
+<!--          $.ajax({-->
+<!--            url: '/ko/p/review',-->
+<!--            type: "GET",-->
+<!--            data: {"productCode":productCode},-->
+<!--            success: function(data){-->
+<!--              var starWidth = 0;-->
+<!--              if(data.reviewList.results.length > 0){-->
+<!--                starWidth = getStarScore(data.reviewAvg);-->
+<!--              }-->
+<!--              if(starWidth==0){-->
+<!--                $("#prodTotalStarScoreWrapper").css("display","none");-->
+<!--              }else{-->
+<!--                $("#prodTotalStarScore").css("width",starWidth+"%")-->
+<!--              }-->
+<!--            },-->
+<!--            error: function(xhr, Status, error) {-->
+<!--              var la = new layerAlert(error);-->
+<!--              la.confirmAction = function(){-->
+<!--                return;-->
+<!--              };-->
+<!--            }-->
+<!--          });-->
+
+
+<!--          stockOnlineStockpile["TH2B9WJM335N_BK_95"] = "11";-->
+<!--          warehouseStockpile["TH2B9WJM335N_BK_95"] = "0";-->
+
+<!--          stockOnlineStockpile["TH2B9WJM335N_BK_100"] = "19";-->
+<!--          warehouseStockpile["TH2B9WJM335N_BK_100"] = "0";-->
+
+<!--          stockOnlineStockpile["TH2B9WJM335N_BK_105"] = "20";-->
+<!--          warehouseStockpile["TH2B9WJM335N_BK_105"] = "0";-->
+
+<!--          stockOnlineStockpile["TH2B9WJM335N_BK_110"] = "0";-->
+<!--          warehouseStockpile["TH2B9WJM335N_BK_110"] = "0";-->
+
+<!--          $(".btn_close").on("click", function(){-->
+<!--            hideProductLayer();-->
+<!--            $(".popwrap").hide();-->
+<!--          });-->
+
+<!--          $('.toggle_type1>dt').click(function() {-->
+
+<!--            $(this).addClass('on');-->
+<!--            $(this).siblings('dt').removeClass('on');-->
+
+<!--            var beforeHeight = $(".toggle_type1").height();-->
+<!--            var afterHeight = 0;-->
+<!--            var scrolltop = $(window).scrollTop();-->
+
+<!--            var checkElement = $(this).next();-->
+
+<!--            if((checkElement.is('dd')) && (checkElement.is(':visible'))) {-->
+<!--              $(this).removeClass('on');-->
+<!--              checkElement.slideUp('fast',-->
+<!--                  function(){-->
+<!--                    afterHeight = $(".toggle_type1").height();-->
+<!--// 	 					bodyScroll();-->
+<!--                  });-->
+
+<!--            }-->
+<!--            var fitGuide = false;-->
+<!--            if((checkElement.is('dd')) && (!checkElement.is(':visible'))) {-->
+<!--              var v_label = "";-->
+<!--              var v_type = $(this).children().attr("id");-->
+<!--              //21.11.03 상품상세 정보 영역 변경 관련 GA이벤트태깅 추가 및 변경-->
+<!--              if(v_type == "NEW_DETAIL_INFO_EVT"){-->
+<!--                v_label = "상품상세정보";-->
+<!--              }else if(v_type == "DETAIL_INFO_EVT"){-->
+<!--                if ('ko' == 'ko') {-->
+<!--                  v_label = "상품정보제공고시";-->
+<!--                }else{-->
+<!--                  v_label = "상품상세정보";-->
+<!--                }-->
+<!--              }else if(v_type == "REAL_SIZE_EVT"){-->
+<!--                v_label = "실측사이즈";-->
+<!--              }else if(v_type == "DELI_RETURN_EVT"){-->
+<!--                v_label = "배송 및 반품";-->
+<!--              }else if(v_type == "FIT_GUIDE_EVT"){-->
+<!--                fitGuide = true;-->
+<!--              }-->
+
+<!--              if(!fitGuide) {-->
+<!--                GA_Event('상품_상세','정보',v_label);-->
+<!--              }-->
+
+<!--              $('.toggle_type1>dd:visible').slideUp('fast');-->
+
+<!--              checkElement.slideDown('fast',-->
+<!--                  function(){-->
+<!--                    afterHeight = $(".toggle_type1").height();-->
+<!--// 					bodyScroll();-->
+<!--                  });-->
+<!--            }-->
+
+<!--            if(fitGuide) {-->
+<!--              fitGuide_Swiper_Slide(1);-->
+<!--            }-->
+
+<!--            var bodyScroll = function(){-->
+
+<!--              $('body,html').animate({scrollTop:parseFloat(scrolltop + (beforeHeight - afterHeight))},-->
+<!--                  function(){-->
+<!--                    bodyReSize();-->
+<!--                  }-->
+<!--              );-->
+<!--            }-->
+
+<!--            if($(this).next('dd').length == 0) {-->
+<!--              return true;-->
+<!--            } else {-->
+<!--              return false;-->
+<!--            }-->
+<!--          });-->
+
+<!--          if ( 'en' == 'ko' || 'zh' == 'ko' ) {-->
+<!--            showExchangeRate();-->
+<!--          }-->
+
+<!--          $("#restock_tlt").mouseover(function(){-->
+<!--// // 		showExchangeRate();-->
+<!--            $("#restock_delch_box").css("display","block");-->
+<!--          });-->
+
+<!--          $("#restock_tlt").mouseout(function(){-->
+<!--            $("#restock_delch_box").css("display","none");-->
+<!--          });-->
+
+<!--          if($('#referencesListContent ul:eq(0) > li').length > 3) {-->
+<!--            matchItemSlider();-->
+<!--          }else {-->
+<!--            $(".related_evt .matches_list > ul > li").css("margin-right", "10px");-->
+<!--          }-->
+
+<!--          //타임옴므 실측사이즈-->
+<!--          if("BR06" == "BR06"){-->
+<!--            var checkShow = false;-->
+<!--            var checkCode = "TH2B9WJM335N";-->
+<!--            var checkLanguage = "ko";-->
+<!--            if(checkCode == "TH1H7WPC500M" || checkCode == "TH1I3WPC505M" || checkCode == "TH1H8WPC503M" || checkCode == "TH1HAWPC505M"  || checkCode == "TH1HAWPC505MP1" ){-->
+<!--              $(".timehomme_pants_fit").addClass("slim");-->
+<!--              $(".timehomme_pants_fit").removeClass("straight");-->
+<!--              $(".timehomme_pants_fit").removeClass("comfort");-->
+<!--              checkShow = true;-->
+<!--            }else if(checkCode == "TH1H8WPC510M" || checkCode == "TH1H8WPC530M" || checkCode == "TH1H8WPC540M" || checkCode == "TH1HBWPC535M" || checkCode == "TH1HAWPC545M" || checkCode == "TH1HAWPC525M"  || checkCode == "TH1HAWPC525MP1" ){-->
+<!--              $(".timehomme_pants_fit").removeClass("slim");-->
+<!--              $(".timehomme_pants_fit").addClass("straight");-->
+<!--              $(".timehomme_pants_fit").removeClass("comfort");-->
+<!--              checkShow = true;-->
+<!--            }-->
+
+<!--            if(checkShow){-->
+<!--              if(checkLanguage == "ko"){-->
+<!--                $(".timehomme_pants_fit").addClass("ko");-->
+<!--              }else if(checkLanguage == "en"){-->
+<!--                $(".timehomme_pants_fit").addClass("en");-->
+<!--              }else if(checkLanguage == "zh"){-->
+<!--                $(".timehomme_pants_fit").addClass("zh");-->
+<!--              }-->
+
+<!--              $(".timehomme_pants_fit").show();-->
+<!--            }-->
+<!--          }-->
+
+<!--          //at home,quick 배송지 변경-->
+<!--          $(".btn_chg").on("click",function(){-->
+<!--            if($(this).parent().parent().attr("id") == "athome_svc"){-->
+<!--              searchAddressLayer("streetname","streetnumber","postalcode");-->
+<!--            }else if($(this).parent().parent().attr("id") == "quick_svc"){-->
+<!--              searchAddressLayer("quickStreetname","quickStreetnumber","quickPostalcode");-->
+<!--            }-->
+<!--          });-->
+
+<!--          // 예약주문 토스트팝업 190507-->
+<!--          /* if($("#erpWorkOrderProdCode").val() != "") {-->
+<!--              clearTimeout(toastPopupPreOrderInit);-->
+<!--              clearTimeout(toastPopupPreOrderAfter);-->
+<!--              clearTimeout(toastPopupPreOrderStop);-->
+<!--          }-->
+
+<!--          if("N" == "Y") {-->
+<!--              toastPopupPreOrder();-->
+<!--          } */-->
+
+
+
+<!--          $('#vs-placeholder-cart').on('DOMSubtreeModified',function(){-->
+<!--            var label = escape('TIME HOMME')+"_"+escape('후드 패딩 플라이트 점퍼');-->
+
+<!--            if($('#vs-placeholder-cart div').hasClass('demonstration-overlay')){-->
+<!--              if($(".demonstration-overlay").attr('onclick') == undefined || $(".demonstration-overlay").attr('onclick') == ""){-->
+<!--                $(".demonstration-overlay").attr('onclick', 'GA_Event(\'상품_상세\',\'버츄사이즈\', \''+label+'\')');-->
+<!--              }-->
+<!--            }-->
+
+<!--            if($('#vs-placeholder-cart td').hasClass('col-user-product')){-->
+<!--              if($(".col-user-product .sample").attr('onclick')==undefined || $(".col-user-product .sample").attr('onclick') ==""){-->
+<!--                $(".col-user-product .sample").attr('onclick', 'GA_Event(\'상품_상세\',\'버츄사이즈\', \''+label+'\')');-->
+<!--              }-->
+<!--            }-->
+<!--          });-->
+
+
+
+<!--          swiperslideForLookbook();-->
+
+
+<!--        });-->
+
+<!--        function swiperslideForLookbook(){-->
+
+<!--          var slideBox_Idx = $('.sub-slide-zone .slide-box');-->
+<!--          var smallSwiperLeng = $('.sub-slide-zone .slide-box').length;-->
+<!--          var smallSlideArr = new Array();-->
+
+<!--          for(var i = 0; i < smallSwiperLeng; i++){-->
+<!--            var smallSlideLeng = $(slideBox_Idx[i]).find('.swiper-slide').length-->
+<!--            smallSlideArr.push(smallSlideLeng);-->
+<!--          }-->
+
+<!--          // 룩북보기 sub 배너 슬라이드 옵션-->
+<!--          var subSlideOption = {-->
+<!--            slidesPerView: 3,-->
+<!--            slidesPerGroup: 3,-->
+<!--            spaceBetween: 10,-->
+<!--            loop: true,-->
+<!--            loopFillGroupWithBlank: true,-->
+<!--            observer: true,-->
+<!--            observeParents: true,-->
+<!--            simulateTouch:false,-->
+<!--            navigation: {-->
+<!--              nextEl: '.swiper-button-next.sub-nav-right',-->
+<!--              prevEl: '.swiper-button-prev.sub-nav-left',-->
+<!--            },-->
+<!--          };-->
+
+<!--          // 룩북보기 sub 배너 슬라이드-->
+<!--          var cdNlb_sub_swiper = new Swiper('.sub-slide-zone .swiper-container', subSlideOption);-->
+
+<!--          for(var i = 0; i < smallSwiperLeng; i++){-->
+<!--            if( smallSlideArr[i] <= 2 ){-->
+<!--              if(cdNlb_sub_swiper.length !== undefined && cdNlb_sub_swiper.length > 0){-->
+<!--                $(cdNlb_sub_swiper[i].$el).parent().addClass('destroy');-->
+<!--                cdNlb_sub_swiper[i].destroy();-->
+<!--              }else{-->
+<!--                $(cdNlb_sub_swiper.$el).parent().addClass('destroy');-->
+<!--                cdNlb_sub_swiper.destroy();-->
+<!--              }-->
+<!--            }-->
+<!--          }-->
+
+<!--          // 룩북보기 title 배너 슬라이드 옵션-->
+<!--          // var titleSlideOption = {-->
+<!--          //   slidesPerView: 1,-->
+<!--          //   slidesPerGroup: 1,-->
+<!--          //   spaceBetween: 0,-->
+<!--          //   loop: true,-->
+<!--          //   simulateTouch:false,-->
+<!--          //   navigation: {-->
+<!--          //     nextEl: '.swiper-button-next.tt-nav-right',-->
+<!--          //     prevEl: '.swiper-button-prev.tt-nav-left',-->
+<!--          //   },-->
+<!--          //   pagination: {-->
+<!--          //     el: '.swiper-pagination.tt-nav-page',-->
+<!--          //     clickable: true,-->
+<!--          //   },-->
+<!--          //   on: {-->
+<!--          //     slideChange: function() {-->
+<!--          //       var $subSlide = $('.detail-pg-lookbook-aside-box .sub-slide-zone .slide-box');-->
+<!--          //       var slideIndex = this.realIndex;-->
+<!--          //-->
+<!--          //       //console.log(slideIndex);-->
+<!--          //-->
+<!--          //       $subSlide.hide();-->
+<!--          //       $($subSlide[slideIndex]).show();-->
+<!--          //-->
+<!--          //     }-->
+<!--          //     /* ,slideChangeTransitionStart: function(){-->
+<!--          //       // 202010623 auto height 기능 추가-->
+<!--          //       var slide_Wrap = $(".title-slide-zone .swiper-wrapper");-->
+<!--          //       var target_Height = $(this.$wrapperEl).find('.swiper-slide-active img').height();-->
+<!--          //-->
+<!--          //       slide_Wrap.height(target_Height);-->
+<!--          //     }, */-->
+<!--          //   }-->
+<!--          // };-->
+
+
+<!--          // if($(".cd-n-lb-tab a").attr("href") == "#cd-n-lb-tab-02"){-->
+<!--          //-->
+<!--          //   var ttSlideBox_Idx = $('.title-slide-zone .swiper-wrapper'); // [0, 1]-->
+<!--          //   var ttSwiperLeng = $('.title-slide-zone .swiper-slide').length;-->
+<!--          //-->
+<!--          //   var small_new_slide = document.querySelector('.sub-slide-zone .swiper-container').swiper;-->
+<!--          //   if (small_new_slide != null) small_new_slide.destroy();-->
+<!--          //-->
+<!--          //   var cdNlb_sub_swiper_new = new Swiper('.sub-slide-zone .swiper-container', subSlideOption);-->
+<!--          //   var cdNlb_tt_swiper = new Swiper('.title-slide-zone .swiper-container', titleSlideOption);-->
+<!--          //-->
+<!--          //   var $subSlide = $('.detail-pg-lookbook-aside-box .sub-slide-zone .slide-box');-->
+<!--          //-->
+<!--          //   if( ttSwiperLeng <= 1 ){-->
+<!--          //     if(cdNlb_tt_swiper.length !== undefined && cdNlb_tt_swiper.length > 0){-->
+<!--          //       $(cdNlb_tt_swiper[i].$el).parent().addClass('destroy');-->
+<!--          //       cdNlb_tt_swiper[i].destroy();-->
+<!--          //     }else{-->
+<!--          //       $(cdNlb_tt_swiper.$el).parent().addClass('destroy');-->
+<!--          //       cdNlb_tt_swiper.destroy();-->
+<!--          //     }-->
+<!--          //-->
+<!--          //     // title slide가 하나일 경우 sub-slide show-->
+<!--          //     $($subSlide[0]).show();-->
+<!--          //-->
+<!--          //   }-->
+<!--          //-->
+<!--          //-->
+<!--          //-->
+<!--          // }-->
+
+
+
+
+<!--          // 함께코디한 상품 & 룩북보기 tab-->
+<!--          // $(".related_evt .cd-n-lb-tab").find("a").off().on("click", function(e){-->
+<!--          //   var $this = $(this);-->
+<!--          //   var $all_tab_nav = $this.parents(".cd-n-lb-tab").find("li");-->
+<!--          //   var $tab_contents = $this.parents(".related_evt").find(".cd-n-lb-content-box");-->
+<!--          //   var id = $this.attr("href");-->
+<!--          //   var tabIndex = $this.parent().index();-->
+<!--          //-->
+<!--          //   e.preventDefault();-->
+<!--          //   $all_tab_nav.removeClass("on");-->
+<!--          //   $this.parent().addClass("on");-->
+<!--          //   $tab_contents.hide();-->
+<!--          //   $(id).show();-->
+<!--          //-->
+<!--          //   var thisTab = $(this).parent('li').index();-->
+<!--          //-->
+<!--          //   if ( thisTab === 0 ) {-->
+<!--          //     var title_new_slide = document.querySelector('.title-slide-zone .swiper-container').swiper;-->
+<!--          //     var small_new_slide = document.querySelector('.sub-slide-zone .swiper-container').swiper;-->
+<!--          //     if (title_new_slide != null) title_new_slide.destroy();-->
+<!--          //     if (small_new_slide != null) small_new_slide.destroy();-->
+<!--          //   }else {-->
+<!--          //     var ttSlideBox_Idx = $('.title-slide-zone .swiper-wrapper'); // [0, 1]-->
+<!--          //     var ttSwiperLeng = $('.title-slide-zone .swiper-slide').length;-->
+<!--          //-->
+<!--          //     var small_new_slide = document.querySelector('.sub-slide-zone .swiper-container').swiper;-->
+<!--          //     if (small_new_slide != null) small_new_slide.destroy();-->
+<!--          //-->
+<!--          //     var cdNlb_sub_swiper_new = new Swiper('.sub-slide-zone .swiper-container', subSlideOption);-->
+<!--          //     var cdNlb_tt_swiper = new Swiper('.title-slide-zone .swiper-container', titleSlideOption);-->
+<!--          //-->
+<!--          //     if( ttSwiperLeng <= 1 ){-->
+<!--          //       if(cdNlb_tt_swiper.length !== undefined && cdNlb_tt_swiper.length > 0){-->
+<!--          //         $(cdNlb_tt_swiper[i].$el).parent().addClass('destroy');-->
+<!--          //         cdNlb_tt_swiper[i].destroy();-->
+<!--          //       }else{-->
+<!--          //         $(cdNlb_tt_swiper.$el).parent().addClass('destroy');-->
+<!--          //         cdNlb_tt_swiper.destroy();-->
+<!--          //       }-->
+<!--          //     }-->
+<!--          //-->
+<!--          //-->
+<!--          //-->
+<!--          //   }-->
+<!--          // });-->
+<!--        }-->
+
+
+<!--        var popupOneclick-->
+<!--        $(document).ready(function() {-->
+
+<!--        })-->
+
+<!--        function fn_oneClickProcess(){-->
+<!--          var productCode = $('form[name=addToCartForm] input[name=productCodePost]').val();-->
+<!--          var productType = $('form[name=addToCartForm] input[name=productCodeType]').val();-->
+<!--          var qty = $("#txtqty").val();-->
+
+<!--          if(parseInt($("#productPrice").val()) == 0) {-->
+<!--            var la = new layerAlert('선택 상품은 일시적인 시스템 장애로 구매하실 수 없습니다.<br/>고객센터(1800-5700)로 문의주세요.');-->
+<!--            oneClickProcess = true;-->
+<!--            return;-->
+<!--          }-->
+<!--          if(productType != 'ApparelSizeVariantProduct'){-->
+<!--            var la = new layerAlert('사이즈를 선택해 주세요.');-->
+<!--            oneClickProcess = true;-->
+<!--            return;-->
+<!--          }-->
+
+<!--          if(qty < 1){-->
+<!--            var la = new layerAlert('productdetail.basket.errormag.qty');-->
+<!--            oneClickProcess = true;-->
+<!--            return;-->
+<!--          }-->
+
+<!--          if($("#storePickupCheck").is(":checked") || $("#athomeCheck").is(":checked") || $("#quickCheck").is(":checked")){-->
+<!--            var la = new layerAlert('퀵배송/매장수령은 배송특화 서비스로</br>원클릭 결제가 불가능합니다.');-->
+<!--            la.confirmAction = function(){-->
+<!--              return;-->
+<!--            };-->
+<!--            oneClickProcess = true;-->
+<!--            return;-->
+<!--          }-->
+
+<!--          var check4pmProcess = false;-->
+<!--          var check4pmOver = false;-->
+<!--          var vipDeliAvail = true;-->
+<!--          if($("#fourpmCheck").is(":checked")){-->
+<!--            vipDeliAvail = false;-->
+<!--            $("#deliveryKind").val("4pm");-->
+<!--            $.ajax({-->
+<!--              url: '/ko/shoppingbag/check4pm',-->
+<!--              type: "GET",-->
+<!--              data: $('form[name=addToCartForm]').serialize(),-->
+<!--              async : false,-->
+<!--              success: function(data){-->
+<!--                //data가 0 또는 4pm의 경우 담기-->
+<!--                if(data == "normal"){-->
+<!--                  var scrollTop = $(document).scrollTop();-->
+<!--                  var la = new layerAlert('쇼핑백에 {0}PM 상품이 아닌 일반배송 상품이 담겨 있습니다. 쇼핑백에서 일반배송 상품을&nbsp; 삭제 후 {0}PM 버튼을 클릭해 주세요.');-->
+<!--                  var top = $(".popwrap.w_type_1").css("margin-top").replace("px","");-->
+<!--                  $(document).scrollTop(scrollTop);-->
+<!--                  $(".popwrap.w_type_1").css("margin-top",Number(scrollTop)+Number(top)+"px");-->
+<!--                  la.confirmAction = function(){-->
+<!--                    return;-->
+<!--                  };-->
+<!--                  check4pmProcess = true;-->
+<!--                }else if(data == "pm_over"){-->
+<!--                  check4pmOver = true;-->
+<!--                  $("#deliveryKind").val("");-->
+<!--                }else if(data == "store"){-->
+<!--                  var scrollTop = $(document).scrollTop();-->
+<!--                  var la = new layerAlert('쇼핑백에 {0}PM 상품이 아닌 매장수령 상품이 담겨 있습니다. 쇼핑백에서 매장수령 상품을&nbsp; 삭제 후 {0}PM 버튼을 클릭해 주세요.');-->
+<!--                  var top = $(".popwrap.w_type_1").css("margin-top").replace("px","");-->
+<!--                  $(document).scrollTop(scrollTop);-->
+<!--                  $(".popwrap.w_type_1").css("margin-top",Number(scrollTop)+Number(top)+"px");-->
+<!--                  la.confirmAction = function(){-->
+<!--                    return;-->
+<!--                  };-->
+<!--                  check4pmProcess = true;-->
+<!--                }else if(data == "athome"){-->
+<!--                  var scrollTop = $(document).scrollTop();-->
+<!--                  var la = new layerAlert('쇼핑백에 {0}PM 상품이 아닌 앳홈 상품이 담겨 있습니다. 쇼핑백에서 앳홈 상품을&nbsp; 삭제 후 {0}PM 버튼을 클릭해 주세요.');-->
+<!--                  var top = $(".popwrap.w_type_1").css("margin-top").replace("px","");-->
+<!--                  $(document).scrollTop(scrollTop);-->
+<!--                  $(".popwrap.w_type_1").css("margin-top",Number(scrollTop)+Number(top)+"px");-->
+<!--                  la.confirmAction = function(){-->
+<!--                    return;-->
+<!--                  };-->
+<!--                  check4pmProcess = true;-->
+<!--                }-->
+<!--              },-->
+<!--              error: function(xhr, Status, error) {-->
+<!--                var la = new layerAlert(error);-->
+<!--                la.confirmAction = function(){-->
+<!--                  return;-->
+<!--                };-->
+<!--              }-->
+<!--            });-->
+<!--          }-->
+
+<!--          if(check4pmProcess){-->
+<!--            $("#deliveryKind").val("");-->
+<!--            oneClickProcess = true;-->
+<!--            return false;-->
+<!--          }-->
+
+<!--          if(check4pmOver){-->
+<!--            var la = new layerAlert('오후{0}시 이후 주문시 일반배송으로 변경됩니다.');-->
+<!--            la.confirmAction = function(){-->
+<!--              return;-->
+<!--            };-->
+<!--          }-->
+
+<!--          $('form[name=addToCartForm] input[name=qty]').val(qty);-->
+<!--          $('form[name=addToCartForm] input[name=buyNowYn]').val(false);-->
+
+<!--          if("false" == "true" && "ko" == "ko"){-->
+<!--            NetFunnel_Action({action_id:"buy_now"},function(ev,ret){-->
+<!--              oneclickLoadingStart(vipDeliAvail);-->
+<!--            });-->
+<!--          }else{-->
+<!--            oneclickLoadingStart(vipDeliAvail);-->
+<!--          }-->
+<!--        }-->
+
+<!--        function oneclickLoadingStart(vipDeliAvail){-->
+<!--          $("body").append('<div class="layerArea" id="oneclickPopupLayer"><div class="layerBg"></div></div>');-->
+
+<!--          var loadingHtml = "";-->
+<!--          loadingHtml += '<div class="layerLoading_bar" id="oneclickLoadingDiv" style="width: 100%;height: 100%;top:0; z-index: 102">';-->
+<!--          loadingHtml += '    <div class="ly_oneclick">';-->
+<!--          loadingHtml += '        <img src="http://cdn.thehandsome.com/pc/order/loading_spinner_007s_190827.gif" alt="loading">';-->
+<!--          loadingHtml += '                <p class="ly_ld_main" >최대할인 혜택을 계산 중 입니다</p>';-->
+<!--          loadingHtml += '                <p class="ly_ld_sub">최대할인 혜택을 원클릭결제에 자동 적용하여<br>';-->
+<!--          loadingHtml += '                   편리한 결제가 가능합니다</p>';-->
+<!--          loadingHtml += '    </div>';-->
+<!--          loadingHtml += '</div>';-->
+
+<!--          $("#oneclickPopupLayer").append(loadingHtml);-->
+
+
+<!--          var products ="";-->
+<!--          products +=$("#productCode").val();-->
+<!--          products +=","+ $("input[name=qty]").val();-->
+<!--          $.ajax({-->
+<!--            url : '/checkout/oneclick?products='+products+'&vipDeliAvail='+vipDeliAvail ,-->
+<!--            type : 'GET',-->
+<!--            success : function(data){-->
+<!--              $('#oneclickPopupLayer').append(data);-->
+<!--            },-->
+<!--            error : function(err){-->
+<!--              console.log(err.responseText);-->
+<!--            }-->
+<!--          })-->
+<!--          setEcommerceData("Checkout1(원클릭결제)");-->
+<!--          oneClickProcess = true;-->
+<!--        }-->
+
+<!--        function loadingOff(){-->
+<!--          //로딩바제거-->
+<!--          if($("#loadingBarDiv").length > 0){-->
+<!--            $(".layerLoading_bar").remove();-->
+<!--          }-->
+
+<!--          if($(".layerArea:last").length > 0){-->
+<!--            $(".layerArea:last").remove();-->
+<!--          }-->
+<!--        }-->
+
+<!--        function oneClickTargetBlankPopup(wpayData){//원클릭결제 새창 팝업 2001-->
+<!--          WPAY.checkoutAuthSubmit(wpayData);-->
+<!--        }-->
+
+
+<!--        var starscore = 0;-->
+<!--        function getStarScore(starscore){-->
+<!--          var average = starscore;-->
+<!--          var starWidth=0;-->
+<!--          if(1 <= average && average < 1.25){-->
+<!--            starWidth=20;-->
+<!--          } else if(1.25 <= average && average < 1.75){-->
+<!--            starWidth=30;-->
+<!--          } else if(1.75 <= average && average < 2.25){-->
+<!--            starWidth=40;-->
+<!--          } else if(2.25 <= average && average < 2.75){-->
+<!--            starWidth=50;-->
+<!--          } else if(2.75 <= average && average < 3.25){-->
+<!--            starWidth=60;-->
+<!--          } else if(3.25 <= average && average < 3.75){-->
+<!--            starWidth=70;-->
+<!--          } else if(3.75 <= average && average < 4.25){-->
+<!--            starWidth=80;-->
+<!--          } else if(4.25 <= average && average < 4.75){-->
+<!--            starWidth=90;-->
+<!--          } else if(4.75 <= average && average <= 5){-->
+<!--            starWidth=100;-->
+<!--          }-->
+<!--          return starWidth;-->
+<!--        }-->
+
+<!--        function setOneClick(){-->
+
+<!--        }-->
+
+<!--        function fnSharePin(sUrl){-->
+<!--          var sImg = "http://newmedia.thehandsome.com/TH/2B/FW/TH2B9WJM335N_BK_C01.jpg";-->
+<!--          var sTxt = "[TIME HOMME] 후드 패딩 플라이트 점퍼";-->
+
+<!--          if(sImg.indexOf("_C01") > 0) {-->
+<!--            sImg = sImg.replace("_C01", "_W01");-->
+<!--          }-->
+
+<!--          var href = "http://www.pinterest.com/pin/create/button/?url="+sUrl+"&media="+sImg+"&description="+encodeURIComponent(sTxt);-->
+<!--          var a = window.open(href, 'pinterest', 'width=800, height=500');-->
+<!--          if ( a ) {-->
+<!--            a.focus();-->
+<!--          }-->
+<!--        }-->
+
+<!--        function matchItemSlider(){-->
+<!--          var widthLi = $("#referencesListContent").width() / 3;-->
+<!--          var productTotal = $("#referencesListContent .slides li").size();-->
+<!--          if(productTotal <= 3) {-->
+<!--            $("#referencesControls .prev").hide();-->
+<!--            $("#referencesControls .next").hide();-->
+<!--            $("#referencesListContent ul").removeClass("slides");-->
+<!--            $("#referencesListContent > ul li").css("margin-right","10px");-->
+<!--          }-->
+<!--          var mySlider = $("#referencesListContent .slides").bxSlider({-->
+<!--            mode:"horizontal",-->
+<!--            speed:500,-->
+<!--            pager:false,-->
+<!--            moveSlides:1,-->
+<!--            slideWidth:widthLi,-->
+<!--            minSlides:3,-->
+<!--            maxSlides:3,-->
+<!--            slideMargin:10,-->
+<!--            auto:false,-->
+<!--            autoHover:false,-->
+<!--            controls:false,-->
+<!--            adaptiveHeight:true,-->
+<!--            adaptiveHeightSpeed:10-->
+<!--          });-->
+<!--          $("#referencesControls .prev").on("click",function(){-->
+<!--            mySlider.goToPrevSlide();-->
+<!--            return false;-->
+<!--          });-->
+<!--          $("#referencesControls .next").on("click",function(){-->
+<!--            mySlider.goToNextSlide();-->
+<!--            return false;-->
+<!--          });-->
+<!--          $(".rmd_pb .tlt").mouseenter(function(){-->
+<!--            $("#productEctTab .rmd_pb_popup").show();-->
+<!--          });-->
+<!--          $(".rmd_pb .tlt").mouseleave(function(){-->
+<!--            $("#productEctTab .rmd_pb_popup").hide();-->
+<!--          });-->
+
+<!--        };-->
+
+<!--        function addHidden(ptag, hname, hvl) {-->
+
+<!--          if($("#"+hname).length >0){-->
+<!--            $("#"+hname).remove();-->
+<!--          }-->
+<!--          return $('<input/>').attr('type'    , 'hidden')-->
+<!--          .attr('id'      , hname)-->
+<!--          .attr('name'    , hname)-->
+<!--          .attr('value'   , hvl)-->
+<!--          .appendTo(ptag);-->
+<!--        }-->
+
+<!--        /* 주문서간편결제 : 결제 인증 후 콜백-->
+<!--        원클릭구매 : iframe 안에서 실행되기 때문에, target 을 _top으로 지정합니다-->
+<!--         */-->
+<!--        var checkoutPaymentAuthCallback = function (resultCode, resultMsg, result) {-->
+<!--          console.log(document.cookie);-->
+<!--          switch(resultCode) {-->
+<!--            case "2406": // 쿠키정보가 없습니다.-->
+<!--              //layerWpayCookieSettingView();-->
+<!--              //WPAY.close();-->
+<!--              //window.parent.postMessage({layerClose:'layerClose'},'*');-->
+<!--              //window.parent.postMessage({inicisPopOpen:'inicisPopOpen'},'*');-->
+
+<!--              console.log("쿠키 정보가 없음");-->
+<!--              break;-->
+<!--            case "0000":-->
+<!--              $("body").append('<div class="layerArea" id="productLayer"><div class="layerBg"></div></div>');-->
+
+<!--              $(".layerArea .layerBg").css('background','none');-->
+
+<!--              // 토스트 팝업 추가-->
+<!--              var toastPopup = '<div class="pop_loading_oneclick200210" style="background:#444;width:290px;height:120px;position:fixed;top:30%;left:50%;margin-left:-145px;margin-top:-60px;z-index:9999;">';-->
+<!--              toastPopup += '<img src="http://cdn.thehandsome.com/_ui/handsomemobile/images/common/Spinner_1s_105px.png" alt="loading" style="display:block;width:32px;height:32px;margin:30px auto 15px auto;">';-->
+<!--              toastPopup += '<p style="color:#fff;text-align:center;">';-->
+<!--              toastPopup += '<span style="background:url(\'http://cdn.thehandsome.com/pc/products/one_click_pay_w.png\') left 2px no-repeat;color:#fff;font-size:15px;padding-left:93px;">가 진행중입니다.</span>';-->
+<!--              toastPopup += '</p>';-->
+<!--              toastPopup += '</div>';-->
+
+<!--              $("body").append(toastPopup);-->
+
+<!--              //상품상세와 결제페이지 구분이 안되기 때문에-->
+<!--              //window.parent.postMessage({loadingShow:'loadingShow'},'*');-->
+
+<!--              var $PAY_FORM = $("#PAY_FORM");-->
+<!--              addHidden($PAY_FORM, 'wtid'	, result.wtid);-->
+
+<!--              $PAY_FORM.attr({-->
+<!--                'method': 'POST',-->
+<!--                'action': '/ko/inicis/inipaywpay/sop/response',-->
+<!--                'target': '_top'-->
+<!--              });-->
+
+<!--              $PAY_FORM.submit();-->
+<!--              break;-->
+<!--            default:-->
+<!--              new layerAlert(resultMsg);-->
+<!--              //WPAY.close();-->
+<!--              //window.parent.postMessage({layerClose:'layerClose'},'*');-->
+<!--              break;-->
+<!--          }-->
+<!--        }-->
+
+
+
+<!--        function addWishListProdClick(productBaseCode) {-->
+
+<!--          var lc = new layerConfirm("로그인이 필요합니다", "확인", "취소");-->
+<!--          lc.cancleAction = function(){//취소 호출 펑션-->
+<!--            $("."+productBaseCode+"Like").each(function(index, ele){-->
+<!--              $(ele).removeClass("on");-->
+<!--            })-->
+<!--          };-->
+
+<!--          lc.confirmAction = function(){//확인 호출 펑션-->
+<!--            location.href = "/ko/member/login";-->
+<!--          };-->
+
+
+<!--          addWishListProd(productBaseCode);-->
+<!--        }-->
+
+<!--        function addWishListProd(productBaseCode){-->
+<!--          $.ajax({-->
+<!--            url: "/ko/wishlist/add-product-action",-->
+<!--            type: "GET",-->
+<!--            data: {productCode: productBaseCode ,type: 'toggle'},-->
+<!--            success: function(msg){-->
+
+<!--              if(msg !== 'erroor1'){-->
+<!--                if(productBaseCode === 'TH2B9WJM335N_BK'){-->
+<!--                  $('.wishlist1803').toggleClass('on');-->
+<!--                }-->
+<!--                $('.' + productBaseCode + 'LIKE').each(function(index, ele){-->
+<!--                  $(ele).toggleClass('on');-->
+<!--                })-->
+<!--              }-->
+<!--            }-->
+<!--          });-->
+<!--        }-->
+
+
+<!--        function chngColorChip(ele, sourceProd, targetProd) {-->
+
+<!--          var $this = $('#chipbtn_' + targetProd);-->
+<!--          var $thisChips = $this.closest('.we-codi-colorchip');-->
+<!--          //$thisChips.find('a').removeClass('on');-->
+
+<!--          $.ajax({-->
+<!--            url		: '/ko/product/reloadCoordiSize',-->
+<!--            type	: 'GET',-->
+<!--            datatype: 'json',-->
+<!--            data	: {-->
+<!--              'productcode'	: targetProd-->
+<!--            },-->
+<!--            success	: function(data) {-->
+<!--              var product = data.product;-->
+<!--              var images;-->
+
+<!--              var txtHtml = '';-->
+<!--              var lookbookTxtHtml = '';-->
+<!--              /* 가격변경 */-->
+<!--              var priceHtml = '';-->
+
+<!--              priceHtml = product.price.formattedValue;-->
+
+<!--              if(priceHtml != ''){-->
+<!--                $('#prod_'+sourceProd+' .info_wrap .price').html(priceHtml);-->
+<!--              }-->
+
+<!--              if ( product.productImages != null ) {-->
+
+<!--                for ( var i=0; i<product.productImages.length; i++ ) {-->
+<!--                  images = product.productImages[i];-->
+
+<!--                  if ( images.imageDivisionCode.code === 'S01' ) {-->
+<!--                    txtHtml = images.image.url;-->
+<!--                    break;-->
+<!--                  }-->
+<!--                }-->
+<!--              }-->
+
+
+<!--              $(ele).parent().closest('#prod_'+sourceProd).find('img').attr('src', txtHtml);-->
+
+
+<!--            }-->
+<!--          });-->
+
+
+<!--        }-->
+
+<!--        // 210728 oera 신규 추가 S-->
+<!--        function fn_popupOeraMileage(){-->
+<!--          //fn_parentLayer();-->
+<!--          $("#popupOeraMileage").show();-->
+<!--        }-->
+
+<!--        //211101 체험단 리뷰 추가 S-->
+<!--        function fn_popupTesterReview(){ // 체험단 팝업-->
+<!--          if($("#testerReviewDiv").css("display") == "none"){-->
+<!--            testerReviewReset();-->
+<!--            viewPopup("#testerReviewDiv");-->
+<!--            GA_Event('상품_상세','정보','체험단');-->
+<!--          }-->
+<!--        }-->
+
+<!--        function testerReviewReset() { //팝업초기화-->
+<!--          if($('.review_more_1807 a').parents('.evaluation_view').hasClass('on')) {-->
+<!--            $('.review_more_1807 a').parents('.evaluation_view').removeClass('on');-->
+<!--          }-->
+<!--          $("#testerReviewDiv .paging .pageBtn:eq(0)").trigger("click");-->
+<!--        }-->
+<!--        // 211101 체험단 리뷰 추가 E-->
+
+<!--        //]]>-->
+<!--      </script>-->
 
       <div class="item_detail_info float_right" id="contentDiv" style="margin-top: 20px; top: 0px; left: 638px;">
         <div class="info">
@@ -1950,8 +1958,6 @@ $(document).ready(function(){
               <strong>제조연월 :</strong> 202110<br>
               <strong>세탁방법 및 취급 시 주의사항</strong>
               <div class="howToWash renew1907" id="newHowToWash">
-
-              <!--  이미지 타임리프 적용하기    -->
                 <ul>
                   <li>
                     <img src="http://cdn.thehandsome.com/pc/laundryMark/pc_ko1/008.png" onmouseover="this.src='http://cdn.thehandsome.com/pc/laundryMark/pc_ko2/008_.png'" onmouseout="this.src='http://cdn.thehandsome.com/pc/laundryMark/pc_ko1/008.png'" onerror="javascript:onErrorImg(this);" alt="008">
