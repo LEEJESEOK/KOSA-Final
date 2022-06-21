@@ -5,7 +5,2133 @@
   <meta charset="UTF-8">
   <title>Title</title>
 </head>
-<body>
-  <button th:href="@{/product/review/page}">review 팝업</button>
+<body oncontextmenu="return false">
+<link rel="stylesheet" th:href="@{/css/brand.css}" />
+<link rel="stylesheet" th:href="@{/css/common.css}" />
+<link rel="stylesheet" th:href="@{/css/contents.css}" />
+<link rel="stylesheet" th:href="@{/css/font_443.css}"/>
+<link rel="stylesheet" th:href="@{/css/common.css}"/>
+<link rel="stylesheet" th:href="@{/css/layout.css}"/>
+<link rel="stylesheet" th:href="@{/css/popup.css}"/>
+<link rel="stylesheet" th:href="@{/css/jquery-ui.min.css}"/>
+<link rel="stylesheet" th:href="@{/css/brand.css}"/>
+<link rel="stylesheet" th:href="@{/css/footer.css}"/>
+<link rel="stylesheet" th:href="@{/css/contents.css}"/>
+<link rel="stylesheet" th:href="@{/css/print.css}"/>
+<link rel="stylesheet" th:href="@{/css/products.css}"/>
+
+<script type="text/javascript" th:src="@{/js/actions.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery-1.11.2.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.vticker.js}"></script>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/js/html5shiv-printshiv.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.flexslider.js}"></script>
+<script type="text/javascript" th:src="@{/js/ui.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.form-3.51.js}"></script>
+<script type="text/javascript" th:src="@{/js/common_function.js}"></script>
+<script type="text/javascript" th:src="@{/js/videojs-ie8.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/html5shiv.js}"></script>
+<script type="text/javascript" th:src="@{/js/respond.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery-ui-1.11.2.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/instagramAPI.js}"></script>
+<script type="text/javascript" th:src="@{/js/makePCookie.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/netfunnel.js}" charset="UTF-8"></script>
+<script type="text/javascript" th:src="@{/js/netfunnel_skin.js}" charset="UTF-8"></script>
+<script type="text/javascript" th:src="@{/js/unorm.js}"></script>
+<script type="text/javascript" th:src="@{/js/appboy.min.js}"></script>
+
+<div id="bodyWrap" class="item_detail">
+  <div class="adaptive_wrap">
+    <div class="clearfix prd_detail1905" id="clearfix">
+      <div class="clearfix image_view3">
+        <a href="javascript:imageZoom()" id="btn_zoom" class="btn_zoom" onclick="GA_Event('상품_상세','크게보기','클릭')">크게보기</a><!-- 버튼 클릭시 item_visual 에 zoom 클래스 추가 -->
+        <!-- 2021.08.18 동영상 재생 수정, 상품 imageDivisionCode에 VOD가 있는 경우 동영상 url 세팅 -->
+        <div class="image_view1" id="image_view1">
+          <div class="item_visual" id="imageDiv" style="margin-top: 20px;">
+            <ul>
+
+              <li><img src="http://newmedia.thehandsome.com/TH/2B/FW/TH2B9WJM335N_BK_W01.jpg/dims/resize/684x1032/" class="respon_image" alt="후드 패딩 플라이트 점퍼" onerror="this.src='http://cdn.thehandsome.com/_ui/desktop/common/images/products/no_img1.jpg'"></li>
+
+              <li><img src="http://newmedia.thehandsome.com/TH/2B/FW/TH2B9WJM335N_BK_W02.jpg/dims/resize/684x1032/" class="respon_image" alt="후드 패딩 플라이트 점퍼" onerror="this.src='http://cdn.thehandsome.com/_ui/desktop/common/images/products/no_img1.jpg'"></li>
+
+              <li><img src="http://newmedia.thehandsome.com/TH/2B/FW/TH2B9WJM335N_BK_W03.jpg/dims/resize/684x1032/" class="respon_image" alt="후드 패딩 플라이트 점퍼" onerror="this.src='http://cdn.thehandsome.com/_ui/desktop/common/images/products/no_img1.jpg'"></li>
+
+              <li><img src="http://newmedia.thehandsome.com/TH/2B/FW/TH2B9WJM335N_BK_W04.jpg/dims/resize/684x1032/" class="respon_image" alt="후드 패딩 플라이트 점퍼" onerror="this.src='http://cdn.thehandsome.com/_ui/desktop/common/images/products/no_img1.jpg'"></li>
+
+              <li><img src="http://newmedia.thehandsome.com/TH/2B/FW/TH2B9WJM335N_BK_W05.jpg/dims/resize/684x1032/" class="respon_image" alt="후드 패딩 플라이트 점퍼" onerror="this.src='http://cdn.thehandsome.com/_ui/desktop/common/images/products/no_img1.jpg'"></li>
+
+              <li><img src="http://newmedia.thehandsome.com/TH/2B/FW/TH2B9WJM335N_BK_W06.jpg/dims/resize/684x1032/" class="respon_image" alt="후드 패딩 플라이트 점퍼" onerror="this.src='http://cdn.thehandsome.com/_ui/desktop/common/images/products/no_img1.jpg'"></li>
+
+
+            </ul>
+          </div>
+        </div>
+        <div class="item_visual" id="imageDivW" style="display:none">
+          <ul>
+            <li><img src="http://newmedia.thehandsome.com/TH/2B/FW/TH2B9WJM335N_BK_W01.jpg" class="respon_image" alt="후드 패딩 플라이트 점퍼" onerror="this.src='http://cdn.thehandsome.com/_ui/desktop/common/images/products/no_img1.jpg'"></li>
+            <li><img src="http://newmedia.thehandsome.com/TH/2B/FW/TH2B9WJM335N_BK_W02.jpg" class="respon_image" alt="후드 패딩 플라이트 점퍼" onerror="this.src='http://cdn.thehandsome.com/_ui/desktop/common/images/products/no_img1.jpg'"></li>
+            <li><img src="http://newmedia.thehandsome.com/TH/2B/FW/TH2B9WJM335N_BK_W03.jpg" class="respon_image" alt="후드 패딩 플라이트 점퍼" onerror="this.src='http://cdn.thehandsome.com/_ui/desktop/common/images/products/no_img1.jpg'"></li>
+            <li><img src="http://newmedia.thehandsome.com/TH/2B/FW/TH2B9WJM335N_BK_W04.jpg" class="respon_image" alt="후드 패딩 플라이트 점퍼" onerror="this.src='http://cdn.thehandsome.com/_ui/desktop/common/images/products/no_img1.jpg'"></li>
+            <li><img src="http://newmedia.thehandsome.com/TH/2B/FW/TH2B9WJM335N_BK_W05.jpg" class="respon_image" alt="후드 패딩 플라이트 점퍼" onerror="this.src='http://cdn.thehandsome.com/_ui/desktop/common/images/products/no_img1.jpg'"></li>
+            <li><img src="http://newmedia.thehandsome.com/TH/2B/FW/TH2B9WJM335N_BK_W06.jpg" class="respon_image" alt="후드 패딩 플라이트 점퍼" onerror="this.src='http://cdn.thehandsome.com/_ui/desktop/common/images/products/no_img1.jpg'"></li>
+          </ul>
+        </div>
+        <!--동영상 삽입 180710-->
+        <!--//동영상 삽입 180710-->
+        <!--  2021.08.18 동영상 재생 영역  -->
+      </div><script type="text/javascript" src="/_ui/desktop/common/js/wpay.js"></script>
+      <!-- 품절상품포함 여부 -->
+      <script type="text/javascript">
+        //<![CDATA[
+        var stockOnlineStockpile = {};
+        var warehouseStockpile = {};
+
+        $(document).ready(function() {
+          cartQuantity = {};
+
+          var vsProductId = $("#vs-product-id").length;
+          if(vsProductId > 0){
+            var vsProductCodeType = $('form[name=addToCartForm] input[name=productCodeType]').val();
+            if(vsProductCodeType == "ApparelSizeVariantProduct") {
+              var vsProductCodePost = $('form[name=addToCartForm] input[name=productCodePost]').val();
+              if(vsProductCodePost != "" && vsProductCodePost.indexOf("_") > -1){
+                $("#vs-product-id").val(vsProductCodePost.substr(0,vsProductCodePost.lastIndexOf("_")));
+              }
+            }
+          }
+
+
+          $(".btn_star_score li a").on("click", function(){
+            $("#rating").val($(this).attr('value'));
+          });
+
+          $('#customerReview').click(function(){
+            fn_popupCustomerReview();
+          });
+
+          $('#offlineQty').click(function(){
+            fn_stockconfirm();
+          });
+
+          var productCode = $("#productCode").val();
+          $.ajax({
+            url: '/ko/p/review',
+            type: "GET",
+            data: {"productCode":productCode},
+            success: function(data){
+              var starWidth = 0;
+              if(data.reviewList.results.length > 0){
+                starWidth = getStarScore(data.reviewAvg);
+              }
+              if(starWidth==0){
+                $("#prodTotalStarScoreWrapper").css("display","none");
+              }else{
+                $("#prodTotalStarScore").css("width",starWidth+"%")
+              }
+            },
+            error: function(xhr, Status, error) {
+              var la = new layerAlert(error);
+              la.confirmAction = function(){
+                return;
+              };
+            }
+          });
+
+
+          stockOnlineStockpile["TH2B9WJM335N_BK_95"] = "11";
+          warehouseStockpile["TH2B9WJM335N_BK_95"] = "0";
+
+          stockOnlineStockpile["TH2B9WJM335N_BK_100"] = "19";
+          warehouseStockpile["TH2B9WJM335N_BK_100"] = "0";
+
+          stockOnlineStockpile["TH2B9WJM335N_BK_105"] = "20";
+          warehouseStockpile["TH2B9WJM335N_BK_105"] = "0";
+
+          stockOnlineStockpile["TH2B9WJM335N_BK_110"] = "0";
+          warehouseStockpile["TH2B9WJM335N_BK_110"] = "0";
+
+          $(".btn_close").on("click", function(){
+            hideProductLayer();
+            $(".popwrap").hide();
+          });
+
+          $('.toggle_type1>dt').click(function() {
+
+            $(this).addClass('on');
+            $(this).siblings('dt').removeClass('on');
+
+            var beforeHeight = $(".toggle_type1").height();
+            var afterHeight = 0;
+            var scrolltop = $(window).scrollTop();
+
+            var checkElement = $(this).next();
+
+            if((checkElement.is('dd')) && (checkElement.is(':visible'))) {
+              $(this).removeClass('on');
+              checkElement.slideUp('fast',
+                  function(){
+                    afterHeight = $(".toggle_type1").height();
+// 	 					bodyScroll();
+                  });
+
+            }
+            var fitGuide = false;
+            if((checkElement.is('dd')) && (!checkElement.is(':visible'))) {
+              var v_label = "";
+              var v_type = $(this).children().attr("id");
+              //21.11.03 상품상세 정보 영역 변경 관련 GA이벤트태깅 추가 및 변경
+              if(v_type == "NEW_DETAIL_INFO_EVT"){
+                v_label = "상품상세정보";
+              }else if(v_type == "DETAIL_INFO_EVT"){
+                if ('ko' == 'ko') {
+                  v_label = "상품정보제공고시";
+                }else{
+                  v_label = "상품상세정보";
+                }
+              }else if(v_type == "REAL_SIZE_EVT"){
+                v_label = "실측사이즈";
+              }else if(v_type == "DELI_RETURN_EVT"){
+                v_label = "배송 및 반품";
+              }else if(v_type == "FIT_GUIDE_EVT"){
+                fitGuide = true;
+              }
+
+              if(!fitGuide) {
+                GA_Event('상품_상세','정보',v_label);
+              }
+
+              $('.toggle_type1>dd:visible').slideUp('fast');
+
+              checkElement.slideDown('fast',
+                  function(){
+                    afterHeight = $(".toggle_type1").height();
+// 					bodyScroll();
+                  });
+            }
+
+            if(fitGuide) {
+              fitGuide_Swiper_Slide(1);
+            }
+
+            var bodyScroll = function(){
+
+              $('body,html').animate({scrollTop:parseFloat(scrolltop + (beforeHeight - afterHeight))},
+                  function(){
+                    bodyReSize();
+                  }
+              );
+            }
+
+            if($(this).next('dd').length == 0) {
+              return true;
+            } else {
+              return false;
+            }
+          });
+
+          if ( 'en' == 'ko' || 'zh' == 'ko' ) {
+            showExchangeRate();
+          }
+
+          $("#restock_tlt").mouseover(function(){
+// // 		showExchangeRate();
+            $("#restock_delch_box").css("display","block");
+          });
+
+          $("#restock_tlt").mouseout(function(){
+            $("#restock_delch_box").css("display","none");
+          });
+
+          if($('#referencesListContent ul:eq(0) > li').length > 3) {
+            matchItemSlider();
+          }else {
+            $(".related_evt .matches_list > ul > li").css("margin-right", "10px");
+          }
+
+          //타임옴므 실측사이즈
+          if("BR06" == "BR06"){
+            var checkShow = false;
+            var checkCode = "TH2B9WJM335N";
+            var checkLanguage = "ko";
+            if(checkCode == "TH1H7WPC500M" || checkCode == "TH1I3WPC505M" || checkCode == "TH1H8WPC503M" || checkCode == "TH1HAWPC505M"  || checkCode == "TH1HAWPC505MP1" ){
+              $(".timehomme_pants_fit").addClass("slim");
+              $(".timehomme_pants_fit").removeClass("straight");
+              $(".timehomme_pants_fit").removeClass("comfort");
+              checkShow = true;
+            }else if(checkCode == "TH1H8WPC510M" || checkCode == "TH1H8WPC530M" || checkCode == "TH1H8WPC540M" || checkCode == "TH1HBWPC535M" || checkCode == "TH1HAWPC545M" || checkCode == "TH1HAWPC525M"  || checkCode == "TH1HAWPC525MP1" ){
+              $(".timehomme_pants_fit").removeClass("slim");
+              $(".timehomme_pants_fit").addClass("straight");
+              $(".timehomme_pants_fit").removeClass("comfort");
+              checkShow = true;
+            }
+
+            if(checkShow){
+              if(checkLanguage == "ko"){
+                $(".timehomme_pants_fit").addClass("ko");
+              }else if(checkLanguage == "en"){
+                $(".timehomme_pants_fit").addClass("en");
+              }else if(checkLanguage == "zh"){
+                $(".timehomme_pants_fit").addClass("zh");
+              }
+
+              $(".timehomme_pants_fit").show();
+            }
+          }
+
+          //at home,quick 배송지 변경
+          $(".btn_chg").on("click",function(){
+            if($(this).parent().parent().attr("id") == "athome_svc"){
+              searchAddressLayer("streetname","streetnumber","postalcode");
+            }else if($(this).parent().parent().attr("id") == "quick_svc"){
+              searchAddressLayer("quickStreetname","quickStreetnumber","quickPostalcode");
+            }
+          });
+
+          // 예약주문 토스트팝업 190507
+          /* if($("#erpWorkOrderProdCode").val() != "") {
+              clearTimeout(toastPopupPreOrderInit);
+              clearTimeout(toastPopupPreOrderAfter);
+              clearTimeout(toastPopupPreOrderStop);
+          }
+
+          if("N" == "Y") {
+              toastPopupPreOrder();
+          } */
+
+
+
+          $('#vs-placeholder-cart').on('DOMSubtreeModified',function(){
+            var label = escape('TIME HOMME')+"_"+escape('후드 패딩 플라이트 점퍼');
+
+            if($('#vs-placeholder-cart div').hasClass('demonstration-overlay')){
+              if($(".demonstration-overlay").attr('onclick') == undefined || $(".demonstration-overlay").attr('onclick') == ""){
+                $(".demonstration-overlay").attr('onclick', 'GA_Event(\'상품_상세\',\'버츄사이즈\', \''+label+'\')');
+              }
+            }
+
+            if($('#vs-placeholder-cart td').hasClass('col-user-product')){
+              if($(".col-user-product .sample").attr('onclick')==undefined || $(".col-user-product .sample").attr('onclick') ==""){
+                $(".col-user-product .sample").attr('onclick', 'GA_Event(\'상품_상세\',\'버츄사이즈\', \''+label+'\')');
+              }
+            }
+          });
+
+
+
+          swiperslideForLookbook();
+
+
+        });
+
+        function swiperslideForLookbook(){
+
+          var slideBox_Idx = $('.sub-slide-zone .slide-box');
+          var smallSwiperLeng = $('.sub-slide-zone .slide-box').length;
+          var smallSlideArr = new Array();
+
+          for(var i = 0; i < smallSwiperLeng; i++){
+            var smallSlideLeng = $(slideBox_Idx[i]).find('.swiper-slide').length
+            smallSlideArr.push(smallSlideLeng);
+          }
+
+          // 룩북보기 sub 배너 슬라이드 옵션
+          var subSlideOption = {
+            slidesPerView: 3,
+            slidesPerGroup: 3,
+            spaceBetween: 10,
+            loop: true,
+            loopFillGroupWithBlank: true,
+            observer: true,
+            observeParents: true,
+            simulateTouch:false,
+            navigation: {
+              nextEl: '.swiper-button-next.sub-nav-right',
+              prevEl: '.swiper-button-prev.sub-nav-left',
+            },
+          };
+
+          // 룩북보기 sub 배너 슬라이드
+          var cdNlb_sub_swiper = new Swiper('.sub-slide-zone .swiper-container', subSlideOption);
+
+          for(var i = 0; i < smallSwiperLeng; i++){
+            if( smallSlideArr[i] <= 2 ){
+              if(cdNlb_sub_swiper.length !== undefined && cdNlb_sub_swiper.length > 0){
+                $(cdNlb_sub_swiper[i].$el).parent().addClass('destroy');
+                cdNlb_sub_swiper[i].destroy();
+              }else{
+                $(cdNlb_sub_swiper.$el).parent().addClass('destroy');
+                cdNlb_sub_swiper.destroy();
+              }
+            }
+          }
+
+
+          // 룩북보기 title 배너 슬라이드 옵션
+          var titleSlideOption = {
+            slidesPerView: 1,
+            slidesPerGroup: 1,
+            spaceBetween: 0,
+            loop: true,
+            simulateTouch:false,
+            navigation: {
+              nextEl: '.swiper-button-next.tt-nav-right',
+              prevEl: '.swiper-button-prev.tt-nav-left',
+            },
+            pagination: {
+              el: '.swiper-pagination.tt-nav-page',
+              clickable: true,
+            },
+            on: {
+              slideChange: function() {
+                var $subSlide = $('.detail-pg-lookbook-aside-box .sub-slide-zone .slide-box');
+                var slideIndex = this.realIndex;
+
+                //console.log(slideIndex);
+
+                $subSlide.hide();
+                $($subSlide[slideIndex]).show();
+
+              }
+              /* ,slideChangeTransitionStart: function(){
+                // 202010623 auto height 기능 추가
+                var slide_Wrap = $(".title-slide-zone .swiper-wrapper");
+                var target_Height = $(this.$wrapperEl).find('.swiper-slide-active img').height();
+
+                slide_Wrap.height(target_Height);
+              }, */
+            }
+          };
+
+
+          if($(".cd-n-lb-tab a").attr("href") == "#cd-n-lb-tab-02"){
+
+            var ttSlideBox_Idx = $('.title-slide-zone .swiper-wrapper'); // [0, 1]
+            var ttSwiperLeng = $('.title-slide-zone .swiper-slide').length;
+
+            var small_new_slide = document.querySelector('.sub-slide-zone .swiper-container').swiper;
+            if (small_new_slide != null) small_new_slide.destroy();
+
+            var cdNlb_sub_swiper_new = new Swiper('.sub-slide-zone .swiper-container', subSlideOption);
+            var cdNlb_tt_swiper = new Swiper('.title-slide-zone .swiper-container', titleSlideOption);
+
+            var $subSlide = $('.detail-pg-lookbook-aside-box .sub-slide-zone .slide-box');
+
+            if( ttSwiperLeng <= 1 ){
+              if(cdNlb_tt_swiper.length !== undefined && cdNlb_tt_swiper.length > 0){
+                $(cdNlb_tt_swiper[i].$el).parent().addClass('destroy');
+                cdNlb_tt_swiper[i].destroy();
+              }else{
+                $(cdNlb_tt_swiper.$el).parent().addClass('destroy');
+                cdNlb_tt_swiper.destroy();
+              }
+
+              // title slide가 하나일 경우 sub-slide show
+              $($subSlide[0]).show();
+
+            }
+
+
+
+          }
+
+
+
+
+          // 함께코디한 상품 & 룩북보기 tab
+          $(".related_evt .cd-n-lb-tab").find("a").off().on("click", function(e){
+            var $this = $(this);
+            var $all_tab_nav = $this.parents(".cd-n-lb-tab").find("li");
+            var $tab_contents = $this.parents(".related_evt").find(".cd-n-lb-content-box");
+            var id = $this.attr("href");
+            var tabIndex = $this.parent().index();
+
+            e.preventDefault();
+            $all_tab_nav.removeClass("on");
+            $this.parent().addClass("on");
+            $tab_contents.hide();
+            $(id).show();
+
+            var thisTab = $(this).parent('li').index();
+
+            if ( thisTab === 0 ) {
+              var title_new_slide = document.querySelector('.title-slide-zone .swiper-container').swiper;
+              var small_new_slide = document.querySelector('.sub-slide-zone .swiper-container').swiper;
+              if (title_new_slide != null) title_new_slide.destroy();
+              if (small_new_slide != null) small_new_slide.destroy();
+            }else {
+              var ttSlideBox_Idx = $('.title-slide-zone .swiper-wrapper'); // [0, 1]
+              var ttSwiperLeng = $('.title-slide-zone .swiper-slide').length;
+
+              var small_new_slide = document.querySelector('.sub-slide-zone .swiper-container').swiper;
+              if (small_new_slide != null) small_new_slide.destroy();
+
+              var cdNlb_sub_swiper_new = new Swiper('.sub-slide-zone .swiper-container', subSlideOption);
+              var cdNlb_tt_swiper = new Swiper('.title-slide-zone .swiper-container', titleSlideOption);
+
+              if( ttSwiperLeng <= 1 ){
+                if(cdNlb_tt_swiper.length !== undefined && cdNlb_tt_swiper.length > 0){
+                  $(cdNlb_tt_swiper[i].$el).parent().addClass('destroy');
+                  cdNlb_tt_swiper[i].destroy();
+                }else{
+                  $(cdNlb_tt_swiper.$el).parent().addClass('destroy');
+                  cdNlb_tt_swiper.destroy();
+                }
+              }
+
+
+
+            }
+          });
+        }
+
+
+        var popupOneclick
+        $(document).ready(function() {
+
+        })
+
+        function fn_oneClickProcess(){
+          var productCode = $('form[name=addToCartForm] input[name=productCodePost]').val();
+          var productType = $('form[name=addToCartForm] input[name=productCodeType]').val();
+          var qty = $("#txtqty").val();
+
+          if(parseInt($("#productPrice").val()) == 0) {
+            var la = new layerAlert('선택 상품은 일시적인 시스템 장애로 구매하실 수 없습니다.<br/>고객센터(1800-5700)로 문의주세요.');
+            oneClickProcess = true;
+            return;
+          }
+          if(productType != 'ApparelSizeVariantProduct'){
+            var la = new layerAlert('사이즈를 선택해 주세요.');
+            oneClickProcess = true;
+            return;
+          }
+
+          if(qty < 1){
+            var la = new layerAlert('productdetail.basket.errormag.qty');
+            oneClickProcess = true;
+            return;
+          }
+
+          if($("#storePickupCheck").is(":checked") || $("#athomeCheck").is(":checked") || $("#quickCheck").is(":checked")){
+            var la = new layerAlert('퀵배송/매장수령은 배송특화 서비스로</br>원클릭 결제가 불가능합니다.');
+            la.confirmAction = function(){
+              return;
+            };
+            oneClickProcess = true;
+            return;
+          }
+
+          var check4pmProcess = false;
+          var check4pmOver = false;
+          var vipDeliAvail = true;
+          if($("#fourpmCheck").is(":checked")){
+            vipDeliAvail = false;
+            $("#deliveryKind").val("4pm");
+            $.ajax({
+              url: '/ko/shoppingbag/check4pm',
+              type: "GET",
+              data: $('form[name=addToCartForm]').serialize(),
+              async : false,
+              success: function(data){
+                //data가 0 또는 4pm의 경우 담기
+                if(data == "normal"){
+                  var scrollTop = $(document).scrollTop();
+                  var la = new layerAlert('쇼핑백에 {0}PM 상품이 아닌 일반배송 상품이 담겨 있습니다. 쇼핑백에서 일반배송 상품을&nbsp; 삭제 후 {0}PM 버튼을 클릭해 주세요.');
+                  var top = $(".popwrap.w_type_1").css("margin-top").replace("px","");
+                  $(document).scrollTop(scrollTop);
+                  $(".popwrap.w_type_1").css("margin-top",Number(scrollTop)+Number(top)+"px");
+                  la.confirmAction = function(){
+                    return;
+                  };
+                  check4pmProcess = true;
+                }else if(data == "pm_over"){
+                  check4pmOver = true;
+                  $("#deliveryKind").val("");
+                }else if(data == "store"){
+                  var scrollTop = $(document).scrollTop();
+                  var la = new layerAlert('쇼핑백에 {0}PM 상품이 아닌 매장수령 상품이 담겨 있습니다. 쇼핑백에서 매장수령 상품을&nbsp; 삭제 후 {0}PM 버튼을 클릭해 주세요.');
+                  var top = $(".popwrap.w_type_1").css("margin-top").replace("px","");
+                  $(document).scrollTop(scrollTop);
+                  $(".popwrap.w_type_1").css("margin-top",Number(scrollTop)+Number(top)+"px");
+                  la.confirmAction = function(){
+                    return;
+                  };
+                  check4pmProcess = true;
+                }else if(data == "athome"){
+                  var scrollTop = $(document).scrollTop();
+                  var la = new layerAlert('쇼핑백에 {0}PM 상품이 아닌 앳홈 상품이 담겨 있습니다. 쇼핑백에서 앳홈 상품을&nbsp; 삭제 후 {0}PM 버튼을 클릭해 주세요.');
+                  var top = $(".popwrap.w_type_1").css("margin-top").replace("px","");
+                  $(document).scrollTop(scrollTop);
+                  $(".popwrap.w_type_1").css("margin-top",Number(scrollTop)+Number(top)+"px");
+                  la.confirmAction = function(){
+                    return;
+                  };
+                  check4pmProcess = true;
+                }
+              },
+              error: function(xhr, Status, error) {
+                var la = new layerAlert(error);
+                la.confirmAction = function(){
+                  return;
+                };
+              }
+            });
+          }
+
+          if(check4pmProcess){
+            $("#deliveryKind").val("");
+            oneClickProcess = true;
+            return false;
+          }
+
+          if(check4pmOver){
+            var la = new layerAlert('오후{0}시 이후 주문시 일반배송으로 변경됩니다.');
+            la.confirmAction = function(){
+              return;
+            };
+          }
+
+          $('form[name=addToCartForm] input[name=qty]').val(qty);
+          $('form[name=addToCartForm] input[name=buyNowYn]').val(false);
+
+          if("false" == "true" && "ko" == "ko"){
+            NetFunnel_Action({action_id:"buy_now"},function(ev,ret){
+              oneclickLoadingStart(vipDeliAvail);
+            });
+          }else{
+            oneclickLoadingStart(vipDeliAvail);
+          }
+        }
+
+        function oneclickLoadingStart(vipDeliAvail){
+          $("body").append('<div class="layerArea" id="oneclickPopupLayer"><div class="layerBg"></div></div>');
+
+          var loadingHtml = "";
+          loadingHtml += '<div class="layerLoading_bar" id="oneclickLoadingDiv" style="width: 100%;height: 100%;top:0; z-index: 102">';
+          loadingHtml += '    <div class="ly_oneclick">';
+          loadingHtml += '        <img src="http://cdn.thehandsome.com/pc/order/loading_spinner_007s_190827.gif" alt="loading">';
+          loadingHtml += '                <p class="ly_ld_main" >최대할인 혜택을 계산 중 입니다</p>';
+          loadingHtml += '                <p class="ly_ld_sub">최대할인 혜택을 원클릭결제에 자동 적용하여<br>';
+          loadingHtml += '                   편리한 결제가 가능합니다</p>';
+          loadingHtml += '    </div>';
+          loadingHtml += '</div>';
+
+          $("#oneclickPopupLayer").append(loadingHtml);
+
+
+          var products ="";
+          products +=$("#productCode").val();
+          products +=","+ $("input[name=qty]").val();
+          $.ajax({
+            url : '/checkout/oneclick?products='+products+'&vipDeliAvail='+vipDeliAvail ,
+            type : 'GET',
+            success : function(data){
+              $('#oneclickPopupLayer').append(data);
+            },
+            error : function(err){
+              console.log(err.responseText);
+            }
+          })
+          setEcommerceData("Checkout1(원클릭결제)");
+          oneClickProcess = true;
+        }
+
+        function loadingOff(){
+          //로딩바제거
+          if($("#loadingBarDiv").length > 0){
+            $(".layerLoading_bar").remove();
+          }
+
+          if($(".layerArea:last").length > 0){
+            $(".layerArea:last").remove();
+          }
+        }
+
+        function oneClickTargetBlankPopup(wpayData){//원클릭결제 새창 팝업 2001
+          WPAY.checkoutAuthSubmit(wpayData);
+        }
+
+
+        var starscore = 0;
+        function getStarScore(starscore){
+          var average = starscore;
+          var starWidth=0;
+          if(1 <= average && average < 1.25){
+            starWidth=20;
+          } else if(1.25 <= average && average < 1.75){
+            starWidth=30;
+          } else if(1.75 <= average && average < 2.25){
+            starWidth=40;
+          } else if(2.25 <= average && average < 2.75){
+            starWidth=50;
+          } else if(2.75 <= average && average < 3.25){
+            starWidth=60;
+          } else if(3.25 <= average && average < 3.75){
+            starWidth=70;
+          } else if(3.75 <= average && average < 4.25){
+            starWidth=80;
+          } else if(4.25 <= average && average < 4.75){
+            starWidth=90;
+          } else if(4.75 <= average && average <= 5){
+            starWidth=100;
+          }
+          return starWidth;
+        }
+
+        function setOneClick(){
+
+        }
+
+        function fnSharePin(sUrl){
+          var sImg = "http://newmedia.thehandsome.com/TH/2B/FW/TH2B9WJM335N_BK_C01.jpg";
+          var sTxt = "[TIME HOMME] 후드 패딩 플라이트 점퍼";
+
+          if(sImg.indexOf("_C01") > 0) {
+            sImg = sImg.replace("_C01", "_W01");
+          }
+
+          var href = "http://www.pinterest.com/pin/create/button/?url="+sUrl+"&media="+sImg+"&description="+encodeURIComponent(sTxt);
+          var a = window.open(href, 'pinterest', 'width=800, height=500');
+          if ( a ) {
+            a.focus();
+          }
+        }
+
+        function matchItemSlider(){
+          var widthLi = $("#referencesListContent").width() / 3;
+          var productTotal = $("#referencesListContent .slides li").size();
+          if(productTotal <= 3) {
+            $("#referencesControls .prev").hide();
+            $("#referencesControls .next").hide();
+            $("#referencesListContent ul").removeClass("slides");
+            $("#referencesListContent > ul li").css("margin-right","10px");
+          }
+          var mySlider = $("#referencesListContent .slides").bxSlider({
+            mode:"horizontal",
+            speed:500,
+            pager:false,
+            moveSlides:1,
+            slideWidth:widthLi,
+            minSlides:3,
+            maxSlides:3,
+            slideMargin:10,
+            auto:false,
+            autoHover:false,
+            controls:false,
+            adaptiveHeight:true,
+            adaptiveHeightSpeed:10
+          });
+          $("#referencesControls .prev").on("click",function(){
+            mySlider.goToPrevSlide();
+            return false;
+          });
+          $("#referencesControls .next").on("click",function(){
+            mySlider.goToNextSlide();
+            return false;
+          });
+          $(".rmd_pb .tlt").mouseenter(function(){
+            $("#productEctTab .rmd_pb_popup").show();
+          });
+          $(".rmd_pb .tlt").mouseleave(function(){
+            $("#productEctTab .rmd_pb_popup").hide();
+          });
+
+        };
+
+        function addHidden(ptag, hname, hvl) {
+
+          if($("#"+hname).length >0){
+            $("#"+hname).remove();
+          }
+          return $('<input/>').attr('type'    , 'hidden')
+          .attr('id'      , hname)
+          .attr('name'    , hname)
+          .attr('value'   , hvl)
+          .appendTo(ptag);
+        }
+
+        /* 주문서간편결제 : 결제 인증 후 콜백
+        원클릭구매 : iframe 안에서 실행되기 때문에, target 을 _top으로 지정합니다
+         */
+        var checkoutPaymentAuthCallback = function (resultCode, resultMsg, result) {
+          console.log(document.cookie);
+          switch(resultCode) {
+            case "2406": // 쿠키정보가 없습니다.
+              //layerWpayCookieSettingView();
+              //WPAY.close();
+              //window.parent.postMessage({layerClose:'layerClose'},'*');
+              //window.parent.postMessage({inicisPopOpen:'inicisPopOpen'},'*');
+
+              console.log("쿠키 정보가 없음");
+              break;
+            case "0000":
+              $("body").append('<div class="layerArea" id="productLayer"><div class="layerBg"></div></div>');
+
+              $(".layerArea .layerBg").css('background','none');
+
+              // 토스트 팝업 추가
+              var toastPopup = '<div class="pop_loading_oneclick200210" style="background:#444;width:290px;height:120px;position:fixed;top:30%;left:50%;margin-left:-145px;margin-top:-60px;z-index:9999;">';
+              toastPopup += '<img src="http://cdn.thehandsome.com/_ui/handsomemobile/images/common/Spinner_1s_105px.png" alt="loading" style="display:block;width:32px;height:32px;margin:30px auto 15px auto;">';
+              toastPopup += '<p style="color:#fff;text-align:center;">';
+              toastPopup += '<span style="background:url(\'http://cdn.thehandsome.com/pc/products/one_click_pay_w.png\') left 2px no-repeat;color:#fff;font-size:15px;padding-left:93px;">가 진행중입니다.</span>';
+              toastPopup += '</p>';
+              toastPopup += '</div>';
+
+              $("body").append(toastPopup);
+
+              //상품상세와 결제페이지 구분이 안되기 때문에
+              //window.parent.postMessage({loadingShow:'loadingShow'},'*');
+
+              var $PAY_FORM = $("#PAY_FORM");
+              addHidden($PAY_FORM, 'wtid'	, result.wtid);
+
+              $PAY_FORM.attr({
+                'method': 'POST',
+                'action': '/ko/inicis/inipaywpay/sop/response',
+                'target': '_top'
+              });
+
+              $PAY_FORM.submit();
+              break;
+            default:
+              new layerAlert(resultMsg);
+              //WPAY.close();
+              //window.parent.postMessage({layerClose:'layerClose'},'*');
+              break;
+          }
+        }
+
+
+
+        function addWishListProdClick(productBaseCode) {
+
+          var lc = new layerConfirm("로그인이 필요합니다", "확인", "취소");
+          lc.cancleAction = function(){//취소 호출 펑션
+            $("."+productBaseCode+"Like").each(function(index, ele){
+              $(ele).removeClass("on");
+            })
+          };
+
+          lc.confirmAction = function(){//확인 호출 펑션
+            location.href = "/ko/member/login";
+          };
+
+
+          addWishListProd(productBaseCode);
+        }
+
+        function addWishListProd(productBaseCode){
+          $.ajax({
+            url: "/ko/wishlist/add-product-action",
+            type: "GET",
+            data: {productCode: productBaseCode ,type: 'toggle'},
+            success: function(msg){
+
+              if(msg !== 'erroor1'){
+                if(productBaseCode === 'TH2B9WJM335N_BK'){
+                  $('.wishlist1803').toggleClass('on');
+                }
+                $('.' + productBaseCode + 'LIKE').each(function(index, ele){
+                  $(ele).toggleClass('on');
+                })
+              }
+            }
+          });
+        }
+
+
+        function chngColorChip(ele, sourceProd, targetProd) {
+
+          var $this = $('#chipbtn_' + targetProd);
+          var $thisChips = $this.closest('.we-codi-colorchip');
+          //$thisChips.find('a').removeClass('on');
+
+          $.ajax({
+            url		: '/ko/product/reloadCoordiSize',
+            type	: 'GET',
+            datatype: 'json',
+            data	: {
+              'productcode'	: targetProd
+            },
+            success	: function(data) {
+              var product = data.product;
+              var images;
+
+              var txtHtml = '';
+              var lookbookTxtHtml = '';
+              /* 가격변경 */
+              var priceHtml = '';
+
+              priceHtml = product.price.formattedValue;
+
+              if(priceHtml != ''){
+                $('#prod_'+sourceProd+' .info_wrap .price').html(priceHtml);
+              }
+
+              if ( product.productImages != null ) {
+
+                for ( var i=0; i<product.productImages.length; i++ ) {
+                  images = product.productImages[i];
+
+                  if ( images.imageDivisionCode.code === 'S01' ) {
+                    txtHtml = images.image.url;
+                    break;
+                  }
+                }
+              }
+
+
+              $(ele).parent().closest('#prod_'+sourceProd).find('img').attr('src', txtHtml);
+
+
+            }
+          });
+
+
+        }
+
+        // 210728 oera 신규 추가 S
+        function fn_popupOeraMileage(){
+          //fn_parentLayer();
+          $("#popupOeraMileage").show();
+        }
+
+        //211101 체험단 리뷰 추가 S
+        function fn_popupTesterReview(){ // 체험단 팝업
+          if($("#testerReviewDiv").css("display") == "none"){
+            testerReviewReset();
+            viewPopup("#testerReviewDiv");
+            GA_Event('상품_상세','정보','체험단');
+          }
+        }
+
+        function testerReviewReset() { //팝업초기화
+          if($('.review_more_1807 a').parents('.evaluation_view').hasClass('on')) {
+            $('.review_more_1807 a').parents('.evaluation_view').removeClass('on');
+          }
+          $("#testerReviewDiv .paging .pageBtn:eq(0)").trigger("click");
+        }
+        // 211101 체험단 리뷰 추가 E
+
+        //]]>
+      </script>
+
+      <div class="item_detail_info float_right" id="contentDiv" style="margin-top: 20px; top: 0px; left: 638px;">
+        <div class="info">
+          <div class="info_sect">
+            <h4 class="item_name">
+              <div class="brand-name">
+                <a href="javascript:fn_goCategori('br06')" onclick="GA_Detail('brand',$(this))">TIME HOMME</a>
+              </div>
+              <span class="name ko_fir_spel">
+					후드 패딩 플라이트 점퍼<input type="hidden" id="brandName" value="TIME HOMME">
+					<input type="hidden" id="productName" value="후드 패딩 플라이트 점퍼">
+					<input type="hidden" id="productCode" value="TH2B9WJM335N_BK">
+				</span>
+            </h4>
+
+            <div class="flag">
+            </div>
+
+            <p class="price">
+              <span>₩690,000</span>
+              <input type="hidden" id="productPrice" value="690000">
+            </p>
+            <!-- 상품추가설명 -->
+            <p class="selling_point"></p>
+            <!-- 20200914이후 추가 상품설명 (신) -->
+            <div class="prod-detail-con-box">
+              <strong class="number-code">상품품번 : <span>TH2B9WJM335N_BK</span></strong>
+              <div class="round-style">
+                <p>
+                  은은하게 광택감이 돌아 세련된 느낌을 주는 이 점퍼는 지퍼와 스냅 버튼으로 탈부착이 가능한 후드 패널을 함께 구성하여 날씨나 룩에 따라 원하는대로 스타일링이 용이합니다. 패딩 충전재가 들어가 있어 가볍지만 한층 따뜻하게 착용할 수 있습니다.</p>
+              </div>
+              <div class="fit-info">
+                <p class="size-text">
+
+                  - 피팅 정보 : 188cm, 105 사이즈 모델이 105 사이즈 착용</p>
+              </div>
+            </div>
+            <!-- 20200914 이전 상품설명(구) -->
+          </div>
+
+          <!-- 20200904 추가 (더보기) -->
+          <div class="info_sect">
+            <div class="prod-detail-con-more">
+              <button type="button" class="more-btn">더보기<i></i></button>
+              <div class="more-con-box" style="display: none;">
+                <ul>
+                  <li>- 앞면의 지퍼 클로징<br>- 후드에 드로우스트링<br>- 소매 한쪽에 지퍼 포켓과 4개의 펜 홀더, 양옆에 플랩 포켓, 1개의 인 포켓<br>- 넥라인과 소맷단, 밑단에 리브 니트</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <script>
+            $(document).ready(function() {
+              $('.prod-detail-con-more').on('click', '.more-btn', function(){
+                $('.more-con-box').slideToggle(function(){
+                  $(this).parent('.prod-detail-con-more').find('.more-btn').toggleClass('on');
+                });
+              })
+            });
+          </script>
+          <!-- //20200904 더보기 -->
+          <div class="info_sect">
+            <ul class="point_delivery">
+              <li>
+                <span class="title">한섬마일리지</span>
+                <span class="txt">34,500&nbsp;M&nbsp;(5%)</span>
+              </li>
+
+              <li>
+                <span class="title">H.Point</span>
+                <span class="txt">690&nbsp;P&nbsp;(0.1%)</span>
+                <a href="javascript:fn_cardBenefit();" id="cardbenef" class="etc_info" onclick="GA_Event('상품_상세','카드사_혜택안내','클릭');">카드사 혜택안내</a>
+                <script type="text/javascript">
+                  $(document).ready(function(){
+
+
+                    fn_tableMerge($("#noInterestTable").attr("id"));
+
+                    fn_tableMerge($("#partNoInterestTable").attr("id"));
+
+
+                    $('.card img').each(function (){
+                      $(this).attr('src',cdnImgUrl($(this).attr('orgurl')));
+                    })
+                  });
+
+                  // CDN 이미지 URL로 변경
+                  function cdnImgUrl(mediaUrl) {
+                    var rtnUrl = mediaUrl;
+                    try {
+                      var searchText = 'context='
+                      var cdnDomain = 'http://image.thehandsome.com/sys_master/';
+                      rtnUrl = rtnUrl.substr(rtnUrl.indexOf(searchText)+searchText.length, rtnUrl.length);
+                      rtnUrl = decodeURIComponent(atob(rtnUrl)).split('|');
+                      if ( rtnUrl.length > 4 ) {
+                        rtnUrl = rtnUrl[4];
+                        rtnUrl = cdnDomain + rtnUrl;
+                      } else {
+                        rtnUrl = mediaUrl;
+                      }
+                    } catch (e) {
+                      console.log(e);
+                    }
+                    return rtnUrl;
+                  }
+
+                  function fn_tableMerge(id){
+
+                    var beforName = "";
+                    var mergeCnt = 1;
+                    var beforObj;
+
+                    $("#"+id+" th").each(function(){
+
+                      if(beforName == ""){
+                        beforName = $(this).attr("name");
+                        beforObj = $(this);
+                      }else if(beforName == $(this).attr("name")){
+                        mergeCnt = mergeCnt + 1;
+                        $(this).remove();
+                        beforObj.attr("rowspan", mergeCnt);
+                      }else{
+                        beforName = $(this).attr("name");
+                        beforObj = $(this);
+                        mergeCnt = 1;
+                      }
+
+                    });
+                  }
+
+                </script>
+
+                <div class="popwrap w_type_2" id="cardBenefit" style="display:none;">
+                  <div class="pop_tltwrap2">
+                    <h3>카드혜택안내</h3>
+                  </div>
+                  <div class="pop_cnt">
+                    <div class="card_benefits scroll-y">
+                      <div class="box">
+                        <div class="title clearfix">
+                          <p class="float_left">무이자 할부 행사</p>
+                          <!--
+                          <p class="float_left">무이자 할부 행사</p>
+                          <p class="float_right">행사기간 : 2015.08.01 ~ 2015.12.31</p>
+                          -->
+                        </div>
+                        <table class="cnt_type1" id="noInterestTable">
+                          <caption>무이자 할부 행사</caption>
+                          <colgroup>
+                            <col style="width:155px">
+                            <col>
+                          </colgroup>
+                          <tbody>
+                          <tr>
+                            <th scope="row" name="신한카드"><span class="card"><img src="http://image.thehandsome.com/sys_master/hde/h2b/8814181515294.jpg" orgurl="/medias/shinhan.jpg?context=bWFzdGVyfHJvb3R8MjY1N3xpbWFnZS9qcGVnfGhkZS9oMmIvODgxNDE4MTUxNTI5NC5qcGd8NTAwMDYxM2ZmZmRlZGFhZDQ0ODNmODJjZTg2OTE3MGI3OWQ2ZmE3YzI0ZjA3MDY3NzIxYWVhNmY3NDQyYWUzMA" alt="신한카드"></span></th>
+                            <td><b>신한카드 5만원이상 결제시 2~7개월 무이자 할부</b><br>
+                              대상: 신한카드 전 회원<br>
+                              (신한BC 제외/ 법인,기프트,체크,선불카드 제외)
+                              <br>
+                              2022.06.01&nbsp;~&nbsp;2022.06.30</td>
+                          </tr>
+                          <tr>
+                            <th scope="row" name="삼성카드"><span class="card"><img src="http://image.thehandsome.com/sys_master/h3d/h4d/8814181613598.jpg" orgurl="/medias/SAMSUNG.jpg?context=bWFzdGVyfHJvb3R8MzIxOXxpbWFnZS9qcGVnfGgzZC9oNGQvODgxNDE4MTYxMzU5OC5qcGd8ZGY1NDJiM2U1YWNmNGE5MTJkOTA0MTAxMDliMDc4ZjRlNTJmZjJlOTkxOTQzZTEwMDcxZWU2NGU2MjJmMWE2Mw" alt="삼성카드"></span></th>
+                            <td><b>삼성카드 5만원이상 결제시 2~6개월 무이자 할부</b><br>
+                              대상: 삼성카드 전 회원<br>
+                              (법인,기프트,체크,선불카드 제외)<br>
+                              2022.06.01&nbsp;~&nbsp;2022.06.30</td>
+                          </tr>
+                          <tr>
+                            <th scope="row" name="비씨카드"><span class="card"><img src="http://image.thehandsome.com/sys_master/hf2/h0d/8814181220382.jpg" orgurl="/medias/BC.jpg?context=bWFzdGVyfHJvb3R8MjQ1OHxpbWFnZS9qcGVnfGhmMi9oMGQvODgxNDE4MTIyMDM4Mi5qcGd8MjZlZGU2ZGQyNDBkYzU5YmY2NWY0MDU3NDc1OTA0YWI5NmM4NDJjMDFiYjBiYjBjY2FhZjhmMzg3ZmE5NGU5Yw" alt="비씨카드"></span></th>
+                            <td><b>비씨카드 5만원이상 결제시 2~7개월 무이자 할부</b><br>
+                              대상: 비씨카드 전 회원<br>(법인,기프트,체크,선불카드 제외)<br>
+                              2022.06.01&nbsp;~&nbsp;2022.06.30</td>
+                          </tr>
+                          <tr>
+                            <th scope="row" name="현대카드"><span class="card"><img src="http://image.thehandsome.com/sys_master/h5d/h7c/8814181711902.jpg" orgurl="/medias/HYUNDAI.jpg?context=bWFzdGVyfHJvb3R8MjYxMHxpbWFnZS9qcGVnfGg1ZC9oN2MvODgxNDE4MTcxMTkwMi5qcGd8YmM5ZWY0ZjlhODlkMzdmMjYyNmY4NjQ4OWU5NWVjOWFlMGY4ODIwYzZlNjA0MjBlNDkwNWI0ZDllYThjMWE5Mw" alt="현대카드"></span></th>
+                            <td><b>현대카드 5만원이상 결제시 2~7개월 무이자 할부</b><br>
+                              대상: 현대카드 전 회원<br>
+                              (법인,기프트,체크,선불카드 제외)<br>
+                              2022.06.01&nbsp;~&nbsp;2022.06.30</td>
+                          </tr>
+                          <tr>
+                            <th scope="row" name="국민카드"><span class="card"><img src="http://image.thehandsome.com/sys_master/h2e/h34/8814181023774.jpg" orgurl="/medias/kucmin.jpg?context=bWFzdGVyfHJvb3R8MzMwM3xpbWFnZS9qcGVnfGgyZS9oMzQvODgxNDE4MTAyMzc3NC5qcGd8MjM1YjEyN2I4OTljMGIxYzY3MjhjNDhkZWMyOTE5ODZjYmRiYWExNDdhOWZmNDQ3ZWNhNGIxZjYwYzk2MDA4Zg" alt="국민카드"></span></th>
+                            <td><b>KB국민카드 5만원이상 결제시 2~7개월 무이자 할부</b><br>
+                              대상: KB국민카드 전 회원<br>
+                              (NH농협, 국민BC 제외/ 법인,기프트,체크,선불카드 제외)<br>
+                              2022.06.01&nbsp;~&nbsp;2022.06.30</td>
+                          </tr>
+                          <tr>
+                            <th scope="row" name="하나카드"><span class="card"><img src="http://image.thehandsome.com/sys_master/h60/hfb/8814054965278.gif" orgurl="/medias/hanacard.gif?context=bWFzdGVyfHJvb3R8MTkzNXxpbWFnZS9naWZ8aDYwL2hmYi84ODE0MDU0OTY1Mjc4LmdpZnxhMGM5OWY0MDdhNDhjYzkwOTdiMzhkM2VmMDQ2YTI0NTAyNDBjZTljNTdiYzk4YWRhZmI0NjBhOWRhNzRiMGYw" alt="하나카드"></span></th>
+                            <td><b>하나카드 5만원이상 결제시 2~8개월 무이자 할부</b><br>
+                              대상: 하나카드 전 회원 (구 하나SK, 구 외환)<br>
+                              (하나BC카드 포함/법인,기프트,체크,선불카드 제외)<br>
+                              2022.06.01&nbsp;~&nbsp;2022.06.30</td>
+                          </tr>
+                          <tr>
+                            <th scope="row" name="NH카드"><span class="card"><img src="http://image.thehandsome.com/sys_master/h8e/h36/8814181908510.jpg" orgurl="/medias/NH.jpg?context=bWFzdGVyfHJvb3R8Mzk3OXxpbWFnZS9qcGVnfGg4ZS9oMzYvODgxNDE4MTkwODUxMC5qcGd8ZWVlNmY1OWM0NDdmMjg2M2Y4NGZkNDZjYThmOTVkMWNmY2QwYWNkOWI1ODc5YTdiMTc5MjY4MThiZTkzYzNmMw" alt="NH카드"></span></th>
+                            <td><b>NH농협카드 5만원이상 결제시 2~8개월 무이자 할부</b><br>
+                              대상: NH농협카드 전 회원<br>
+                              (NH농협BC카드 포함/ 법인,기프트,체크,선불카드 제외)
+                              <br>
+                              2022.06.01&nbsp;~&nbsp;2022.06.30</td>
+                          </tr>
+                          <tr>
+                            <th scope="row" name="롯데카드"><span class="card"><img src="http://image.thehandsome.com/sys_master/hb3/h47/8814181810206.jpg" orgurl="/medias/LOTTE.jpg?context=bWFzdGVyfHJvb3R8MzI3MXxpbWFnZS9qcGVnfGhiMy9oNDcvODgxNDE4MTgxMDIwNi5qcGd8MDliOThkNzA1ZDc2ZDE4MzZhYmUzYjI2MDMxZDk0NGU3OTVjYzBhYTA1MmMzMjAyZmE0Y2U4OTZlNTU3NDU2Zg" alt="롯데카드"></span></th>
+                            <td><b>롯데카드 5만원이상 결제시 2~4개월 무이자 할부</b><br>
+                              대상:롯데카드 전 회원<br>
+                              (법인,기프트,체크,선불카드 제외)<br>
+                              2022.06.01&nbsp;~&nbsp;2022.06.30</td>
+                          </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="box">
+                        <div class="title clearfix">
+                          <p class="float_left">부분 무이자 할부 행사</p>
+
+                        </div>
+                        <table class="cnt_type1" id="partNoInterestTable">
+                          <caption>부분 무이자 할부 행사</caption>
+                          <colgroup>
+                            <col style="width:155px">
+                            <col>
+                          </colgroup>
+                          <tbody>
+                          <tr>
+                            <th scope="row" name="신한카드"><span class="card"><img src="http://image.thehandsome.com/sys_master/hde/h2b/8814181515294.jpg" orgurl="/medias/shinhan.jpg?context=bWFzdGVyfHJvb3R8MjY1N3xpbWFnZS9qcGVnfGhkZS9oMmIvODgxNDE4MTUxNTI5NC5qcGd8NTAwMDYxM2ZmZmRlZGFhZDQ0ODNmODJjZTg2OTE3MGI3OWQ2ZmE3YzI0ZjA3MDY3NzIxYWVhNmY3NDQyYWUzMA" alt="신한카드"></span></th>
+                            <td><b>10개월 부분무이자</b><br>
+                              (5만원이상 결제시/1,2,3,4회차 고객부담, 잔여할부 수수료 면제/법인,체크,기프트카드 제외)<br>
+                              2022.06.01&nbsp;~&nbsp;2022.06.30</td>
+                          </tr>
+                          <tr>
+                            <th scope="row" name="삼성카드" rowspan="2"><span class="card"><img src="http://image.thehandsome.com/sys_master/h3d/h4d/8814181613598.jpg" orgurl="/medias/SAMSUNG.jpg?context=bWFzdGVyfHJvb3R8MzIxOXxpbWFnZS9qcGVnfGgzZC9oNGQvODgxNDE4MTYxMzU5OC5qcGd8ZGY1NDJiM2U1YWNmNGE5MTJkOTA0MTAxMDliMDc4ZjRlNTJmZjJlOTkxOTQzZTEwMDcxZWU2NGU2MjJmMWE2Mw" alt="삼성카드"></span></th>
+                            <td><b>10개월 부분무이자</b><br>
+                              (5만원이상 결제시/1,2,3,4회차 고객 부담, 잔여할부 수수료 면제/법인,체크,기프트카드 제외)<br>
+                              2022.06.01&nbsp;~&nbsp;2022.06.30</td>
+                          </tr>
+                          <tr>
+
+                            <td><b>12개월 부분무이자</b><br>
+                              (5만원이상 결제시/1,2,3,4,5회차 고객 부담, 잔여할부 수수료 면제/법인,체크,기프트카드 제외)
+                              <br>
+                              2022.06.01&nbsp;~&nbsp;2022.06.30</td>
+                          </tr>
+                          <tr>
+                            <th scope="row" name="비씨카드" rowspan="2"><span class="card"><img src="http://image.thehandsome.com/sys_master/hf2/h0d/8814181220382.jpg" orgurl="/medias/BC.jpg?context=bWFzdGVyfHJvb3R8MjQ1OHxpbWFnZS9qcGVnfGhmMi9oMGQvODgxNDE4MTIyMDM4Mi5qcGd8MjZlZGU2ZGQyNDBkYzU5YmY2NWY0MDU3NDc1OTA0YWI5NmM4NDJjMDFiYjBiYjBjY2FhZjhmMzg3ZmE5NGU5Yw" alt="비씨카드"></span></th>
+                            <td><b> 우리BC 10개월 부분무이자</b><br>
+                              (5만원이상 결제시/1,2,3회차 고객부담, 잔여할부 수수료 면제/법인,체크,기프트카드 제외)
+                              <br>
+                              2022.06.01&nbsp;~&nbsp;2022.06.30</td>
+                          </tr>
+                          <tr>
+
+                            <td><b>우리BC 12개월 부분무이자</b><br>
+                              (5만원이상 결제시/1,2,3,4회차 고객부담, 잔여할부 수수료 면제/법인,체크,기프트카드 제외)
+                              <br>
+                              2022.06.01&nbsp;~&nbsp;2022.06.30</td>
+                          </tr>
+                          <tr>
+                            <th scope="row" name="국민카드" rowspan="2"><span class="card"><img src="http://image.thehandsome.com/sys_master/h2e/h34/8814181023774.jpg" orgurl="/medias/kucmin.jpg?context=bWFzdGVyfHJvb3R8MzMwM3xpbWFnZS9qcGVnfGgyZS9oMzQvODgxNDE4MTAyMzc3NC5qcGd8MjM1YjEyN2I4OTljMGIxYzY3MjhjNDhkZWMyOTE5ODZjYmRiYWExNDdhOWZmNDQ3ZWNhNGIxZjYwYzk2MDA4Zg" alt="국민카드"></span></th>
+                            <td><b>10개월 부분무이자</b><br>
+                              (5만원이상 결제시/1,2,3회차 고객부담, 잔여할부 수수료 면제/법인,체크,기프트카드 제외)<br>
+                              2022.06.01&nbsp;~&nbsp;2022.06.30</td>
+                          </tr>
+                          <tr>
+
+                            <td><b>12개월 부분무이자</b><br>
+                              (5만원이상 결제시/1,2,3,4회차 고객부담, 잔여할부 수수료 면제/법인,체크,기프트카드 제외)<br>
+                              2022.06.01&nbsp;~&nbsp;2022.06.30</td>
+                          </tr>
+                          <tr>
+                            <th scope="row" name="하나카드" rowspan="2"><span class="card"><img src="http://image.thehandsome.com/sys_master/h60/hfb/8814054965278.gif" orgurl="/medias/hanacard.gif?context=bWFzdGVyfHJvb3R8MTkzNXxpbWFnZS9naWZ8aDYwL2hmYi84ODE0MDU0OTY1Mjc4LmdpZnxhMGM5OWY0MDdhNDhjYzkwOTdiMzhkM2VmMDQ2YTI0NTAyNDBjZTljNTdiYzk4YWRhZmI0NjBhOWRhNzRiMGYw" alt="하나카드"></span></th>
+                            <td><b>10개월 부분무이자</b><br>
+                              (5만원이상 결제시/1,2,3회차 고객부담, 잔여할부 수수료 면제/법인,체크,기프트카드 제외)<br>
+                              2022.06.01&nbsp;~&nbsp;2022.06.30</td>
+                          </tr>
+                          <tr>
+
+                            <td><b>12개월 부분무이자</b><br>
+                              (5만원이상 결제시/1,2,3,4회차 고객부담, 잔여할부 수수료 면제/법인,체크,기프트카드 제외)<br>
+                              2022.06.01&nbsp;~&nbsp;2022.06.30</td>
+                          </tr>
+                          <tr>
+                            <th scope="row" name="신한카드"><span class="card"><img src="http://image.thehandsome.com/sys_master/hde/h2b/8814181515294.jpg" orgurl="/medias/shinhan.jpg?context=bWFzdGVyfHJvb3R8MjY1N3xpbWFnZS9qcGVnfGhkZS9oMmIvODgxNDE4MTUxNTI5NC5qcGd8NTAwMDYxM2ZmZmRlZGFhZDQ0ODNmODJjZTg2OTE3MGI3OWQ2ZmE3YzI0ZjA3MDY3NzIxYWVhNmY3NDQyYWUzMA" alt="신한카드"></span></th>
+                            <td><b>12개월 부분무이자</b><br>
+                              (5만원이상 결제시/1,2,3,4,5회차 고객부담, 잔여할부 수수료 면제/법인,체크,기프트카드 제외)<br>
+                              2022.06.01&nbsp;~&nbsp;2022.06.30</td>
+                          </tr>
+                          </tbody>
+                        </table>
+                        <ul class="bul_sty01_li mt10">
+                          <li>무이자 할부 결제 시 카드사 포인트는 적립되지 않습니다.</li>
+                          <li>ARS 무이자 할부는 해당 카드사 ARS 번호로 사전 신청을 하신 경우에 한하여<br>무이자 혜택이 적용됩니다.(ARS 부문 무이자 할부 포함)</li>
+                          <li>상기 부분 무이자 할부는 5만원 이상 결제 시 자동 적용되며, 결제창에는 무이자 표시가   되지 않을  수 있습니다.</li>
+                          <li>법인 / 체크 / 선불 / 기프트 / 은행 계열 카드는 제외됩니다.</li>
+                          <li>고객 부담 수수료는 해당 카드사로 문의 바랍니다.</li>
+                          <li>본 행사는 카드사 사정에 따라 일부 내용이 변경 또는 중단될 수 있습니다.</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <a href="javascript:void(0);" class="btn_close"><img src="http://cdn.thehandsome.com/_ui/desktop/common/images/popup/ico_close.png" alt="닫기"></a>
+                </div>
+              </li>
+
+              <li>
+                <span class="title">배송비</span>
+                <span class="txt">30,000원 이상 무료배송 (실결제 기준)</span>
+                <a href="javascript:fn_popupDelivery();" class="etc_info" onclick="GA_Event('상품_상세','배송안내','클릭');">배송안내</a>
+                <div class="popwrap w_type_2" id="popupDelivery" style="display:none;">
+                  <div class="pop_tltwrap2">
+                    <h3>배송비안내</h3>
+                  </div>
+                  <div class="pop_cnt">
+                    <table class="cnt_type1">
+                      <caption>배송비안내</caption>
+                      <colgroup>
+                        <col style="width:155px">
+                        <col>
+                      </colgroup>
+                      <tbody>
+                      <tr>
+                        <th scope="row">배송기간</th>
+                        <td>평균 입금완료일 기준 2-4일 소요됩니다.<br>(토/일/공휴일 제외)</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">배송비</th>
+                        <td>
+                          <ul class="bul_sty01_li">
+                            <li>30,000원 이상 결제 시 <em class="ft_point01">무료배송</em></li>
+                            <li>30,000원 미만 결제 시 <em class="ft_point01">2,500원</em></li>
+                          </ul>
+                          <p class="bul_sty02">도서산간 지역은 3,000원의 별도 배송비가 부과됩니다.</p>
+                          <p class="bul_sty02">쿠폰/바우처 할인금액 및 한섬마일리지/H.Point 사용을 제외한 실결제금액 기준입니다.</p>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <a href="javascript:void(0);" class="btn_close"><img src="http://cdn.thehandsome.com/_ui/desktop/common/images/popup/ico_close.png" alt="닫기"></a>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="info_sect">
+            <ul class="color_size_qty">
+              <li>
+                <span class="title">색상</span>
+                <div class="txt">
+                  <ul class="color_chip clearfix">
+                    <input type="hidden" id="colorName" value="BLACK">
+                    <li id="TH2B9WJM335N_BK">
+                      <input type="hidden" class="colorNameVal" value="BLACK">
+                      <a href="#;" class="beige on" style="background:#000000 url('http://newmedia.thehandsome.com/TH/2B/FW/TH2B9WJM335N_BK_C01.jpg/dims/resize/24x24')" onmouseover="setColorName('BLACK');" onmouseout="setColorName('');"></a>
+                    </li>
+                    <li id="TH2B9WJM335N_GK">
+                      <input type="hidden" class="colorNameVal" value="GREY KHAKI">
+                      <a href="javascript:fn_detailProductAjax('TH2B9WJM335N_GK');" class="beige" style="background:#b7b299 url('http://newmedia.thehandsome.com/TH/2B/FW/TH2B9WJM335N_GK_C01.jpg/dims/resize/24x24')" onmouseover="setColorName('GREY KHAKI');" onmouseout="setColorName('');" onclick="GA_Event('상품_상세','컬러칩','GK')"></a>
+                    </li>
+                  </ul>
+                </div>
+                <span class="cl_name" id="colorNameContent"></span>
+              </li>
+              <li>
+                <span class="title">사이즈<!-- 사이즈 --></span>
+                <span class="txt">
+					<script type="text/javascript">
+
+$(document).ready(function(){
+
+  var tab = $('#size_tab ul li');
+  var content = $('.size_tab_container > div');
+  $('.size_tab_container > div + div').css('display','none');
+  tab.on('click', function(e){
+    e.preventDefault();
+    var tg = $(this);
+    var tc = tg.find('> a');
+    tab.find('> a').removeClass('active');
+    tc.addClass('active');
+    i = tg.index();
+    content.css('display', 'none');
+    content.eq(i).css('display', 'block');
+  });
+
+});
+
+</script>
+
+<div class="popwrap w_type_2" id="sizeQuickReferenceLayer" style="display:none;">
+	<div class="pop_tltwrap2">
+		<h3>사이즈조견표</h3>
+	</div>
+	<div class="pop_cnt">
+		<div class="size_chart">
+			<div class="tab_a m6" id="size_tab">
+				<ul>
+					<li><a href="#;" class="active">WOMEN<br>TOP</a></li>
+					<li><a href="#;">WOMEN<br>BOTTOMS</a></li>
+					<li><a href="#;">WOMEN<br>SHOES</a></li>
+					<li><a href="#;">MEN<br>TOP</a></li>
+					<li><a href="#;">MEN<br>BOTTOMS</a></li>
+					<li><a href="#;">MEN<br>SHOES</a></li>
+				</ul>
+			</div>
+			<div class="size_tab_container">
+				<div>
+					<table class="cnt_type2">
+						<caption>사이즈조견표</caption>
+						<colgroup>
+							<col>
+							<col style="width:16%">
+							<col style="width:16%">
+							<col style="width:16%">
+							<col style="width:16%">
+							<col style="width:16%">
+						</colgroup>
+						<thead>
+							<tr class="al_middle">
+								<th scope="col">BRAND/<br>SIZE</th>
+								<th scope="col">XS</th>
+								<th scope="col">S</th>
+								<th scope="col">M</th>
+								<th scope="col">L</th>
+								<th scope="col">FREE</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="al_middle">
+								<th scope="row">TIME</th>
+								<td>76</td>
+								<td>82</td>
+								<td>88</td>
+								<td>94</td>
+								<td>90</td>
+							</tr>
+							<tr class="al_middle">
+								<th scope="row">MINE</th>
+								<td>76</td>
+								<td>82</td>
+								<td>88</td>
+								<td>94</td>
+								<td>90</td>
+							</tr>
+							<tr class="al_middle">
+								<th scope="row">SYSTEM</th>
+								<td>76</td>
+								<td>82</td>
+								<td>88</td>
+								<td>-</td>
+								<td>90</td>
+							</tr>
+							<tr class="al_middle">
+								<th scope="row">SJSJ</th>
+								<td>76</td>
+								<td>82</td>
+								<td>88</td>
+								<td>-</td>
+								<td>90</td>
+							</tr>
+							<tr class="al_middle">
+								<th scope="row" rowspan="2">KOREA</th>
+								<td>85</td>
+								<td>90</td>
+								<td>95</td>
+								<td>100</td>
+								<td>-</td>
+							</tr>
+							<tr class="al_middle">
+								<td>44</td>
+								<td>55</td>
+								<td>66</td>
+								<td>77</td>
+								<td>-</td>
+							</tr>
+							<tr class="al_middle">
+								<th scope="row">US</th>
+								<td>2</td>
+								<td>4</td>
+								<td>6</td>
+								<td>8</td>
+								<td>-</td>
+							</tr>
+							<tr class="al_middle">
+								<th scope="row">EUROPE</th>
+								<td>34</td>
+								<td>36</td>
+								<td>38</td>
+								<td>40</td>
+								<td>-</td>
+							</tr>
+							<tr class="al_middle">
+								<th scope="row">CHINA</th>
+								<td>160/<br>80A</td>
+								<td>165/<br>84A</td>
+								<td>170/<br>88A</td>
+								<td>175/<br>92A</td>
+								<td>-</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div style="display:none;">
+					<table class="cnt_type2">
+						<caption>사이즈조견표</caption>
+						<colgroup>
+							<col>
+							<col style="width:19%">
+							<col style="width:19%">
+							<col style="width:19%">
+							<col style="width:19%">
+						</colgroup>
+						<thead>
+							<tr class="al_middle">
+								<th scope="col">BRAND/<br>SIZE</th>
+								<th scope="col">XS</th>
+								<th scope="col">S</th>
+								<th scope="col">M</th>
+								<th scope="col">L</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th scope="row">TIME</th>
+								<td>61</td>
+								<td>64</td>
+								<td>67</td>
+								<td>70</td>
+							</tr>
+							<tr>
+								<th scope="row">MINE</th>
+								<td>61</td>
+								<td>64</td>
+								<td>67</td>
+								<td>70</td>
+							</tr>
+							<tr>
+								<th scope="row">SYSTEM</th>
+								<td>61</td>
+								<td>64</td>
+								<td>67</td>
+								<td>-</td>
+							</tr>
+							<tr>
+								<th scope="row">SJSJ</th>
+								<td>61</td>
+								<td>64</td>
+								<td>67</td>
+								<td>-</td>
+							</tr>
+							<tr class="al_middle">
+								<th scope="row" rowspan="2">KOREA</th>
+								<td>24</td>
+								<td>26</td>
+								<td>28</td>
+								<td>30</td>
+							</tr>
+							<tr>
+								<td>44</td>
+								<td>55</td>
+								<td>66</td>
+								<td>77</td>
+							</tr>
+							<tr>
+								<th scope="row">US</th>
+								<td>2</td>
+								<td>4</td>
+								<td>6</td>
+								<td>8</td>
+							</tr>
+							<tr>
+								<th scope="row">EUROPE</th>
+								<td>34</td>
+								<td>36</td>
+								<td>38</td>
+								<td>40</td>
+							</tr>
+							<tr>
+								<th scope="row">CHINA</th>
+								<td>160/<br>66A</td>
+								<td>165/<br>68A</td>
+								<td>170/<br>70A</td>
+								<td>175/<br>72A</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div style="display:none;">
+					<table class="cnt_type2">
+						<caption>사이즈조견표</caption>
+						<colgroup>
+							<col>
+							<col style="width:19%">
+							<col style="width:19%">
+							<col style="width:19%">
+							<col style="width:19%">
+						</colgroup>
+						<thead>
+							<tr class="al_middle">
+								<th scope="col">BRAND/<br>SIZE</th>
+								<th scope="col">XS</th>
+								<th scope="col">S</th>
+								<th scope="col">M</th>
+								<th scope="col">L</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th scope="row">TIME</th>
+								<td>230</td>
+								<td>235</td>
+								<td>240</td>
+								<td>245</td>
+							</tr>
+							<tr>
+								<th scope="row">MINE</th>
+								<td>230</td>
+								<td>235</td>
+								<td>240</td>
+								<td>245</td>
+							</tr>
+							<tr>
+								<th scope="row">SYSTEM</th>
+								<td>230</td>
+								<td>235</td>
+								<td>240</td>
+								<td>245</td>
+							</tr>
+							<tr>
+								<th scope="row">SJSJ</th>
+								<td>230</td>
+								<td>235</td>
+								<td>240</td>
+								<td>245</td>
+							</tr>
+							<tr>
+								<th scope="row">KOREA</th>
+								<td>230</td>
+								<td>235</td>
+								<td>240</td>
+								<td>245</td>
+							</tr>
+							<tr>
+								<th scope="row">US</th>
+								<td>6</td>
+								<td>6.5</td>
+								<td>7</td>
+								<td>7.5</td>
+							</tr>
+							<tr>
+								<th scope="row">EUROPE</th>
+								<td>36</td>
+								<td>36.5</td>
+								<td>37</td>
+								<td>37.5</td>
+							</tr>
+							<tr>
+								<th scope="row">CHINA</th>
+								<td>36</td>
+								<td>37</td>
+								<td>38</td>
+								<td>39</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div style="display:none;">
+					<table class="cnt_type2">
+						<caption>사이즈조견표</caption>
+						<colgroup>
+							<col>
+							<col style="width:16%">
+							<col style="width:16%">
+							<col style="width:16%">
+							<col style="width:16%">
+							<col style="width:16%">
+						</colgroup>
+						<thead>
+							<tr class="al_middle">
+								<th scope="col">BRAND/<br>SIZE</th>
+								<th scope="col">S</th>
+								<th scope="col">M</th>
+								<th scope="col">L</th>
+								<th scope="col">XL</th>
+								<th scope="col">XXL</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="al_middle">
+								<th scope="row">TIME<br>HOMME</th>
+								<td>90</td>
+								<td>95</td>
+								<td>100</td>
+								<td>105</td>
+								<td>110</td>
+							</tr>
+							<tr class="al_middle">
+								<th scope="row">SYSTEM<br>HOMME</th>
+								<td>90</td>
+								<td>95</td>
+								<td>100</td>
+								<td>105</td>
+								<td>110</td>
+							</tr>
+							<tr class="al_middle">
+                                <th scope="row">CLUB<br>MONACO</th>
+                                <td>XS</td>
+                                <td>S</td>
+                                <td>M</td>
+                                <td>L</td>
+                                <td>XL</td>
+                            </tr>
+							<tr class="al_middle">
+								<th scope="row">KOREA</th>
+								<td>90</td>
+								<td>95</td>
+								<td>100</td>
+								<td>105</td>
+								<td>110</td>
+							</tr>
+							<tr class="al_middle">
+								<th scope="row">US</th>
+								<td>36</td>
+								<td>38</td>
+								<td>40</td>
+								<td>42</td>
+								<td>44</td>
+							</tr>
+							<tr class="al_middle">
+								<th scope="row">EUROPE</th>
+								<td>46</td>
+								<td>48</td>
+								<td>50</td>
+								<td>52</td>
+								<td>54</td>
+							</tr>
+							<tr class="al_middle">
+								<th scope="row">CHINA</th>
+								<td>165/<br>80-90</td>
+								<td>170/<br>96-98</td>
+								<td>175/<br>108-110</td>
+								<td>180/<br>118-122</td>
+								<td>185/<br>126-130</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div style="display:none;">
+					<table class="cnt_type2">
+						<caption>사이즈조견표</caption>
+						<colgroup>
+							<col>
+							<col style="width:9.5%">
+							<col style="width:9.5%">
+							<col style="width:9.5%">
+							<col style="width:9.5%">
+							<col style="width:9.5%">
+							<col style="width:9.5%">
+							<col style="width:9.5%">
+							<col style="width:9.5%">
+							<col style="width:9.5%">
+						</colgroup>
+						<thead>
+							<tr class="al_middle">
+								<th scope="col">BRAND/<br>SIZE</th>
+								<th scope="col">S</th>
+								<th scope="col" colspan="2">M</th>
+								<th scope="col" colspan="2">L</th>
+								<th scope="col" colspan="2">XL</th>
+								<th scope="col" colspan="2">XXL</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="al_middle">
+								<th scope="row">TIME<br>HOMME</th>
+								<td>74</td>
+								<td colspan="2">78</td>
+								<td>82</td>
+								<td>84</td>
+								<td>86</td>
+								<td>88</td>
+								<td>90</td>
+								<td>92</td>
+							</tr>
+							<tr class="al_middle">
+								<th scope="row">SYSTEM<br>HOMME</th>
+								<td>74</td>
+								<td colspan="2">78</td>
+								<td>82</td>
+								<td>84</td>
+								<td>86</td>
+								<td>88</td>
+								<td>90</td>
+								<td>92</td>
+							</tr>
+                            <tr class="al_middle">
+                                <th scope="row">CLUB<br>MONACO</th>
+                                <td>29</td>
+                                <td>30</td>
+                                <td>31</td>
+                                <td>32</td>
+                                <td>33</td>
+                                <td colspan="2">34</td>
+                                <td colspan="2">36</td>
+                            </tr>
+							<tr class="al_middle">
+								<th scope="row">KOREA</th>
+								<td>29</td>
+								<td colspan="2">30</td>
+								<td>32</td>
+								<td>33</td>
+								<td>34</td>
+								<td>35</td>
+								<td>35.5</td>
+								<td>36</td>
+							</tr>
+							<tr class="al_middle">
+								<th scope="row">US</th>
+								<td>44T</td>
+								<td colspan="2">46T</td>
+								<td colspan="2">48T</td>
+								<td colspan="2">50T</td>
+								<td colspan="2">52T</td>
+							</tr>
+							<tr class="al_middle">
+								<th scope="row">EUROPE</th>
+								<td>44</td>
+								<td colspan="2">46</td>
+								<td colspan="2">48</td>
+								<td colspan="2">50</td>
+								<td colspan="2">52</td>
+							</tr>
+							<tr class="al_middle">
+								<th scope="row">CHINA</th>
+								<td>44</td>
+								<td colspan="2">46</td>
+								<td colspan="2">48</td>
+								<td colspan="2">50</td>
+								<td colspan="2">52</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div style="display:none;">
+					<table class="cnt_type2">
+						<caption>사이즈조견표</caption>
+						<colgroup>
+							<col>
+							<col style="width:23%">
+							<col style="width:23%">
+							<col style="width:23%">
+						</colgroup>
+						<thead>
+							<tr class="al_middle">
+								<th scope="col">BRAND<br>SIZE</th>
+								<th scope="col">S</th>
+								<th scope="col">M</th>
+								<th scope="col">L</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr class="al_middle">
+								<th scope="row">TIME HOMME</th>
+								<td>260</td>
+								<td>270</td>
+								<td>280</td>
+							</tr>
+							<tr class="al_middle">
+								<th scope="row">SYSTEM HOMME</th>
+								<td>260</td>
+								<td>270</td>
+								<td>280</td>
+							</tr>
+							<tr class="al_middle">
+								<th scope="row">KOREA</th>
+								<td>260</td>
+								<td>270</td>
+								<td>280</td>
+							</tr>
+							<tr class="al_middle">
+								<th scope="row">US</th>
+								<td>8</td>
+								<td>9</td>
+								<td>10</td>
+							</tr>
+							<tr class="al_middle">
+								<th scope="row">EUROPE</th>
+								<td>41</td>
+								<td>42</td>
+								<td>43.5</td>
+							</tr>
+							<tr class="al_middle">
+								<th scope="row">CHINA</th>
+								<td>43</td>
+								<td>45</td>
+								<td>47</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				</div>
+		</div>
+	</div>
+	<a href="javascript:void(0);" class="btn_close"><img src="http://cdn.thehandsome.com/_ui/desktop/common/images/popup/ico_close.png" alt="닫기"></a>
+</div><ul class="size_chip clearfix sizeChipKo1901">
+							<li id="TH2B9WJM335N_BK_95">
+										<a href="javascript:fn_detailProductAjax('TH2B9WJM335N_BK_95')" onclick="GA_Event('상품_상세','사이즈','95')">95</a>
+										</li>
+									<li id="TH2B9WJM335N_BK_100">
+										<a href="javascript:fn_detailProductAjax('TH2B9WJM335N_BK_100')" onclick="GA_Event('상품_상세','사이즈','100')">100</a>
+										</li>
+									<li id="TH2B9WJM335N_BK_105">
+										<a href="javascript:fn_detailProductAjax('TH2B9WJM335N_BK_105')" onclick="GA_Event('상품_상세','사이즈','105')">105</a>
+										</li>
+									<li id="TH2B9WJM335N_BK_110">
+                                            <a href="javascript:fn_detailProductAjax('TH2B9WJM335N_BK_110');" class="not_stock" onclick="GA_Event('상품_상세','사이즈','110')">110</a>
+                                                        </li>
+									</ul>
+					</span>
+                <!-- 2021.08.10 화장품 상품인 경우 사이즈조견표 영역 미노출 -->
+                <a href="javascript:fn_popupSizeQuickReference();" class="etc_info" onclick="GA_Event('상품_상세','사이즈_조건표','클릭')">사이즈 조견표</a>
+                <!-- 재입고알림 툴팁 -->
+                <!-- //재입고알림 툴팁 -->
+
+              </li>
+              <li>
+                <span class="title">수량</span>
+                <span class="txt">
+						<span class="qty_sel num">
+							<a href="javascript:fn_qtySubtraction();" class="left">이전 버튼</a>
+							<input type="text" id="txtqty" title="수량" value="1" class="mr0" readonly="readonly">
+							<a href="javascript:fn_qtyAdd();" class="right">다음 버튼</a>
+							     </span>
+					</span>
+
+                <input type="hidden" id="erpWorkOrderNumber">     <input type="hidden" id="reserveSalesStockpile">  <input type="hidden" id="erpWorkOrderProdCode">  </li>
+            </ul>
+          </div>
+          <div class="total_price clearfix">
+            <div class="title float_left" style="width:auto;">총 합계</div>
+            <div class="pirce float_right">
+              <!-- 				<div class="tlt_ship"> -->
+              <!-- 				<div class="delch_box" style="display: none;"> -->
+              <!-- 	       			<span class="arr">위치아이콘</span> -->
+              <!-- 	                <div> -->
+              <!-- 	                    <div id="exchangeDiv"></div> -->
+              <!-- 	                </div> -->
+              <!-- 	        	</div> -->
+              <!-- 				</div> -->
+              <span id="sumPrice">₩690,000</span>
+            </div>
+          </div>
+          <!-- st_receipt_wrap -->
+          <!-- //st_receipt_wrap -->
+          <!-- st_store_wrap -->
+          <div class="st_store_wrap1807" id="storePickupChoice" style="display:none;">
+            <div class="st_store">
+              <dl>
+                <dt>선택 매장</dt>
+                <dd>
+                  <p id="storePickupChoiceName"></p>
+                  <p id="storePickupChoiceAddress"></p>
+                  <p id="storePickupChoiceTelephone"></p>
+                </dd>
+                <dt>수령 신청일</dt>
+                <dd>
+                  <p id="storePickupChoiceDate"></p>
+                </dd>
+              </dl>
+              <a href="javascript:fn_popupStorePickUp();" class="btn">매장변경</a>
+            </div>
+            <ul class="bul_sty01_li">
+              <li>매장 수령 시 상품 사이즈 및 컬러 변경은 불가합니다.</li>
+              <li>수령 가능 확정 일은 주문 완료 후, 수령 교환권을 SMS로 안내 드립니다.</li>
+              <li>수령 확정일로부터 <span style="color:#fe4242;">1일 경과 후 상품을 수령하지 않으시면 자동 취소</span> 됩니다.</li>
+            </ul>
+          </div>
+          <!-- //st_store_wrap -->
+          <div class="btnwrap clearfix" style="position: absolute; width: 473px; margin-top: 0; margin-bottom: 0;">
+            <input type="button" value="" class="btn wishlist1803 float_left ml0  " onclick="addWishListClick();GA_Event('상품_상세','하단 고정 버튼','좋아요');">
+
+            <div class="toast_popup">
+              <p style="display: none; top: -4.12381px; opacity: 0.031172;">위시리스트에서 삭제했습니다.</p>
+            </div>
+
+            <!--190508 추가 -->
+            <div class="toast_popup_pre_order1905"><!-- 토스트팝업 190507 -->
+              <p>예약 주문이 가능한 옵션(컬러/사이즈)가 있습니다. <br>옵션 선택 후 배송 예정일을 확인해 주세요.</p>
+              <span class="arr">위치아이콘</span>
+            </div>
+            <!--//190508 추가 -->
+
+            <form id="addToCartForm" name="addToCartForm" action="/ko/HANDSOME/MEN/OUTER/DOWN-JUMPER/%ED%9B%84%EB%93%9C-%ED%8C%A8%EB%94%A9-%ED%94%8C%EB%9D%BC%EC%9D%B4%ED%8A%B8-%EC%A0%90%ED%8D%BC/p/TH2B9WJM335N_BK?categoryCode=me03" method="post"><input type="hidden" maxlength="3" size="1" name="qty" class="qty">
+              <input type="hidden" name="productCodePost" value="TH2B9WJM335N_BK">
+              <input type="hidden" id="productCodeType" name="productCodeType" value="ApparelStyleVariantProduct">
+              <input type="hidden" id="stockCnt" value="0">
+              <input type="hidden" name="storeId" id="storeId" value="">
+              <input type="hidden" name="storePickupDate" id="storePickupDate" value="">
+              <input type="hidden" name="workOrder" id="workOrder" value="">
+              <input type="hidden" name="recommendProduct" id="recommendProduct" value="">
+              <input type="hidden" name="deliveryKind" id="deliveryKind" value="">
+              <input type="hidden" name="streetname" id="streetname" value="">
+              <input type="hidden" name="streetnumber" id="streetnumber" value="">
+              <input type="hidden" name="postalcode" id="postalcode" value="">
+              <input type="hidden" name="quickStreetname" id="quickStreetname" value="">
+              <input type="hidden" name="quickStreetnumber" id="quickStreetnumber" value="">
+              <input type="hidden" name="quickPostalcode" id="quickPostalcode" value="">
+              <input type="hidden" name="fourpmList" id="fourpmList">
+              <input type="hidden" name="athomeList" id="athomeList">
+              <input type="hidden" name="pickupList" id="pickupList">
+              <input type="hidden" name="quickList" id="quickList">
+              <input type="hidden" name="buyNowYn" id="buyNowYn" value="false">
+              <input type="button" value="쇼핑백 담기" class="btn cart1803 float_left ml0" id="addToCartButton" onclick="addToCart();GA_Event('상품_상세','하단 고정 버튼','쇼핑백담기');">
+              <div>
+                <input type="hidden" name="CSRFToken" value="4de39ebb-abd2-409c-982d-746b1f3a6e3d">
+              </div></form><input type="button" value="바로주문" class="btn order float_right mr0" id="addToCartBuyNowButton" onclick="GA_Event('상품_상세','하단 고정 버튼','바로주문');addToCart(true);">
+          </div>
+
+          <dl class="toggle_type1" style="margin-top:80px;">
+            <dt>
+              <a href="javascript:void(0);" id="DETAIL_INFO_EVT">
+                상품정보제공고시</a>
+            </dt>
+            <dd style="display:none;">
+              <strong>상품품번 :</strong> TH2B9WJM335N<br>
+              <strong>품목 :</strong> 의류<br>
+              <strong>소재 :</strong> 겉감 NL : 나일론 100%, 배색 PL : 폴리에스터 96%, PU : 폴리우레탄 4%, 배색1 CT : 면 100%, 배색2 PL : 폴리에스터 96%, PU : 폴리우레탄 4%, 안감1 PL : 폴리에스터 100%, 안감2 CT : 면 100%, PL : 폴리에스터 65%, 안감3 CT : 면 35%, PL : 폴리에스터 65%, 충전재 PL : 폴리에스터 100%(BK,GK)<br>
+              <strong>색상 :</strong> BK(BLACK), GK(GREY KHAKI)<br>
+              <strong>사이즈 :</strong> 100, 105, 95, 110<br>
+              <strong>제조국 :</strong> 한국<br>
+              <strong>제조사 :</strong> (주)한섬<br>
+              <strong>제조연월 :</strong> 202110<br>
+              <strong>세탁방법 및 취급 시 주의사항</strong>
+              <div class="howToWash renew1907" id="newHowToWash">
+
+              <!--  이미지 타임리프 적용하기    -->
+                <ul>
+                  <li>
+                    <img src="http://cdn.thehandsome.com/pc/laundryMark/pc_ko1/008.png" onmouseover="this.src='http://cdn.thehandsome.com/pc/laundryMark/pc_ko2/008_.png'" onmouseout="this.src='http://cdn.thehandsome.com/pc/laundryMark/pc_ko1/008.png'" onerror="javascript:onErrorImg(this);" alt="008">
+                    <span class="code_num">008</span>
+
+                  </li>
+                  <li>
+                    <img src="http://cdn.thehandsome.com/pc/laundryMark/pc_ko1/003.png" onmouseover="this.src='http://cdn.thehandsome.com/pc/laundryMark/pc_ko2/003_.png'" onmouseout="this.src='http://cdn.thehandsome.com/pc/laundryMark/pc_ko1/003.png'" onerror="javascript:onErrorImg(this);" alt="003">
+                    <span class="code_num">003</span>
+
+                  </li>
+                  <li>
+                    <img src="http://cdn.thehandsome.com/pc/laundryMark/pc_ko1/029.png" onmouseover="this.src='http://cdn.thehandsome.com/pc/laundryMark/pc_ko2/029_.png'" onmouseout="this.src='http://cdn.thehandsome.com/pc/laundryMark/pc_ko1/029.png'" onerror="javascript:onErrorImg(this);" alt="029">
+                    <span class="code_num">029</span>
+
+                  </li>
+                  <li>
+                    <img src="http://cdn.thehandsome.com/pc/laundryMark/pc_ko1/049.png" onmouseover="this.src='http://cdn.thehandsome.com/pc/laundryMark/pc_ko2/049_.png'" onmouseout="this.src='http://cdn.thehandsome.com/pc/laundryMark/pc_ko1/049.png'" onerror="javascript:onErrorImg(this);" alt="049">
+                    <span class="code_num">049</span>
+
+                  </li>
+                  <li>
+                    <img src="http://cdn.thehandsome.com/pc/laundryMark/pc_ko1/019.png" onmouseover="this.src='http://cdn.thehandsome.com/pc/laundryMark/pc_ko2/019_.png'" onmouseout="this.src='http://cdn.thehandsome.com/pc/laundryMark/pc_ko1/019.png'" onerror="javascript:onErrorImg(this);" alt="019">
+                    <span class="code_num">019</span>
+
+                  </li>
+                </ul>
+                본 제품은 반드시 드라이크리닝 하십시오. 세탁 시 이염, 변색, 탈색될 수 있으니 유의하시기 바랍니다. 단추나 악세서리는 세탁 시 손상될 수 있으므로 은박지로 싸거나 분리하여 주십시오. 특성상 마찰에 의해 올 뜯김 등 원단 손상이 발생할 수 있으니 취급 시 주의하시기 바랍니다.<br><br>
+              </div>
+              <br>
+              <strong>품질보증기준</strong><br>
+              1. 본 제품은 정부 고시 소비자 분쟁해결 기준에 의거 고객의 정당한 피해를 보상해드립니다. <br> - 원단 불량, 부자재 불량, 봉제 불량, 사이즈 부정확, 부당 표시(미표시 및 부실표시) 및 소재 구성 부적합으로 인한 세탁 사고 : 구입일로부터 1년 이내분은 무상수리, 교환, 구입가 환불함. (단, 봉제 불량은 1년 경과 후에도 무상 수선 가능) <br> - 사이즈가 맞지 않거나 디자인, 색상 불만 제품 : 구입 후 7일 이내로서 제품에 손상이 없는 경우 동일 가격, 동일 제품으로 교환 가능. <br> - 상하의 한 벌(세트/일착)인 경우 한 쪽에만 이상이 있어도 한 벌(세트/일착)로 처리함. 단, 소재 및 디자인이 다른 경우에는 해당 의류만 교환 가능. <br>2. 소비자 부주의에 의한 제품 훼손, 세탁 잘못으로 인한 변형 및 품질 보증기간(1년)이 경과한 제품에 대해서는 보상의 책임을 지지 않으며, 수선 가능시에는 실비로 수선해드립니다. <br>3. 제품에 이상이 있는 경우 바로 본사로 연락주시면 수선/교환/환불이 가능하나, 타업체(일반 수선실 등)에서 수선했을 경우는 불가능합니다.<br><br>
+              <div style="margin-bottom:20px;">
+                <p style="float:left;">
+                  <strong>AS 책임자와 연락처</strong><br>
+                  ㈜한섬/1800-5700</p>
+                <!-- 20200218 마크 추가 -->
+                <div class="sft_ksdt">
+                </div>
+                <!-- // 20200218 마크 추가 -->
+              </div><br><br>
+              위 내용은 상품정보제공 고시에 따라 작성되었습니다.</dd>
+            <!-- 2021.08.10 화장품 상품인 경우 실측사이즈 영역 미노출 -->
+            <dt><a href="javascript:void(0);" id="REAL_SIZE_EVT">실측사이즈</a></dt>
+            <dd>
+              <div class="ko realsize_img SZ08"></div>
+              <p class="tit">점퍼</p>
+              <dl class="info_tbl">
+                <dt>총길이 :</dt>
+                <dd>67cm</dd><dd>
+              </dd><dt class="inline">가슴단면 :</dt>
+                <dd>70cm</dd><dd>
+              </dd><dt class="inline">어깨너비 :</dt>
+                <dd>62cm</dd><dd>
+              </dd><dt>소매길이 :</dt>
+                <dd>60cm</dd><dd>
+              </dd><dt class="inline">소매부리 :</dt>
+                <dd>11cm</dd><dd>
+              </dd></dl>
+              <!-- info_tbl -->
+
+              <!-- //info_tbl -->
+              <!-- numlist -->
+              <p class="info2">피팅 정보 : 188cm, 105 사이즈 모델이 105 사이즈 착용</p>
+              <br>
+              <!-- //numlist -->
+              <font color="red">
+                <strong>
+                  원단, 측정방법에 따라 약간의 오차 가능성이 있습니다.</strong>
+              </font>
+
+              <div class="timehomme_pants_fit" style="display:none"></div>
+            </dd>
+            <dt><a href="#" id="DELI_RETURN_EVT">배송 및 교환/반품</a></dt>
+            <dd>
+              <p class="tit">배송안내</p> <dl class="info_tbl"> <dt>배송방식 :</dt> <dd>우체국택배, CJ대한통운, 부릉, 굿투럭</dd><!-- 210728 oera 신규 추가  --> <dt>배송지역 :</dt> <dd>전국 (일부 지역 제외)</dd> <dt>배송정보 :</dt> <dd>평균 입금완료일 기준 2-4일 소요됩니다 (토/일/공휴일 제외)</dd> <dt>배송비 :</dt> <dd>실결제금액 기준 30,000원 이상 결제 시 무료배송<br>30,000원 미만 결제 시 2,500원(기본 배송비)<br>* 실결제금액이란, 쿠폰/바우처 할인액 및 <br>&nbsp; 한섬마일리지/H.Point 사용 금액을 제외한 금액입니다. <br> &nbsp;&nbsp;(e-money 사용은 실결제금액에 포함)<br>* 도서산간 지역은 3,000원의 별도 배송비가 부과됩니다.<br>* 일부 도서지역은 도선료가 부가될 수 있습니다. </dd> </dl> <p class="tit mt20">교환 및 반품안내</p> <!-- info_tbl --> <dl class="info_tbl"> <dt>교환/반품 기간 :</dt> <dd>상품 수령 후, 7일 이내</dd> <dt>교환절차 :</dt> <dd style="letter-spacing: -0.2px;"> 사이즈 및 상품불량 교환만 가능(색상교환 불가)하며 교환을 원하실 경우<br> 고객센터로 문의해주시기 바랍니다. (교환 재고가 없을 경우, 환불로 안내예정)<br> - 교환은 배송비 입금 및 상품 입고 확인 이후에 진행됩니다. <br> 화장품은 상품 불량만 교환 가능하며(상품 개봉 후 교환 불가), 고객센터로<br> 문의해주시기 바랍니다. <!-- 210728 oera 신규 추가  --> </dd> <dt>반품절차 :</dt> <dd>[배송완료] 7일 이내에 마이페이지 주문/배송/취소/반품 메뉴에서<br> [반품신청] 버튼을 클릭 시 가능합니다.</dd> <dt>교환/반품 배송비 :</dt> <dd style="letter-spacing: -0.4px;">배송비는 5,000원 이며(반품비는 주문시 배송비 결제 유무에 따라 변동)<br>상품 불량 등의 이유로 교환/반품하실 경우, 배송비는 무료입니다.</dd> <dt>교환/반품 불가사유</dt> <dd>다음의 경우에는 교환/반품이 불가합니다. <ol class="numlist"> <li> <span class="num sum">-</span> <span class="txt">교환/반품 기간(상품 수령 후 7일 이내)을 초과하였을 경우</span> </li> <li> <span class="num sum">-</span> <span class="txt">고객님의 요청에 의해 제품 사양이 변경(이니셜 제품, 사이즈 맞춤 제품 등)된 경우</span></li><li><span class="num sum">-</span><span class="txt">제품을 이미 사용하였거나, 제품 일부를 소비하였을 경우</span> </li> <!-- 210728 oera 신규 추가  --> <li> <span class="num sum">-</span> <span class="txt">화장품 : 상품 개봉 후 교환/반품 불가. 단 상품 불량(내용물 불량) 혹은 피부 트러블로 인한 반품은 가능(용량 1/3 미만 사용 및 의사소견서 1:1문의 첨부 필수)</span></li> <!-- // 210728 oera 신규 추가  --> <li> <span class="num sum">-</span> <span class="txt">식기류 : 제품 수령 후, 비닐포장을 개봉한 경우</span> </li> <li> <span class="num sum">-</span> <span class="txt">고객님의 귀책사유로 인해 회수가 지연될 경우</span> </li> <li> <span class="num sum">-</span> <span class="txt">국내외 환율 변동 등에 의해 가격이 변동되는 제품의 경우</span> </li> <li> <span class="num sum">-</span> <span class="txt">문제소지가 있는 제품을 본사가 아닌, 타 업체(일반 수선실 등)에서 선처리가 된 경우</span> </li> </ol> </dd> <!-- 210728 oera 신규 추가  --> <dt>교환/반품건 배송</dt> <dd>교환/반품 시 배송 받으신 박스로 반송하셔야 합니다. <br>(한섬/오에라/리퀴드퍼퓸바 상품 함께 주문 후 교환/반품 시 각각의 박스에 나눠서 반송해주세요. 한 박스에 함께 동봉하여 반송 시 교환/반품 처리가 불가할 수 있습니다)</dd> <!-- // 210728 oera 신규 추가  --> </dl> <p class="tit mt20">환불안내</p> <p>환불은 반송제품 확인 후 진행됩니다.</p><br>
+            </dd>
+            <!--상품평 btn-->
+            <div class="popup_customer_review1807" id="customerReview">
+              <a href="#;" onclick="GA_Event('상품_상세','정보','상품평');">상품평(<span id="customerReviewCnt">101</span>)
+                <div class="star_score1807" id="prodTotalStarScoreWrapper">
+                    <span class="cmt_star">
+                       <!-- 별점에 따라 class명 변경 (star1, star2 ,star3, star4, star5) -->
+                        <span class="cmt_per" id="prodTotalStarScore" style="width: 100%;">별점</span>
+                    </span>
+                </div>
+              </a>
+            </div>
+            <!--//상품평 btn-->
+
+          </dl>
+        </div>
+
+        <div class="clearfix mt30">
+          <div class="btnwrap float_left">
+            <a href="javascript:fn_popupProductQnA();" class="btn arrow mr0" onclick="GA_Event('상품_상세','Q&amp;A','클릭');">Q&amp;A(<span class="data" id="productQnACnt">37</span>)</a>
+          </div>
+          <div class="float_right">
+            <!-- AddToAny BEGIN -->
+            <div class="a2a_kit a2a_kit_size_32 a2a_default_style" style="line-height: 32px;">
+              <a class="a2a_button_facebook" onclick="GA_Event('상품_상세','공유_SNS','FACEBOOK');" target="_blank" href="/#facebook" rel="nofollow noopener"><span class="a2a_svg a2a_s__default a2a_s_facebook" style="background-color: rgb(24, 119, 242);"><svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path fill="#FFF" d="M17.78 27.5V17.008h3.522l.527-4.09h-4.05v-2.61c0-1.182.33-1.99 2.023-1.99h2.166V4.66c-.375-.05-1.66-.16-3.155-.16-3.123 0-5.26 1.905-5.26 5.405v3.016h-3.53v4.09h3.53V27.5h4.223z"></path></svg></span><span class="a2a_label">Facebook</span></a>
+              <a class="a2a_button_twitter" onclick="GA_Event('상품_상세','공유_SNS','TWITTER');" target="_blank" href="/#twitter" rel="nofollow noopener"><span class="a2a_svg a2a_s__default a2a_s_twitter" style="background-color: rgb(29, 155, 240);"><svg focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path fill="#FFF" d="M28 8.557a9.913 9.913 0 01-2.828.775 4.93 4.93 0 002.166-2.725 9.738 9.738 0 01-3.13 1.194 4.92 4.92 0 00-3.593-1.55 4.924 4.924 0 00-4.794 6.049c-4.09-.21-7.72-2.17-10.15-5.15a4.942 4.942 0 00-.665 2.477c0 1.71.87 3.214 2.19 4.1a4.968 4.968 0 01-2.23-.616v.06c0 2.39 1.7 4.38 3.952 4.83-.414.115-.85.174-1.297.174-.318 0-.626-.03-.928-.086a4.935 4.935 0 004.6 3.42 9.893 9.893 0 01-6.114 2.107c-.398 0-.79-.023-1.175-.068a13.953 13.953 0 007.55 2.213c9.056 0 14.01-7.507 14.01-14.013 0-.213-.005-.426-.015-.637.96-.695 1.795-1.56 2.455-2.55z"></path></svg></span><span class="a2a_label">Twitter</span></a>
+              <a href="javascript:fnSharePin(&quot;http://www.thehandsome.com/ko/HANDSOME/MEN/OUTER/DOWN-JUMPER/%ED%9B%84%EB%93%9C-%ED%8C%A8%EB%94%A9-%ED%94%8C%EB%9D%BC%EC%9D%B4%ED%8A%B8-%EC%A0%90%ED%8D%BC/p/TH2B9WJM335N_BK&quot;);" class="pinterest" onclick="GA_Event('상품_상세','공유_SNS','PRINTEREST');"></a>
+              <input type="hidden" id="url" value="http://www.thehandsome.com/ko/HANDSOME/MEN/OUTER/DOWN-JUMPER/%ED%9B%84%EB%93%9C-%ED%8C%A8%EB%94%A9-%ED%94%8C%EB%9D%BC%EC%9D%B4%ED%8A%B8-%EC%A0%90%ED%8D%BC/p/TH2B9WJM335N_BK">
+              <div style="clear: both;"></div></div>
+            <script type="text/javascript">
+              var a2a_config = a2a_config || {};
+              a2a_config.num_services = 10;
+              var brandName =	"[" + $('#brandName').val() + "]";
+              var productName = $('.name').contents().first().text();
+              a2a_config.linkname = brandName + " " + productName;
+              a2a_config.linkurl = 'http://www.thehandsome.com/ko/HANDSOME/MEN/OUTER/DOWN-JUMPER/%ED%9B%84%EB%93%9C-%ED%8C%A8%EB%94%A9-%ED%94%8C%EB%9D%BC%EC%9D%B4%ED%8A%B8-%EC%A0%90%ED%8D%BC/p/TH2B9WJM335N_BK?lang=ko';
+              a2a_config.track_links = 'googl';
+            </script>
+            <script type="text/javascript" src="//static.addtoany.com/menu/page.js"></script>
+            <!-- AddToAny END -->
+
+          </div>
+        </div>
+
+        <input type="hidden" id="viewExhibitionPageCode" value="">
+        <input type="hidden" id="viewExhibitionPageName" value="">
+
+
+
+<!--        &lt;!&ndash; 코디상품 start &ndash;&gt;-->
+<!--        <div class="related_evt">-->
+<!--          <div class="cd-n-lb-tab" id="codi_lookbook_tab" style="border-bottom:none">-->
+<!--            <ul>-->
+<!--            </ul>-->
+<!--          </div>-->
+<!--          &lt;!&ndash; box1 &ndash;&gt;-->
+<!--          <div class="cd-n-lb-content-box" id="cd-n-lb-tab-01">-->
+<!--            <div class="matches_list together-codi-list" id="referencesListContent">-->
+<!--              <ul class="clearfix slides">-->
+<!--              </ul>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          &lt;!&ndash; //box1 &ndash;&gt;-->
+
+<!--          &lt;!&ndash; box2 &ndash;&gt;-->
+<!--          <div class="cd-n-lb-content-box" id="cd-n-lb-tab-02" style="display: block;">-->
+<!--            <div class="detail-pg-lookbook-aside-box">-->
+<!--              &lt;!&ndash; title-slide &ndash;&gt;-->
+<!--              <div class="title-slide-zone">-->
+<!--                <div class="swiper-container">-->
+<!--                  <div class="swiper-wrapper">-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; nav &ndash;&gt;-->
+<!--                &lt;!&ndash; //nav &ndash;&gt;-->
+<!--              </div>-->
+<!--              &lt;!&ndash; //title-slide &ndash;&gt;-->
+
+<!--              &lt;!&ndash; sub-slide &ndash;&gt;-->
+<!--              <div class="sub-slide-zone">-->
+<!--              </div>-->
+<!--              &lt;!&ndash; //sub-slide &ndash;&gt;-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          &lt;!&ndash; //box2 &ndash;&gt;-->
+<!--        </div>-->
+        <!--코디상품 end -->
+
+        <input type="hidden" id="vs-product-id" value="TH2B9WJM335N_BK">
+        <input type="hidden" id="vs-product-version" value="1">
+        <input type="hidden" id="vs-product-image-url" value="http://newmedia.thehandsome.com/TH/2B/FW/TH2B9WJM335N_BK_T01.jpg">
+      </div>
+
+      <form id="PAY_FORM" method="post" accept-charset="euc-kr">
+      </form>
+    </div>
+    <div class="product-detail-img">
+    </div>
+  </div>
+</div>
+
+<!-- footerWrap -->
+<th:block th:replace="~{/footer :: footer}"></th:block>
+
 </body>
 </html>

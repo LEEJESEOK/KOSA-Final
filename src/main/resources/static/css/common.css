@@ -77,7 +77,7 @@ input[type="week"]:disabled{background:#f9f9f9}
 .flex-control-nav{position:absolute; left:0; bottom:15px; width:100%; text-align:center;}
 .flex-control-nav li{display:inline;width:inherit;}
 .flex-control-nav li a{display:inline-block; vertical-align:middle; width:10px; height:10px; text-indent:-1000em; overflow:hidden; background:url('/_ui/desktop/common/images/common/ico_slider.png') no-repeat 0 -10px; margin-right:5px; cursor:pointer;}
-.flex-control-nav li a.flex-active{background:url('/_ui/desktop/common/images/common/ico_slider.png') no-repeat 0 0;}
+.flex-control-nav li a.flex-active{background:url('http://www.thehandsome.com/_ui/desktop/common/images/common/ico_slider.png') no-repeat 0 0;}
 
 /****************************************************
  Common
@@ -102,7 +102,7 @@ input[type="week"]:disabled{background:#f9f9f9}
 .box_type_1{padding:40px;background: #fff;border:1px solid #e3e3e3;}
 .box_type_2{padding:20px;background: #f9f9f9;border:1px solid #e3e3e3;}
 .box_common {margin-bottom: 15px;padding-bottom: 15px;border-bottom:1px solid #ebebeb;}
-.guide_comment{margin-left:5px;display:inline-block;padding-left:20px;color:#c69c6c;background: url("/_ui/desktop/common/images/common/ico_err.png") 0 9px no-repeat; line-height:30px;}
+.guide_comment{margin-left:5px;display:inline-block;padding-left:20px;color:#c69c6c;background: url("http://www.thehandsome.com/_ui/desktop/common/images/common/ico_err.png") 0 9px no-repeat; line-height:30px;}
 .guide_comment2{margin-top:5px;color:#c69c6c;font-size:11px;line-height:20px;}
 
 .com_txt{color:#555}
@@ -122,7 +122,7 @@ input[type="week"]:disabled{background:#f9f9f9}
 .em_select{width:120px;}
 .szpoll_wrap{position:;margin-top:20px;}
 .sum_add{margin-left:10px;padding:0 2px;display:inline-block;color:#fff;font-size:11px;background:#c69c6c;}
-.minus{display:inline-block;width:15px;background: url("/_ui/desktop/common/images/common/ico_minus.png") 0 6px no-repeat;text-indent: 999em; overflow:hidden;}
+.minus{display:inline-block;width:15px;background: url("http://www.thehandsome.com/_ui/desktop/common/images/common/ico_minus.png") 0 6px no-repeat;text-indent: 999em; overflow:hidden;}
 
 .file_upload{position: relative;display:inline-block;width:45%;padding-right:120px;}
 .file_upload input.text {width:100%;height:30px;padding:0 6px;border:1px solid #ccc;cursor:pointer;}
@@ -134,7 +134,7 @@ input[type="week"]:disabled{background:#f9f9f9}
 	-khtml-opacity:0;
 	-moz-opacity:0;
 }
-.ico_file{padding:3px 0 0 20px;color:#c69c6c;height:15px;background:url("/_ui/desktop/common/images/common/ico_file.png") no-repeat 0 3px;}
+.ico_file{padding:3px 0 0 20px;color:#c69c6c;height:15px;background:url("http://www.thehandsome.com/_ui/desktop/common/images/common/ico_file.png") no-repeat 0 3px;}
 
 .input_sumtxt{position:relative;padding-right:80px}
 .input_sumtxt input{width:100%; }
@@ -147,11 +147,11 @@ input[type="week"]:disabled{background:#f9f9f9}
 /*card_sample*/
 .card{display:block;}
 .card img{max-width:124px;text-align:center;vertical-align:middle;}
-.card.shinhan{width:88px;background:url("/_ui/desktop/common/images/popup/card_logo.gif") 0 0 no-repeat;text-indent: -999em}
-.card.hana{width:74px;background:url("/_ui/desktop/common/images/popup/card_logo.gif") 0 -50px no-repeat;text-indent: -999em}
-.card.nk{width:115px;background:url("/_ui/desktop/common/images/popup/card_logo.gif")  0 -100px no-repeat;text-indent: -999em}
-.card.kb{width:120px;background:url("/_ui/desktop/common/images/popup/card_logo.gif") 0 -150px no-repeat;text-indent: -999em}
-.cp_txt{height:24px;display:inline-block;color:#222;line-height:26px;background:url("/_ui/desktop/common/images/common/ico_point.png") no-repeat;}
+.card.shinhan{width:88px;background:url("http://www.thehandsome.com/_ui/desktop/common/images/popup/card_logo.gif") 0 0 no-repeat;text-indent: -999em}
+.card.hana{width:74px;background:url("http://www.thehandsome.com/_ui/desktop/common/images/popup/card_logo.gif") 0 -50px no-repeat;text-indent: -999em}
+.card.nk{width:115px;background:url("http://www.thehandsome.com_ui/desktop/common/images/popup/card_logo.gif")  0 -100px no-repeat;text-indent: -999em}
+.card.kb{width:120px;background:url("http://www.thehandsome.com/_ui/desktop/common/images/popup/card_logo.gif") 0 -150px no-repeat;text-indent: -999em}
+.cp_txt{height:24px;display:inline-block;color:#222;line-height:26px;background:url("http://www.thehandsome.com/_ui/desktop/common/images/common/ico_point.png") no-repeat;}
 .cp_txt.point{padding-left:28px;letter-spacing:1px;}
 .cp_txt.coupon{padding-left:65px;background-position:0 -50px;}
 
@@ -177,14 +177,14 @@ input[type="week"]:disabled{background:#f9f9f9}
 .title_wrap .sh_wrap .btn{min-width:auto;}
 
 /* title add 20150909 */
-.title_wrap h5.bul_tlt{font-size:14px;padding-left:10px;background: url("/_ui/desktop/common/images/common/bul_tlt.gif") 0 5px no-repeat;}
+.title_wrap h5.bul_tlt{font-size:14px;padding-left:10px;background: url("http://www.thehandsome.com/_ui/desktop/common/images/common/bul_tlt.gif") 0 5px no-repeat;}
 .title_wrap h6{font-size:14px;color:#222;font-weight: normal;}
 .title_wrap h6 span{padding-left:10px;font-size: 11px;color:#999;}
 
 .cnts_title{height:89px;border-bottom:1px solid #e3e3e3;text-align: center;font-weight: normal;}
 .cnts_title.none{border-bottom:none;}
 .cnts_title span{display:block; margin:0 auto; padding-top:33px;font-size: 26px;color:#363636;}
-.cnts_title span a{display:inline-block;padding:0 20px 0 40px;background: url("/_ui/desktop/common/images/products/ico_location_arr.png") 0 50% no-repeat;}
+.cnts_title span a{display:inline-block;padding:0 20px 0 40px;background: url("http://www.thehandsome.com/_ui/desktop/common/images/products/ico_location_arr.png") 0 50% no-repeat;}
 .cnts_title span a:first-child{background: none;}
 
 /****************************************************
@@ -270,11 +270,11 @@ input[type="week"]:disabled{background:#f9f9f9}
 .btn.add_ss{padding:6px 10px 7px;padding:7px 10px 6px\9;min-width:50px;border:1px solid #ccc;background:#f5f5f5;font-size:11px;line-height:11px;}
 .btn.dis_ss{padding:6px 10px 7px;padding:7px 10px 6px\9;min-width:50px;background:#fcfcfc;border:1px solid #f0f0f0;color:#c7c7c7;font-size:11px;line-height:11px;cursor:default;}
 
-.btn.arrow{padding:7px 17px 0 10px;height:21px;line-height:12px;border:1px solid #ccc;background:url("/_ui/desktop/common/images/common/btn_arr1.png") right 50% no-repeat;}
+.btn.arrow{padding:7px 17px 0 10px;height:21px;line-height:12px;border:1px solid #ccc;background:url("http://www.thehandsome.com/_ui/desktop/common/images/common/btn_arr1.png") right 50% no-repeat;}
 .btn.arrow span{padding-right:5px;line-height:28px}
 .btn.arrow span.data{line-height:13px;padding:0 3px}
-.btn.arrlist{padding-left:15px;line-height:22px;border:none;background: url("/_ui/desktop/common/images/common/ico_arr.png") 5px 7px no-repeat;}
-.btn_close{position:absolute;top:5px;right:5px;padding:5px;width:9px;height:9px;display:block;background:url("/_ui/desktop/common/images/common/btn_close.png") center center no-repeat;border:none;cursor:pointer;overflow:hidden;text-indent:-100px;}
+.btn.arrlist{padding-left:15px;line-height:22px;border:none;background: url("http://www.thehandsome.com/_ui/desktop/common/images/common/ico_arr.png") 5px 7px no-repeat;}
+.btn_close{position:absolute;top:5px;right:5px;padding:5px;width:9px;height:9px;display:block;background:url("http://www.thehandsome.com/_ui/desktop/common/images/common/btn_close.png") center center no-repeat;border:none;cursor:pointer;overflow:hidden;text-indent:-100px;}
 @-moz-document url-prefix(){.btn.arrlist{line-height:20px;}}
 .btn.download{padding:8px 35px 10px 15px;min-width:140px;background:#fff;border:1px solid #a3a3a3;font-size:14px;background: url("/_ui/desktop/common/images/common/ico_download.gif") right 50% no-repeat;}
 
@@ -308,7 +308,7 @@ input[type="week"]:disabled{background:#f9f9f9}
 .tab_a.m6 li{width:16.7%}
 .tab_a.m8 li{width:12.54%}
 
-.tab_b li{float:left;background:url("/_ui/desktop/common/images/common/bul_1.gif") left 4px no-repeat}
+.tab_b li{float:left;background:url("http://www.thehandsome.com/_ui/desktop/common/images/common/bul_1.gif") left 4px no-repeat}
 .tab_b li:first-child{background:none}
 .tab_b li a{display:block;padding:0 15px;font-size: 13px;color:#727272;}
 .tab_b li a:hover,
@@ -332,7 +332,7 @@ input[type="week"]:disabled{background:#f9f9f9}
 .svlink {overflow:hidden;}
 .svlink li{float:left;width:25%;}
 .svlink li a{padding:20px 0 20px 70px;color:#222;font-size:14px;line-height:25px;display:block;border:1px solid #e3e3e3;background:#f5f5f5 url("/_ui/desktop/common/images/common/ico_svlink.png") 30px 20px no-repeat}
-.svlink li a span{display:inline-block;width:30px;height:20px;background: url("/_ui/desktop/common/images/common/ico_svlink_arr.png") 10px 8px no-repeat;overflow:hidden;text-indent:-100px;}
+.svlink li a span{display:inline-block;width:30px;height:20px;background: url("http://www.thehandsome.com/_ui/desktop/common/images/common/ico_svlink_arr.png") 10px 8px no-repeat;overflow:hidden;text-indent:-100px;}
 .svlink li+li a{border-left:none;background-position:30px -30px;}
 .svlink li+li+li a{background-position:30px -80px;}
 .svlink li+li+li+li a{background-position:30px -130px;}
@@ -341,7 +341,7 @@ input[type="week"]:disabled{background:#f9f9f9}
 /****************************************************
  Toogle
 ****************************************************/
-.toggle_type1>dt{position: relative;border-bottom: 1px solid #ebebeb;background: url("/_ui/desktop/common/images/common/ico_toggle.png") right 30px no-repeat;}
+.toggle_type1>dt{position: relative;border-bottom: 1px solid #ebebeb;background: url("http://www.thehandsome.com/_ui/desktop/common/images/common/ico_toggle.png") right 30px no-repeat;}
 .toggle_type1>dt.on{background-position: right  -19px;}
 .toggle_type1>dt a{display:block;padding:25px 0;font-size: 14px;color:#363636;}
 .toggle_type1>dd{padding:20px 0;border-bottom: 1px solid #ebebeb;line-height:20px;display:none;}
@@ -353,7 +353,7 @@ input[type="week"]:disabled{background:#f9f9f9}
 
 /* toggle_type2 - add 20150910 */
 .toggle_type2{margin-bottom:20px;border-top:1px solid #404040;}
-.toggle_type2 dt{padding:12px 0 12px 20px;color:#363636;border-bottom: 1px solid #e3e3e3;background:#f5f5f5 url("/_ui/desktop/common/images/common/ico_toggle2.png") right 18px no-repeat;font-weight: bold;}
+.toggle_type2 dt{padding:12px 0 12px 20px;color:#363636;border-bottom: 1px solid #e3e3e3;background:#f5f5f5 url("http://www.thehandsome.com/_ui/desktop/common/images/common/ico_toggle2.png") right 18px no-repeat;font-weight: bold;}
 .toggle_type2 dt.on{background-position: right -74px;}
 .toggle_type2 dt a{display: block}
 .toggle_type2 dd{display:none;padding:40px 20px;border-bottom: 1px solid #e3e3e3}
@@ -366,16 +366,16 @@ input[type="week"]:disabled{background:#f9f9f9}
 .qna_wrap .btn_wrap{overflow: hidden;}
 .qna_wrap .btn_wrap p{padding:20px 0;}
 .qna_wrap .btn_wrap .btn{width: inherit;}
-.qna_wrap .btn_wrap .btn_cls{float:right;width:inherit;padding-left: 15px;background: url("/_ui/desktop/common/images/common/btn_close.png") 0 7px no-repeat;}
+.qna_wrap .btn_wrap .btn_cls{float:right;width:inherit;padding-left: 15px;background: url("http://www.thehandsome.com/_ui/desktop/common/images/common/btn_close.png") 0 7px no-repeat;}
 .qna_box{text-align:left;}
 .qna_box .qt{padding-bottom:20px;overflow:hidden;}
-.qna_box .qt .ico{float:left;width:32px;height:32px;background: url("/_ui/desktop/common/images/common/ico_qna.png") 0 0 no-repeat;text-indent:-100px;overflow:hidden;}
+.qna_box .qt .ico{float:left;width:32px;height:32px;background: url("http://www.thehandsome.com/_ui/desktop/common/images/common/ico_qna.png") 0 0 no-repeat;text-indent:-100px;overflow:hidden;}
 .qna_box .qt .txt{padding-left:45px;}
 .qna_box .qt .txt p{display:block;}
 .qna_box .qt .txt .ico_file{margin-top:20px;display:inline-block;}
 .qna_box .an{padding-top:20px;border-top:1px solid #e5e5e5;overflow:hidden;}
 .qna_box .an.none{padding-top:0;border-top:none;}
-.qna_box .an .ico{float:left;width:32px;height:32px;background: url("/_ui/desktop/common/images/common/ico_qna.png") -70px 0 no-repeat;text-indent:-100px;overflow:hidden;}
+.qna_box .an .ico{float:left;width:32px;height:32px;background: url("http://www.thehandsome.com/_ui/desktop/common/images/common/ico_qna.png") -70px 0 no-repeat;text-indent:-100px;overflow:hidden;}
 .qna_box .an .txt{padding-left:45px;}
 .qna_box .an .txt p{display:block;}
 .qna_box .an .txt p.date{margin-top:20px;color:#999;}
@@ -388,7 +388,7 @@ input[type="week"]:disabled{background:#f9f9f9}
 .gnb_sh_wrap{float:right;position:absolute;right:5px;z-index:15;}
 .gnb_sh_box{margin-top:6px;padding-left:5px;height:24px;border:1px solid #e2e2e2;background:#fff;}
 .gnb_sh_box input{float:left;width:200px;height:24px;color:#727272;font-size:11px;line-height:28px;border:none;outline:none;text-indent:0;}
-.gnb_sh_box a{display:inline-block;width:25px;height:24px;background:url("/_ui/desktop/common/images/common/ico_gnb_sh.png") no-repeat;text-indent:-100px;overflow:hidden;}
+.gnb_sh_box a{display:inline-block;width:25px;height:24px;background:url("http://www.thehandsome.com/_ui/desktop/common/images/common/ico_gnb_sh.png") no-repeat;text-indent:-100px;overflow:hidden;}
 
 .gnb_sh_result{position:relative;z-index:14;border:1px solid #e2e2e2;border-top:none;background:#fff;}
 .gnb_sh_result .tab{overflow:hidden;}
@@ -398,7 +398,7 @@ input[type="week"]:disabled{background:#f9f9f9}
 .gnb_sh_result .result_list{display:none;padding:5px 0;position:absolute;top:35px;left:-1px;z-index:13;width:235px;border:1px solid #e2e2e2;border-top:none;background:#fff;}
 .gnb_sh_result .result_list.on{display:block;}
 .gnb_sh_result .result_list .ml{padding:2px 15px;display:inline-block;font-size:11px;}
-.gnb_sh_result .result_list .close{float:right;width:30px;height:22px;overflow:hidden;text-indent:-100px;background:url("/_ui/desktop/common/images/common/btn_close_s.png") no-repeat center center;}
+.gnb_sh_result .result_list .close{float:right;width:30px;height:22px;overflow:hidden;text-indent:-100px;background:url("http://www.thehandsome.com/_ui/desktop/common/images/common/btn_close_s.png") no-repeat center center;}
 .gnb_sh_result .result_list .btn_svclose{margin:5px 0;padding:2px 5px;background:#f5f5f5;text-align:right;display:block;}
 .gnb_sh_result .result_list .btn_allclose{padding:2px 5px;text-decoration:underline;background:none;text-align:right;display:block;}
 
@@ -407,17 +407,17 @@ input[type="week"]:disabled{background:#f9f9f9}
 .sh_all_wrap .sh_all_box{display:inline-block;}
 .sh_all_wrap .sh_all{display:inline-block;border-bottom:1px solid #363636;}
 .sh_all_wrap .sh_all .input{float:left;width:400px;font-size:16px;text-indent:0;border:none;margin-right:0;outline:none;}
-.sh_all_wrap .sh_all .btn_sh{padding:5px;width:17px;height:16px;float:left;background: url("/_ui/desktop/common/images/common/btn_sh_all.png") 4px 5px no-repeat;text-indent:-100px;overflow:hidden;}
+.sh_all_wrap .sh_all .btn_sh{padding:5px;width:17px;height:16px;float:left;background: url("http://www.thehandsome.com/_ui/desktop/common/images/common/btn_sh_all.png") 4px 5px no-repeat;text-indent:-100px;overflow:hidden;}
 .sh_all_wrap .result{padding-top:10px;text-align:left;}
 .sh_all_wrap .result a{margin-right:10px;display:inline-block;font-size:11px;}
 .sh_all_wrap .result a:hover{color:#727272;text-decoration:underline;}
 
-.sh_all_wrap .ranklist{position:relative; margin:-3px 0 0 30px;display:inline-block;width:160px; height:30px;background:url("/_ui/desktop/common/images/common/ico_sh_arr.png") 140px 13px no-repeat;z-index: 4}
-.sh_all_wrap .ranklist.on{background:url("/_ui/desktop/common/images/common/ico_sh_arr.png") 140px -14px no-repeat;}
+.sh_all_wrap .ranklist{position:relative; margin:-3px 0 0 30px;display:inline-block;width:160px; height:30px;background:url("http://www.thehandsome.com/_ui/desktop/common/images/common/ico_sh_arr.png") 140px 13px no-repeat;z-index: 4}
+.sh_all_wrap .ranklist.on{background:url("http://www.thehandsome.com/_ui/desktop/common/images/common/ico_sh_arr.png") 140px -14px no-repeat;}
 .sh_all_wrap .ranklist .tlt_top{padding:5px 10px; display:block;color:#363636; font-size:13px; font-weight:bold; text-align:left;border:1px solid #e3e3e3;}
 .sh_all_wrap .ranklist .list_result{display:none;position:absolute;top:31px;z-index:1;width:158px;border:1px solid #e3e3e3;border-top:none;background:#fff;}
 .sh_all_wrap .ranklist .list_result ol{padding:5px 0;}
-.sh_all_wrap .ranklist ol li a{display:block; color:#363636; font-size:12px;background: url("/_ui/desktop/common/images/common/ico_sh_num.png") no-repeat;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;padding-left:35px;text-align:left;margin-bottom:5px;}
+.sh_all_wrap .ranklist ol li a{display:block; color:#363636; font-size:12px;background: url("http://www.thehandsome.com/_ui/desktop/common/images/common/ico_sh_num.png") no-repeat;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;padding-left:35px;text-align:left;margin-bottom:5px;}
 .sh_all_wrap .ranklist ol li .num1{background-position:10px 3px;}
 .sh_all_wrap .ranklist ol li .num2{background-position:10px -23px;}
 .sh_all_wrap .ranklist ol li .num3{background-position:10px -49px;}
@@ -464,7 +464,7 @@ input[type="week"]:disabled{background:#f9f9f9}
 .search_sv_wrap p{padding:5px 10px 0 0;display:inline-block;color:#222;font-size:14px;letter-spacing:2px;}
 .search_sv_wrap .input{margin-right:0;width:360px;outline:none;}
 .search_sv_wrap .alink{padding:5px 0 5px 20px;display:inline-block;}
-.search_sv_wrap .alink a{padding:0 7px;display:inline-block;background: url("/_ui/desktop/common/images/common/ico_linkline.gif") no-repeat center left;}
+.search_sv_wrap .alink a{padding:0 7px;display:inline-block;background: url("http://www.thehandsome.com/_ui/desktop/common/images/common/ico_linkline.gif") no-repeat center left;}
 .search_sv_wrap .alink a:first-child{background:none}
 
 /****************************************************
@@ -558,9 +558,9 @@ td .btn_wrap a:first-child{margin-top:0px;}
 
 table thead th.th_2line{padding:5px 20px;}
 
-table .ico_pic{display:inline-block;margin:0 5px;width:15px;height: 15px;text-indent: -999em;background: url("/_ui/desktop/common/images/common/ico_list_bul.gif") 0 3px no-repeat;}
-table .ico_new{display:inline-block;margin:0 5px;width:28px;height:15px;text-indent: -999em;background: url("/_ui/desktop/common/images/common/ico_list_bul.gif") -42px 3px no-repeat}
-table .ico_secret{display:inline-block;margin:0 5px;width:15px;height:15px;text-indent: -999em;background: url("/_ui/desktop/common/images/common/ico_list_bul.gif") -98px 3px no-repeat}
+table .ico_pic{display:inline-block;margin:0 5px;width:15px;height: 15px;text-indent: -999em;background: url("http://www.thehandsome.com/_ui/desktop/common/images/common/ico_list_bul.gif") 0 3px no-repeat;}
+table .ico_new{display:inline-block;margin:0 5px;width:28px;height:15px;text-indent: -999em;background: url("http://www.thehandsome.com/_ui/desktop/common/images/common/ico_list_bul.gif") -42px 3px no-repeat}
+table .ico_secret{display:inline-block;margin:0 5px;width:15px;height:15px;text-indent: -999em;background: url("http://www.thehandsome.com/_ui/desktop/common/images/common/ico_list_bul.gif") -98px 3px no-repeat}
 table .answer_ready{color:#fe4242;font-size: 11px;}
 table .answer_ok{color:#999999;font-size: 11px;}
 
@@ -599,7 +599,7 @@ table td .receive_choice > span label{padding-right:25px;display:inline-block;}
 
 .shpro_wrap{margin-top:5px;}
 .shpro_wrap span{padding:5px;display:inline-block;}
-.shpro_wrap a{width:20px;height:20px;float:right;background: url('/_ui/desktop/common/images/common/btn_close_s.png') 7px 7px no-repeat;overflow:hidden;text-indent:-99em;}
+.shpro_wrap a{width:20px;height:20px;float:right;background: url('http://www.thehandsome.com/_ui/desktop/common/images/common/btn_close_s.png') 7px 7px no-repeat;overflow:hidden;text-indent:-99em;}
 .shpro_btn{width:120px;}
 
 .tbl_cp_wrap{padding:10px 0;border-top:1px solid #666;border-bottom:1px solid #e3e3e3;}
@@ -617,7 +617,7 @@ table td .receive_choice > span label{padding-right:25px;display:inline-block;}
  Paging
 ****************************************************/
 .paging{margin-top:40px;text-align: center}
-.paging > a{display:inline-block;width:15px;margin:0 5px;height:13px;background: url("/_ui/desktop/common/images/common/ico_paging.png") 0 0 no-repeat;text-indent: -999em; cursor:pointer;}/*200702 수정*/
+.paging > a{display:inline-block;width:15px;margin:0 5px;height:13px;background: url("http://www.thehandsome.com/_ui/desktop/common/images/common/ico_paging.png") 0 0 no-repeat;text-indent: -999em; cursor:pointer;}/*200702 수정*/
 .paging .prev{background-position: -25px -4px;}
 .paging .next{background-position: -62px -4px;}
 .paging .prev2{background-position: 0 -4px;}
@@ -663,7 +663,7 @@ table td .receive_choice > span label{padding-right:25px;display:inline-block;}
 
 .cl_select a{float:left;display:block;margin-right:5px;width:18px;height:18px;overflow:hidden;text-indent:-100px;border:1px solid #e3e3e3;}
 .cl_select a.on{width:16px;height:16px; border:2px solid #363636;}
-.cl_select a.no_color{width:18px; height:18px; background-image:url("/_ui/desktop/common/images/common/color_chip_no_order.gif"); border:1px solid #cacaca; cursor:default;}
+.cl_select a.no_color{width:18px; height:18px; background-image:url("http://www.thehandsome.com/_ui/desktop/common/images/common/color_chip_no_order.gif"); border:1px solid #cacaca; cursor:default;}
 
 .sz_select a{float:left;display:block;margin-right:5px;min-width:33px;height:18px;background-color:#fff; color:#222;font-size:11px;text-align:center;line-height:18px;border:1px solid #cacaca; padding:0 2px;}
 .sz_select a.on{min-width:31px;height:16px;border:2px solid #363636;background:#fff;line-height:18px;}
@@ -702,7 +702,7 @@ table td .receive_choice > span label{padding-right:25px;display:inline-block;}
 .total_price_wrap .total{margin-top:20px;}
 .total_price_wrap .total dt{width:70px;}
 .total_price_wrap .total dd{width:175px;color:#c69c6c;font-size:18px;text-align:right;}
-.tlt_ship{padding-right:15px;width:40px;height:20px;color:#222;background: url("/_ui/desktop/common/images/common/ico_ship.gif") no-repeat right 4px;}
+.tlt_ship{padding-right:15px;width:40px;height:20px;color:#222;background: url("http://www.thehandsome.com/_ui/desktop/common/images/common/ico_ship.gif") no-repeat right 4px;}
 .shcode_wrap{float:left;}
 .shcode_wrap p{margin-bottom:10px;display:block;color:#222;}
 .shcode_wrap .input{width:170px;}
@@ -852,7 +852,7 @@ table td .receive_choice > span label{padding-right:25px;display:inline-block;}
 .rmd_pb_list ul li span{display:block;text-align:center;height:20px;overflow:hidden;white-space: nowrap;text-overflow:ellipsis;}
 .rmd_pb_list ul li .brand{font-weight:bold;}
 .rmd_pb_list ul li .price{padding:5px 0;}
-.rmd_pb_list .controls a{position:absolute;display:block;text-indent:-9999px;background:url('/_ui/desktop/common/images/main/items_list_controls.png') no-repeat;width:20px;height:33px;}
+.rmd_pb_list .controls a{position:absolute;display:block;text-indent:-9999px;background:url('http://www.thehandsome.com/_ui/desktop/common/images/main/items_list_controls.png') no-repeat;width:20px;height:33px;}
 .rmd_pb_list .controls .prev{top:115px;left:7px;}
 .rmd_pb_list .controls .next{background-position:right top;top:115px; right:7px;}
 /*END 쇼핑백 >> 추천상품 리스트*/
@@ -875,15 +875,15 @@ table td .receive_choice > span label{padding-right:25px;display:inline-block;}
 .search_box_wrap.on .search_box{position:relative;height:32px;float:right;}
 .search_box_wrap.on .data_react{margin-top:32px;padding:12px 16px 12px 16px;border-top:2px solid #000;overflow:hidden;max-height:369px;}
 .search_box_wrap.on .data_react .btn_close{position:relative;top:13.5px;right:0;width:7px;height:7px;padding:0;display:inline-block;float:right;background:url('/_ui/desktop/common/images/common/btn_close_s.png') no-repeat;}
-.search_box_wrap.on .search_box a span.btn_close{display:block;width:4px;height:4px;top:8px;right:30px;background:url('/_ui/desktop/common/images/common/search_close.png') no-repeat;}
+.search_box_wrap.on .search_box a span.btn_close{display:block;width:4px;height:4px;top:8px;right:30px;background:url('http://www.thehandsome.com/_ui/desktop/common/images/common/search_close.png') no-repeat;}
 /*tab 최근검색어*/
 .search_box_wrap.on .data_react .btn_search_tab{overflow:hidden;padding-bottom:8px;}
 .search_box_wrap.on .data_react .btn_search_tab>a{display:block;text-align:center;width:50%;float:left;font-weight:bold;color:#999;font-size:14px;}
-.search_box_wrap.on .data_react .btn_search_tab>a:first-child{background:url('/_ui/desktop/common/images/common/bul_1.gif') no-repeat right center;}
+.search_box_wrap.on .data_react .btn_search_tab>a:first-child{background:url('http://www.thehandsome.com/_ui/desktop/common/images/common/bul_1.gif') no-repeat right center;}
 .search_box_wrap.on .data_react .btn_search_tab>a.on{color:#000;}
 .search_box_wrap.on .data_react .search_tab .s_tab li{height:34px;line-height:34px;}
 .search_box_wrap.on .data_react .search_tab .recent_search .clear_search_hs{border-top:1px solid #e3e3e3;padding-top:7px;margin-top:17px;text-align:right;}
-.search_box_wrap.on .data_react .search_tab .recent_search .clear_search_hs a{display:inline-block;background:url('/_ui/desktop/common/images/common/btn_close_s.png') no-repeat right center;padding-right:15px;}
+.search_box_wrap.on .data_react .search_tab .recent_search .clear_search_hs a{display:inline-block;background:url('http://www.thehandsome.com/_ui/desktop/common/images/common/btn_close_s.png') no-repeat right center;padding-right:15px;}
 /*tab style search*/
 .search_box_wrap.on .data_react .search_tab .style_search{overflow:hidden;display:none;min-height:270px;}
 .search_box_wrap.on .data_react .search_tab .style_search .style_search_tlt{font-size:25px;padding:10px 0 25px 0;color:#363636;margin-top:10px;}
@@ -912,8 +912,8 @@ table td .receive_choice > span label{padding-right:25px;display:inline-block;}
 .search_box_wrap.on .data_react .search_tab .popular_search ol li a span{display:inline-block;color:#fff;width:16px;height:16px;background:#d1d1d1;text-align:center;line-height:16px;margin-right:10px;vertical-align: baseline;}
 .search_box_wrap.on .data_react .search_tab .popular_search ol li.top a span{background:#c69c6d;}
 .search_box_wrap.on .data_react .search_tab .popular_search ol li a::after{content:"-";position:absolute;right:0;text-decoration:none;}
-.search_box_wrap.on .data_react .search_tab .popular_search ol li a.up::after{content:"";background:url('/_ui/desktop/common/images/common/ico_updown.png') no-repeat;width:12px;height:7px;top:40%;}
-.search_box_wrap.on .data_react .search_tab .popular_search ol li a.down::after{content:"";background:url('/_ui/desktop/common/images/common/ico_updown.png') no-repeat;background-position:0 -7px;width:12px;height:7px;top:50%;}
+.search_box_wrap.on .data_react .search_tab .popular_search ol li a.up::after{content:"";background:url('http://www.thehandsome.com/_ui/desktop/common/images/common/ico_updown.png') no-repeat;width:12px;height:7px;top:40%;}
+.search_box_wrap.on .data_react .search_tab .popular_search ol li a.down::after{content:"";background:url('http://www.thehandsome.com/_ui/desktop/common/images/common/ico_updown.png') no-repeat;background-position:0 -7px;width:12px;height:7px;top:50%;}
 .search_box_wrap.on .data_react .search_tab .popular_search ol li a.new::after{content:"NEW";position:absolute;right:0;color:#c69c6d;font-size:11px;}
 
 /*검색어 자동완성*/
@@ -949,7 +949,7 @@ table td .receive_choice > span label{padding-right:25px;display:inline-block;}
 .br_result_search .result_inner_top_left .result_tlt strong.schr_result{overflow:hidden; display: -webkit-box; margin-bottom:10px; white-space:normal; line-height:40px; word-wrap: break-word; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }/* 200224 추가 */
 .br_result_search .result_inner_top_left .result_tlt span{font-size:14px;vertical-align: baseline;}
 .br_result_search .result_inner_top_left .keyword{overflow:hidden;padding-bottom:5px;}
-.br_result_search .result_inner_top_left .keyword p{float:left;font-weight:bold;font-size:13px;color:#363636;padding-right:10px;background:url('/_ui/desktop/common/images/common/ico_ord_line.png') no-repeat right center;margin-right:10px;}
+.br_result_search .result_inner_top_left .keyword p{float:left;font-weight:bold;font-size:13px;color:#363636;padding-right:10px;background:url('http://www.thehandsome.com/_ui/desktop/common/images/common/ico_ord_line.png') no-repeat right center;margin-right:10px;}
 .br_result_search .result_inner_top_left .keyword ul{overflow:hidden;}
 .br_result_search .result_inner_top_left .keyword ul>li{float:left;padding-right:7px;}
 .br_result_search .result_inner_top_right .keyword p{float:left;font-weight:bold;font-size:13px;color:#363636;}
@@ -960,12 +960,12 @@ table td .receive_choice > span label{padding-right:25px;display:inline-block;}
 .br_result_search .result_inner_top_right .list ul{position:absolute;top:7px;background:#fff;border:1px solid #e3e3e3;z-index:3;padding:5px 0;}
 .br_result_search .result_inner_top_right .list ul li{padding:0 7px;line-height:25px;}
 .br_result_search .result_inner_top_right .list ul li a{font-size:11px;}
-.br_result_search .result_inner_top_right .select{display:block;width:75px;color:#363636;font-size:11px;background:url('/_ui/desktop/common/images/products/ico_select.png') right center no-repeat;padding-right:15px;}
+.br_result_search .result_inner_top_right .select{display:block;width:75px;color:#363636;font-size:11px;background:url('http://www.thehandsome.com/_ui/desktop/common/images/products/ico_select.png') right center no-repeat;padding-right:15px;}
 .br_result_search .result_inner_top_right .re_search_box{float:right;width:282px;border-bottom:1px solid #000;margin:0 5px 30px 0;}
 .br_result_search .result_inner_top_right input[type="search"]{-webkit-appearance:textfield;width:250px;height:25px;box-sizing:content-box;line-height:25px;margin-right:0;outline:none;border:none;}
 .br_result_search .result_inner_top_right input[type="search"]::-webkit-search-decoration{-webkit-appearance:none;}
 .br_result_search .result_inner_top_right input[type="search"]::-webkit-search-cancel-button{-webkit-appearance:none;}
-.br_result_search .result_inner_top_right .btn_search{display:block;float:right;width:24px;height:25px;margin-left:8px;text-indent:-999em;background:url('/resources/img/common/ico_utilmenu.png') no-repeat; background-position:-74px -32px;}
+.br_result_search .result_inner_top_right .btn_search{display:block;float:right;width:24px;height:25px;margin-left:8px;text-indent:-999em;background:url('http://www.thehandsome.com/resources/img/common/ico_utilmenu.png') no-repeat; background-position:-74px -32px;}
 .br_result_search .result_inner_top_right .popular{position:relative;height:21px;}
 .br_result_search .result_inner_top_right .popular ol{float:right;position:absolute;top:-11px;right:-7px;overflow:hidden;width:272px;height:21px;background:#fff;border:none;padding:10px 20px;z-index:51;}
 .br_result_search .result_inner_top_right .popular ol.on{height:auto;border:1px solid #e3e3e3;top:-20px;right:-8px;padding:18px 20px;}
@@ -1160,7 +1160,7 @@ table td .receive_choice > span label{padding-right:25px;display:inline-block;}
 .util_menu .ico.athome{width:48px;height:20px;background:url('http://cdn.thehandsome.com/pc/athome_evt_ico_1805.gif') no-repeat;margin-top:12px;}
 .athome_header{position:relative;}
 .athome_header .athome_info{position:absolute;top:40px;right:-0;width:277px;height:215px;background:#fff;border:1px solid #ccc;text-align:left;padding:14px 16px;display:none}
-.athome_header .athome_info > p::before{content:"";background:url('/_ui/desktop/common/images/common/box_arr.gif') no-repeat;width:11px;height:6px;position:absolute;top:-6px;left:285px;}
+.athome_header .athome_info > p::before{content:"";background:url('http://www.thehandsome.com/_ui/desktop/common/images/common/box_arr.gif') no-repeat;width:11px;height:6px;position:absolute;top:-6px;left:285px;}
 .athome_header .athome_info > p{margin-bottom:15px;}
 .athome_header .athome_info .btn_go{display:block;width:175px;height:auto;background:#f8484a;color:#fff;line-height:33px;margin:0 auto;text-align:center;}
 .athome_header .athome_info .btn_go::after{content:" ▶";color:#fff;font-size:7px;padding-left:5px;line-height:33px;}
@@ -1169,7 +1169,7 @@ table td .receive_choice > span label{padding-right:25px;display:inline-block;}
 .athome_header .evt_athome_info{height:200px;}
 .athome_header .evt_athome_info .btn_go{position:absolute;left:0;bottom:0;width:100%;}
 /*주문 - at home 서비스*/
-.option_wrap .athome{float:left;color:#c69c6c;padding-left:18px;background:url('/_ui/desktop/common/images/common/list_athome.png') 0 4px no-repeat;background-size:14px 13px;font-size:11px;}
+.option_wrap .athome{float:left;color:#c69c6c;padding-left:18px;background:url('http://www.thehandsome.com/_ui/desktop/common/images/common/list_athome.png') 0 4px no-repeat;background-size:14px 13px;font-size:11px;}
 .athome_svc .btnwrap.order .btn.gray{background:#c69c6c;border:1px solid #c69c6c;}
 .btnwrap.order .btn.gray{margin-left:5px;}
 .athome_svc .bul_sty01_li.mt40 li:first-child{color:#c69c6c;font-weight:bold;}
@@ -1242,7 +1242,7 @@ table td .receive_choice > span label{padding-right:25px;display:inline-block;}
 .faq_en_wrap .rec_bul + p{margin-bottom:50px;color:#363636;font-size:12px;font-family:'MalgunGothic',sans-serif;}
 .faq_en_wrap .rec_bul:before{content:"";display:inline-block;width:6px;height:6px;background:#363636;margin-right:7px;position:relative;top:-2px;}
 .faq_en_wrap .delv{width:226px;height:90px;background:#f5f5f5;position:absolute;font-family:'MalgunGothic',sans-serif;}
-.faq_en_wrap .delv:after{content:"";display:inline-block;width:16px;height:13px;background:url('/_ui/desktop/common/images/en/en_ico_next.png') no-repeat;position:absolute;right:-29px;bottom:38px;}
+.faq_en_wrap .delv:after{content:"";display:inline-block;width:16px;height:13px;background:url('http://www.thehandsome.com/_ui/desktop/common/images/en/en_ico_next.png') no-repeat;position:absolute;right:-29px;bottom:38px;}
 .faq_en_wrap .delv.step3:after{right:106px;bottom:-29px;-ms-transform: rotate(90deg);-webkit-transform: rotate(90deg);transform: rotate(90deg);}
 .faq_en_wrap .delv.step4:after,
 .faq_en_wrap .delv.step5:after{right:unset;left:-29px;bottom:38px;-ms-transform: rotate(180deg);-webkit-transform: rotate(180deg);transform: rotate(180deg);}
@@ -1263,7 +1263,7 @@ table td .receive_choice > span label{padding-right:25px;display:inline-block;}
 .shopping_cart_tab1807 .tab4 li{width:25%;}
 .shopping_cart_tab1807 ul li a{font-size:16px;padding:20px 0;line-height:34px;color:#888;border-bottom:1px solid #414040;}
 .shopping_cart_tab1807 ul li a.active{font-weight:bold;color:#1b1b1b;border:1px solid #414040;border-bottom:0;}
-.shopping_cart_tab1807 ul li a span{display:inline-block;width:65px;height:33px;background:url('/resources/img/common/shopping_cart_tab.png') no-repeat;}
+.shopping_cart_tab1807 ul li a span{display:inline-block;width:65px;height:33px;background:url('http://www.thehandsome.com/resources/img/common/shopping_cart_tab.png') no-repeat;}
 .shopping_cart_tab1807 ul li a span.delt_ico{background-position:0 0;}
 .shopping_cart_tab1807 ul li a span.spt_ico{width:58px;background-position:0 -34px;}
 .shopping_cart_tab1807 ul li a span.atht_ico{width:58px;background-position:0 -66px;}
@@ -1274,7 +1274,7 @@ table td .receive_choice > span label{padding-right:25px;display:inline-block;}
 .cart_pdt_cnt{font-size:16px;float:left;}
 .cart_pdt_cnt span{display:inline-block;margin-top:1px;}
 .fourpm_pd_ck{display:inline-block;float:right;}
-.fourpm_pd_ck .input_wrap label{color:#c69c6c;padding-left:30px;background:url('/_ui/desktop/common/images/common/fourpm.png') 2px 0 no-repeat;}
+.fourpm_pd_ck .input_wrap label{color:#c69c6c;padding-left:30px;background:url('http://www.thehandsome.com/_ui/desktop/common/images/common/fourpm.png') 2px 0 no-repeat;}
 .total_count1807{width:220px;float:right;}
 .total_count1807 span{color:#c69c6c;display:inline-block;margin-top:1px;}
 .soldout_tbl1807{margin-top:70px;}
@@ -1347,7 +1347,7 @@ table td .receive_choice > span label{padding-right:25px;display:inline-block;}
 .list_pdt_cnt_wrap1808 .list_pdt_sltbox1808 select::-ms-expand{display:none;}
 
 /*마이페이지 - 문구 1810*/
-.title_wrap .txt_line{float:left;margin-left:15px;padding-left:15px;color:#999;background: url("/resources/img/common/ico_txt_line.gif") 0 5px no-repeat;line-height:24px;}
+.title_wrap .txt_line{float:left;margin-left:15px;padding-left:15px;color:#999;background: url("http://www.thehandsome.com/resources/img/common/ico_txt_line.gif") 0 5px no-repeat;line-height:24px;}
 
 /* UI 개선 181019 */
 .tbl_wtype1 .shpro_wrap ul li{border:1px solid #e3e3e3;width:100%;float:left;margin:2px 0}
@@ -1383,11 +1383,11 @@ table td .receive_choice > span label{padding-right:25px;display:inline-block;}
 
 /*주문서 - 퀵배송 문구*/
 .ord_quick_deliv_txt{font-size:8.5px;font-weight:bold;margin-top:5px;}
-.ord_quick_deliv_txt:before{content:"";display:inline-block;width:13px;height:13px;position:relative;top:3px;background:url('/_ui/desktop/common/images/products/ico_prd_list1810.png') 0 -17px no-repeat;margin-right:3px;}
+.ord_quick_deliv_txt:before{content:"";display:inline-block;width:13px;height:13px;position:relative;top:3px;background:url('http://www.thehandsome.com/_ui/desktop/common/images/products/ico_prd_list1810.png') 0 -17px no-repeat;margin-right:3px;}
 /*마이페이지 주문배송반품취소 - 퀵배송 UI*/
 .basket_tlt span.sb_tlt{display:block;width:auto;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
 .option_wrap .stk{color:#c69c6c;}
-.option_wrap .stk:before{content:"";display:inline-block;width:13px;height:13px;position:relative;top:3px;background:url('/_ui/desktop/common/images/products/ico_prd_list1810.png') 0 0 no-repeat;margin-right:3px;}
+.option_wrap .stk:before{content:"";display:inline-block;width:13px;height:13px;position:relative;top:3px;background:url('http://www.thehandsome.com/_ui/desktop/common/images/products/ico_prd_list1810.png') 0 0 no-repeat;margin-right:3px;}
 .option_wrap .quick_deliv:before{background-position:0 -17px;}
 .option_wrap .pickup_deliv:before{background-position:0 0px;}
 .option_wrap .al_restock{font-size:11px;color:#363636;line-height:18px;}
@@ -1432,8 +1432,8 @@ table.e-gift .pt_list_all img{width:160px;height:99px;border-radius:5px;}
 table.e-gift .basket_tlt span.sb_tlt{padding-top:14px;letter-spacing:1px;display:inline-block}
 table.e-gift .tlt_wrap p{padding-top:10px;color:#c69c6c;font-size:11px;letter-spacing:1px}
 .tbl_wtype1 .e-gift_choice td{line-height:27px}
-.float_left.e-gift .guide_comment{font-size:11px; background:url("/_ui/desktop/common/images/common/ico_err.png") 0 16px no-repeat; line-height:inherit; padding-top:12px}
-.tblwrap.receive_info .guide_comment.second{background:url("/_ui/desktop/common/images/common/ico_err.png") 0 4px no-repeat; line-height:inherit; padding-top:0; margin-left:0}
+.float_left.e-gift .guide_comment{font-size:11px; background:url("http://www.thehandsome.com/_ui/desktop/common/images/common/ico_err.png") 0 16px no-repeat; line-height:inherit; padding-top:12px}
+.tblwrap.receive_info .guide_comment.second{background:url("http://www.thehandsome.com/_ui/desktop/common/images/common/ico_err.png") 0 4px no-repeat; line-height:inherit; padding-top:0; margin-left:0}
 .float_left.e-gift .message ::-webkit-input-placeholder{font-size:12px; color:#aaa}
 :-moz-placeholder{font-size:12px; color:#aaa}
 ::-moz-placeholder{font-size:12px; color:#aaa}
@@ -1568,7 +1568,7 @@ table.e-gift .tlt_wrap p{padding-top:10px;color:#c69c6c;font-size:11px;letter-sp
 .box_type_1.renewal1904{border:none;padding:0}
 .box_type_1.renewal1904 .inner_box.step2{padding:0}
 .login_wrap.renewal1904 .inner_box .title_wrap h4{float:left;padding:40px 20px 15px}
-.login_wrap.renewal1904 .inner_box .title_wrap h4 a.otp{background:url("/resources/img/common/ico_txt_line.gif") right center no-repeat; padding-right:20px; margin-right:20px}
+.login_wrap.renewal1904 .inner_box .title_wrap h4 a.otp{background:url("http://www.thehandsome.com/resources/img/common/ico_txt_line.gif") right center no-repeat; padding-right:20px; margin-right:20px}
 .login_wrap.renewal1904 .inner_box .title_wrap.login1904 h4{padding:0}
 .login_wrap.renewal1904 .inner_box .title_wrap.login1904 h4:first-child{margin-left:35px}
 .box_type_1.renewal1904 .border_box1{border:1px solid #e3e3e3; overflow:hidden; float:left; width:495px; height:537px}

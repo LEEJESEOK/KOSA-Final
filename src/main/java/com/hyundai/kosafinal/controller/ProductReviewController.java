@@ -1,7 +1,9 @@
 package com.hyundai.kosafinal.controller;
 
+import com.hyundai.kosafinal.domain.ProductDTO;
 import com.hyundai.kosafinal.domain.ProductReviewDTO;
 import com.hyundai.kosafinal.service.ProductReviewService;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Controller;
@@ -34,6 +36,12 @@ public class ProductReviewController {
     ){
     productReviewService.saveProductReview(productReviewDTO, imgFile);
     return productReviewDTO;
+  }
+
+  @GetMapping("product/detail/{productId}")
+  @ResponseBody
+  public List<ProductDTO> getProductByProductId(@PathVariable("productId")String productId){
+    return Collections.emptyList();
   }
 
 }
