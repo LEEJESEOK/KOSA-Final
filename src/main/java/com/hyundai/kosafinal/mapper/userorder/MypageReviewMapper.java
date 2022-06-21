@@ -1,6 +1,7 @@
 package com.hyundai.kosafinal.mapper.userorder;
 
 import com.hyundai.kosafinal.domain.MypageReviewDTO;
+import com.hyundai.kosafinal.domain.ReplyDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -16,5 +17,8 @@ public interface MypageReviewMapper {
 
     // 게시글 작성
     public void insert(MypageReviewDTO dto);
+
+    // 게시글 답글 조회
+    public ReplyDTO getReply(int id);
 
 }
