@@ -4,7 +4,10 @@
 <configuration>
 
   <settings>
+    <!-- Null 값이 발생할 경우 빈칸이 아닌 null로 인식 -->
     <setting name="jdbcTypeForNull" value="NULL"/>
+    <!-- 자동으로 카멜케이스 규칙으로 변환 -->
+    <setting name="mapUnderscoreToCamelCase" value="true"/>
   </settings>
 
   <typeAliases>
