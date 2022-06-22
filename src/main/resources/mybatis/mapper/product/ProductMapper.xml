@@ -112,4 +112,24 @@
                                                     #{category.large}, #{category.medium}, #{category.small},
                                                     #{brand}, #{minPrice}, #{maxPrice}, 0) p)
     </select>
+
+    <select id="selectProductByIdAndColor" resultType="ProductDTO">
+      select *
+      FROM PRODUCT
+      where id = #{productId}
+      <if test='color != null || color != ""'>
+        and
+        color_id = #{color}
+      </if>
+    </select>
+
+    <select id="selectColors" resultType="ProductDTO">
+      SELECT * FROM view_product_list_color_no_duplicates
+      WHERE id = #{productId}
+    </select>
+
+    <select id="selectSize" resultType="ProductDTO">
+      SELECT * from view_product_list_size_no_duplicates
+      where id = #{productId}
+    </select>
 </mapper>

@@ -7,4 +7,9 @@ public interface ProductDetailService {
 
   List<ProductDTO> getProductDetailList(String productId);
 
+  List<ProductDTO> getProductByIdAndColor(String productId, String color);
+
+  List<ProductDTO> getColorsChip(String productId);
+
+  List<ProductDTO> getProductSizeList(String productId);
 }

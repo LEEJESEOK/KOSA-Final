@@ -18,4 +18,22 @@ public class ProductDetailServiceImpl implements ProductDetailService {
   public List<ProductDTO> getProductDetailList(String productId) {
     return productMapper.selectProductDetailById(productId);
   }
+
+  @Override
+  public List<ProductDTO> getProductByIdAndColor(
+    String productId,
+    String color
+  ) {
+    return productMapper.selectProductByIdAndColor(productId, color);
+  }
+
+  @Override
+  public List<ProductDTO> getColorsChip(String productId) {
+    return productMapper.selectColors(productId);
+  }
+
+  @Override
+  public List<ProductDTO> getProductSizeList(String productId) {
+    return productMapper.selectSize(productId);
+  }
 }
