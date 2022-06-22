@@ -46,16 +46,15 @@ class ProductServiceTest {
 
     @Test
     void getFilteredColorListWithPaging() {
-        String id = "";
+        String id = "CM2B1WOT280W";
         String size = "";
         String color = "";
-        CategoryDTO categoryDTO = new CategoryDTO("WOMEN", "Top", "");
-        String brand = "TIME";
-        int minPrice = 100000, maxPrice = 600000;
+        CategoryDTO categoryDTO = new CategoryDTO("WOMEN", "OUTER", "JACKET");
+        String brand = "";
+        int minPrice = 0, maxPrice = Integer.MAX_VALUE;
         int sortType = 0;
         Criteria criteria = new Criteria(2, 12);
-
-        List<ColorDTO> list = productService.getFilteredColorListWithPaging(id, size, color, categoryDTO, brand, minPrice, maxPrice, sortType, criteria);
+        List<ColorDTO> list = productService.getFilteredColorListWithPaging(id, size, color, categoryDTO, brand, minPrice, maxPrice, sortType, null);
         for (ColorDTO colorDTO : list)
             System.out.println(colorDTO);
     }

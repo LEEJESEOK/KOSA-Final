@@ -62,7 +62,7 @@
                                                                  #{category.large}, #{category.medium},
                                                                  #{category.small},
                                                                  #{brand}, #{minPrice}, #{maxPrice}, #{sortType}) p)
-                     where rn between ((#{criteria.pageNum} - 1) * #{criteria.amount} + 1) and (#{criteria.pageNum} * #{criteria.amount}))
+                     )
     </select>
     <!--필터에 해당하는 제품의 사이즈 목록-->
     <select id="selectFilteredSizeListWithPaging" resultType="SizeDTO">
@@ -76,8 +76,7 @@
                                     , #{category.large}, #{category.medium}, #{category.small}
                                     , #{brand}, #{minPrice}, #{maxPrice}
                                     , #{sortType}) p)
-                     where rn between ((#{criteria.pageNum} - 1) * #{criteria.amount} + 1)
-                               and (#{criteria.pageNum} * #{criteria.amount}))
+                     )
     </select>
 
     <select id="selectCategory" resultType="CategoryDTO">

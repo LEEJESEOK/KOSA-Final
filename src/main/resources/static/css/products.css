@@ -8,7 +8,7 @@
 .filterWrap li.btn{width:100px;padding-left:20px;}
 .filterWrap li.btn a{display:inline-block;margin-right:20px;text-decoration: underline}
 .filterWrap li .select{display:block;color:#363636;}
-.filterWrap li .select .ico_arr{width:20px;height:20px;display:inline-block;background:url("/_ui/desktop/common/images/products/ico_select.png") center 9px no-repeat;text-indent: -999em;}
+.filterWrap li .select .ico_arr{width:20px;height:20px;display:inline-block;background:url("http://www.thehandsome.com/_ui/desktop/common/images/products/ico_select.png") center 9px no-repeat;text-indent: -999em;}
 .filterWrap .items_count .num{letter-spacing: 1px;font-family:"whitneyBold","Malgun Gothic","맑은 고딕"}
 .filterWrap li .current{margin-top:1px;display:inline-block;color:#a3a3a3;padding:0 10px 0 10px;width:55px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}/*20150930*/
 

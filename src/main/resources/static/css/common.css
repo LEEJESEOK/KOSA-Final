@@ -8,7 +8,7 @@ body{-webkit-text-size-adjust:none;-webkit-user-select:none;-webkit-touch-callou
 body,p,div,h1,h2,h3,h4,h5,h6,ul,ol,li,dl,dt,dd,table,th,td,form,fieldset,legend,input,textarea,select,button,code,label, em, span{margin:0;padding:0;vertical-align:top;line-height:20px;word-break:break-all;}
 input, textarea, button, select{font-family:"Malgun Gothic","맑은 고딕","Dotum","돋움", AppleGothic,sans-serif; color: #555; font-size: 12px;}
 label, em, span{font-size:inherit;}
-form{display:inline;margin:none}
+form{display:inline;margin:0px;}
 img,fieldset{border:0}
 hr{display:none}
 li{list-style:none}
@@ -31,7 +31,7 @@ input[type=file]{margin-right:5px;height:28px;line-height:30px;border:1px solid 
 input[type=radio],input[type=checkbox]{width:13px;height:13px;margin:3px 3px 0 0; margin:1px 3px 0 0\9;}
 textarea{padding:5px 10px;width:97%;border:1px solid #ccc;resize:none;line-height: 20px}
 select{margin:2px 5px 0 0;height:30px;border:1px solid #ccc;padding:3px 8px 6px 8px;vertical-align:top;margin-top:1px\9;}
-@-moz-document url-prefix(){select {padding:0 8px;};}
+@-moz-document url-prefix(){select {padding:0 8px;}}
 
 /* input disabled */
 textarea:disabled,
@@ -77,7 +77,7 @@ input[type="week"]:disabled{background:#f9f9f9}
 .flex-control-nav{position:absolute; left:0; bottom:15px; width:100%; text-align:center;}
 .flex-control-nav li{display:inline;width:inherit;}
 .flex-control-nav li a{display:inline-block; vertical-align:middle; width:10px; height:10px; text-indent:-1000em; overflow:hidden; background:url('/_ui/desktop/common/images/common/ico_slider.png') no-repeat 0 -10px; margin-right:5px; cursor:pointer;}
-.flex-control-nav li a.flex-active{background:url('/_ui/desktop/common/images/common/ico_slider.png') no-repeat 0 0;}
+.flex-control-nav li a.flex-active{background:url('http://www.thehandsome.com/_ui/desktop/common/images/common/ico_slider.png') no-repeat 0 0;}
 
 /****************************************************
  Common
@@ -617,7 +617,7 @@ table td .receive_choice > span label{padding-right:25px;display:inline-block;}
  Paging
 ****************************************************/
 .paging{margin-top:40px;text-align: center}
-.paging > a{display:inline-block;width:15px;margin:0 5px;height:13px;background: url("/_ui/desktop/common/images/common/ico_paging.png") 0 0 no-repeat;text-indent: -999em; cursor:pointer;}/*200702 수정*/
+.paging > a{display:inline-block;width:15px;margin:0 5px;height:13px;background: url("http://www.thehandsome.com/_ui/desktop/common/images/common/ico_paging.png") 0 0 no-repeat;text-indent: -999em; cursor:pointer;}/*200702 수정*/
 .paging .prev{background-position: -25px -4px;}
 .paging .next{background-position: -62px -4px;}
 .paging .prev2{background-position: 0 -4px;}
