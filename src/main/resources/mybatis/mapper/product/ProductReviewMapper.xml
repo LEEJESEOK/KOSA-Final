@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hyundai.kosafinal.mapper.product.ProductReviewMapper">
+
+  <select id="getProductReviewByProductId" resultType="com.hyundai.kosafinal.domain.ProductReviewDTO">
+    SELECT *
+    FROM TABLE(SF_REVIEW_SELECT_GET(#{productId}))
+  </select>
+
+  <insert id="insertProductReview" statementType="CALLABLE" parameterType="com.hyundai.kosafinal.domain.ProductReviewDTO">
+    <![CDATA[
+    {call SP_REVIEW_INSERT(
+          #{email},
+          #{productId},
+          #{productSize},
+          #{productColorId},
+          #{title},
+          #{content},
+          #{editDate},
+          #{rate},
+          #{imgFile},
+          #{ctryLarge},
+          #{ctryMedium},
+          #{ctrySmall})
+    }
+        ]]>
+  </insert>
+</mapper>

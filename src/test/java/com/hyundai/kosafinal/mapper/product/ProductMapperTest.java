@@ -5,12 +5,14 @@ import com.hyundai.kosafinal.domain.ColorDTO;
 import com.hyundai.kosafinal.domain.ProductDTO;
 import com.hyundai.kosafinal.domain.SizeDTO;
 import com.hyundai.kosafinal.entity.Criteria;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
+@Slf4j
 @SpringBootTest
 class ProductMapperTest {
 
@@ -113,4 +115,11 @@ class ProductMapperTest {
         for (CategoryDTO categoryDTO : list)
             System.out.println(categoryDTO);
     }
+    
+    @Test
+    void selectProductDetailByIdTests(){
+        List<ProductDTO> productDTOList = productMapper.selectProductDetailById("MM2B3WJS085M");
+        productDTOList.forEach(dto -> {log.info(dto.toString());});
+    }
+
 }
