@@ -648,7 +648,7 @@
 /*상품상세 - 리얼핏 보기*/
 .btn_real_fit{position:absolute;z-index:3;top:140px;left:49.9%;margin-left:31px;outline:none;}
 .view_realfit1810 .rlfit_txt_expl{width:auto;position:absolute;top:183px;left:33.9%;right:auto;padding:10px 15px;border:1px solid #ccc;background-color:#fff;display:none;}
-.view_realfit1810 .rlfit_txt_expl .arr{right:52px;} 
+.view_realfit1810 .rlfit_txt_expl .arr{right:52px;}
 
 /*상품상세 - 퀵배송 UI*/
 .st_receipt_wrap .quick_deliv .text p:nth-child(2){width:210px;height:23px;font-size:11px;color:#777;margin-left:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -982,7 +982,7 @@ body.gate_body{ width:100%; height:100%; background:url('http://cdn.thehandsome.
 .pc_gate_pop ul li span{ display:block; font-weight:bold; font-size:28px; color:#e46764; }
 .pc_gate_pop ul li span em{ font-weight:normal; font-size:20px; vertical-align: 0px; color:#000000; }
 .pc_gate_pop .pc_poptxt03{ margin-bottom:40px; }
-.pc_bg20200512{ 
+.pc_bg20200512{
 	background-color: rgba(0, 0, 0, 0.5);
 	width: 100%;
 	height: 100%;

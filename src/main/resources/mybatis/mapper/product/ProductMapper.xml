@@ -52,7 +52,7 @@
     <!--필터에 해당하는 제품의 색상 목록-->
     <select id="selectFilteredColorListWithPaging" resultType="ColorDTO">
         SELECt ID                                                 productId,
-               COLOR_ID                                           colorId,
+               COLOR_ID                                           id,
                (select COLOR_NAME FROM COLOR WHERE ID = COLOR_ID) colorName,
                COLOR_CHIP_URI                                     colorChipUri
         FROM VIEW_PRODUCT_LIST_COLOR_NO_DUPLICATES
@@ -62,7 +62,7 @@
                                                                  #{category.large}, #{category.medium},
                                                                  #{category.small},
                                                                  #{brand}, #{minPrice}, #{maxPrice}, #{sortType}) p)
-                     where rn between ((#{criteria.pageNum} - 1) * #{criteria.amount} + 1) and (#{criteria.pageNum} * #{criteria.amount}))
+                     )
     </select>
     <!--필터에 해당하는 제품의 사이즈 목록-->
     <select id="selectFilteredSizeListWithPaging" resultType="SizeDTO">
@@ -76,8 +76,7 @@
                                     , #{category.large}, #{category.medium}, #{category.small}
                                     , #{brand}, #{minPrice}, #{maxPrice}
                                     , #{sortType}) p)
-                     where rn between ((#{criteria.pageNum} - 1) * #{criteria.amount} + 1)
-                               and (#{criteria.pageNum} * #{criteria.amount}))
+                     )
     </select>
     
     <select id="selectProductDetailById" resultType="com.hyundai.kosafinal.domain.ProductDTO">

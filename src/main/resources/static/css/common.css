@@ -8,7 +8,7 @@ body{-webkit-text-size-adjust:none;-webkit-user-select:none;-webkit-touch-callou
 body,p,div,h1,h2,h3,h4,h5,h6,ul,ol,li,dl,dt,dd,table,th,td,form,fieldset,legend,input,textarea,select,button,code,label, em, span{margin:0;padding:0;vertical-align:top;line-height:20px;word-break:break-all;}
 input, textarea, button, select{font-family:"Malgun Gothic","맑은 고딕","Dotum","돋움", AppleGothic,sans-serif; color: #555; font-size: 12px;}
 label, em, span{font-size:inherit;}
-form{display:inline;margin:none}
+form{display:inline;margin:0px;}
 img,fieldset{border:0}
 hr{display:none}
 li{list-style:none}
@@ -31,7 +31,7 @@ input[type=file]{margin-right:5px;height:28px;line-height:30px;border:1px solid 
 input[type=radio],input[type=checkbox]{width:13px;height:13px;margin:3px 3px 0 0; margin:1px 3px 0 0\9;}
 textarea{padding:5px 10px;width:97%;border:1px solid #ccc;resize:none;line-height: 20px}
 select{margin:2px 5px 0 0;height:30px;border:1px solid #ccc;padding:3px 8px 6px 8px;vertical-align:top;margin-top:1px\9;}
-@-moz-document url-prefix(){select {padding:0 8px;};}
+@-moz-document url-prefix(){select {padding:0 8px;}}
 
 /* input disabled */
 textarea:disabled,
