@@ -2,10 +2,10 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>카테고리</title>
-    <div th:replace="/head.html::head"></div>
+    <th:block th:replace="~{/head::head}"></th:block>
 </head>
 <body>
-<!--<div th:replace="/header.html::header"></div>-->
+<th:block th:replace="~{/header_category::header_category}"></th:block>
 <script>
     const rowMax = 3;
     const colMax = 4;
@@ -187,6 +187,6 @@
         </div>
     </div>
 </div>
-<div th:replace="/footer.html::footer"></div>
+<th:block th:replace="/footer::footer"></th:block>
 </body>
 </html>
