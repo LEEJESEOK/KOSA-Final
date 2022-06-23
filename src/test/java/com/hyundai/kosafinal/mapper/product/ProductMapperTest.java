@@ -122,4 +122,14 @@ class ProductMapperTest {
         productDTOList.forEach(dto -> {log.info(dto.toString());});
     }
 
+
+    @Test
+    public void testGetColors() {
+        productMapper.selectColors("MM2B3TTS065H5H");
+    }
+
+    @Test
+    public void testGetSizes() {
+        productMapper.selectSize("MM2B3TTS065H5H");
+    }
 }

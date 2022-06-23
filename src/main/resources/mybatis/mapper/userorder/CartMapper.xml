@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hyundai.kosafinal.mapper.userorder.CartMapper">
+
+    <!-- 장바구니 목록 조회 -->
+    <select id="getList" resultType="com.hyundai.kosafinal.entity.CartProduct">
+        SELECT * FROM TABLE(SF_CART_GETLIST(#{userEmail}))
+    </select>
+
+    <!-- 장바구니 추가 -->
+    <insert id="insert" statementType="CALLABLE">
+        <!-- SEQUENCE 미리 조회 -->
+        <selectKey resultType="int" keyProperty="id" order="BEFORE">
+            SELECT SQ_CART.nextval FROM dual
+        </selectKey>
+        { CALL SP_CART_INSERT(#{id}, #{pid}, #{pcolor}, #{psize}, #{amount}, #{userEmail}) }
+    </insert>
+
+    <!-- 장바구니 수정 -->
+    <update id="update" statementType="CALLABLE">
+        { CALL SP_CART_UPDATE(#{id}, #{pid}, #{pcolor}, #{psize}, #{amount}, #{userEmail}) }
+    </update>
+
+    <!-- 장바구니 삭제 -->
+    <delete id="delete" statementType="CALLABLE">
+        { CALL SP_CART_DELETE(#{id}, #{userEmail}) }
+    </delete>
+
+</mapper>
