@@ -32,6 +32,7 @@ public class UserDetailService implements UserDetailsService {
             log.info(email);
 
             result = mapper.findByEmail(email);
+            log.info("result"+result);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -44,6 +45,7 @@ public class UserDetailService implements UserDetailsService {
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + result.getRole_set()));
+        log.info(authorities);
 
         // clubMember --> AuthMemberDTO 변환
         AuthMemberDTO  authMemberDTO = new
@@ -54,6 +56,7 @@ public class UserDetailService implements UserDetailsService {
 
         log.info(authMemberDTO);
         log.info(authMemberDTO.getAuthorities());
+
         // AuthMemberDTO는 UserDetails 타입으로 처리됨
         return authMemberDTO;
     }// end load..

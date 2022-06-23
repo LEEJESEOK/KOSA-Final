@@ -1,6 +1,7 @@
 package com.hyundai.kosafinal.controller;
 
 import com.hyundai.kosafinal.domain.MemberDTO;
+import com.hyundai.kosafinal.domain.RoleSetDTO;
 import com.nimbusds.oauth2.sdk.http.HTTPRequest;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,10 +13,12 @@ import com.hyundai.kosafinal.service.MemberService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 @RestController
@@ -27,54 +30,36 @@ public class MemberRestController {
     private PasswordEncoder passwordencoder;
 
     @RequestMapping(value = "/register", method = RequestMethod.POST) //회원가입
-    public void register(@RequestBody Map<String, Object> params) {
-
+    public void register(@RequestBody Map<String, Object> params) throws ParseException {
+        System.out.println("----------------------------");
+        System.out.println("회원가입 컨트롤러 ");
         for (String key : params.keySet())
             System.out.println(key + " : " + params.get(key));
-        System.out.println(params.size());
-        System.out.println("회원가입 컨트롤러 ");
+
         MemberDTO member = new MemberDTO();
 
-        System.out.println("----------------------------");
         member.setEmail((String) params.get("email"));
-        System.out.println((String) params.get("email"));
-
         member.setPassword((String) params.get("password"));
-        System.out.println((String) params.get("password"));
-
         member.setName((String) params.get("name"));
-        System.out.println((String) params.get("name"));
-
         member.setGender((Integer) params.get("gender"));
-        System.out.println(params.get("gender"));
 
 
-        System.out.println(params.get("birth1"));
-        System.out.println(params.get("birth2"));
-        System.out.println(params.get("birth3"));
-        Date date=new Date();
-        date.setYear(Integer.parseInt((String)params.get("birth1")));
-        date.setMonth(Integer.parseInt((String)params.get("birth2")));
-        date.setDate(Integer.parseInt((String)params.get("birth3")));
-        member.setBirth(date);
 
         member.setTel((String) params.get("tel"));
-        System.out.println( params.get("tel"));
-
         member.setAddress1((String) params.get("address1"));
-        System.out.println( params.get("address1"));
-
         member.setAddress2((String) params.get("address2"));
-        System.out.println( params.get("address2"));
-
         member.setZipcode((String) params.get("zipcode"));
-        System.out.println( params.get("zipcode"));
-
         member.setHeight(Integer.parseInt((String)params.get("height")));
-        System.out.println( params.get("height"));
-
         member.setWeight(Integer.parseInt((String)params.get("weight")));
-        System.out.println( params.get("weight"));
+
+
+        Date date=new Date();
+        String dateStr = (String) params.get("birth1")+"-"+(String) params.get("birth2")+"-"+(String) params.get("birth3")    ;     // 포맷터
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");         // 문자열 -> Date
+        date = formatter.parse(dateStr);
+        member.setBirth(date);
+
+
 
         Map<String, Object> result = new HashMap<String, Object>();
         result.put("result", service.insertMember(member) ? "success" : "fail");
@@ -82,8 +67,9 @@ public class MemberRestController {
 
     }
 
-    @RequestMapping(value = "/isDuplicate", method = RequestMethod.GET) //중복확인
+    @RequestMapping(value = "/isDuplicate", method = RequestMethod.GET) // 이메일 중복확인
     public String isDuplicate(HttpServletRequest request) {
+        System.out.println("----------------------------");
         System.out.println("이메일 중복체크");
         String email = request.getParameter("email");
         int result = service.checkId(email);
@@ -94,4 +80,42 @@ public class MemberRestController {
         }
     }
 
+    @RequestMapping(value = "/isDuplicate2", method = RequestMethod.GET) // 기존 비밀번호랑 비교
+    public String isDuplicate2(HttpServletRequest request) {
+        System.out.println("-----------------------------");
+        System.out.println("기존 비밀번호랑 비교");
+        String email = request.getParameter("email"); //기존 이메일
+        System.out.println(email);
+        String old_password = service.checkPW(email); //기존 비밀번호
+        System.out.println(old_password);
+        String new_password = request.getParameter("password"); //새로 입력받은 비밀번호
+
+
+        if (passwordencoder.matches(new_password,old_password)){
+            return "true";
+        }
+        else {
+            return "false";
+        }
+    }
+    @RequestMapping(value = "/update", method=RequestMethod.POST) //업데이트
+    public boolean update(@RequestBody Map<String,Object> params) throws ParseException {
+        System.out.println("----------------------------");
+        System.out.println("회원정보수정");
+        for (String key : params.keySet())
+            System.out.println(key + " : " + params.get(key));
+        MemberDTO member = new MemberDTO();
+        member.setEmail((String)params.get("email"));
+        member.setName((String)params.get("name"));
+        member.setPassword((String) params.get("password"));
+        System.out.println("레스트"+member);
+        Date date=new Date();
+        String dateStr = (String) params.get("birth1")+"-"+(String) params.get("birth2")+"-"+(String) params.get("birth3")    ;     // 포맷터
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");         // 문자열 -> Date
+        date = formatter.parse(dateStr);
+        member.setBirth(date);
+        return service.updateMember(member);
+
+
+    }
 }

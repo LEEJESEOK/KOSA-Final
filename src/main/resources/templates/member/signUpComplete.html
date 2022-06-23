@@ -1,36 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-
-    <script>
-        // jQuery 충돌 방지
-        var arkQuery = $.noConflict(true);
-    </script>
-
-    <script type="text/javascript">
-        //<![CDATA[
-        $(document).ready(function(){
-
-            // 메인으로 이동 클릭 시
-            $("#mainBtn").click(function(){
-                location.href="/";
-            });
-
-            // 로그인 클릭 시
-            $("#loginBtn").click(function(){
-                location.href="/login/loginform";
-            });
-
-        });
-
-        //]]>
-    </script>
+    <th:block th:replace="/head.html::head"></th:block>
 </head>
 <body>
+<th:block th:replace="/header.html::header"></th:block>
+<script>
+    // jQuery 충돌 방지
+    var arkQuery = $.noConflict(true);
+</script>
+
+<script type="text/javascript">
+    //<![CDATA[
+    $(document).ready(function () {
+
+        // 메인으로 이동 클릭 시
+        $("#mainBtn").click(function () {
+            location.href = "/";
+        });
+
+        // 로그인 클릭 시
+        $("#loginBtn").click(function () {
+            location.href = "/member/login";
+        });
+
+    });
+
+    //]]>
+</script>
 <div id="bodyWrap">
     <!--title-->
     <h3 class="cnts_title">
@@ -67,6 +67,6 @@
 </div>
 
 <!-- footer.jsp include -->
-
+<th:block th:replace="/footer.html::footer"></th:block>
 </body>
 </html>

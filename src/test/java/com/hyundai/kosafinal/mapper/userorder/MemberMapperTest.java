@@ -24,7 +24,7 @@ class MemberMapperTest {
     void insertMember() {
         MemberDTO member = new MemberDTO();
 
-        member.setEmail("TEST4");
+        member.setEmail("TEST5");
         member.setPassword(passwordencoder.encode("1111"));
         member.setName("이승연");
 //        member.setGender(0);
@@ -71,19 +71,19 @@ class MemberMapperTest {
     @Test
     void updateMember() {
         MemberDTO member = new MemberDTO();
-        member.setEmail("TEST4");
+        member.setEmail("TEST1");
         member.setPassword(passwordencoder.encode("1121"));
-        member.setName("이제석");
+        member.setName("이");
         member.setGender(0);
         Date date = new Date();
         member.setBirth(date);
-        member.setTel("01058585858");
+        member.setTel("01");
         member.setAddress1("인천");
         member.setAddress2("부평");
         member.setHeight(177);
         member.setWeight(88);
+        System.out.println(mapper.updateMember(member));
 
-        mapper.updateMember(member);
     }
 
     @Test
@@ -94,7 +94,7 @@ class MemberMapperTest {
 
     @Test
     void findByEmail() {
-        String email = "TEST1";
+        String email = "isaa1155";
         int login_type = 0;
         Member2DTO result = mapper.findByEmail(email);
         System.out.println(result);

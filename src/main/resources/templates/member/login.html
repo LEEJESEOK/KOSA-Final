@@ -53,8 +53,10 @@
 <!--        }-->
 
 <!--    </script>-->
+    <data th:replace="/head.html::head"></data>
 </head>
 <body>
+<div th:replace="/header.html::header"></div>
 <div id="bodyWrap" class="login">
     <h3 class="cnts_title"><span>로그인</span></h3>
     <div class="sub_container">
@@ -102,6 +104,6 @@
         </div>
     </div>
 </div>
-
+<div th:replace="/footer.html::footer"></div>
 </body>
 </html>

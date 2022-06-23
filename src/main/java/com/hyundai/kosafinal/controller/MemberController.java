@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import lombok.extern.log4j.Log4j2;
 
+import java.security.Principal;
+
 @Log4j2
 @Controller
 
@@ -40,17 +42,16 @@ public class MemberController {
         return "redirect:/logout";
     }
 
-    @GetMapping("")
-    public String update_view(){ //수정 입력 양식 html 로 이동
-        log.info("update_view");
-        return "login/Modify";
-    }
-
     @GetMapping("/modify") //회원정보 수정버튼 눌렀을때
     public void modify(MemberDTO member){
         log.info("modify");
-
     }
+
+    @GetMapping("/basic") //마이페이지 첫화면
+    public void basic(){
+        log.info("마이페이지 첫 화면 이동");
+    }
+
 
 
 
