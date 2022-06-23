@@ -54,4 +54,17 @@ public interface ProductMapper {
 
     // 상품 정보 수정
     int updateProduct(ProductDTO productDTO);
+
+    //상품 아이디로 정보 조회
+    List<ProductDTO> selectProductDetailById(@Param("productId")String productId);
+
+    //상품 아이디, 컬러로 정보 조회
+    List<ProductDTO> selectProductByIdAndColor(@Param("productId")String productId,
+                                               @Param("color")String color);
+
+    //해당 ID 컬러칩 중복 제거
+    List<ProductDTO> selectColors(@Param("productId")String productId);
+
+    //해당 ID 사이즈 중복 제거
+    List<ProductDTO> selectSize(@Param("productId")String productId);
 }
