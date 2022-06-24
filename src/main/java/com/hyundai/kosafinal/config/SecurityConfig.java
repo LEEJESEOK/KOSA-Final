@@ -1,13 +1,14 @@
 package com.hyundai.kosafinal.config;
 
 
-
 /*************************************************************
  파일명: SecurityConfig.java
  기능: Security 를 사용하기 위한 로그인 설정
  작성자: 이승연
  [코멘트: 일반 사용자 로그인, 소셜로그인 그리고 접근제한을 설정할 수 있다.]
  ***********************************************************/
+
+import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
@@ -16,7 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import lombok.extern.log4j.Log4j2;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -30,12 +31,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         roleHierarchyImpl.setHierarchy("ROLE_ADMIN > ROLE_MANAGER > ROLE_USER");
         return roleHierarchyImpl;
     }
-    @Bean // Bean 등록
+
+    @Bean
+        // Bean 등록
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
 
 
     @Override
@@ -61,7 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //소셜 로그인 (카카오)
 
         // csrf 토큰 비활성화
-        http.csrf().disable();
+        http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 
 
         //로그아웃

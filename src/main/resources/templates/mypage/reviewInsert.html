@@ -17,6 +17,12 @@
 <script>
     // jQuery 충돌 방지
     var arkQuery = $.noConflict(true);
+
+    $.ajaxSetup({
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader(csrf_header, csrf_token);
+        }
+    });
 </script>
 
 <script type="text/javascript">

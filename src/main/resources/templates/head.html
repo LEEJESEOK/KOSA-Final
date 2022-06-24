@@ -3,12 +3,17 @@
 <th:block th:fragment="head">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!--csrf token-->
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+
     <!--favicon-->
     <link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.ico}"/>
 
     <!--css-->
     <link rel="stylesheet" th:href="@{/css/brand.css}"/>
-    <link rel="stylesheet" th:href="@{/css/common.css?20220622}"/>
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
     <link rel="stylesheet" th:href="@{/css/contents.css}"/>
     <link rel="stylesheet" th:href="@{/css/font_443.css}"/>
     <link rel="stylesheet" th:href="@{/css/layout.css}"/>
@@ -41,5 +46,10 @@
     <script type="text/javascript" th:src="@{/js/netfunnel_skin.js}" charset="UTF-8"></script>
     <script type="text/javascript" th:src="@{/js/unorm.js}"></script>
     <script type="text/javascript" th:src="@{/js/appboy.min.js}"></script>
+
+    <script>
+        const csrf_token = $("meta[name='_csrf']").attr("content");
+        const csrf_header = $('meta[name="_csrf_header"]').attr('content');
+    </script>
 </th:block>
 </html>
