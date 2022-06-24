@@ -4,10 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!--csrf token-->
-    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
-    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
-
     <!--favicon-->
     <link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.ico}"/>
 
@@ -47,9 +43,5 @@
     <script type="text/javascript" th:src="@{/js/unorm.js}"></script>
     <script type="text/javascript" th:src="@{/js/appboy.min.js}"></script>
 
-    <script>
-        const csrf_token = $("meta[name='_csrf']").attr("content");
-        const csrf_header = $('meta[name="_csrf_header"]').attr('content');
-    </script>
 </th:block>
 </html>
