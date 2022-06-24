@@ -7,8 +7,9 @@
     <!-- head -->
     <th:block th:replace="~{/head :: head}"></th:block>
     <!-- //head -->
-
+</head>
 <body oncontextmenu="return false">
+<th:block th:replace="~{/include/csrf::csrf}"></th:block>
 
 <!-- headerWrap -->
 <th:block th:replace="~{/header_logo :: header_logo}"></th:block>
@@ -17,12 +18,6 @@
 <script>
     // jQuery 충돌 방지
     var arkQuery = $.noConflict(true);
-
-    $.ajaxSetup({
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader(csrf_header, csrf_token);
-        }
-    });
 </script>
 
 <script type="text/javascript">
@@ -157,9 +152,9 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 data: JSON.stringify({
-                    title : $('#subject').val(),
-                    content : $('#contents').val(),
-                    category : $("#largeClassificationCode option:checked").text()
+                    title: $('#subject').val(),
+                    content: $('#contents').val(),
+                    category: $("#largeClassificationCode option:checked").text()
                 }),
                 success: function () {
                     location.replace("/mypage/review/complete");
@@ -461,9 +456,11 @@
         <div class="layerBg" tabindex="-1"></div>
     </div>
 
-    <!-- footerWrap -->
-    <th:block th:replace="~{/footer :: footer}"></th:block>
-    <!-- //footerWrap -->
+</div>
+<!-- //bodyWrap -->
 
+<!-- footerWrap -->
+<th:block th:replace="~{/footer :: footer}"></th:block>
+<!-- //footerWrap -->
 </body>
 </html>
