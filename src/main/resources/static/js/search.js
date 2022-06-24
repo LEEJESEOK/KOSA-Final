@@ -1100,7 +1100,7 @@ function doSearch() {
 //        getNotLoginMyKeyWord($("#query").val(), 10);            
 //    }
 //    
-    getNotLoginMyKeyWord($("#query").val(), 10);
+    // getNotLoginMyKeyWord($("#query").val(), 10);
     
     searchForm.collection.value = searchForm.selectedLang.value;
     searchForm.identity.value = "united";
