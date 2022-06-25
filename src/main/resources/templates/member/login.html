@@ -34,6 +34,7 @@
                     </div>
                     <div id="hpIPLogin">
                         <form  id="loginForm"  name="loginForm" action="/login" method="post">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                             <input type="hidden" name="inputId" id="inputId" value = "" />
                             <fieldset>
                                 <legend>로그인 입력항목</legend>

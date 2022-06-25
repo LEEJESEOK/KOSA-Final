@@ -35,24 +35,22 @@ public class MemberController {
     }
 
     @PostMapping("/delete")
-    public String delete(String email){
-        log.info("이승연"+email);
+    public String delete(String email) {
+        log.info("이승연" + email);
         service.deleteMember(email);
 
         return "redirect:/logout";
     }
 
     @GetMapping("/modify") //회원정보 수정버튼 눌렀을때
-    public void modify(MemberDTO member){
+    public void modify(MemberDTO member) {
         log.info("modify");
     }
 
     @GetMapping("/basic") //마이페이지 첫화면
-    public void basic(){
+    public void basic() {
         log.info("마이페이지 첫 화면 이동");
     }
-
-
 
 
 }
