@@ -1,5 +1,21 @@
 <html xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<div class="top_nav topnav1903" th:fragment="top_nav" > <!--맨위헤더-->
+<head>
+    <script type="text/javascript" th:src="@{/js/jquery-1.11.2.min.js}"></script>
+</head>
+<div class="top_nav topnav1903" th:fragment="top_nav"> <!--맨위헤더-->
+    <th:block th:replace="/include/csrf::csrf"></th:block>
+    <script>
+        $().ready(function () {
+            $("#logoutBtn").click(function () {
+                $.ajax({
+                        type: "post",
+                        url: "/logout"
+                    }
+                );
+            });
+
+        });
+    </script>
     <div class="top_nav_wrap clearfix">
         <div class="brand_menu brand_menu1903">
             <ul class="clearfix">
@@ -211,7 +227,7 @@
             <ul class="clearfix">
                 <!-- 로그인/로그아웃에 따라 다르게 보이게 처리 -->
                 <li sec:authorize="!isAuthenticated()"><a href="/member/login">로그인</a></li>
-                <li sec:authorize="isAuthenticated()"><a href="/logout">로그아웃</a></li>
+                <li sec:authorize="isAuthenticated()"><a id="logoutBtn" href="">로그아웃</a></li>
                 <li class="header_dropmemu mypage">
 
                     <a href="/mypage" class="btn" onclick="GA_Event('공통','헤더_메뉴','마이페이지')">마이페이지</a>
