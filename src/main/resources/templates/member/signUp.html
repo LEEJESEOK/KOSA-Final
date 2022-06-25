@@ -1,9 +1,751 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <th:block th:replace="~{/head :: head}"></th:block>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script>
+        <!-- 주소 API include -->
+
+
+        $(document).ready(function () {
+
+
+            var nowYear = parseInt('2008');
+            var nowMonth = parseInt('06');
+            var nowDay = parseInt('20');
+            var monthArray = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+
+            //if(nowYear < 2000) nowYear += 1900;
+
+            //년도
+            for (var i = nowYear; i >= 1900; i--) {
+                $('#selYear').append("<option value='" + i + "'>" + i + "</option>");
+            }
+
+            $("#selYear").change(function () {
+
+
+                var selYear1 = $('#selYear').val();
+
+                if ($('#selMonth').val() == 02) {
+                    if ($("#selDay option:last").val() >= 29) {
+
+                        $("#selDay option[value='29']").remove();
+                        $("#selDay option[value='30']").remove();
+                        $("#selDay option[value='31']").remove();
+                    }
+
+                    if ((selYear1 % 4 == 0 && selYear1 % 100 != 0) || selYear1 % 400 == 0) {
+                        $("#selDay").append("<option value='29'>29</option>");
+                    }
+                }
+
+
+                //만14세미만 가입X
+                if (nowYear == selYear1) {
+                    for (var i = nowMonth + 1; i <= 12; i++) {
+                        if (i < 10) {
+                            $("#selMonth option[value='0" + i + "']").remove();
+                        } else {
+                            $("#selMonth option[value='" + i + "']").remove();
+                        }
+                        if ($("#selMonth").val() > nowMonth) $("#selMonth").val('').prop("selected", true);
+                    }
+
+                    if (nowMonth == parseInt($('#selMonth').val())) {
+
+                        var n_selMonth = parseInt($('#selMonth').val());
+                        var maxDay = monthArray[n_selMonth];
+
+                        for (var i = nowDay + 1; i <= maxDay; i++) {
+                            if (i < 10) {
+                                $("#selDay option[value='0" + i + "']").remove();
+                            } else {
+                                $("#selDay option[value='" + i + "']").remove();
+                            }
+                            if ($("#selDay").val() > nowDay) {
+                                $("#selDay").val('').prop("selected", true);
+                            }
+                        }
+                    }
+                } else {
+                    var n_selMonth = parseInt($('#selMonth').val());
+                    var maxDay = monthArray[n_selMonth];
+
+                    if ($("#selMonth option:last").val() < 12) {
+                        for (var i = nowMonth + 1; i <= 12; i++) {
+                            if (i < 10) {
+                                $("#selMonth").append("<option value='0" + i + "'>0" + i + "</option>");
+                            } else {
+                                $("#selMonth").append("<option value='" + i + "'>" + i + "</option>");
+                            }
+                        }
+                    }
+
+
+                    if ($("#selDay option:last").val() < maxDay) {
+
+                        if ($('#selMonth').val() == 02) {
+                            if ((selYear1 % 4 == 0 && selYear1 % 100 != 0) || selYear1 % 400 == 0) {
+                                maxDay = 29;
+                            }
+                        }
+
+                        for (var i = parseInt($("#selDay option:last").val()) + 1; i <= maxDay; i++) {
+                            if (i < 10) {
+                                $("#selDay").append("<option value='0" + i + "'>0" + i + "</option>");
+                            } else {
+                                $("#selDay").append("<option value='" + i + "'>" + i + "</option>");
+                            }
+                        }
+                    }
+
+                }
+            });
+
+            $("#selMonth").change(function () {
+                var lastDay = $("#selDay option:last").val();
+                var selYear1 = $('#selYear').val();
+                var n_selMonth = parseInt($('#selMonth').val());
+                var maxDay = monthArray[n_selMonth];
+
+                if ($(this).val() == 02) {
+
+
+                    $("#selDay option[value='31']").remove();
+                    $("#selDay option[value='30']").remove();
+                    $("#selDay option[value='29']").remove();
+
+                    if ((selYear1 % 4 == 0 && selYear1 % 100 != 0) || selYear1 % 400 == 0) {
+                        $("#selDay").append("<option value='29'>29</option>");
+
+                    }
+                    ;
+
+
+                } else if ($(this).val() == 04 || $(this).val() == 06 || $(this).val() == 09 || $(this).val() == 11
+            )
+                {
+
+
+                    if (lastDay == 28) {
+                        $("#selDay").append("<option value='29'>29</option>");
+                        $("#selDay").append("<option value='30'>30</option>");
+                    } else if (lastDay == 29) {
+                        $("#selDay").append("<option value='30'>30</option>");
+                    } else if (lastDay == 31) {
+                        $("#selDay option[value='31']").remove();
+                    }
+
+
+                }
+            else
+                {
+
+                    if (lastDay == 28) {
+                        $("#selDay").append("<option value='29'>29</option>");
+                        $("#selDay").append("<option value='30'>30</option>");
+                        $("#selDay").append("<option value='31'>31</option>");
+                    } else if (lastDay == 29) {
+                        $("#selDay").append("<option value='30'>30</option>");
+                        $("#selDay").append("<option value='31'>31</option>");
+                    } else if (lastDay == 30) {
+                        $("#selDay").append("<option value='31'>31</option>");
+                    }
+                }
+
+
+                //만14세미만 가입X
+                if (nowYear == selYear1 && nowMonth == $('#selMonth').val()) {
+
+                    for (var i = nowDay + 1; i <= $("#selDay option:last").val(); i++) {
+                        if (i < 10) {
+                            $("#selDay option[value='0" + i + "']").remove();
+                        } else {
+                            $("#selDay option[value='" + i + "']").remove();
+                        }
+                        if ($("#selDay option:last").val() < $("#selDay").val()) $("#selDay").val('').prop("selected", true);
+                    }
+                } else {
+
+                    if ($("#selDay option:last").val() < maxDay) {
+                        for (var i = parseInt($("#selDay option:last").val()) + 1; i <= maxDay; i++) {
+                            if (i < 10) {
+                                $("#selDay").append("<option value='0" + i + "'>0" + i + "</option>");
+                            } else {
+                                $("#selDay").append("<option value='" + i + "'>" + i + "</option>");
+                            }
+                        }
+                    }
+                }
+            });
+
+            emailTypeDomainSelectController("#emailDomain", "#emailDomainSel");
+
+            passwordValidationCheck('pw');
+            // passwordValidationCheck('pwc');
+
+            $("#pw").keypress(function (event) {
+
+                if (capsLock(event)) {
+                    $("#pwcapsLockMsg").text("<Caps Lock>이 켜져 있습니다.");
+                } else {
+                    $("#pwcapsLockMsg").text("");
+                }
+                if ($("#pw").val().length > 0)
+                    $("#pwMsg").text("비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요");
+            });
+
+            $("#pw").focus(function (event) {
+                $("#pwMsg").text("비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요");
+            });
+
+            $("#pw").blur(function () {
+                if ($(this).val().length > 0) {
+                    var pwRegExp = /^(?=.*[a-zA-Z])(?=.*[\?\<\>\;\:\'\"\`\(\)\{\}\[\]\|\\\~\,\.!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
+                    if (!pwRegExp.test($(this).val())) {
+                        $("#pwMsg").text("비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요");
+                        $("#pwTypeChk").val("");
+                        return true;
+                    }
+                    $("#pwTypeChk").val("Y");
+                    $("#pwMsg").text("");
+                    // $("#pwcMsg").text("");
+                    $("#pwConfirmChk").val("");
+                }
+            });
+
+            // $("#pwc").keypress(function(event){
+            //
+            //     if(capsLock(event)){
+            //         $("#pwcCapsLockMsg").text("<Caps Lock>이 켜져 있습니다.");
+            //     } else {
+            //         $("#pwcCapsLockMsg").text("");
+            //     }
+            //
+            //     if($("#pwc").val().length > 0)
+            //         $("#pwcMsg").text("비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요");
+            //
+            // });
+
+            // $("#pwc").focus(function(event){
+            //     $("#pwcMsg").text("비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요");
+            //
+            // });
+
+            $('#emailDubChkBtn').click(function () {
+                var vc = new ValidationCheck();
+                vc.checkIdList = ['email'];
+                vc.msgFn = function (msg) {
+                    $("#emailMsg").text(msg);
+                };
+                if (vc.isValid()) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/isDuplicate",
+                        data: JSON.stringify({
+                            email: $("#email").val(),
+                        }),
+                        dataType: "json",
+                        contentType: "application/json",
+                        success: function (data) {
+                            if (data == "true") {
+                                $("#emailMsg").text('이미 사용중인 이메일입니다.');
+                            } else {
+                                $("#emailMsg").text('사용 가능한 이메일입니다.');
+                                $("#emailDuplChk").val('Y');
+
+                            }
+                        },
+                        error: function (e) {
+                            console.log(e);
+                        }
+                    });
+                }
+            });
+
+            $("#cancleBtn").click(function () {
+                var lc = new layerConfirm('회원가입을 취소하시겠습니까?', '확인', '취소');
+                lc.confirmAction = function () {
+                    location.href = "/ko/";
+                };
+            });
+
+
+            var joinCfBtnChk = 0;
+            $("#joinBtn").click(function () {
+
+                var vc = new ValidationCheck();
+                vc.checkIdList = ['pw', 'name', 'selYear', 'selMonth', 'selDay'];
+
+                if (!vc.isValid()) {
+                    return;
+                }
+
+                var pwTypeChk = $("#pwTypeChk").val();
+                //var pwConfirmChk = $("#pwConfirmChk").val();
+                var emailDuplChk = $("#emailDuplChk").val();
+
+                if (pwTypeChk !== "Y") {
+                    layerAlert("비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요 ");
+                    return;
+                }
+
+                // if ( pwConfirmChk !== "Y") {
+                //     layerAlert("비밀번호가 일치하지 않습니다 ");
+                //     return;
+                // }
+
+
+                if ($("#email").val() != "") {
+                    if (emailDuplChk !== "Y") {
+                        layerAlert("E-mail 중복확인이 되지 않았습니다.");
+                        return;
+                    }
+
+                    // var email = $("#email").val()+"@"+$("#emailDomain").val();
+                    // if (!validateEmail(email)) {
+                    //     layerAlert("잘못된 E-mail 형식입니다.");
+                    //     return;
+                    // }
+
+                    if (email.length > 50) {
+                        layerAlert("E-mail은 최대 50자입니다.");
+                        return;
+                    }
+                } else {
+                    if ($("#emailReceiveYn").is(':checked')) {
+                        layerAlert("E-mail (정보수신용) 을 입력해 주세요.");
+                        return;
+                    }
+                }
+
+                $("#cancleBtn").attr("disabled", true);
+                //$("#joinBtn").attr("disabled", true);
+
+                // $("#collectionAgreementYN").val("Y");
+                $("#emailAddress").val($("#email").val());
+
+                if ($("#email").val() == "") {
+                    $("#emailAddress").val("");
+                }
+                $("#sBirthday").val($("#selYear").val() + $("#selMonth").val() + $("#selDay").val());
+
+
+                new Date(($("#selYear").val()) + "/" +
+                    ($("#selMonth").val()) + "/" +
+                    ($("#selDay").val()))
+                // TODO 생년월일
+                if (vc.isValid()) {
+                    $.ajax({
+                        type: "POST",
+                        data: JSON.stringify({
+                            email: $("#email").val(),
+                            password: $("#pw").val(),
+                            name: $("#name").val(),
+                            gender: $("#gender").val() === "남" ? 0 : 1,
+                            birth1: $("#selYear").val(),
+                            birth2: $("#selMonth").val(),
+                            birth3: $("#selDay").val().substring(0, 2),
+
+                            tel: $("#tel").val(),
+                            address1: $("#address1").val(),
+                            address2: $("#address2").val(),
+                            zipcode: $("#zipcode").val(),
+                            height: $("#height").val(),
+                            weight: $("#weight").val()
+                        }),
+
+                        url: "/register",
+                        dataType: "json",
+                        contentType: "application/json; charset=UTF-8",
+                        success: function () {
+                            location.href = "/member/signUpComplete"
+                        },
+                        error: function (request, status, error) {
+                            ajaxError(request, status, error)
+                        }
+                    })
+
+                }
+            });
+
+
+            $("#email,#emailDomain").keypress(function (event) {
+                if (event.which == 32) {
+                    return false;
+                }
+            });
+
+            $('#ck1').click(function () {
+                if ($(this).is(':checked')) {
+                    var email = "isaa1107@gmail.com";
+                    var emailArray = email.split("@");
+
+                    $("#email").val(emailArray[0]);
+                    $("#emailDomainSel").val(emailArray[1]);
+                    $("#emailDomain").val(emailArray[1]);
+                    $("#emailDomainSel option:eq(0)").prop("selected", "selected");
+                    $("#emailDomain").show();
+                }
+            });
+
+            $(document).on("keyup", "input:text[numberOnly]", function () {
+                $(this).val($(this).val().replace(/[^0-9]/gi, ""));
+            });
+
+            $('.email-prev-detail-btn').click(function (e) {
+                e.preventDefault();
+                $('.email-detail-pop').show();
+                $('.btn_close').click(function (e) {
+                    e.preventDefault();
+                    $('.email-detail-pop').hide();
+                });
+            });
+        });
+
+
+        /*
+         * 비밀번호태그 Key 이벤트 [2017.01.11 - 이현승]
+         */
+        var passwordValidationCheck = function (fid) {
+            var t = this;
+
+            this.msgFn = function (msg) {
+                $('#' + fid).blur();
+                layerAlert(msg)
+            };
+
+            this.notLockFn = function () {
+                //default do nothing. but you can do something!
+            };
+
+            $('#' + fid).keyup(function (event) {
+                passwordSamePassCheck(fid);
+            });
+        }
+
+        /*
+         * 비밀번호 유효성 체크 [2017.01.11 - 이현승]
+         */
+        var readonlyFlag = false;
+
+        function passwordSamePassCheck(fid) {
+
+            var SamePass_0 = 0; // 동일문자 카운트
+            var SamePass_1 = 0; // 연속성(+) 카운드
+            var SamePass_2 = 0; // 연속성(-) 카운드
+
+            var inputdata = $('#' + fid).val();
+
+            for (var i = 0; i < inputdata.length; i++) {     // 4자리
+                var chr_pass_0 = inputdata.charCodeAt(i - 2);//3);
+                var chr_pass_1 = inputdata.charCodeAt(i - 1);//2);
+                var chr_pass_2 = inputdata.charCodeAt(i);// - 1);
+
+                if (i > 1) {
+                    // 동일문자 카운트
+                    if ((chr_pass_0 == chr_pass_1) && (chr_pass_1 == chr_pass_2)) {
+                        SamePass_0++;
+                    } else {
+                        SamePass_0 = 0;
+                    }
+                    // 연속성(+) 카운드
+                    if (chr_pass_0 - chr_pass_1 == 1 && chr_pass_1 - chr_pass_2 == 1) {
+                        SamePass_1++;
+                    } else {
+                        SamePass_1 = 0;
+                    }
+                    // 연속성(-) 카운드
+                    if (chr_pass_0 - chr_pass_1 == -1 && chr_pass_1 - chr_pass_2 == -1) {
+                        SamePass_2++;
+                    } else {
+                        SamePass_2 = 0;
+                    }
+                }
+
+                if (!readonlyFlag) {
+                    if (SamePass_0 > 0) {
+                        readonlyFlag = true;
+                        $("input").attr("readonly", readonlyFlag);
+                        var la = new layerAlert("동일문자를 3번 이상 사용할 수 없습니다.");
+                        la.confirmAction = function () {
+                            readonlyFlag = false;
+                            $("input").attr("readonly", readonlyFlag);
+                            $('#' + fid).focus();
+                        };
+                    } else if (SamePass_1 > 0 || SamePass_2 > 0) {
+                        readonlyFlag = true;
+                        $("input").attr("readonly", readonlyFlag);
+                        var la = new layerAlert("연속된 문자열(123 또는 321, abc, cba 등) 3자리이상 올 수 없습니다.");
+                        la.confirmAction = function () {
+                            readonlyFlag = false;
+                            $("input").attr("readonly", readonlyFlag);
+                            $('#' + fid).focus();
+                        };
+                    }
+                }
+            }
+        }
+
+
+        function validateEmail(email) {
+            var re = /^((([^<>()[\]\\.,;:\s@\"~`!@#$%^&*+={}|'/?]+(\.[^<>()[\]\\.,;:\s@\"~`!@#$%^&*+={}|'/?]+)*))|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(email);
+        }
+
+
+        function dupCheck() {
+            $.ajax({
+
+                type: "GET",
+                url: "/isDuplicate?email=" + $("#email").val(),
+                success: function (data) {
+                    if (data == "true") {
+                        $("#emailMsg").text('이미 사용중인 아이디입니다.');
+                    } else {
+                        $("#emailMsg").text('사용 가능한 아이디입니다.');
+                        $("#emailDuplChk").val('Y');
+                    }
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+        }
+
+        function ajaxError(request, status, error) {
+            let message = "code : " + request + "\n";
+            message += "message : " + request.responseText + "\n";
+            message += "error : " + error;
+
+            console.log(message);
+        }
+
+        // 주소 찾기 함수
+        function searchAddress() {
+            new daum.Postcode({
+                oncomplete: function (data) {
+                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                    // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
+                    // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                    var addr = ''; // 도로명 주소 변수
+                    var extraAddr = ''; // 참고 항목 변수
+
+                    //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                        addr = data.roadAddress;
+                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                        addr = data.jibunAddress;
+                    }
+
+                    // if(data.userSelectedType === 'R'){
+                    //     // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                    //     // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                    //     if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                    //         extraAddr += data.bname;
+                    //     }
+                    //     // 건물명이 있고, 공동주택일 경우 추가한다.
+                    //     if(data.buildingName !== '' && data.apartment === 'Y'){
+                    //         extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    //     }
+                    //     // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                    //     if(extraAddr !== ''){
+                    //         extraAddr = ' (' + extraAddr + ')';
+                    //     }
+                    //     // 조합된 참고항목을 해당 필드에 넣는다.
+                    //     document.getElementById("sample6_extraAddress").value = extraAddr;
+                    //
+                    // } else {
+                    //     document.getElementById("sample6_extraAddress").value = '';
+                    // }
+
+
+                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                    document.getElementById('zipcode').value = data.zonecode; //
+                    document.getElementById("address1").value = addr;
+                    // 커서를 상세주소 필드로 이동한다.
+                    document.getElementById("address2").focus();
+                }
+            }).open();
+        }
+    </script>
 </head>
 <body>
-회원가입 페이지입니다.
-<body>
+<th:block th:replace="/header_logo.html::header_logo"></th:block>
+
+<form id="memberJoinForm" action="/register" method="POST"><input type="hidden" name="emailDuplChk" id="emailDuplChk"
+                                                                  value="" title="이메일 중복"/>
+    <input type="hidden" name="pwTypeChk" id="pwTypeChk" value="" title="비밀번호 형식"/>
+    <!--    <input type="hidden" name="pwConfirmChk" id="pwConfirmChk" value="" title="비밀번호 일치" />-->
+    <!--    <input type="hidden" id="uid" name="uid" value="isaa1107@gmail.com" />-->
+    <input type="hidden" id="emailAddress" name="emailAddress" value=""/>
+    <!--    <input type="hidden" id="sBirthday" name="sBirthday" value=""/>-->
+    <!--    <input type="hidden" id="gender" name="gender" value=""/>-->
+    <input type="hidden" id="collectionAgreementYN" name="collectionAgreementYN" value=""/>
+
+
+    <div id="bodyWrap">
+        <!--title-->
+        <h3 class="cnts_title"><span>회원가입</span></h3>
+        <div class="sub_container">
+            <div class="join_title">
+                <p class="title">고객님의 회원정보를 입력해주세요.</p>
+            </div>
+            <fieldset>
+                <legend>회원정보입력</legend>
+                <div class="box_type_1">
+                    <div class="title_wrap clearfix">
+                        <h4 class="float_left">회원정보</h4>
+                        <p class="reqd_txt float_right"><strong class="reqd">*</strong> 표시는 필수항목입니다.</p>
+                    </div>
+                    <div class="tblwrap">
+                        <table class="tbl_wtype1">
+                            <caption>회원가입 입력항목</caption>
+                            <colgroup>
+                                <col style="width:160px"/>
+                                <col/>
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th scope="row"><strong class="reqd">*</strong><label for="email">아이디</label></th>
+                                <td>
+                                    <input type="text" style="width:120px" title="이메일" id="email">
+                                    <input type="button" class="btn add_s" id="idDubChkBtn" value="중복확인"
+                                           onclick="dupCheck()">
+                                    <span class="guide_comment" id="emailMsg"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><strong class="reqd">*</strong><label for="pw">비밀번호</label></th>
+                                <td>
+                                    <input type="password" id="pw" name="passwd" style="width:150px" title="비밀번호"/>
+                                    <span class="guide_comment lh_30" id="pwMsg"></span>
+                                    <span class="guide_comment lh_30" id="pwcapsLockMsg"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><strong class="reqd">*</strong><label for="name">이름</label></th>
+                                <td>
+                                    <input type="text" style="width:120px" id="name" name="name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><label for="birth">생년월일</label></th>
+                                <td id="birth">
+                                    <select style="width:80px" id="selYear" title="년도">
+                                        <option value="">년</option>
+                                    </select>
+                                    <select style="width:80px" id="selMonth" title="월">
+                                        <option value="">월</option>
+                                        <option value="01">01</option>
+                                        <option value="02">02</option>
+                                        <option value="03">03</option>
+                                        <option value="04">04</option>
+                                        <option value="05">05</option>
+                                        <option value="06">06</option>
+                                        <option value="07">07</option>
+                                        <option value="08">08</option>
+                                        <option value="09">09</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                    </select>
+                                    <select style="width:80px" id="selDay" title="일">
+                                        <option value="">일</option>
+                                        <option value="01">01</option>
+                                        <option value="02">02</option>
+                                        <option value="03">03</option>
+                                        <option value="04">04</option>
+                                        <option value="05">05</option>
+                                        <option value="06">06</option>
+                                        <option value="07">07</option>
+                                        <option value="08">08</option>
+                                        <option value="09">09</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                        <option value="14">14</option>
+                                        <option value="15">15</option>
+                                        <option value="16">16</option>
+                                        <option value="17">17</option>
+                                        <option value="18">18</option>
+                                        <option value="19">19</option>
+                                        <option value="20">20</option>
+                                        <option value="21">21</option>
+                                        <option value="22">22</option>
+                                        <option value="23">23</option>
+                                        <option value="24">24</option>
+                                        <option value="25">25</option>
+                                        <option value="26">26</option>
+                                        <option value="27">27</option>
+                                        <option value="28">28</option>
+                                        <option value="29">29</option>
+                                        <option value="30">30</option>
+                                        <option value="31">31</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><label for="gender">성별</label></th>
+                                <td>
+                                    <select style="width:50px" id="gender" title="성별">
+                                        <option value="">남</option>
+                                        <option value="">여</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><label for="tel">연락처(-빼고 입력)</label></th>
+                                <td>
+                                    <input type="text" style="width:120px" id="tel" name="tel"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><label for="address">주소</label></th>
+                                <td class="address" id="address">
+                                    <input type="text" id="zipcode" disabled>
+                                    <input type="button" class="btn add_s" onclick="searchAddress()" value="우편번호찾기"><br>
+                                    <input type="text" id="address1" name="address1" size="60" disabled><br>
+                                    <input type="text" id="address2" name="address2" size="60">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row"><label for="height">키(cm)</label></th>
+                                <td>
+                                    <input type="text" style="width:120px" id="height" name="height"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><label for="weight">체중(kg)</label></th>
+                                <td>
+                                    <input type="text" style="width:120px" id="weight" name="weight"/>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    <div class="btnwrap">
+                        <input type="button" value="취소" class="btn wt" id="cancleBtn"/>
+                        <input type="button" value="회원가입" class="btn gray mr0" id="joinBtn"/>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <!--//sub container-->
+    </div>
+</form>
+<th:block th:replace="/footer.html::footer"></th:block>
+</body>
+</html>

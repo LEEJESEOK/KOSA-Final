@@ -44,15 +44,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers("/member/login").permitAll() //login.html은 모든 사용자가 볼 수 있다.
-                .antMatchers("/board/board").hasRole("USER"); //게시판은 USER 권한만 가진 사용자가 볼 수 있다.
-
-
+                .antMatchers("/board/board").hasRole("USER")
+                .antMatchers("/member/modify").hasRole("USER")
+                .antMatchers("/member/basic").hasRole("USER");
         //일반 사용자 로그인, 로그인 페이지 우회
         http.formLogin().loginPage("/member/login")
                 .loginProcessingUrl("/login")
                 .usernameParameter("email") //DB의 Member 테이블과 연동하기 위해 username을 email로 설정한다.
                 .passwordParameter("password")//DB의 Member 테이블과 연동하기 위해 password를 password 로 설정한다.
-                .defaultSuccessUrl("/board/board")//로그인 성공 후 이동할 URL
+                .defaultSuccessUrl("/member/basic")//로그인 성공 후 이동할 URL
                 .failureUrl("/member/login?error=true"); //로그인 실패시 URL
         //소셜 로그인 (구글)
         http.oauth2Login().defaultSuccessUrl("/board/board");
@@ -67,7 +67,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         //로그아웃
         http.logout().logoutUrl("/logout")
-                .logoutSuccessUrl("/member/login");
+                .logoutSuccessUrl("/member/login")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID","remember-me");
+
 
     }
 
