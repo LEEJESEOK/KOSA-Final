@@ -1,0 +1,673 @@
+<!-- 마이페이지 1:1 문의글 목록 조회 -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>더한섬닷컴</title>
+
+    <!-- head -->
+    <th:block th:replace="~{/head :: head}"></th:block>
+    <!-- //head -->
+
+</head>
+<body oncontextmenu="return false">
+
+<!-- headerWrap -->
+<th:block th:replace="~{/header_logo :: header_logo}"></th:block>
+<!-- //headerWrap -->
+
+<script>
+    // jQuery 충돌 방지
+    var arkQuery = $.noConflict(true);
+</script>
+
+<script type="text/javascript">
+    //<![CDATA[
+
+    $(document).ready(function () {
+
+        // 옵션변경창 컬러와 사이즈 init
+
+
+        // 수량 증가 눌렀을 때
+        $(document).on("click", '.right', function () {
+            var qty = $(this).parents('.qty_sel').find('.mr0');
+
+            // TODO : 재고 관리 로직 추가
+            qty.val(Number(qty.val()) + 1);
+
+
+        });
+        // 수량 감소 눌렀을 때
+        $(document).on("click", '.left', function () {
+            var qty = $(this).parents('.qty_sel').find('.mr0');
+
+            // 최소수량은 1개
+            if (qty.val() == 1) {
+                return;
+            }
+            qty.val(Number(qty.val()) - 1);
+        });
+
+        // 버튼 눌렸을 때 실행되는 함수
+        $(document).on("click", '.btn', function () {
+            var prodid = $(this).prop('id').split("_");
+
+            // 변경 적용 버튼 눌렀을 때
+            if (prodid[0] == 'QuantityProduct' || prodid[0] == 'UpdateCart') {
+                let form = $('#updateCartForm' + prodid[1]);
+                let id = form.find('input[name=id]').val();
+                let pid = form.find('input[name=pid]').val();
+                let initialCartQuantity = form.find('input[name=oldpamount]').val();
+                let newCartQuantity = form.find('input[name=amount]').val();
+                let color = form.find('input[name=pcolor]').val();
+                let size = form.find('input[name=psize]').val();
+                let price = form.find('input[name=price]').val();
+                let userEmail = form.find('input[name=userEmail]').val();
+
+                let formData = {
+                    "id": id,
+                    "pid": pid,
+                    "amount": newCartQuantity,
+                    "pcolor": color,
+                    "psize": size,
+                    "userEmail": userEmail
+                }
+                $.ajax({
+                    url: "[(@{/cart/})]" + id,
+                    method: "post",
+                    data: JSON.stringify(formData),
+                    dataType: 'json',
+                    contentType: "application/json; charset=UTF-8",
+                    success: function () {
+						let la = new layerAlert("장바구니 상품이 변경되었습니다.");
+						la.confirmAction = function () {
+							window.location.reload();
+						};
+                    },
+                    error: function (request, status, error) {
+                        alert(error);
+                    }
+                });
+            }
+
+
+            // 삭제 버튼 눌렀을 때
+            if (prodid[0] == 'RemoveProduct') {
+                let form = $('#deleteCartForm' + prodid[1]);
+                let id = form.find('input[name=id]').val();
+                let userEmail = form.find('input[name=userEmail]').val();
+
+                let formData = new FormData();
+                formData.append("id", id);
+                formData.append("userEmail", userEmail);
+
+                $.ajax({
+                    url: "[(@{/cart})]",
+                    method: "delete",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    cache: false
+                }).done(() => {
+                    let la = new layerAlert("장바구니 상품이 삭제되었습니다.");
+                    la.confirmAction = function () {
+						window.location.reload();
+                    };
+                });
+            }
+
+            // 옵션변경에서 취소 버튼 눌렀을 때
+            if (prodid[0] == 'optCancelLayer') {
+                $(this).parents('.basket_info').slideUp('fast')
+            }
+        });
+
+        // 총 합계 계산
+        function calcPrice() {
+            var total = 0;
+			var productCount = 0;
+
+            // 선택된 상품들의 가격만 더해서 총 합 계산
+            $("input[name=cartlist]").each(function () {
+                if ($(this).prop("checked")) {
+                    var form = $('#updateCartForm' + $(this).val());
+                    var price = form.find('input[name=price]').val();
+                    total += Number(price);
+					productCount++;
+                }
+            });
+            $("#cartDataSubtotal").text("₩" + total.toLocaleString());
+            $("#cartDataTotalPrice").text("₩" + total.toLocaleString());
+			$("#selectProductCount").text(productCount);
+        }
+
+
+        // 전체 선택시
+        $(document).on("click", "#entryCheckAll", function () {
+            var eachName = $(this).val();
+            eachName = "input[name=" + eachName + "]";
+
+            var checkProp = $(this).prop("checked");
+            $(eachName).each(function () {
+                if ($(this).prop("disabled") == false) {
+                    $(this).prop("checked", checkProp);
+                }
+            });
+
+            // 총 합 계산
+            calcPrice();
+        });
+
+        // 개별 선택시
+        $(document).on("click", "input[name='cartlist']", function () {
+            var obj = this;
+            var isCartListCheckPrice = true;
+            if ($("input:checkbox[name='cartlist']:checked").length > 0) {
+                $("[class^=shopping_cart_tab]").find("[name=cartDivision]").each(function () {
+                    if ($(this).attr("data-division") == "store") {
+                        if ($(this).hasClass("active")) {
+                            ("input:checkbox[name='cartlist']").prop("disabled", false);
+                        }
+                    }
+                });
+            } else {
+                if ($("#ordersheetCartDivision").val() != "") {
+                    $("input:checkbox[name='cartlist']").prop("disabled", false);
+                }
+            }
+
+            // 총 합 계산
+            calcPrice();
+
+        });
+
+        var cartDivisionActiveYn = false;
+        $("a[name='cartDivision']").each(function () {
+            if ($(this).data('division') == "") {
+                $(this).prop("class", "active");
+                cartDivisionActiveYn = true;
+            } else {
+                $(this).prop("class", "");
+            }
+        });
+
+        if (!cartDivisionActiveYn) {
+            if ($("a[name='cartDivision']").length > 0) {
+                $("a[name='cartDivision']").eq(0).prop("class", "active");
+            }
+        }
+    });
+
+    // 옵션 변경 적용
+    function setOptions(obj, id, change, type) {
+        $(obj).parent().find("a").css("line-height", "18px");
+        $(obj).addClass("on");
+        $(obj).siblings("a").removeClass("on");
+        $(obj).css("line-height", "15px")
+
+        var form = $('#updateCartForm' + id);
+        var pColorInput = form.find('input[name=pcolor]');
+        var pSizeInput = form.find('input[name=psize]');
+
+        if (type == 'color') {
+            pColorInput.val(change);
+        } else if (type == 'size') {
+            pSizeInput.val(change);
+        }
+    }
+
+
+    // 옵션변경 눌렀을 때
+    $(document).on("click", '.btn_option', function () {
+        let id = $(this).prop('id');
+        let form = $('#updateCartForm' + id);
+        let color = form.find('input[name=pcolor]').val();
+        let size = form.find('input[name=psize]').val();
+
+        let optionTr = $('#option' + id);
+
+        $('#option' + id).find(".cl_select > a").each(function () {
+            let curColor = $(this).attr('id');
+            if (color == curColor) {
+                $(this).addClass("on");
+                $(this).css("line-height", "15px");
+            }
+        });
+
+        $('#option' + id).find(".sz_select > a").each(function () {
+            let curSize = $(this).attr('id');
+            if (size == curSize) {
+                $(this).addClass("on");
+                $(this).css("line-height", "15px");
+            }
+        });
+
+        optionTr.css("display", "");
+
+    });
+
+    //주문하기 버튼 눌렀을 때
+    function checkoutPage() {
+        var form_contents = '';
+        var orderNumber = 0;
+
+        // 체크된 상품을 orderForm에 input hidden 태그로 정보 추가
+        $("input:checkbox[name='cartlist']:checked").each(function () {
+
+            var form = $('#updateCartForm' + $(this).val());
+            var pid = form.find('input[name=pid]').val();
+            var pamount = form.find('input[name=oldpamount]').val();
+
+            orderNumber = $(this).val();
+
+            var pid_input = "<input name='pid" + orderNumber + "' type='hidden' value='" + pid + "'>";
+            form_contents += pid_input;
+            var pcolor_input = "<input name='ccolorcode" + orderNumber + "' type='hidden' value=' '>";
+            form_contents += pcolor_input;
+            var psize_input = "<input name='ssize" + orderNumber + "' type='hidden' value='FR'>";
+            form_contents += psize_input;
+            var pamount_input = "<input name='oamount" + orderNumber + "' type='hidden' value='" + pamount + "'>";
+            form_contents += pamount_input;
+
+
+        });
+        // 총 개수 추가로 전달
+        var pid_count = "<input name='pcount' type='hidden' value='" + orderNumber + "'>";
+        form_contents += pid_count;
+
+        // 선택된 상품이 없을 경우
+        if (orderNumber == 0) {
+            layerAlert("주문하실 상품을 선택해주세요.");
+            return false;
+        }
+
+        var lc = new layerConfirm("주문하시겠습니까?", "YES", "NO");
+        lc.confirmAction = function () {
+            // html에 추가
+            $(".orderForm").html(form_contents);
+            $(".orderForm").submit();
+        };
+
+    }
+
+    //]]>
+</script>
+
+<!-- bodyWrap -->
+<div id="bodyWrap">
+    <!--title-->
+    <h3 class="cnts_title cnts_tlt1807">
+        <span>쇼핑백</span>
+    </h3>
+    <!--//title-->
+
+    <span id="shoppingbagCartView">
+	<!--sub_container-->
+		<div class="sub_container ">
+			<!--order wrap-->
+			<div class="shopping_cart_tab1807 tab_a">
+				<!-- 장바구니개편 -->
+				<ul class="tab3">
+					<li><a th:href="@{#}" name="cartDivision" data-division=""
+                           onclick="GA_Event('쇼핑백', '탭', '택배');" class="active"><span
+                            class="delt_ico"></span>택배 </a></li>
+					<li><a th:href="@{#}" name="cartDivision" data-division="store"
+                           onclick="GA_Event('쇼핑백', '탭', '매장수령');" class=""><span
+                            class="spt_ico"></span>매장수령 </a></li>
+					<li><a th:href="@{#}" name="cartDivision" data-division="quick"
+                           onclick="GA_Event('쇼핑백', '탭', '퀵배송');"
+                           class=""><span class="quk_ico"></span>퀵배송 </a></li>
+				</ul>
+                <!-- //장바구니개편 -->
+			</div>
+
+			<div class="orderwrap1807">
+				<div class="tbl_info_wrap">
+					<p class="cart_top_text"></p>
+
+					<div class="fourpm_pd_ck">
+						<div class="input_wrap"></div>
+					</div>
+				</div>
+                <!--shoppingback table-->
+				<div class="tblwrap">
+					<table class="tbl_ltype">
+						<caption>쇼핑백</caption>
+						<colgroup>
+							<col style="width: 10px;">
+							<col>
+							<col style="width: 120px">
+							<col style="width: 105px">
+							<col style="width: 110px">
+						</colgroup>
+						<thead>
+							<tr>
+								<th scope="col">
+									<!-- 2019.11.07 쇼핑백 진입 시 선택 상품 없도록 수정 -->
+									<input type="checkbox" id="entryCheckAll" value="cartlist">
+								</th>
+								<th scope="col">상품정보</th>
+								<th scope="col">수량</th>
+								<th scope="col">판매가</th>
+								<th scope="col">선택</th>
+							</tr>
+						</thead>
+                        <!-- 장바구니 상품 유무에 따라 다르게 출력 (박주영) -->
+                        <!-- 장바구니에 없을 경우 -->
+						<tbody th:if="${ cartList == null }">
+							<tr>
+								<td colspan="6" class="no_data frt">쇼핑백에 담긴 상품이 없습니다.</td>
+							</tr>
+						</tbody>
+
+                        <!-- 장바구니에 있을 경우 -->
+						<tbody th:if="${ cartList != null }" th:each="cart:${cartList}">
+							<tr name="entryProductInfo">
+								<td class="frt">
+									<input type="checkbox" name="cartlist" th:value="${cart.id}">
+								</td>
+								<td class="pt_list_wrap">
+									<!-- pt_list_all -->
+									<div class="pt_list_all">
+										<a th:href="@{/product/detail/${cart.pid}}">
+											<img th:src="${cart.image}">
+										</a>
+										<div class="tlt_wrap">
+											<a th:href="@{/product/detail/${cart.pid}}"
+                                               class="basket_tlt">
+												<span class="tlt" th:text="${cart.brand}"></span>
+												<span class="sb_tlt" th:text="${cart.name}"></span>
+											</a>
+											<p class="color_op">
+
+                                               color : <span th:text="${cart.pcolor}"></span><span
+                                                    class="and_line">/</span>
+
+                                                       size : <span th:text="${cart.psize}"></span>
+											</p>
+
+                                            <!-- 옵션 변경 -->
+											<div class="option_wrap">
+												<a th:href="@{#none}" class="btn_option"
+                                                   th:id="${cart.id}">옵션변경</a>
+											</div>
+										</div>
+									</div> <!-- //pt_list_all-->
+								</td>
+
+								<td class="al_middle">
+									<!-- 상품 정보 업데이트 form (박주영) -->
+									<form th:id="'updateCartForm' + ${cart.id}" th:action="@{/cart/${cart.id}}"
+                                          method="post">
+										<input type="hidden" name="id" th:value="${cart.id}">
+										<input type="hidden" name="pid" th:value="${cart.pid}">
+										<input type="hidden" name="pcolor" th:value="${cart.pcolor}">
+										<input type="hidden" name="psize" th:value="${cart.psize}">
+										<input type="hidden" name="oldpamount" th:value="${cart.amount}">
+										<input type="hidden" name="userEmail" th:value="${cart.userEmail}">
+										<input type="hidden" name="price" th:value="${cart.price * cart.amount}">
+                                        <!-- qty_sel -->
+										<span class="qty_sel num">
+											<a th:href="@{#none}" class="left">이전 버튼</a>
+											<input th:id="'quantity' + ${cart.id}" name="amount" type="text"
+                                                   class="mr0" th:value="${cart.amount}">
+											<a th:href="@{#none}" class="right">다음버튼</a>
+										</span>
+                                        <!-- //qty_sel -->
+                                        <!-- 수량 변경 버튼 -->
+										<a th:href="@{#none}" th:id="'QuantityProduct_' + ${cart.id}"
+                                           class="btn wt_ss qty_w mr0">변경
+										</a>
+                                        <!--											<input type="hidden" name="CSRFToken" value="27683fce-14ac-46b4-9704-eef7e178928d">-->
+									</form>
+								</td>
+								<td class="al_middle">
+									<!-- Price -->
+									<div class="price_wrap">
+<!--										<span th:text="${cart.price * cart.amount}">-->
+										<span th:text="${'₩ ' + #numbers.formatInteger(cart.price * cart.amount, 3, 'COMMA')}">
+
+										</span>
+									</div> <!-- //Price -->
+								</td>
+								<td class="al_middle">
+									<form th:id="'deleteCartForm' + ${cart.id}" th:action="@{/cart}"
+                                          method="post">
+										<input type="hidden" name="_method" value="DELETE"/>
+										<input type="hidden" name="id" th:value="${cart.id}">
+										<input type="hidden" name="userEmail" th:value="${cart.userEmail}">
+										<div class="btn_wrap">
+											<a th:href="@{#none}" class="btn wt_ss">위시리스트</a>
+                                            <!-- 삭제 버튼 -->
+											<a th:href="@{#none}" th:id="'RemoveProduct_' + ${cart.id}"
+                                               class="btn wt_ss">삭제</a>
+										</div>
+									</form>
+								</td>
+							</tr>
+                            <!-- Info wrap -->
+                            <tr th:id="'option' + ${cart.id}" style="display: none">
+                                <td colspan="6" class="basket_wrap">
+                                    <!-- Info -->
+                                    <div class="basket_info" style="display: block;">
+                                        <span class="btn_arr">위치아이콘</span>
+                                        <div class="info">
+                                            <!-- Products -->
+                                            <div class="pt_list" id="pt_list_1">
+												<a href="/ko/HANDSOME/WOMEN/DRESS/LONG-MAXI-DRESS/%EB%B2%A8%ED%8B%B0%EB%93%9C-%ED%8C%A8%EB%84%90-%EB%93%9C%EB%A0%88%EC%8A%A4/p/SY2C3WOP553W_DR">
+                                        	<img th:src="${cart.image}" alt="">
+                                            </a>
+                                        <div class="tlt_wrap">
+                                            <a href="/ko/HANDSOME/WOMEN/DRESS/LONG-MAXI-DRESS/%EB%B2%A8%ED%8B%B0%EB%93%9C-%ED%8C%A8%EB%84%90-%EB%93%9C%EB%A0%88%EC%8A%A4/p/SY2C3WOP553W_DR"
+                                               class="basket_tlt">
+                                                <span class="tlt" th:text="${cart.brand}"></span>
+                                                <span class="sb_tlt" th:text="${cart.name}"></span>
+                                            </a>
+                                            <!-- color_size -->
+                                            <dl class="cs_wrap">
+                                                <dt>COLOR</dt>
+                                                <dd>
+                                                    <div class="cl_select">
+                                                    <a th:each="color:${cart.colors}" href="javascript:void(0);"
+                                                       th:id="${color.colorId}"
+                                                       th:cartId="${cart.id}"
+                                                       th:colorId="${color.colorId}"
+                                                       th:onclick="setOptions(this, this.getAttribute('cartId'), this.getAttribute('colorId'), 'color')"
+                                                       class="beige"
+                                                       th:style="'background-image:url(' + ${color.colorChipUri} + ');'"
+                                                       th:text="${color.name}"></a>
+														<span class="cs_sel1807"></span>
+                                                    </div>
+                                                </dd>
+                                                <dt>SIZE</dt>
+                                                <dd style="width: 90%; height: 100%;">
+                                                    <div class="sz_select">
+                                                    	<a th:each="size:${cart.sizes}" href="javascript:void(0);"
+                                                           th:id="${size.size}"
+                                                           th:cartId="${cart.id}"
+                                                           th:sizeId="${size.size}"
+                                                           th:onclick="setOptions(this, this.getAttribute('cartId'), this.getAttribute('sizeId'), 'size')"
+                                                           th:text="${size.size}"></a>
+													</div>
+												</dd>
+                                            </dl>
+                                            <!-- //color_size -->
+                                        </div>
+
+                                        </div>
+                                            <!-- //Products -->
+                                            <!-- btns -->
+                                            <div class="btns">
+                                                <a href="#none" class="btn wt_ss mr0"
+                                                   th:id="'UpdateCart_' + ${cart.id}">변경</a>
+                                                <a href="#none" class="btn wt_ss mt10 mr0"
+                                                   th:id="'optCancelLayer_' + ${cart.id}">취소</a>
+                                                <a href="#none" class="btn_close" th:id="'optCloseLayer_' + ${cart.id}">닫기</a>
+                                            </div>
+                                            <!-- //btns -->
+                                        </div>
+                                    </div> <!-- //Info -->
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="6" class="basket_wrap">
+                                    </td>
+                            </tr>
+						</tbody>
+					</table>
+				</div>
+                <!--// shoppingback table-->
+                <!--Total wrap-->
+				<div class="total_wrap">
+					<!-- total -->
+					<div class="total_price_wrap">
+						<dl>
+							<dt>상품 합계</dt>
+							<dd>
+								<span id="cartDataSubtotal">₩0</span>
+							</dd>
+							<dt class="delch_wrap">
+								<p class="tlt_ship">배송비</p>
+							</dt>
+							<dd>
+								<span id="cartDataDeliveryCost">₩0</span>
+							</dd>
+						</dl>
+						<dl class="total ">
+							<dt>합계</dt>
+							<dd>
+								<span id="cartDataTotalPrice">₩0</span>
+							</dd>
+						</dl>
+					</div>
+					<div class="total_count1807">
+						<p>
+							총 <span id="selectProductCount" th:text="0"></span>개 상품
+						</p>
+					</div>
+                    <!-- //total -->
+				</div>
+                <!--//Total wrap-->
+                <!--button wrap-->
+				<div class="btnwrap order" id="checkout_btn_wrap">
+					<!-- 주문하기 버튼 -->
+					<a th:href="@{#}" onclick="checkoutPage();">
+						<input value="선택상품 주문하기" class="btn gray mr0" type="button">
+					</a>
+				</div>
+                <!--//button wrap-->
+
+                <!-- 주문 form(동적으로 input태그 추가) -->
+				<form th:action="@{/order/order}" method="post" class="orderForm">
+
+				</form>
+
+                <!-- 프로모션 -->
+				<div class="promotion_wrap mt60" id="freeGiftPromotion">
+                        <dl class="promotion_list" style="border-top:1px solid #ebebeb; padding:60px 20px 18px 20px">
+                            <dt class="promotion_tit">PROMOTION 혜택</dt>
+                            <dd class="promotion_con1">
+                                <strong>혜택 1 /
+
+                                구매하신 고객님께 사은품을 드립니다.
+                                </strong>
+                                <ul class="bul_sty01_li promotion_img">
+                                    <li class="img"><img
+                                            src="/medias/KakaoTalk-20220609-153233279.jpg?context=bWFzdGVyfHJvb3R8OTE5NDl8aW1hZ2UvanBlZ3xoZWQvaDgyLzkzMDY1OTkwNjM1ODIuanBnfDAzODNhYzljYmNjODQyMTg5YjRjMGVjNWJiNjlmNjZiNjI1Y2IwZWYzNzYzYTMwNWU0YTk5NzhmNGIzZjg0YTg"></li>
+                                    <li>사은품 : Liquides 로고 에코백</li>
+                                    <li>기간 내 리퀴드 퍼퓸바 향수 구매 고객님께 시그니처 로고 에코백을 사은품으로 드립니다.<br>주문 1건당 1개 제공되며, 사은품은 주문하신 배송지로 7월  15일 이후 별도 발송됩니다. <br>- 기간 : 6월 20일 ~ 7월 10일(선착순 증정)</li>
+                                </ul>
+                            </dd>
+                            <dd class="promotion_con2">
+                                <strong>혜택 2 /
+                                500,000원 이상
+
+                                구매하신 고객님께 사은품을 드립니다.
+                                </strong>
+                                <ul class="bul_sty01_li promotion_img">
+                                    <li class="img"><img
+                                            src="/medias/0531-04423.jpg?context=bWFzdGVyfHJvb3R8Mjk0MzR8aW1hZ2UvanBlZ3xoNjQvaDQ5LzkzMDYwOTM5MTIwOTQuanBnfGY2YmQ3YmU4NGFjODFhMTVmZjQwNWU4NDZjYzY5NDBkOGJkZmQyODI2MWFmNDg1YTIzNzBlYzk4ZTNiMzdhZjU"></li>
+                                    <li>사은품 : 타임 썸머 스페셜 기프트_탐브렐라</li>
+                                    <li>타임 아울렛 실결제 50만원 이상 구매 고객님께  "탐브렐라(TIME+UMBRELLA)" 사은품을 드립니다. <br>
+(실 결제금액 기준, 타임 아울렛 상품만 해당) <br>
+* 기간 : 6월 17일 ~ 7월 10일 (소진 시 종료, 선착순 증정)
+* 사은품은 취소 및 반품을 고려하여 주문하신 배송지로 7월 29일 이후 순차적으로 발송됩니다.</li>
+                                </ul>
+                            </dd>
+                            <dd class="promotion_con1">
+                                <strong>혜택 3 /
+                                30,000원 이상
+
+                                구매하신 고객님께 사은품을 드립니다.
+                                </strong>
+                                <ul class="bul_sty01_li promotion_img">
+                                    <li class="img"><img
+                                            src="/medias/GIFT.jpg?context=bWFzdGVyfHJvb3R8NTI5OTI1fGltYWdlL2pwZWd8aGJmL2hmNS85Mjg0MzMwMTYwMTU4LmpwZ3xjYjNhYmMwNDU1ZTExZTM3ZTYwN2M4YzNiNWY5YjRkOWNhZTYyOTZhZmQxNGYwMjE0OThkZWVmMzVmMGQ3NGE3"></li>
+                                    <li>사은품 : 바디 브러쉬 &amp; 코튼 매쉬 파우치</li>
+                                    <li>더캐시미어띵즈 내 WEEKNDERS 상품 3만원 이상 구매하신 고객님께 "바디 브러쉬 &amp; 코튼 매쉬 파우치"을 드립니다.<br>기간 : 5월 31일~소진 시 까지<br>*WEEKNDERS 상품 필수 구매<br>사은품은 주문하신 상품과 함께 동봉하여 발송될 예정입니다.<br>본 사은품은 주문번호당 1회 증정되며, 반품 및 교환시 사은품은 반드시 동봉하여 회수됩니다.</li>
+                                </ul>
+                            </dd>
+                            </dl>
+                    </div>
+                    </div>
+            <!--//order wrap-->
+		</div> <!--//sub_container-->
+	</span>
+    <!-- // 장바구니개편 -->
+
+    <!--Guide table-->
+    <div class="gd_wrap mt60">
+        <dl class="shoppingbag_list">
+            <dt>쇼핑백 이용안내</dt>
+            <dd class="shoppingbag_list_text">
+                <ul class="bul_sty01_li">
+                    <li id="infoAddN1">4PM 상품은 오후 4시 이전에 주문 하셔야 다음날 배송이 가능하며 재고가
+                        소진될 경우 일반택배로 주문하실 수 있습니다.
+                    </li>
+                    <li id="infoAddN2">3만원 구매 시 무료 배송됩니다. 3만원 미만 구매 시 배송비 2,500원이
+                        추가되며, 도서산간 지역으로 배송을 원하실 경우<br>배송비가 추가될 수 있습니다.
+                    </li>
+                    <li>쇼핑백에 담긴 상품은 30일 동안 보관됩니다. 30일이 지난 상품 자동 삭제됩니다.<br>더
+                        오래 보관하고 싶은 상품은 위시리스트에 담아주세요.
+                    </li>
+                    <li>쇼핑백에 최대 50개까지 상품 보관이 가능하며, 실제 구매 시에는 가격이나 혜택이 변동될 수 있습니다.</li>
+
+                    <li>쇼핑백에 담은 상품이 판매종료가 되었을 경우 자동 삭제 됩니다.</li>
+                    <li>쿠폰은 배송&amp;결제정보 화면에서 입력 할 수 있습니다.</li>
+                    <li>상품별 지급율에 따라 한섬마일리지 및 H.POINT가 적립됩니다. 배송완료 10일 이후 적립되며 실
+                        결제금액기준입니다.
+                    </li>
+                    <li>해외 배송을 원할 경우 더한섬닷컴의 영문 혹은 중문 서비스를 이용해 주시기 바랍니다.</li>
+                    <li></li>
+                </ul>
+            </dd>
+        </dl>
+        <dl class="gd_list">
+            <dt>카드행사 혜택</dt>
+            <dd>
+                <ul class="gd_btn1807">
+                    <li><a href="#;" rel="benefit_wrap1807">
+                        <p>무이자 할부</p> <span>자세히 보기 &gt;</span>
+                    </a></li>
+                    <li style="display: none;"><a href="#;"
+                                                  rel="benefit2_wrap1807">
+                        <p>청구할인</p> <span>자세히 보기 &gt;</span>
+                    </a></li>
+                    <li style="display: none;"><a href="#;"
+                                                  rel="benefit3_wrap1807">
+                        <p>즉시할인</p> <span>자세히 보기 &gt;</span>
+                    </a></li>
+                </ul>
+            </dd>
+        </dl>
+    </div>
+    <!--//Guide table-->
+
+</div>
+
+<!-- footerWrap -->
+<th:block th:replace="~{/footer :: footer}"></th:block>
+
+</body>
+</html>

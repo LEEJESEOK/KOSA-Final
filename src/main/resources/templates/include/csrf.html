@@ -1,0 +1,23 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script type="text/javascript" th:src="@{/js/jquery-1.11.2.min.js}"></script>
+</head>
+<body>
+<th:block th:fragment="csrf">
+    <script>
+        const csrf_token = "[[${_csrf.token}]]";
+        const csrf_header = "[[${_csrf.headerName}]]";
+
+        $.ajaxSetup({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(csrf_header, csrf_token);
+            }
+        });
+    </script>
+</th:block>
+<!--csrf_sample_form-->
+<form>
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+</form>
+</body>
+</html>

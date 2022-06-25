@@ -33,6 +33,11 @@ public class UserDetailService implements UserDetailsService {
 
             result = mapper.findByEmail(email);
 
+            log.info("result"+result);
+            if(result.getStatus()==1){
+                throw new UsernameNotFoundException("탈퇴한 회원");
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             //로직 처리만 0이면 가입, 1이면 탈퇴, 2면 휴면상태
@@ -44,6 +49,7 @@ public class UserDetailService implements UserDetailsService {
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + result.getRole_set()));
+        log.info(authorities);
 
         // clubMember --> AuthMemberDTO 변환
         AuthMemberDTO  authMemberDTO = new
@@ -54,6 +60,7 @@ public class UserDetailService implements UserDetailsService {
 
         log.info(authMemberDTO);
         log.info(authMemberDTO.getAuthorities());
+
         // AuthMemberDTO는 UserDetails 타입으로 처리됨
         return authMemberDTO;
     }// end load..
