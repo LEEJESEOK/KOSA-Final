@@ -61,6 +61,13 @@
         {call sp_member_insert_role_set(#{role_set}, #{user_email})}
     </insert>
 
+    <delete id="deleteRoleSet">
+        update ROLE_SET
+        set role_set='MANAGER'
+        where user_email=#{user_email}
+
+    </delete>
+
     <select id="checkId" resultType="int">
         select sf_check_id(#{email})
         from dual

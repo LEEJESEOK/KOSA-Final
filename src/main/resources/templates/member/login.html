@@ -1,43 +1,10 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>LoginPage</title>
-    <link rel="stylesheet" th:href="@{/css/brand.css}"/>
-    <link rel="stylesheet" th:href="@{/css/common.css}"/>
-    <link rel="stylesheet" th:href="@{/css/contents.css}"/>
-    <link rel="stylesheet" th:href="@{/css/font_443.css}"/>
-    <link rel="stylesheet" th:href="@{/css/common.css}"/>
-    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
-    <link rel="stylesheet" th:href="@{/css/popup.css}"/>
-    <link rel="stylesheet" th:href="@{/css/jquery-ui.min.css}"/>
-    <link rel="stylesheet" th:href="@{/css/brand.css}"/>
-    <link rel="stylesheet" th:href="@{/css/footer.css}"/>
-    <link rel="stylesheet" th:href="@{/css/contents.css}"/>
-    <link rel="stylesheet" th:href="@{/css/print.css}"/>
-
-    <script type="text/javascript" th:src="@{/js/actions.js}"></script>
-    <script type="text/javascript" th:src="@{/js/jquery-1.11.2.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/jquery.vticker.js}"></script>
-    <script type="text/javascript" th:src="@{/js/common.js}"></script>
-    <script type="text/javascript" th:src="@{/js/html5shiv-printshiv.js}"></script>
-    <script type="text/javascript" th:src="@{/js/jquery.flexslider.js}"></script>
-    <script type="text/javascript" th:src="@{/js/ui.js}"></script>
-    <script type="text/javascript" th:src="@{/js/jquery.form-3.51.js}"></script>
-    <script type="text/javascript" th:src="@{/js/common_function.js}"></script>
-    <script type="text/javascript" th:src="@{/js/videojs-ie8.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/html5shiv.js}"></script>
-    <script type="text/javascript" th:src="@{/js/respond.js}"></script>
-    <script type="text/javascript" th:src="@{/js/jquery-ui-1.11.2.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/instagramAPI.js}"></script>
-    <script type="text/javascript" th:src="@{/js/makePCookie.js}"></script>
-    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/netfunnel.js}" charset="UTF-8"></script>
-    <script type="text/javascript" th:src="@{/js/netfunnel_skin.js}" charset="UTF-8"></script>
-    <script type="text/javascript" th:src="@{/js/unorm.js}"></script>
-    <script type="text/javascript" th:src="@{/js/appboy.min.js}"></script>
+    <th:block th:replace="~{/head :: head}"></th:block>
 
 <!--    <script>-->
 <!--        function check_form(){-->
@@ -53,10 +20,9 @@
 <!--        }-->
 
 <!--    </script>-->
-    <data th:replace="/head.html::head"></data>
 </head>
 <body>
-<div th:replace="/header.html::header"></div>
+<th:block th:replace="/header_logo.html::header_logo"></th:block>
 <div id="bodyWrap" class="login">
     <h3 class="cnts_title"><span>로그인</span></h3>
     <div class="sub_container">
@@ -89,21 +55,21 @@
                         </form>
 
 
-                        <div class="login1905">
+                        <div class="section_bottom">
                             <div>
-                                <a href="/oauth2/authorization/google" class="otp"><img src="/images/google.PNG" width="60px" alt="구글"/></a>
+                                <a href="/oauth2/authorization/google" class="otp"><img src="/images/googleLogin.png" alt="구글"/></a>
                             </div>
                             <div>
                                 <a href="#"><img src="/images/naver.PNG" width="60px" alt="네이버"/></a>
                             </div>
                         </div>
-                        <div
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div th:replace="/footer.html::footer"></div>
+<th:block th:replace="/footer.html::footer"></th:block>
 </body>
 </html>

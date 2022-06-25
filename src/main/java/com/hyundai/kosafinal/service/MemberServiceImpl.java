@@ -19,8 +19,15 @@ public class MemberServiceImpl implements MemberService {
     private PasswordEncoder passwordencoder;
 
     @Override
-    public void deleteMember(String email) { //회원삭제
-        mapper.deleteMember(email);
+    public boolean deleteMember(String email) { //회원삭제
+        System.out.println("MemberServviceImpl deleteMember");
+        System.out.println(email);
+
+        boolean result=mapper.deleteMember(email);
+        System.out.println(result);
+
+
+        return result;
     }
 
     @Override

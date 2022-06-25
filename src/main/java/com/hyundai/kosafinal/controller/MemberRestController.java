@@ -44,21 +44,19 @@ public class MemberRestController {
         member.setGender((Integer) params.get("gender"));
 
 
-
         member.setTel((String) params.get("tel"));
         member.setAddress1((String) params.get("address1"));
         member.setAddress2((String) params.get("address2"));
         member.setZipcode((String) params.get("zipcode"));
-        member.setHeight(Integer.parseInt((String)params.get("height")));
-        member.setWeight(Integer.parseInt((String)params.get("weight")));
+        member.setHeight(Integer.parseInt((String) params.get("height")));
+        member.setWeight(Integer.parseInt((String) params.get("weight")));
 
 
-        Date date=new Date();
-        String dateStr = (String) params.get("birth1")+"-"+(String) params.get("birth2")+"-"+(String) params.get("birth3")    ;     // 포맷터
+        Date date = new Date();
+        String dateStr = (String) params.get("birth1") + "-" + (String) params.get("birth2") + "-" + (String) params.get("birth3");     // 포맷터
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");         // 문자열 -> Date
         date = formatter.parse(dateStr);
         member.setBirth(date);
-
 
 
         Map<String, Object> result = new HashMap<String, Object>();
@@ -91,31 +89,41 @@ public class MemberRestController {
         String new_password = request.getParameter("password"); //새로 입력받은 비밀번호
 
 
-        if (passwordencoder.matches(new_password,old_password)){
+        if (passwordencoder.matches(new_password, old_password)) {
             return "true";
-        }
-        else {
+        } else {
             return "false";
         }
     }
-    @RequestMapping(value = "/update", method=RequestMethod.POST) //업데이트
-    public boolean update(@RequestBody Map<String,Object> params) throws ParseException {
+
+    @RequestMapping(value = "/update", method = RequestMethod.POST) //업데이트
+    public boolean update(@RequestBody Map<String, Object> params) throws ParseException {
         System.out.println("----------------------------");
         System.out.println("회원정보수정");
         for (String key : params.keySet())
             System.out.println(key + " : " + params.get(key));
         MemberDTO member = new MemberDTO();
-        member.setEmail((String)params.get("email"));
-        member.setName((String)params.get("name"));
+        member.setEmail((String) params.get("email"));
+        member.setName((String) params.get("name"));
         member.setPassword((String) params.get("password"));
-        System.out.println("레스트"+member);
-        Date date=new Date();
-        String dateStr = (String) params.get("birth1")+"-"+(String) params.get("birth2")+"-"+(String) params.get("birth3")    ;     // 포맷터
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");         // 문자열 -> Date
-        date = formatter.parse(dateStr);
-        member.setBirth(date);
+        System.out.println("레스트" + member);
+        if (!((String) params.get("birth1")).equals("선택") || !params.get("birth2").equals("선택") || !params.get("birth3").equals("선택")) {
+
+            Date date = new Date();
+            String dateStr = (String) params.get("birth1") + "-" + (String) params.get("birth2") + "-" + (String) params.get("birth3");     // 포맷터
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");         // 문자열 -> Date
+            date = formatter.parse(dateStr);
+            member.setBirth(date);
+        }
         return service.updateMember(member);
 
 
+    }
+    @RequestMapping(value="/delete", method=RequestMethod.POST)
+    public boolean delete(@RequestBody Map<String,Object> params) {
+        for (String key : params.keySet())
+            System.out.println(key + " : " + params.get(key));
+
+        return service.deleteMember((String)params.get("email"));
     }
 }

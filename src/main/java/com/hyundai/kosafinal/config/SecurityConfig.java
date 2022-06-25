@@ -1,13 +1,13 @@
 package com.hyundai.kosafinal.config;
 
 
-
 /*************************************************************
  파일명: SecurityConfig.java
  기능: Security 를 사용하기 위한 로그인 설정
  작성자: 이승연
  [코멘트: 일반 사용자 로그인, 소셜로그인 그리고 접근제한을 설정할 수 있다.]
  ***********************************************************/
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
@@ -30,12 +30,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         roleHierarchyImpl.setHierarchy("ROLE_ADMIN > ROLE_MANAGER > ROLE_USER");
         return roleHierarchyImpl;
     }
-    @Bean // Bean 등록
+
+    @Bean
+        // Bean 등록
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
 
 
     @Override
@@ -66,7 +66,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         //로그아웃
         http.logout().logoutUrl("/logout")
-                .logoutSuccessUrl("/member/login");
+                .logoutSuccessUrl("/member/login")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID","remember-me");
+
 
     }
 

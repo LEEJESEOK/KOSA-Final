@@ -88,7 +88,7 @@ class MemberMapperTest {
 
     @Test
     void deleteMember() {
-        String email = "test2";
+        String email = "TEST1";
         mapper.deleteMember(email);
     }
 

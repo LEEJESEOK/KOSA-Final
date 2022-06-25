@@ -32,7 +32,11 @@ public class UserDetailService implements UserDetailsService {
             log.info(email);
 
             result = mapper.findByEmail(email);
+
             log.info("result"+result);
+            if(result.getStatus()==1){
+                throw new UsernameNotFoundException("탈퇴한 회원");
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

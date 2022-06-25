@@ -1,44 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" th:href="@{/css/brand.css}"/>
-    <link rel="stylesheet" th:href="@{/css/common.css}"/>
-    <link rel="stylesheet" th:href="@{/css/contents.css}"/>
-    <link rel="stylesheet" th:href="@{/css/font_443.css}"/>
-    <link rel="stylesheet" th:href="@{/css/common.css}"/>
-    <link rel="stylesheet" th:href="@{/css/layout.css}"/>
-    <link rel="stylesheet" th:href="@{/css/popup.css}"/>
-    <link rel="stylesheet" th:href="@{/css/jquery-ui.min.css}"/>
-    <link rel="stylesheet" th:href="@{/css/brand.css}"/>
-    <link rel="stylesheet" th:href="@{/css/footer.css}"/>
-    <link rel="stylesheet" th:href="@{/css/contents.css}"/>
-    <link rel="stylesheet" th:href="@{/css/print.css}"/>
-
-    <script type="text/javascript" th:src="@{/js/actions.js}"></script>
-    <script type="text/javascript" th:src="@{/js/jquery-1.11.2.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/jquery.vticker.js}"></script>
-    <script type="text/javascript" th:src="@{/js/common.js}"></script>
-    <script type="text/javascript" th:src="@{/js/html5shiv-printshiv.js}"></script>
-    <script type="text/javascript" th:src="@{/js/jquery.flexslider.js}"></script>
-    <script type="text/javascript" th:src="@{/js/ui.js}"></script>
-    <script type="text/javascript" th:src="@{/js/jquery.form-3.51.js}"></script>
-    <script type="text/javascript" th:src="@{/js/common_function.js}"></script>
-    <script type="text/javascript" th:src="@{/js/videojs-ie8.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/html5shiv.js}"></script>
-    <script type="text/javascript" th:src="@{/js/respond.js}"></script>
-    <script type="text/javascript" th:src="@{/js/jquery-ui-1.11.2.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/instagramAPI.js}"></script>
-    <script type="text/javascript" th:src="@{/js/makePCookie.js}"></script>
-    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/netfunnel.js}" charset="UTF-8"></script>
-    <script type="text/javascript" th:src="@{/js/netfunnel_skin.js}" charset="UTF-8"></script>
-    <script type="text/javascript" th:src="@{/js/unorm.js}"></script>
-    <script type="text/javascript" th:src="@{/js/appboy.min.js}"></script>
-    <script type="text/javascript">
+    <th:block th:replace="~{/head :: head}"></th:block>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script>
+        <!-- 주소 API include -->
 
 
         $(document).ready(function () {
@@ -367,21 +337,21 @@
                 $("#sBirthday").val($("#selYear").val() + $("#selMonth").val() + $("#selDay").val());
 
 
-                new Date(($("#selYear").val())+"/"+
-                    ($("#selMonth").val())+"/"+
-                    ($("#selDay").val())     )
+                new Date(($("#selYear").val()) + "/" +
+                    ($("#selMonth").val()) + "/" +
+                    ($("#selDay").val()))
                 // TODO 생년월일
                 if (vc.isValid()) {
                     $.ajax({
                         type: "POST",
                         data: JSON.stringify({
-                            email:    $("#email").val(),
+                            email: $("#email").val(),
                             password: $("#pw").val(),
-                            name:     $("#name").val(),
-                            gender:   $("#gender").val()==="남" ? 0:1,
-                            birth1:   $("#selYear").val(),
-                            birth2:   $("#selMonth").val(),
-                            birth3:   $("#selDay").val().substring(0,2),
+                            name: $("#name").val(),
+                            gender: $("#gender").val() === "남" ? 0 : 1,
+                            birth1: $("#selYear").val(),
+                            birth2: $("#selMonth").val(),
+                            birth3: $("#selDay").val().substring(0, 2),
 
                             tel: $("#tel").val(),
                             address1: $("#address1").val(),
@@ -556,31 +526,68 @@
 
             console.log(message);
         }
+
+        // 주소 찾기 함수
+        function searchAddress() {
+            new daum.Postcode({
+                oncomplete: function (data) {
+                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                    // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
+                    // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                    var addr = ''; // 도로명 주소 변수
+                    var extraAddr = ''; // 참고 항목 변수
+
+                    //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                        addr = data.roadAddress;
+                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                        addr = data.jibunAddress;
+                    }
+
+                    // if(data.userSelectedType === 'R'){
+                    //     // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                    //     // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                    //     if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                    //         extraAddr += data.bname;
+                    //     }
+                    //     // 건물명이 있고, 공동주택일 경우 추가한다.
+                    //     if(data.buildingName !== '' && data.apartment === 'Y'){
+                    //         extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    //     }
+                    //     // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                    //     if(extraAddr !== ''){
+                    //         extraAddr = ' (' + extraAddr + ')';
+                    //     }
+                    //     // 조합된 참고항목을 해당 필드에 넣는다.
+                    //     document.getElementById("sample6_extraAddress").value = extraAddr;
+                    //
+                    // } else {
+                    //     document.getElementById("sample6_extraAddress").value = '';
+                    // }
+
+
+                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                    document.getElementById('zipcode').value = data.zonecode; //
+                    document.getElementById("address1").value = addr;
+                    // 커서를 상세주소 필드로 이동한다.
+                    document.getElementById("address2").focus();
+                }
+            }).open();
+        }
     </script>
 </head>
 <body>
-<!-- validation check message global -->
-<input type="hidden" id="validationCheckPwd" value="비밀번호를 재입력 하셔야 합니다."/>
-<input type="hidden" id="validationCheck" value="필수데이터가 입력되지 않았습니다."/>
-<input type="hidden" id="validationCheckMsg" value="다음 사항을 확인해 주세요."/>
-<input type="hidden" id="validationCheckMsg1" value="필수데이터가 입력되지 않았습니다."/>
-<input type="hidden" id="validationCheckMsg2" value="동일문자를 3번 이상 사용할 수 없습니다."/>
-<input type="hidden" id="validationCheckMsg3" value="연속된 문자열(123 또는 321, abc, cba 등) 3자리이상 올 수 없습니다."/>
-<input type="hidden" id="validationCheckMsg4" value="Caps Lock 이 켜져 있습니다."/>
-<input type="hidden" id="validationCheckMsg5" value="이메일 아이디의 중복 확인이 필요합니다."/>
-<input type="hidden" id="validationCheckMsg6" value="이메일의 중복확인이 필요합니다."/>
-<input type="hidden" id="deliveryOkMsg" value="확인"/>
-<input type="hidden" id="deliveryCancelMsg" value="취소"/>
-
+<th:block th:replace="/header_logo.html::header_logo"></th:block>
 
 <form id="memberJoinForm" action="/register" method="POST"><input type="hidden" name="emailDuplChk" id="emailDuplChk"
-                                                                 value="" title="이메일 중복"/>
+                                                                  value="" title="이메일 중복"/>
     <input type="hidden" name="pwTypeChk" id="pwTypeChk" value="" title="비밀번호 형식"/>
     <!--    <input type="hidden" name="pwConfirmChk" id="pwConfirmChk" value="" title="비밀번호 일치" />-->
     <!--    <input type="hidden" id="uid" name="uid" value="isaa1107@gmail.com" />-->
     <input type="hidden" id="emailAddress" name="emailAddress" value=""/>
-<!--    <input type="hidden" id="sBirthday" name="sBirthday" value=""/>-->
-<!--    <input type="hidden" id="gender" name="gender" value=""/>-->
+    <!--    <input type="hidden" id="sBirthday" name="sBirthday" value=""/>-->
+    <!--    <input type="hidden" id="gender" name="gender" value=""/>-->
     <input type="hidden" id="collectionAgreementYN" name="collectionAgreementYN" value=""/>
 
 
@@ -702,23 +709,15 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row"><label for="address1">주소</label></th>
-                                <td>
-                                    <input type="text" style="width:120px" id="address1" name="address1"/>
+                                <th scope="row"><label for="address">주소</label></th>
+                                <td class="address" id="address">
+                                    <input type="text" id="zipcode" disabled>
+                                    <input type="button" class="btn add_s" onclick="searchAddress()" value="우편번호찾기"><br>
+                                    <input type="text" id="address1" name="address1" size="60" disabled><br>
+                                    <input type="text" id="address2" name="address2" size="60">
                                 </td>
                             </tr>
-                            <tr>
-                                <th scope="row"><label for="address2">상세주소</label></th>
-                                <td>
-                                    <input type="text" style="width:120px" id="address2" name="address2"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row"><label for="zipcode">우편번호(5자리)</label></th>
-                                <td>
-                                    <input type="text" style="width:120px" id="zipcode" name="zipcode"/>
-                                </td>
-                            </tr>
+
                             <tr>
                                 <th scope="row"><label for="height">키(cm)</label></th>
                                 <td>
@@ -747,5 +746,6 @@
         <!--//sub container-->
     </div>
 </form>
+<th:block th:replace="/footer.html::footer"></th:block>
 </body>
 </html>
