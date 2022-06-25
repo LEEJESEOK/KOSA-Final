@@ -22,6 +22,7 @@ import java.util.Locale;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/member")
 public class MemberRestController {
     @Autowired
     MemberService service;
