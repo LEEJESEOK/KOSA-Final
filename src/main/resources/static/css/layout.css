@@ -366,57 +366,57 @@ iframe.lnb{width:100%;height:100%}
   .sr_category_menu_dep1>li ul li a{width:171px;text-align:center;font-size:13px;padding-left:0;line-height:45px;}
   .sr_category_menu_dep1>li{display:none;}
 
-  .sr_category_menu.chg{width:813px;z-index:50;}
-  .sr_category_menu_dep.chg{width:auto;float:left;}
-  .sr_category_menu_dep.chg h3{width:105px;text-align:left;padding-left:10px;}
-  .sr_category_menu_dep.chg h3+.btn_close{top:15px;left:92px;}
-  .sr_category_menu_dep1.chg>li{display:block;width:105px;border:none;float:left;border-top:1px solid #e3e3e3;border-right:1px solid #e3e3e3;border-bottom:1px solid #e3e3e3;padding-left:10px;overflow:inherit;}
-  .sr_category_menu_dep1.chg>li h3{width:105px;float:left;background:url('../images/common/ico_utilmenu.png') right 19px no-repeat;text-align:left;cursor:pointer;}
-  .sr_category_menu_dep1.chg>li h3 a{display:none;}
-  .sr_category_menu_dep1.chg>li+li .dropdown_menu_wrap{overflow:hidden;z-index:51;}
-  .sr_category_menu_dep1 .filter .filter_apply{display:block;}
-  .sr_category_menu_dep1.chg>li .dropdown_menu_wrap{display:none;background:#fff;border:1px solid #e3e3e3;padding:10px 0;width:176px;height:auto;position:relative;top:0;left:-11px;}
-  .sr_category_menu_dep1.chg>li:nth-child(1) .dropdown_menu_wrap,
-  .sr_category_menu_dep1.chg>li:nth-child(2) .dropdown_menu_wrap{width:195px;}
-  .sr_category_menu_dep1.chg>li .dropdown_menu_wrap.dep2{position:absolute;top:45px;background:#fff;left:-1px;max-height:260px;min-height:150px;height:auto;}
-  .sr_category_menu_dep1.chg>li:last-child .dropdown_menu_wrap{left:-72px;}
-  .sr_category_menu_dep1.chg .sr_category_menu_dep2.dep2_2{background:#fff;width:auto;}
-  .sr_category_menu_dep1.chg .sr_category_menu_dep2.dep2_2 li a{width:auto;}
-  .cate_select .cate_depth_3 .autoscroll{position:absolute;top:45px;left:194px;min-width:195px;width:auto;background:#fff;border:1px solid #e3e3e3;height:auto;max-height:260px;padding:10px 0;z-index:3;display:none;}
-  .cate_select .cate_depth_3 .autoscroll .list li a{width:auto;}
-  .cate_select .cate_depth_3 .autoscroll .list li a:hover{background:#c69c6d;color:#fff;width:auto;}
-  /*
-  .sr_category_menu_dep1.chg .sr_category_menu_dep2.dep2_2 .sr_category_menu_dep3{position:absolute;top:-11px;left:175px;width:171px;background:#fff;border:1px solid #e3e3e3;padding:10px 0;z-index:3;}
-  .sr_category_menu_dep1.chg .sr_category_menu_dep2.dep2_2 .sr_category_menu_dep3 li a{display:block;line-height:25px;padding-left:15px;}
-  .sr_category_menu_dep1.chg .sr_category_menu_dep2.dep2_2 .sr_category_menu_dep3 li a:hover{color:#fff;background:#c69c6d;}
-  */
-  .sr_category_menu_dep1.chg .sr_category_menu_dep2>li.on>a{background:#c69c6d;color:#fff;}
-  .sr_category_menu_dep1.chg .sr_category_menu_dep2>li.current>a{background:#c69c6d;color:#fff;width:auto;}
-  .sr_category_menu_dep1.chg .sr_category_menu_dep2>li.current>a+a{color:#c69c6d;padding-left:30px;background:#fff;}
-  .sr_category_menu_dep1.chg .sr_category_menu_dep2>li:first-child.current a{color:#c69c6d;background:#fff;}
-  .sr_category_menu_dep1.chg>li ul li a{line-height:25px;text-align:left;padding-left:15px;}
-  .sr_category_menu_dep1.chg>li ul li{float:none;border-left:0;overflow:hidden;}
-  .sr_category_menu_dep1.chg .filter .color_chip li{padding-left:0;float:left;}
-  .sr_category_menu_dep1.chg .filter .color_chip li a{padding-left:0;}
-  .sr_category_menu_dep1.chg .filter .size_chip li{padding-left:0;float:left;}
-  .sr_category_menu_dep1.chg .filter .size_chip li+li+li+li+li{margin:0 8px 7px 0;}
-  .sr_category_menu_dep1.chg>li.filter div .apply{display:block;background:#4a4a4a;color:#fff;font-weight:bold;text-align:center;margin:10px;height:30px;line-height:30px;}
-  .sr_category_menu_dep1.chg>li.filter div .reset{display:block;margin-top:10px;float:left;margin-left:70px;}
-  .sr_category_menu_dep1.chg>li.filter div .close{display:block;margin-top:10px;float:left;margin-left:20px;}
-  .sr_category_menu_dep1.chg>li.filter p{padding:0 13px 0 13px;letter-spacing: -.5px;}
-  /*정렬 순*/
-  .sr_sortby{display:none;}
-  .s_sr_sortby{display:block;padding:0;width:120px;float:right;margin:15px 12px 0 0;border:1px solid #e3e3e3;position:relative;overflow:inherit;z-index:50;}
-  .s_sr_sortby .select{display:block;text-align:center;height:45px;}
-  .s_sr_sortby .select span{line-height:45px;}
-  .s_sr_sortby .select:hover{color:#363636;}
-  .s_sr_sortby .select .ico_arr{width:20px;height:40px;display:inline-block;background:url('http://www.thehandsome.com/_ui/desktop/common/images/common/ico_utilmenu.png') right 19px no-repeat;text-indent:-999em;margin:3px 0 0 20px;}
-  .s_sr_sortby ul{position:absolute;top:45px;left:-1px;z-index:10;background:#fff;width:100px;border:1px solid #e3e3e3;padding:10px;display:none;}
-  .s_sr_sortby ul li{float:none;padding:0;line-height:25px;}
-  .s_sr_sortby ul li a:hover{text-decoration:none;}
-  .s_sr_sortby ul li a.on{text-decoration:none;}
-  /*선택한 조건*/
-  .filter_words{display:none;border-top:0;top:60px;left:10px;width:100%;padding-top:0;margin-left:15px;}
+        .sr_category_menu.chg{width:813px;z-index:50;}
+        .sr_category_menu_dep.chg{width:auto;float:left;}
+        .sr_category_menu_dep.chg h3{width:105px;text-align:left;padding-left:10px;}
+        .sr_category_menu_dep.chg h3+.btn_close{top:15px;left:92px;}
+        .sr_category_menu_dep1.chg>li{display:block;width:105px;border:none;float:left;border-top:1px solid #e3e3e3;border-right:1px solid #e3e3e3;border-bottom:1px solid #e3e3e3;padding-left:10px;overflow:inherit;}
+        .sr_category_menu_dep1.chg>li h3{width:105px;float:left;background:url('http://www.thehandsome.com/_ui/desktop/common/images/common/ico_utilmenu.png') right 19px no-repeat;text-align:left;cursor:pointer;}
+        .sr_category_menu_dep1.chg>li h3 a{display:none;}
+        .sr_category_menu_dep1.chg>li+li .dropdown_menu_wrap{overflow:hidden;z-index:51;}
+        .sr_category_menu_dep1 .filter .filter_apply{display:block;}
+        .sr_category_menu_dep1.chg>li .dropdown_menu_wrap{display:none;background:#fff;border:1px solid #e3e3e3;padding:10px 0;width:176px;height:auto;position:relative;top:0;left:-11px;}
+        .sr_category_menu_dep1.chg>li:nth-child(1) .dropdown_menu_wrap,
+        .sr_category_menu_dep1.chg>li:nth-child(2) .dropdown_menu_wrap{width:195px;}
+        .sr_category_menu_dep1.chg>li .dropdown_menu_wrap.dep2{position:absolute;top:45px;background:#fff;left:-1px;max-height:260px;min-height:150px;height:auto;}
+        .sr_category_menu_dep1.chg>li:last-child .dropdown_menu_wrap{left:-72px;}
+        .sr_category_menu_dep1.chg .sr_category_menu_dep2.dep2_2{background:#fff;width:auto;}
+        .sr_category_menu_dep1.chg .sr_category_menu_dep2.dep2_2 li a{width:auto;}
+        .cate_select .cate_depth_3 .autoscroll{position:absolute;top:45px;left:194px;min-width:195px;width:auto;background:#fff;border:1px solid #e3e3e3;height:auto;max-height:260px;padding:10px 0;z-index:3;display:none;}
+        .cate_select .cate_depth_3 .autoscroll .list li a{width:auto;}
+        .cate_select .cate_depth_3 .autoscroll .list li a:hover{background:#c69c6d;color:#fff;width:auto;}
+        /*
+        .sr_category_menu_dep1.chg .sr_category_menu_dep2.dep2_2 .sr_category_menu_dep3{position:absolute;top:-11px;left:175px;width:171px;background:#fff;border:1px solid #e3e3e3;padding:10px 0;z-index:3;}
+        .sr_category_menu_dep1.chg .sr_category_menu_dep2.dep2_2 .sr_category_menu_dep3 li a{display:block;line-height:25px;padding-left:15px;}
+        .sr_category_menu_dep1.chg .sr_category_menu_dep2.dep2_2 .sr_category_menu_dep3 li a:hover{color:#fff;background:#c69c6d;}
+        */
+        .sr_category_menu_dep1.chg .sr_category_menu_dep2>li.on>a{background:#c69c6d;color:#fff;}
+        .sr_category_menu_dep1.chg .sr_category_menu_dep2>li.current>a{background:#c69c6d;color:#fff;width:auto;}
+        .sr_category_menu_dep1.chg .sr_category_menu_dep2>li.current>a+a{color:#c69c6d;padding-left:30px;background:#fff;}
+        .sr_category_menu_dep1.chg .sr_category_menu_dep2>li:first-child.current a{color:#c69c6d;background:#fff;}
+        .sr_category_menu_dep1.chg>li ul li a{line-height:25px;text-align:left;padding-left:15px;}
+        .sr_category_menu_dep1.chg>li ul li{float:none;border-left:0;overflow:hidden;}
+        .sr_category_menu_dep1.chg .filter .color_chip li{padding-left:0;float:left;}
+        .sr_category_menu_dep1.chg .filter .color_chip li a{padding-left:0;}
+        .sr_category_menu_dep1.chg .filter .size_chip li{padding-left:0;float:left;}
+        .sr_category_menu_dep1.chg .filter .size_chip li+li+li+li+li{margin:0 8px 7px 0;}
+        .sr_category_menu_dep1.chg>li.filter div .apply{display:block;background:#4a4a4a;color:#fff;font-weight:bold;text-align:center;margin:10px;height:30px;line-height:30px;}
+        .sr_category_menu_dep1.chg>li.filter div .reset{display:block;margin-top:10px;float:left;margin-left:70px;}
+        .sr_category_menu_dep1.chg>li.filter div .close{display:block;margin-top:10px;float:left;margin-left:20px;}
+        .sr_category_menu_dep1.chg>li.filter p{padding:0 13px 0 13px;letter-spacing: -.5px;}
+        /*정렬 순*/
+        .sr_sortby{display:none;}
+        .s_sr_sortby{display:block;padding:0;width:120px;float:right;margin:15px 12px 0 0;border:1px solid #e3e3e3;position:relative;overflow:inherit;z-index:50;}
+        .s_sr_sortby .select{display:block;text-align:center;height:45px;}
+        .s_sr_sortby .select span{line-height:45px;}
+        .s_sr_sortby .select:hover{color:#363636;}
+        .s_sr_sortby .select .ico_arr{width:20px;height:40px;display:inline-block;background:url('http://www.thehandsome.com/_ui/desktop/common/images/common/ico_utilmenu.png') right 19px no-repeat;text-indent:-999em;margin:3px 0 0 20px;}
+        .s_sr_sortby ul{position:absolute;top:45px;left:-1px;z-index:10;background:#fff;width:100px;border:1px solid #e3e3e3;padding:10px;display:none;}
+        .s_sr_sortby ul li{float:none;padding:0;line-height:25px;}
+        .s_sr_sortby ul li a:hover{text-decoration:none;}
+        .s_sr_sortby ul li a.on{text-decoration:none;}
+        /*선택한 조건*/
+        .filter_words{display:none;border-top:0;top:60px;left:10px;width:100%;padding-top:0;margin-left:15px;}
 }
 /*END OF 검색결과 화면 201705*/
 /*아울렛 메인 브랜드+ start*/
@@ -648,7 +648,7 @@ iframe.lnb{width:100%;height:100%}
 .gnb_nav.hscene1906 .cate_m .delch_box.on{display:block;}
 .gnb_nav.hscene1906 .cate_m .delch_box .arr{right:122px}
 .delch_box.hscene1906{display:none;position:absolute;top:25px;right:36px; width:265px; padding:10px 15px; border:1px solid #ccc; background-color:#fff;}/*sub_container:relative;*/
-.delch_box.hscene1906 .arr{display:block; width:11px; height:6px; position:absolute; right:50px; top:-6px; background:url(http://www.thehandsome.com/_ui/desktop/common/images/common/box_arr.gif) no-repeat; text-indent:-999em;}
+.delch_box.hscene1906 .arr{display:block; width:11px; height:6px; position:absolute; right:50px; top:-6px; background:url("http://www.thehandsome.com/_ui/desktop/common/images/common/box_arr.gif") no-repeat; text-indent:-999em;}
 /* 최상단배너 닫기버튼 이동 190702 */
 .horiz_topbanner.horiz1903 .img_type .img_type_inner .btn_close_w{top:0;right:0}
 /* 메인 - 하니톡 이동 190702 */
@@ -760,7 +760,7 @@ p.amc_morebtn a::before{ content:''; position:absolute; top:-15px; left:-25px; w
 #headerWrap .gnbwarp .gnb_nav1903 > ul.gnbul2 > li:last-child > a.on:after{background:#000;}
 
 .honey_talk_service1905.remove1907{top:56px; right:-65px;}
-#headerWrap .gnbwarp .logo a{background: url(http://cdn.thehandsome.com/_ui/desktop/common/images/main/top-header-handsome-logo.png) 0 7px no-repeat; width:195px;}
+#headerWrap .gnbwarp .logo a{background: url("http://cdn.thehandsome.com/_ui/desktop/common/images/main/top-header-handsome-logo.png") 0 7px no-repeat; width:195px;}
 
 #headerWrap .gnbwarp .gnb_nav > ul.gnbul2 > li > a{margin:0;}
 #headerWrap .gnbwarp .gnb_nav1803 > ul.gnbul2 > li > a:after{display:none;}
@@ -781,14 +781,14 @@ p.amc_morebtn a::before{ content:''; position:absolute; top:-15px; left:-25px; w
 
 #headerWrap .gnbwarp.brand .vline{background:none;}
 
-.util_menu ul li span.ico_sh{background: url(http://cdn.thehandsome.com/_ui/desktop/common/images/common/ico_utilmenu_new.png) 0 11px no-repeat; width:15px;}
-.util_menu ul li span.ico.wishlist{background: url(http://cdn.thehandsome.com/_ui/desktop/common/images/common/ico_utilmenu_new.png) -15px 11px no-repeat; width:16px;}
-.util_menu ul li span.ico.cart{background: url(http://cdn.thehandsome.com/_ui/desktop/common/images/common/ico_utilmenu_new.png) -31px 11px no-repeat;}
+.util_menu ul li span.ico_sh{background: url('http://cdn.thehandsome.com/_ui/desktop/common/images/common/ico_utilmenu_new.png') 0 11px no-repeat; width:15px;}
+.util_menu ul li span.ico.wishlist{background: url('http://cdn.thehandsome.com/_ui/desktop/common/images/common/ico_utilmenu_new.png') -15px 11px no-repeat; width:16px;}
+.util_menu ul li span.ico.cart{background: url('http://cdn.thehandsome.com/_ui/desktop/common/images/common/ico_utilmenu_new.png') -31px 11px no-repeat;}
 
 #headerWrap .gnbwarp .util_menu > ul > li:first-child{min-width:23px;}
 
 /* 5주년 셀렉트샵(20201005) */
-#headerWrap .gnbwarp .gnb_nav > ul > li.selectshop a i{background: url(http://www.thehandsome.com/_ui/desktop/common/images/pc_gnb_selectshop_icon.gif) center center no-repeat; width:53px; height:47px; display:block; position:absolute; top:-16px; left:15px;}
+#headerWrap .gnbwarp .gnb_nav > ul > li.selectshop a i{background: url("http://cdn.thehandsome.com/_ui/desktop/common/images/pc_gnb_selectshop_icon.gif") center center no-repeat; width:53px; height:47px; display:block; position:absolute; top:-16px; left:15px;}
 
 /* header 브랜드 메뉴 가이드 텍스트 추가 (20201016) */
 #headerWrap .top_nav .top_nav_wrap .brand_menu .brand_menu_guide_text{font-size:11px; color:#363636; position:absolute; top:9px; left:72px;}
@@ -800,7 +800,7 @@ p.amc_morebtn a::before{ content:''; position:absolute; top:-15px; left:-25px; w
 /* 편집샵(20201202 예정) */
 #headerWrap .gnbwarp .gnb_nav > ul > li{}
 #headerWrap .gnbwarp .gnb_nav > ul > li.new{position:relative;}
-#headerWrap .gnbwarp .gnb_nav > ul > li.new:after{content:""; display:block; width:6px; height:6px; background:url(http://www.thehandsome.com/_ui/desktop/common/images/icon_new_pc.gif) 0 0 no-repeat; position:absolute; top:10px; right:7px;}
+#headerWrap .gnbwarp .gnb_nav > ul > li.new:after{content:""; display:block; width:6px; height:6px; background:url('http://cdn.thehandsome.com/_ui/desktop/common/images/icon_new_pc.gif') 0 0 no-repeat; position:absolute; top:10px; right:7px;}
 
 /* 편집샴 LNB 수정(20210329) */
 #headerWrap .gnbwarp.brand .gnb_nav.brand-main-menu > ul.brd_m > li a{color:#555;}
@@ -831,13 +831,13 @@ p.amc_morebtn a::before{ content:''; position:absolute; top:-15px; left:-25px; w
 
 /* 210728 oera 신규 추가 */
 #headerWrap .gnbwarp.brand .logo.oera {width:110px;}
-#headerWrap .gnbwarp .gnb_nav > ul > li > a .ico-new {display:block; width:6px; height:6px; background:url(http://www.thehandsome.com/_ui/desktop/common/images/icon_new_pc.gif) 0 0 no-repeat; position:absolute; top:11px; right:10px;text-indent:-99999px;}
+#headerWrap .gnbwarp .gnb_nav > ul > li > a .ico-new {display:block; width:6px; height:6px; background:url('http://cdn.thehandsome.com/_ui/desktop/common/images/icon_new_pc.gif') 0 0 no-repeat; position:absolute; top:11px; right:10px;text-indent:-99999px;}
 #headerWrap .gnbwarp .gnb_nav > ul.gnbul1 li .sm_dep1 .sm_dep2 li.oera a {position:relative;}
-#headerWrap .gnbwarp .gnb_nav > ul.gnbul1 li .sm_dep1 .sm_dep2 li.oera a .ico-new {display:block; width:6px; height:6px; background:url(http://www.thehandsome.com/_ui/desktop/common/images/icon_new_pc.gif) 0 0 no-repeat; position:absolute; top:3px; right:-8px;text-indent:-99999px;}
+#headerWrap .gnbwarp .gnb_nav > ul.gnbul1 li .sm_dep1 .sm_dep2 li.oera a .ico-new {display:block; width:6px; height:6px; background:url('http://cdn.thehandsome.com/_ui/desktop/common/images/icon_new_pc.gif') 0 0 no-repeat; position:absolute; top:3px; right:-8px;text-indent:-99999px;}
 
 /* 220310 Liquides Parfums Bar 신규 추가 */
 #headerWrap .gnbwarp .gnb_nav > ul.gnbul1 li .sm_dep1 .sm_dep2 li.liquide a {position:relative;}
-#headerWrap .gnbwarp .gnb_nav > ul.gnbul1 li .sm_dep1 .sm_dep2 li.liquide a .ico-new {display:block; width:6px; height:6px; background:url(http://www.thehandsome.com/_ui/desktop/common/images/icon_new_pc.gif) 0 0 no-repeat; position:absolute; top:3px; right:-8px;text-indent:-99999px;}
+#headerWrap .gnbwarp .gnb_nav > ul.gnbul1 li .sm_dep1 .sm_dep2 li.liquide a .ico-new {display:block; width:6px; height:6px; background:url('http://cdn.thehandsome.com/_ui/desktop/common/images/icon_new_pc.gif') 0 0 no-repeat; position:absolute; top:3px; right:-8px;text-indent:-99999px;}
 #headerWrap.selectshop-header-wrap .gnbwarp .gnb_nav .sub_menu.sub_brand > ul > li {margin-right:45px}
 #headerWrap .gnbwarp .gnb_nav .sub_menu.sub_brand > ul > li.new{position:relative;}
-#headerWrap .gnbwarp .gnb_nav .sub_menu.sub_brand > ul > li.new:after{content:""; display:block; width:6px; height:6px; background:url(http://www.thehandsome.com/_ui/desktop/common/images/icon_new_pc.gif) 0 0 no-repeat; position:absolute; top:0px; right:-5px;}
+#headerWrap .gnbwarp .gnb_nav .sub_menu.sub_brand > ul > li.new:after{content:""; display:block; width:6px; height:6px; background:url('http://cdn.thehandsome.com/_ui/desktop/common/images/icon_new_pc.gif') 0 0 no-repeat; position:absolute; top:0px; right:-5px;}

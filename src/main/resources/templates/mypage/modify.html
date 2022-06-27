@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <th:block th:replace="~{/head :: head}"></th:block>
+</head>
+<body>
+<div th:replace="/header_logo.html::header_logo"></div>
+
+<div id="bodyWrap">
+    <h3 class="cnts_title">
+        <span id="menuTitle">개인정보 변경</span>
+    </h3>
+    <div class="sub_container">
+        <!-- lnb -->
+        <th:block th:replace="~{/lnb :: lnb}"></th:block>
+        <!-- //lnb -->
+
+
+        <div class="sub_cnts">
+            <div class="gnb_sh_wrap" style="display:none;">
+                <!-- validation check message global -->
+                <input type="hidden" id="validationCheckPwd" value="비밀번호를 재입력 하셔야 합니다.">
+                <input type="hidden" id="validationCheck" value="필수데이터가 입력되지 않았습니다.">
+                <input type="hidden" id="validationCheckMsg" value="다음 사항을 확인해 주세요.">
+                <input type="hidden" id="validationCheckMsg1" value="필수데이터가 입력되지 않았습니다.">
+                <input type="hidden" id="validationCheckMsg2" value="동일문자를 3번 이상 사용할 수 없습니다.">
+                <input type="hidden" id="validationCheckMsg3" value="연속된 문자열(123 또는 321, abc, cba 등) 3자리이상 올 수 없습니다.">
+                <input type="hidden" id="validationCheckMsg4" value="Caps Lock 이 켜져 있습니다.">
+                <input type="hidden" id="validationCheckMsg5" value="이메일 아이디의 중복 확인이 필요합니다.">
+                <input type="hidden" id="validationCheckMsg6" value="이메일의 중복확인이 필요합니다.">
+                <input type="hidden" id="deliveryOkMsg" value="확인">
+                <input type="hidden" id="deliveryCancelMsg" value="취소">
+            </div>
+
+            <script>
+
+                $(document).ready(function () {
+                    if ("ko" == "ko") {
+                        var pwRegExp = /^(?=.*[a-zA-Z])(?=.*[\?\<\>\;\:\'\"\`\(\)\{\}\[\]\|\\\~\,\.!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
+                    } else {
+                        var pwRegExp = /^(?=.*[a-zA-Z])(?=.*[\?\<\>\;\:\'\"\`\(\)\{\}\[\]\|\\\~\,\.!@#$%^*+=-]{0,15})(?=.*[0-9]).{8,15}$/;
+                    }
+
+                    var hPointConnectYn;
+                    var url = window.location.href;
+                    if (url.indexOf("www.thehandsome.com") > -1) {
+                        hPointConnectYn = "Y";
+                    } else {
+                        hPointConnectYn = "Y";
+                    }
+
+
+                    $("#menuTitle").text("개인정보 변경"); //개인정보 변경
+
+                    if ("ko" == "ko") {
+                        if ("Y" == "Y") {
+                            //간편
+                            emailTypeDomainSelectController("#emailDomain", "#emailDomainSel");
+                            $("#emailDomainSel").val("naver.com");
+                            if ($("#emailDomainSel option").index($("#emailDomainSel option:selected")) != -1) $("#emailDomainSel").change();
+                            else $("#emailDomainSel option:eq(0)").attr("selected", "selected");
+
+                            var nowYear = parseInt('2008');
+                            var nowMonth = parseInt('06');
+                            var nowDay = parseInt('21');
+                            var monthArray = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+                            //if(nowYear < 2000) nowYear += 1900;
+
+                            //년도
+                            for (var i = nowYear; i >= 1900; i--) {
+                                $('#selYear').append("<option value='" + i + "'>" + i + "</option>");
+                            }
+
+                            // $("#selDay").val("**");
+                            // $("#selMonth").val("11");
+                            // $("#selYear").val("1996");
+
+                            $("#selYear").change(function () {
+
+                                var selYear1 = $('#selYear').val();
+                                if ($('#selMonth').val() == 02) {
+
+                                    if ($("#selDay option:last").val() >= 29) {
+
+                                        $("#selDay option[value='29']").remove();
+                                        $("#selDay option[value='30']").remove();
+                                        $("#selDay option[value='31']").remove();
+                                    }
+
+                                    if ((selYear1 % 4 == 0 && selYear1 % 100 != 0) || selYear1 % 400 == 0) {
+
+                                        $("#selDay").append("<option value='29'>29</option>");
+                                    }
+                                }
+                                //만14세미만 가입X
+                                if (nowYear == selYear1) {
+                                    for (var i = nowMonth + 1; i <= 12; i++) {
+                                        if (i < 10) {
+                                            $("#selMonth option[value='0" + i + "']").remove();
+                                        } else {
+                                            $("#selMonth option[value='" + i + "']").remove();
+                                        }
+                                        if ($("#selMonth").val() > nowMonth) $("#selMonth").val('').prop("selected", true);
+                                    }
+
+                                    if (nowMonth == parseInt($('#selMonth').val())) {
+
+                                        var n_selMonth = parseInt($('#selMonth').val());
+                                        var maxDay = monthArray[n_selMonth];
+
+                                        for (var i = nowDay + 1; i <= maxDay; i++) {
+                                            if (i < 10) {
+                                                $("#selDay option[value='0" + i + "']").remove();
+                                            } else {
+                                                $("#selDay option[value='" + i + "']").remove();
+                                            }
+                                            if ($("#selDay").val() > nowDay) {
+                                                $("#selDay").val('').prop("selected", true);
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    var n_selMonth = parseInt($('#selMonth').val());
+                                    var maxDay = monthArray[n_selMonth];
+
+                                    if ($("#selMonth option:last").val() < 12) {
+                                        for (var i = nowMonth + 1; i <= 12; i++) {
+                                            if (i < 10) {
+                                                $("#selMonth").append("<option value='0" + i + "'>0" + i + "</option>");
+                                            } else {
+                                                $("#selMonth").append("<option value='" + i + "'>" + i + "</option>");
+                                            }
+                                        }
+                                    }
+                                    if ($("#selDay option:last").val() < maxDay) {
+                                        if ($('#selMonth').val() == 02) {
+                                            if ((selYear1 % 4 == 0 && selYear1 % 100 != 0) || selYear1 % 400 == 0) {
+                                                maxDay = 29;
+                                            }
+                                        }
+                                        for (var i = parseInt($("#selDay option:last").val()) + 1; i <= maxDay; i++) {
+                                            if (i < 10) {
+                                                $("#selDay").append("<option value='0" + i + "'>0" + i + "</option>");
+                                            } else {
+                                                $("#selDay").append("<option value='" + i + "'>" + i + "</option>");
+                                            }
+                                        }
+                                    }
+
+                                }
+                            });
+
+                            $("#selMonth").change(function () {
+                                var lastDay = $("#selDay option:last").val();
+                                var selYear1 = $('#selYear').val();
+                                var n_selMonth = parseInt($('#selMonth').val());
+                                var maxDay = monthArray[n_selMonth];
+
+                                if ($(this).val() == 02) {
+                                    $("#selDay option[value='31']").remove();
+                                    $("#selDay option[value='30']").remove();
+                                    $("#selDay option[value='29']").remove();
+
+                                    if ((selYear1 % 4 == 0 && selYear1 % 100 != 0) || selYear1 % 400 == 0) {
+                                        $("#selDay").append("<option value='29'>29</option>");
+                                    }
+                                } else if ($(this).val() == 04 || $(this).val() == 06 || $(this).val() == 09 || $(this).val() == 11
+                            )
+                                {
+                                    if (lastDay == 28) {
+                                        $("#selDay").append("<option value='29'>29</option>");
+                                        $("#selDay").append("<option value='30'>30</option>");
+                                    } else if (lastDay == 29) {
+                                        $("#selDay").append("<option value='30'>30</option>");
+                                    } else if (lastDay == 31) {
+                                        $("#selDay option[value='31']").remove();
+                                    }
+                                }
+                            else
+                                {
+                                    if (lastDay == 28) {
+                                        $("#selDay").append("<option value='29'>29</option>");
+                                        $("#selDay").append("<option value='30'>30</option>");
+                                        $("#selDay").append("<option value='31'>31</option>");
+                                    } else if (lastDay == 29) {
+                                        $("#selDay").append("<option value='30'>30</option>");
+                                        $("#selDay").append("<option value='31'>31</option>");
+                                    } else if (lastDay == 30) {
+                                        $("#selDay").append("<option value='31'>31</option>");
+                                    }
+                                }
+
+                                //만14세미만 가입X
+                                if (nowYear == selYear1 && nowMonth == $('#selMonth').val()) {
+                                    for (var i = nowDay + 1; i <= $("#selDay option:last").val(); i++) {
+                                        if (i < 10) {
+                                            $("#selDay option[value='0" + i + "']").remove();
+                                        } else {
+                                            $("#selDay option[value='" + i + "']").remove();
+                                        }
+                                        if ($("#selDay option:last").val() < $("#selDay").val()) $("#selDay").val('').prop("selected", true);
+                                    }
+                                } else {
+                                    if ($("#selDay option:last").val() < maxDay) {
+                                        for (var i = parseInt($("#selDay option:last").val()) + 1; i <= maxDay; i++) {
+                                            if (i < 10) {
+                                                $("#selDay").append("<option value='0" + i + "'>0" + i + "</option>");
+                                            } else {
+                                                $("#selDay").append("<option value='" + i + "'>" + i + "</option>");
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+
+                            $("#selDay").change(function () {
+                                if ($("#selDay option:eq(0)").val() == "default") {
+                                    $("#selDay option:eq(0)").remove();
+                                }
+                            });
+
+                            $("#selYear").trigger('change');
+                            $("#selMonth").trigger('change');
+
+                            $('input[name="emailReceiveYN"]:radio:input[value="false"]').attr('checked', 'checked');
+
+                            //이메일 중복 확인
+                            $('#emailDubChkBtn').click(function () {
+
+                                var vc = new ValidationCheck();
+                                vc.checkIdList = ['email'];
+                                vc.msgFn = function (msg) {
+                                    $("#emailMsg").text(msg);
+                                };
+                                if (vc.isValid()) {
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "/member/isDuplicate",
+                                        data: JSON.stringify({
+                                            email: $("#email").val()
+
+                                        }),
+                                        dataType: "json",
+                                        contentType: "application/json",
+                                        success: function (data) {
+                                            if (data == "true") {
+                                                $("#emailMsg").text('이미 사용중인 이메일입니다.');
+                                            } else {
+                                                $("#emailMsg").text('사용 가능한 이메일입니다.');
+                                                $("#emailDuplChk").val('Y');
+
+                                            }
+                                        },
+                                        error: function (e) {
+                                            console.log(e);
+                                        }
+                                    });
+                                }
+
+                            });
+
+
+                            // $("#email, #emailDomain, #emailDomainSel").change(function() {
+                            //
+                            //     var emailRegExp = /^((([^<>()[\]\\.,;:\s@\"~`!@#$%^&+={}|'/?]+(\.[^<>()[\]\\.,;:\s@\"~`!@#$%^&+={}|'/?]+)*))|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                            //     var email = $("#email").val()+"@"+$("#emailDomain").val();
+                            //
+                            //     if ( emailRegExp.test(email) != true ) {
+                            //         $("#emailMsg").text("잘못된 E-mail 형식입니다.");
+                            //         $("#emailDuplChk").val('N');
+                            //         return;
+                            //     } else {
+                            //         $("#emailDuplChk").val('');
+                            //     }
+
+                            //     if("isa*****"+"@"+"naver.com" == email) {
+                            //         $("#emailMsg").text('');
+                            //         $("#emailDuplChk").val('Y');
+                            //     }else {
+                            //         $("#emailMsg").text('');
+                            //         $("#emailDuplChk").val('');
+                            //     }
+                            // });
+
+
+                            $("#cancleBtn").click(function () {
+                                var lc = new layerConfirm('개인정보 변경을 취소하시겠습니까?', '확인', '취소');
+                                lc.confirmAction = function () {
+                                    location.href = "/ko/mypage/order/myorders";
+                                };
+                            });
+
+                            if (hPointConnectYn == "N") {
+                                console.log("hpoint n");
+                                $("#saveBtn").click(function () {
+                                    var la = new layerAlert("통합멤버십 작업으로 인해 일시적으로 사용이 제한 됩니다.불편을 드려 죄송합니다.");
+                                    return false;
+                                });
+
+                                $("#memberSecessionBtn").click(function () {
+                                    var la = new layerAlert("통합멤버십 작업으로 인해 일시적으로 사용이 제한 됩니다.불편을 드려 죄송합니다.");
+                                    return false;
+                                });
+                            } else {
+                                $("#saveBtn").click(function () {
+                                    $("#sBirthday").val($("#selYear").val() + $("#selMonth").val() + $("#selDay").val());
+                                    $("#emailAddress").val($("#email").val() + "@" + $("#emailDomain").val());
+
+                                    var vc = new ValidationCheck();
+                                    vc.checkIdList = ['password'];
+
+                                    if ($("#emailDuplChk").val() == 'N') {
+                                        return;
+                                    }
+
+                                    if ($("#emailAddress").val().length > 50) {
+                                        layerAlert("E-mail은 최대 50자입니다.");
+                                        return;
+                                    }
+                                    let year=$("#selYear").val();
+                                    let month=$("#selMonth").val();
+                                    let day=$("#selDay").val();
+                                    console.log("vc.isValid() : " + vc.isValid());
+                                    if (vc.isValid()) {
+
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/member/update",
+                                            datatype: "json",
+                                            contentType: "application/json",
+                                            data: JSON.stringify({
+                                                email: $("#email").val(),
+                                                password: $("#password").val(),
+                                                name: $("#name").val(),
+                                                birth1:$("#selYear").val(),
+                                                birth2:$("#selMonth").val(),
+                                                birth3:$("#selDay").val()
+
+                                            }),
+                                            error: function (request, status, error) {
+                                                layerAlert("예상치 못한 오류가 발생하였습니다.</br>" + "다시 시도해 주시기 바랍니다5.");
+                                                console.log("code:" + request.status + "\n\n\n\n" + "message:" + request.responseText + "\n\n\n\n" + "error:" + error);
+                                            },
+                                            success: function (result) {
+                                                if (result) {
+                                                    var lc = new layerAlert("입력하신 정보가 변경완료 되었습니다.");
+
+                                                    lc.confirmAction = function () {
+                                                        location.href = "/mypage";
+                                                    };
+                                                } else {
+                                                    layerAlert("예상치 못한 오류가 발생하였습니다.</br>" + "다시 시도해 주시기 바랍니다6.");
+                                                }
+                                            }
+                                        });
+                                    }
+                                });
+
+                                $("#memberSecessionBtn").click(function () { //회원탈퇴
+                                    console.log($("#email").val());
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/member/delete",
+                                        dataType: "json",
+                                        contentType: "application/json",
+                                        data: JSON.stringify({
+                                            email: $("#email").val()
+                                        }),
+                                        success: function () {
+
+                                                console.log("탈퇴");
+                                                var lc = new layerAlert("이용해주셔서 감사합니다.");
+
+                                                lc.confirmAction = function () {
+                                                    location.href = "/logout";
+                                                };
+
+                                        },
+                                        error: function (xhr, Status, error) {
+                                            alert('sendRequest error : ' + xhr.status + " ( " + error + " ) ");
+                                        }
+                                    })
+                                    })
+
+                            }//else
+
+                        } else {  //easyMember != Y
+                            //일반
+                            emailTypeDomainSelectController("#emailDomain", "#emailDomainSel");
+
+                            $("#hp1").val("");
+                            $("#ph1").val("");
+
+                            $("#emailDomainSel").val("naver.com");
+                            if ($("#emailDomainSel option").index($("#emailDomainSel option:selected")) != -1) $("#emailDomainSel").change();
+                            else $("#emailDomainSel option:eq(0)").attr("selected", "selected");
+
+                            $('input[name="emailReceiveYN"]:radio:input[value="false"]').attr('checked', 'checked');
+                            $('input[name="smsReceiveYN"]:radio:input[value="false"]').attr('checked', 'checked');
+
+                            if ($("#hp2").val() == "" || $("#hp2").val() == "")
+                                $("#hpMsg").text("필수항목을 입력하시길 바랍니다.");
+
+
+                            //우편번호 검색
+                            $('#addrSearchBtn').click(function () {
+
+                                searchAddressLayer('address1', 'address2', 'zipCode');
+                            });
+
+                            $('#zipCode').click(function () {
+                                $('#addrSearchBtn').click();
+                            });
+
+                            // //이메일 중복 확인
+                            // $('#emailDubChkBtn').click(function(){
+                            //
+                            //     var vc = new ValidationCheck();
+                            //     vc.checkIdList = ['email','emailDomain'];
+                            //     vc.msgFn = function(msg){
+                            //         $("#emailMsg").text(msg);
+                            //     };
+                            //
+                            //     var email = $("#email").val()+"@"+$("#emailDomain").val();
+                            //
+                            //     if("isa*****"+"@"+"naver.com" == email){
+                            //         $("#emailMsg").text('이미 사용중인 이메일입니다.');
+                            //         $("#emailDuplChk").val('Y');
+                            //         return;
+                            //     }
+                            //
+                            //     if(email.indexOf("*") > -1){
+                            //         $("#emailMsg").text('이미 사용중인 이메일입니다.');
+                            //         $("#emailDuplChk").val('');
+                            //         return;
+                            //     }
+                            //
+                            //     if(vc.isValid() && $("#emailDuplChk").val() != 'N'){
+                            //         $.ajax({
+                            //             type:"GET",
+                            //             url:"/ko/member/isduplemail?email="+email,
+                            //             success:function(response){
+                            //                 if(response==true){
+                            //                     $("#emailMsg").text('이미 사용중인 이메일입니다.');
+                            //                     $("#emailDuplChk").val('');
+                            //                 }else{
+                            //                     $("#emailMsg").text('사용 가능한 이메일입니다.');
+                            //                     $("#emailDuplChk").val('Y');
+                            //
+                            //                 }
+                            //             },
+                            //             error:function(e){
+                            //                 console.log(e);
+                            //             }
+                            //         });
+                            //     }
+                            //
+                            // });
+
+
+                            // $("#email, #emailDomain, #emailDomainSel").change(function(){
+                            //
+                            //     var emailRegExp = /^((([^<>()[\]\\.,;:\s@\"~`!@#$%^&+={}|'/?]+(\.[^<>()[\]\\.,;:\s@\"~`!@#$%^&+={}|'/?]+)*))|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                            //     var email = $("#email").val()+"@"+$("#emailDomain").val();
+                            //
+                            //     if ( emailRegExp.test(email) != true ) {
+                            //
+                            //         $("#emailMsg").text("잘못된 E-mail 형식입니다.");
+                            //         $("#emailDuplChk").val('N');
+                            //         return;
+                            //     } else {
+                            //         $("#emailDuplChk").val('');
+                            //     }
+
+
+                            //     if("isa*****"+"@"+"naver.com" == email){
+                            //         $("#emailMsg").text('');
+                            //         $("#emailDuplChk").val('Y');
+                            //     }else{
+                            //         $("#emailMsg").text('');
+                            //         $("#emailDuplChk").val('');
+                            //     }
+                            // });
+
+
+                            $("#cancleBtn").click(function () {
+                                var lc = new layerConfirm('개인정보 변경을 취소하시겠습니까?', '확인', '취소');
+                                lc.confirmAction = function () {
+                                    location.href = "/ko/mypage/order/myorders";
+                                };
+                            });
+
+                            if (hPointConnectYn == "N") {
+                                $("#saveBtn").click(function () {
+                                    var la = new layerAlert("통합멤버십 작업으로 인해 일시적으로 사용이 제한 됩니다.불편을 드려 죄송합니다.");
+                                    return false;
+                                });
+
+                                $("#memberSecessionBtn").click(function () {
+                                    var la = new layerAlert("통합멤버십 작업으로 인해 일시적으로 사용이 제한 됩니다.불편을 드려 죄송합니다.");
+                                    return false;
+                                });
+                            } else {
+                                $("#saveBtn").click(function () {
+                                    var vc = new ValidationCheck();
+                                    vc.checkIdList = ['password'];
+                                    if (vc.isValid()) {
+
+
+                                        // if($("#ph1").val() == "")
+                                        //     $("#telephoneNumber").val("");
+                                        // else if($("#ph2").val() == "")
+                                        //     $("#telephoneNumber").val("");
+                                        // else if($("#ph3").val() == "")
+                                        //     $("#telephoneNumber").val("");
+                                        // else
+                                        //     $("#telephoneNumber").val($("#ph1").val()+"-"+$("#ph2").val()+"-"+$("#ph3").val());
+
+                                        // // 2017-03-08, 이현승, 전화번호데이터검증 ===>>>
+                                        // var hpCheckResult = phoneNumbericCheck();
+                                        // if(hpCheckResult != "SUCCESS"){
+                                        //     var lc = new layerAlert("전화번호는 숫자만 입력가능 합니다.");
+                                        //     lc.confirmAction = function(){
+                                        //         $('#'+hpCheckResult).focus();
+                                        //     };
+                                        //     return;
+                                        // }
+
+                                        // if($("#emailAddress").val().length > 50){
+                                        //     layerAlert("E-mail은 최대 50자입니다.");
+                                        //     return;
+                                        // }
+
+
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/member/update",
+                                            datatype: "json",
+                                            data: JSON.stringify({
+                                                password: $("#password").val(),
+
+                                            }),
+
+                                            error: function (request, status, error) {
+                                                layerAlert("예상치 못한 오류가 발생하였습니다.</br>" + "다시 시도해 주시기 바랍니다1.");
+                                                console.log("code:" + request.status + "\n\n\n\n" + "message:" + request.responseText + "\n\n\n\n" + "error:" + error);
+                                            },
+                                            success: function (result) {
+                                                if (result) {
+                                                    var lc = new layerAlert('입력하신 정보가 변경완료 되었습니다.');
+
+                                                    lc.confirmAction = function () {
+                                                        location.href = "/member/login";
+                                                    };
+                                                } else {
+                                                    layerAlert("예상치 못한 오류가 발생하였습니다.</br>" + "다시 시도해주시기 바랍니다2.");
+                                                }
+                                            }
+                                        });
+                                    }
+                                });
+
+                                $("#memberSecessionBtn").click(function () {
+                                    console.log($("#email").val());
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/member/delete",
+                                        dataType: "json",
+                                        contentType: "application/json",
+                                        data: JSON.stringify({
+                                            email: $("#email").val()
+                                        }),
+                                        success: function (result) {
+                                            if (result) {
+                                                var selectTypeYn = "N";
+                                                if (selectTypeYn == 'Y') {
+                                                    var lc = new layerAlert('입력하신 정보가 변경완료 되었습니다.');
+
+                                                    lc.confirmAction = function () {
+                                                        location.href = "/member/login";
+                                                    };
+                                                } else {
+                                                        var lc = new layerAlert('입력하신 정보가 변경완료 되었습니다.');
+
+                                                        lc.confirmAction = function () {
+                                                            location.href = "/member/login";
+                                                        };
+                                                }
+                                            }
+                                        },
+                                        error: function (xhr, Status, error) {
+                                            alert('sendRequest error2 : ' + xhr.status + " ( " + error + " ) ");
+                                        }
+                                    });
+                                });
+                            }//
+                        }//e: easyMember != Y
+                    }//e: ko
+                    else //s:global
+                    {
+                        $('input[name="sGender"]:radio:input[value="FEMALE"]').attr('checked', 'checked');
+
+                        var nowYear = parseInt('2008');
+                        var nowMonth = parseInt('06');
+                        var nowDay = parseInt('21');
+                        var monthArray = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+                        //if(nowYear < 2000) nowYear += 1900;
+
+
+                        //년도
+                        for (var i = nowYear; i >= 1900; i--) {
+                            $('#selYear').append("<option value='" + i + "'>" + i + "</option>");
+                        }
+
+                        $("#selDay").val("**");
+                        $("#selMonth").val("11");
+                        $("#selYear").val("1996");
+
+                        $("#selYear").change(function () {
+
+                            var selYear1 = $('#selYear').val();
+                            if ($('#selMonth').val() == 02) {
+                                if ($("#selDay option:last").val() >= 29) {
+                                    $("#selDay option[value='29']").remove();
+                                    $("#selDay option[value='30']").remove();
+                                    $("#selDay option[value='31']").remove();
+                                }
+                                if ((selYear1 % 4 == 0 && selYear1 % 100 != 0) || selYear1 % 400 == 0) {
+                                    $("#selDay").append("<option value='29'>29</option>");
+                                }
+                            }
+
+                            //만14세미만 가입X
+                            if (nowYear == selYear1) {
+                                for (var i = nowMonth + 1; i <= 12; i++) {
+                                    if (i < 10) {
+                                        $("#selMonth option[value='0" + i + "']").remove();
+                                    } else {
+                                        $("#selMonth option[value='" + i + "']").remove();
+                                    }
+                                    if ($("#selMonth").val() > nowMonth) $("#selMonth").val('').prop("selected", true);
+                                }
+
+                                if (nowMonth == parseInt($('#selMonth').val())) {
+
+                                    var n_selMonth = parseInt($('#selMonth').val());
+                                    var maxDay = monthArray[n_selMonth];
+
+                                    for (var i = nowDay + 1; i <= maxDay; i++) {
+                                        if (i < 10) {
+                                            $("#selDay option[value='0" + i + "']").remove();
+                                        } else {
+                                            $("#selDay option[value='" + i + "']").remove();
+                                        }
+                                        if ($("#selDay").val() > nowDay) {
+                                            $("#selDay").val('').prop("selected", true);
+                                        }
+                                    }
+                                }
+                            } else {
+                                var n_selMonth = parseInt($('#selMonth').val());
+                                var maxDay = monthArray[n_selMonth];
+
+                                if ($("#selMonth option:last").val() < 12) {
+                                    for (var i = nowMonth + 1; i <= 12; i++) {
+                                        if (i < 10) {
+                                            $("#selMonth").append("<option value='0" + i + "'>0" + i + "</option>");
+                                        } else {
+                                            $("#selMonth").append("<option value='" + i + "'>" + i + "</option>");
+                                        }
+                                    }
+                                }
+                                if ($("#selDay option:last").val() < maxDay) {
+                                    if ($('#selMonth').val() == 02) {
+                                        if ((selYear1 % 4 == 0 && selYear1 % 100 != 0) || selYear1 % 400 == 0) {
+                                            maxDay = 29;
+                                        }
+                                    }
+                                    for (var i = parseInt($("#selDay option:last").val()) + 1; i <= maxDay; i++) {
+                                        if (i < 10) {
+                                            $("#selDay").append("<option value='0" + i + "'>0" + i + "</option>");
+                                        } else {
+                                            $("#selDay").append("<option value='" + i + "'>" + i + "</option>");
+                                        }
+                                    }
+                                }
+                            }
+                        });
+
+                        $("#selMonth").change(function () {
+                            var lastDay = $("#selDay option:last").val();
+                            var selYear1 = $('#selYear').val();
+                            var n_selMonth = parseInt($('#selMonth').val());
+                            var maxDay = monthArray[n_selMonth];
+
+                            if ($(this).val() == 02) {
+                                $("#selDay option[value='31']").remove();
+                                $("#selDay option[value='30']").remove();
+                                $("#selDay option[value='29']").remove();
+
+                                if ((selYear1 % 4 == 0 && selYear1 % 100 != 0) || selYear1 % 400 == 0) {
+                                    $("#selDay").append("<option value='29'>29</option>");
+                                }
+                                ;
+                            } else if ($(this).val() == 04 || $(this).val() == 06 || $(this).val() == 09 || $(this).val() == 11
+                        )
+                            {
+                                if (lastDay == 28) {
+                                    $("#selDay").append("<option value='29'>29</option>");
+                                    $("#selDay").append("<option value='30'>30</option>");
+                                } else if (lastDay == 29) {
+                                    $("#selDay").append("<option value='30'>30</option>");
+                                } else if (lastDay == 31) {
+                                    $("#selDay option[value='31']").remove();
+                                }
+                            }
+                        else
+                            {
+                                if (lastDay == 28) {
+                                    $("#selDay").append("<option value='29'>29</option>");
+                                    $("#selDay").append("<option value='30'>30</option>");
+                                    $("#selDay").append("<option value='31'>31</option>");
+                                } else if (lastDay == 29) {
+                                    $("#selDay").append("<option value='30'>30</option>");
+                                    $("#selDay").append("<option value='31'>31</option>");
+                                } else if (lastDay == 30) {
+                                    $("#selDay").append("<option value='31'>31</option>");
+                                }
+                            }
+
+                            //만14세미만 가입X
+                            if (nowYear == selYear1 && nowMonth == $('#selMonth').val()) {
+                                for (var i = nowDay + 1; i <= $("#selDay option:last").val(); i++) {
+                                    if (i < 10) {
+                                        $("#selDay option[value='0" + i + "']").remove();
+                                    } else {
+                                        $("#selDay option[value='" + i + "']").remove();
+                                    }
+                                    if ($("#selDay option:last").val() < $("#selDay").val()) $("#selDay").val('').prop("selected", true);
+                                }
+                            } else {
+                                if ($("#selDay option:last").val() < maxDay) {
+                                    for (var i = parseInt($("#selDay option:last").val()) + 1; i <= maxDay; i++) {
+                                        if (i < 10) {
+                                            $("#selDay").append("<option value='0" + i + "'>0" + i + "</option>");
+                                        } else {
+                                            $("#selDay").append("<option value='" + i + "'>" + i + "</option>");
+                                        }
+                                    }
+                                }
+                            }
+                        });
+
+                        $("#selYear").trigger('change');
+                        $("#selMonth").trigger('change');
+
+                        var emailCheck = 'Y';
+
+                        //이메일 중복 확인
+                        $("#email").blur(function () {
+                            if ($("#email").val() == "") {
+                                $("#emailAddressMsg").text("이메일을 입력하셔야 합니다.");
+                                $("#email").focus();
+                            } else {
+                                var vc = new ValidationCheck();
+                                vc.checkIdList = ['email'];
+                                vc.msgFn = function (msg) {
+                                    $("#emailAddressMsg").text(msg);
+                                };
+
+
+                                if ("isaa1107@naver.com" == $("#email").val()) {
+                                    $("#emailAddressMsg").text("");
+                                    $("#emailDuplChk").val('Y');
+                                    return;
+                                }
+
+
+                                if (vc.isValid() && emailCheck == 'Y') {
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "/ko/member/isduplemail?email=" + $("#email").val(),
+                                        success: function (response) {
+                                            if (response == true) {
+                                                $("#emailAddressMsg").text("이미 사용중인 이메일입니다.");
+                                            } else {
+                                                $("#emailAddressMsg").text("사용 가능한 이메일입니다.");
+                                                $("#emailDuplChk").val('Y');
+
+                                            }
+                                        },
+                                        error: function (e) {
+                                            console.log(e);
+                                        }
+                                    });
+                                }
+                            }
+                        });
+
+                        $("#email").change(function () {
+                            if ($("#email").val().length > 0) {
+                                $("#emailAddressMsg").text("");
+                            }
+
+                            var emailRegExp = /^((([^<>()[\]\\.,;:\s@\"~`!@#$%^&+={}|'/?]+(\.[^<>()[\]\\.,;:\s@\"~`!@#$%^&+={}|'/?]+)*))|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                            var email = $("#email").val();
+
+
+                            if (emailRegExp.test(email) != true) {
+
+                                $("#emailAddressMsg").text("이메일주소 체계가 아닙니다.");
+                                $("#emailDuplChk").val('');
+                                emailCheck = 'N';
+
+                                return;
+                            } else {
+                                $("#emailAddressMsg").text("");
+                                $("#emailDuplChk").val('');
+                                emailCheck = 'Y';
+
+                            }
+                        });
+
+
+                        $("#cancleBtn").click(function () {
+                            var lc = new layerConfirm("개인정보 변경을 취소하시겠습니까?", "확인", "취소");
+                            lc.confirmAction = function () {
+                                location.href = "/ko/mypage/order/myorders";
+                            };
+                        });
+
+                        $("#saveBtn").click(function () {
+                            var vc = new ValidationCheck();
+                            vc.checkIdList = ['password'];
+
+                            if (vc.isValid()) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/member/update",
+                                    datatype: "json",
+                                    data: JSON.stringify({
+                                        password: $("#password").val(),
+                                    }),
+                                    error: function (request, status, error) {
+                                        layerAlert("예상치 못한 오류가 발생하였습니다.</br>" + "다시 시도해 주시기 바랍니다3.");
+                                        console.log("code:" + request.status + "\n\n\n\n" + "message:" + request.responseText + "\n\n\n\n" + "error:" + error);
+                                    },
+                                    success: function (result) {
+
+                                        var lc = new layerAlert("입력하신 정보가 변경완료 되었습니다.");
+
+                                        lc.confirmAction = function () {
+                                            location.href = "/member/login";
+                                        };
+
+                                        layerAlert("예상치 못한 오류가 발생하였습니다.</br>" + "다시 시도해 주시기 바랍니다.4");
+
+                                    }
+                                });
+                            }
+                        });
+
+                        $("#memberSecessionBtn").click(function () {
+                            $.ajax({
+                                type: "POST",
+                                url: "/ko/mypage/setSessionAuth",
+                                dataType: "json",
+                                async: false,
+                                cache: false,
+                                data: $("#sessionAuthForm").serialize(),
+                                success: function (data) {
+                                    if (data == "true") {
+                                        location.href = "/ko/mypage/memberSecession";
+                                    }
+                                },
+                                error: function (xhr, Status, error) {
+                                    alert('sendRequest error1 : ' + xhr.status + " ( " + error + " ) ");
+                                }
+                            });
+                        });
+                    }//e:else(global)
+
+                    $("#email,#emailDomain").keypress(function (event) {
+                        if (event.which == 32) {
+                            return false;
+                        }
+
+                    });
+
+
+                    /*
+                     *	비밀번호 변경 Layer Popup관련 Script
+                    */
+                    var $t = null;
+
+
+                    $("#hpPwChangeBtn").click(function () {
+                        $t = layerChangPopup('hpPwSearchPop');
+                        $t.find('#hpConfirmBtn').click(function () {
+                            $t.find('.btn_close').click();
+                            var newWindow = window.open("about:blank");
+                            newWindow.location.href = "https://www.h-point.co.kr/cu/mem/showCustInfo.shd";
+                        });
+                    });
+
+                    $('#PwCheck1').click(function () {
+                        var vc = new ValidationCheck();
+                        vc.checkIdList = ['password'];
+                        vc.msgFn = function (msg) {
+                            $("#emailMsg").text(msg);
+                        };
+                        if (vc.isValid()) {
+                            $.ajax({
+                                type: "GET",
+                                url: "/member/isDuplicate2",
+                                data: JSON.stringify({
+                                    password: $("#password").val(),
+                                }),
+                                dataType: "json",
+                                contentType: "application/json",
+                                success: function (data) {
+                                    if (data == "true") {
+                                        $("#emailMsg").text('기존 비밀번호입니다.');
+                                    } else {
+                                        $("#emailMsg").text('사용 가능한 비밀번호입니다.');
+                                        $("#emailDuplChk").val('Y');
+
+                                    }
+                                },
+                                error: function (e) {
+                                    console.log(e);
+                                }
+                            });
+                        }
+                    });
+
+
+                    // $("#pwChangeBtn").click(function() {
+                    //     $t = layerChangPopup('pwSearchPop');
+                    //     $t.find("#newPasswordDubMsg, #newPasswordConfirmDubMsg").text("비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요.");	//다국어 : 비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요.
+                    //     $t.find("#oldPassword").focus();
+                    //     passwordDataValidationCheck('newPassword', 'newPasswordDubMsg');
+                    //     passwordDataValidationCheck('newPasswordConfirm', 'newPasswordConfirmDubMsg');
+                    //
+                    //     //기존 비밀번호 확인
+                    //     $t.find('#oldPassword').blur(function(){
+                    //         if($t.find("#oldPassword").val() == "")
+                    //         {
+                    //             $t.find("#oldPasswordCheckMsg").text("필수항목을 입력하시길 바랍니다.");	//다국어 : 필수항목을 입력하시길 바랍니다.
+                    //             $t.find("#oldPassword").focus();
+                    //         }
+                    //         else
+                    //         {
+                    //             var pwc = new passwordControll("compare", $t.find("#oldPassword").val(), "8929460453380");
+                    //             pwc.trueAction = function()
+                    //             {
+                    //                 $t.find("#oldPasswordCheckMsg").text("기존 비밀번호와 일치합니다.");	//다국어 : 기존 비밀번호와 일치합니다.
+                    //             };
+                    //             pwc.falseAction = function()
+                    //             {
+                    //                 $t.find("#oldPasswordCheckMsg").text("기존 비밀번호와 일치하지 않습니다.");	//다국어 : 기존 비밀번호와 일치하지 않습니다.
+                    //                 $t.find("#oldPassword").val("");
+                    //                 $t.find("#oldPassword").focus();
+                    //             };
+                    //         }
+                    //
+                    //     });
+                    //
+                    //     $t.find('#newPassword').change(function(){
+                    //         if($t.find("#newPassword").val() == "")
+                    //         {
+                    //             $t.find("#newPasswordDubMsg").text("필수항목을 입력하시길 바랍니다.");	//다국어 : 필수항목을 입력하시길 바랍니다.
+                    //             $t.find("#newPassword").focus();
+                    //         }
+                    //         else if(!pwRegExp.test($(this).val()))
+                    //         {
+                    //             $t.find('#newPasswordDubMsg').text("비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요.");	//다국어 : 비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요.
+                    //             $t.find('#newPassword').focus();
+                    //         }
+                    //     });
+                    //
+                    //     $t.find('#newPasswordConfirm').keyup(function(){
+                    //         var newPwVal = $t.find('#newPassword').val();
+                    //         var newPwConfVal = $t.find('#newPasswordConfirm').val();
+                    //
+                    //         if(newPwConfVal.length >= newPwVal.length){
+                    //             if(newPwVal == newPwConfVal && newPwVal != "")
+                    //             {
+                    //                 $t.find("#passWordConfirmCheck").val("Y");
+                    //                 $t.find("#newPasswordConfirmDubMsg").text("비밀번호가 확인되었습니다.");	//다국어 : 비밀번호가 확인되었습니다.
+                    //                 $t.find('#newPasswordConfirm').blur();
+                    //             }else
+                    //             {
+                    //                 $t.find("#passWordConfirmCheck").val("N");
+                    //                 if(newPwVal == "")
+                    //                 {
+                    //                     $t.find("#newPasswordDubMsg").text("필수항목을 입력하시길 바랍니다.");	//다국어 : 필수항목을 입력하시길 바랍니다.
+                    //                     $t.find('#newPassword').focus();
+                    //                 }else if(newPwConfVal == "")
+                    //                 {
+                    //                     $t.find("#newPasswordConfirmDubMsg").text("필수항목을 입력하시길 바랍니다.");	//다국어 : 필수항목을 입력하시길 바랍니다.
+                    //                     $t.find('#newPasswordConfirm').focus();
+                    //                 }
+                    //                 else
+                    //                 {
+                    //                     $t.find("#newPasswordConfirmDubMsg").text("비밀번호가 일치하지 않습니다.");		//다국어 : 비밀번호가 일치하지 않습니다.
+                    //                     $t.find('#newPasswordConfirm').val("");
+                    //                     $t.find('#newPasswordConfirm').focus();
+                    //                 }
+                    //             }
+                    //         }
+                    //     });
+                    //
+                    //     $t.find('#cancelBtn').click(function(){
+                    //
+                    //         $t.find('.btn_close').click();
+                    //     });
+                    //
+                    //
+                    //     $t.find('#confirmBtn').click(function(){
+                    //
+                    //
+                    //         var newPassword = $t.find('#newPassword').val();
+                    //         var newPasswordLength = parseInt(newPassword.length);
+                    //
+                    //
+                    //         var newPasswordDubMsg = $t.find('#newPasswordDubMsg').text();
+                    //
+                    //
+                    //         if(newPasswordDubMsg != "비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요."){
+                    //             $t.find("#newPassword").focus();
+                    //             $t.find("#newPasswordConfirm").val("");
+                    //             return;
+                    //         }
+                    //
+                    //
+                    //         if($t.find("#newPasswordConfirm").val() == "")
+                    //         {
+                    //             $t.find("#newPasswordConfirmDubMsg").text("필수항목을 입력하시길 바랍니다.");	//다국어 : 필수항목을 입력하시길 바랍니다.
+                    //             $t.find("#newPasswordConfirm").focus();
+                    //         }
+                    //         else if($t.find("#passWordConfirmCheck").val() != "Y")
+                    //         {
+                    //             $t.find("#newPasswordConfirmDubMsg").text("비밀번호가 일치하지 않습니다."); //다국어 : 비밀번호가 일치하지 않습니다.
+                    //             $t.find('#newPasswordConfirm').val("");
+                    //             $t.find('#newPasswordConfirm').focus();
+                    //         }
+                    //         // 새비밀번호 길이체크 (TRUE: 8<=newPassword<=15) [2017.01.06 - 이현승]
+                    //         else if(newPasswordLength < 8 || newPasswordLength > 15){
+                    //             $t.find('#newPasswordDubMsg').text("비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요.");	//다국어 : 비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요.
+                    //             $t.find('#newPassword').focus();
+                    //             $t.find("#newPasswordConfirm").val("");
+                    //         }
+                    //         // 영문/숫자/특수문자 혼합문자열 확인. [2017.01.06 - 이현승]
+                    //         else if(!pwRegExp.test(newPassword)){
+                    //             $t.find('#newPasswordDubMsg').text("비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요.");	//다국어 : 비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요.
+                    //             $t.find('#newPassword').focus();
+                    //             $t.find("#newPasswordConfirm").val("");
+                    //         }
+                    //         else
+                    //         {
+                    //             // 새비밀번호 연속/동일 문자열 체크
+                    //             var concatechk = parseInt(newPasswordConcateCheck(newPassword));
+                    //
+                    //             if(concatechk == -1) {
+                    //                 $t.find('#newPasswordDubMsg').text("동일문자를 3번 이상 사용할 수 없습니다.");		//다국어 : 동일문자를 3번 이상 사용할 수 없습니다.
+                    //                 $t.find('#newPassword').focus();
+                    //                 $t.find("#newPasswordConfirm").val("");
+                    //                 return;
+                    //             }else if(concatechk == -2) {
+                    //                 $t.find('#newPasswordDubMsg').text("연속된 문자열(123 또는 321, abc, cba 등) 3자리이상 올 수 없습니다.");	//다국어 : 연속된 문자열(123 또는 321, abc, cba 등)을 3자리이상 올 수 없습니다.
+                    //                 $t.find('#newPassword').focus();
+                    //                 $t.find("#newPasswordConfirm").val("");
+                    //                 return;
+                    //             }
+                    //
+                    //             var pwc = new passwordControll("save", $t.find("#newPasswordConfirm").val(), "8929460453380");
+                    //             pwc.trueAction = function()
+                    //             {
+                    //                 var la = new layerAlert("비밀번호 변경이 완료 되었습니다. ");		//다국어 : 비밀번호 변경이 완료되었습니다.
+                    //                 la.confirmAction = function()
+                    //                 {
+                    //                     $t.find('.btn_close').click();
+                    //                 };
+                    //             };
+                    //             pwc.falseAction = function()
+                    //             {
+                    //                 layerAlert("비밀번호 변경에 실패하였습니다.");		//다국어 : 비밀번호 변경에 실패하였습니다.
+                    //             };
+                    //         }
+                    //     });
+                    // });
+
+                    var passwordDataValidationCheck = function (fid, msgid) {
+                        var t = this;
+
+                        this.notLockFn = function () {
+                            //default do nothing. but you can do something!
+                        };
+
+                        $t.find('#' + fid).keypress(function (event) {
+
+                            if (capsLock(event)) {
+                                $t.find('#' + msgid).text("Caps Lock 이 켜져 있습니다.");		//다국어 : <Caps Lock>이 켜져 있습니다.
+                                return false;
+                            }
+                            $t.find('#' + msgid).text("비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요.");	//다국어 : 비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요.
+
+                        });
+
+                        $t.find('#' + fid).keyup(function (event) {
+
+                            var inputdata = $t.find('#' + fid).val()
+
+                            if (inputdata > 0) {
+                                $t.find('#' + msgid).text("비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요.");	//다국어 : 비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요.
+                            }
+
+                            var concatechk = parseInt(newPasswordConcateCheck(inputdata));
+
+                            if (concatechk == -1) {
+                                $t.find('#' + msgid).text("동일문자를 3번 이상 사용할 수 없습니다.");	//다국어 : 동일문자를 3번 이상 사용할 수 없습니다.
+                                return false;
+                            } else if (concatechk == -2) {
+                                $t.find('#' + msgid).text("연속된 문자열(123 또는 321, abc, cba 등) 3자리이상 올 수 없습니다.");	//다국어 : 연속된 문자열(123 또는 321, abc, cba 등)을 3자리이상 올 수 없습니다.
+                                return false;
+                            } else {
+                                t.notLockFn();
+                            }
+                        });
+                    };
+
+                    $("#selDay option:eq(0)").prop("selected", true);
+                });
+
+                //회원변경시에만 사용되는 블라인드 영역을 클릭해도 팝업이 안닫히도록 수정
+                var layerChangPopup = function (layerId) {
+
+                    var PARAMS = {};
+                    PARAMS.layerId = layerId;
+                    PARAMS.layer = $("#" + PARAMS.layerId);
+
+
+                    this.openNewLayer = function () {
+
+                        var tp = getMarginTop(PARAMS.layer.height());
+                        if (tp < 0) tp = 0;
+
+                        PARAMS.layer.css("top", tp).css("position", "absolute").css("z-index", 101);
+
+                        var layerTag = '<div class="layerArea">';
+                        layerTag += '<div class="layerBg"></div> ';
+                        layerTag += '</div>';
+
+                        var thisLayer = $(layerTag).appendTo($('body')).append(PARAMS.layer.clone().show());
+                        var existedStyle = $('body').attr('style') || '';
+                        if (existedStyle) {
+                            existedStyle += ';';
+                        }
+                        $('body').attr('style', existedStyle + 'overflow:hidden !important');
+
+
+                        thisLayer.find('.btn_close, .okBtn').click(function () {
+                            //$('body').css('overflow', '');
+                            $('body').attr('style', existedStyle);
+                            thisLayer.remove();
+                            return false;
+                        });
+
+                        return thisLayer;
+                    };
+
+                    return this.openNewLayer();
+                };
+
+                function pwCheck1() {
+                    $.ajax({
+
+                        type: "GET",
+                        url: "/member/isDuplicate2?email=" + $("#email").val() + "&password=" + $("#password").val(),
+                        success: function (data) {
+                            if (data == "true") {
+                                $("#emailMsg").text('이미 사용중인 비밀번호입니다.');
+                            } else {
+                                $("#emailMsg").text('사용 가능한 비밀번호입니다.');
+                                $("#emailDuplChk").val('Y');
+                            }
+                        },
+                        error: function (e) {
+                            console.log(e);
+                        }
+                    });
+                }
+
+                /*
+                 * [2017.01.06 - 이현승] 연속문자열 검사
+                 */
+                function newPasswordConcateCheck(inputdata) {
+
+                    var returnVal = 0;
+
+                    var SamePass_0 = 0; // 동일문자 카운트
+                    var SamePass_1 = 0; // 연속성(+) 카운드
+                    var SamePass_2 = 0; // 연속성(-) 카운드
+
+                    for (var i = 0; i < inputdata.length; i++) {	 // 4자리
+                        var chr_pass_0 = inputdata.charCodeAt(i - 2);//3);
+                        var chr_pass_1 = inputdata.charCodeAt(i - 1);//2);
+                        var chr_pass_2 = inputdata.charCodeAt(i);// - 1);
+
+                        if (i > 1) {
+                            // 동일문자 카운트
+                            if ((chr_pass_0 == chr_pass_1) && (chr_pass_1 == chr_pass_2)) {
+                                SamePass_0++;
+                            } else {
+                                SamePass_0 = 0;
+                            }
+
+                            // 연속성(+) 카운드
+                            if (chr_pass_0 - chr_pass_1 == 1 && chr_pass_1 - chr_pass_2 == 1) {
+                                SamePass_1++;
+                            } else {
+                                SamePass_1 = 0;
+                            }
+
+                            // 연속성(-) 카운드
+                            if (chr_pass_0 - chr_pass_1 == -1 && chr_pass_1 - chr_pass_2 == -1) {
+                                SamePass_2++;
+                            } else {
+                                SamePass_2 = 0;
+                            }
+                        }
+
+                        if (SamePass_0 > 0) {
+                            // 다국어 : 동일문자를 3번 이상 사용할 수 없습니다.
+                            returnVal = -1;
+                        } else if (SamePass_1 > 0 || SamePass_2 > 0) {
+                            // 다국어 : 연속된 문자열(123 또는 321, abc, cba 등)을 3자리이상 올 수 없습니다.
+                            returnVal = -2;
+                        }
+                    }
+                    return returnVal;
+                }
+
+                //]]>
+            </script>
+            <form id="updateProfileForm" action="/member/update" method="post"><input type="hidden" name="prk" id="prk"
+                                                                               value="8929460453380">
+                <input type="hidden" name="emailDuplChk" id="emailDuplChk" value="Y" title="이메일 중복">
+                <input type="hidden" id="emailAddress" name="emailAddress" value="">
+                <input type="hidden" id="sBirthday" name="sBirthday" value="">
+                <!-- //lnbWrap -->
+                <div>
+                    <div class="title_wrap mt30">
+                        <h4 class="float_left">개인정보 변경</h4>
+                        <p class="txt_line">회원정보를 확인하고, 변경할 수 있습니다. </p>
+                        <p class="reqd_txt"><strong class="reqd">*</strong> 표시는 필수항목입니다.</p>
+                    </div>
+
+                    <fieldset>
+                        <legend>회원정보입력</legend>
+                        <div class="tblwrap">
+                            <table class="tbl_wtype1">
+                                <caption>회원가입 입력항목</caption>
+                                <colgroup>
+                                    <col style="width:140px">
+                                    <col>
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <th scope="row" class="th_space"><strong class="reqd">*</strong><label
+                                            for="email">아이디</label></th>
+                                    <td>
+                                        <input type="text" style="width:120px" id="email" name="email"
+                                               th:value="${#authentication.name}" disabled>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" class="th_space"><strong class="reqd">*</strong><label
+                                            for="password">비밀번호</label>
+                                    </th>
+                                    <td>
+                                        <input type="password" id="password" name="password" style="width:150px"
+                                               title="비밀번호"/>
+                                        <input type="button" class="btn add_s" id="pwChangeBtn" value="비밀번호체크"
+                                               onclick="pwCheck1()">
+
+                                        <span class="guide_comment" id="emailMsg"></span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th scope="row" class="th_space"><strong class="reqd">*</strong> <label
+                                            for="name">이름</label></th>
+                                    <td><input type="text" style="width:120px" id="name" name="name"
+                                               th:value="${#authentication.principal.name}" disabled>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" class="th_space">생년월일</th>
+                                    <td><select style="width:120px" id="selYear" title="년도">
+                                        <option value="선택" selected>년</option>
+                                        <option value="2008">2008</option>
+                                        <option value="2007">2007</option>
+                                        <option value="2006">2006</option>
+                                        <option value="2005">2005</option>
+                                        <option value="2004">2004</option>
+                                        <option value="2003">2003</option>
+                                        <option value="2002">2002</option>
+                                        <option value="2001">2001</option>
+                                        <option value="2000">2000</option>
+                                        <option value="1999">1999</option>
+                                        <option value="1998">1998</option>
+                                        <option value="1997">1997</option>
+                                        <option value="1996">1996</option>
+                                        <option value="1995">1995</option>
+                                        <option value="1994">1994</option>
+                                        <option value="1993">1993</option>
+                                        <option value="1992">1992</option>
+                                        <option value="1991">1991</option>
+                                        <option value="1990">1990</option>
+                                        <option value="1989">1989</option>
+                                        <option value="1988">1988</option>
+                                        <option value="1987">1987</option>
+                                        <option value="1986">1986</option>
+                                        <option value="1985">1985</option>
+                                        <option value="1984">1984</option>
+                                        <option value="1983">1983</option>
+                                        <option value="1982">1982</option>
+                                        <option value="1981">1981</option>
+                                        <option value="1980">1980</option>
+                                        <option value="1979">1979</option>
+                                        <option value="1978">1978</option>
+                                        <option value="1977">1977</option>
+                                        <option value="1976">1976</option>
+                                        <option value="1975">1975</option>
+                                        <option value="1974">1974</option>
+                                        <option value="1973">1973</option>
+                                        <option value="1972">1972</option>
+                                        <option value="1971">1971</option>
+                                        <option value="1970">1970</option>
+                                        <option value="1969">1969</option>
+                                        <option value="1968">1968</option>
+                                        <option value="1967">1967</option>
+                                        <option value="1966">1966</option>
+                                        <option value="1965">1965</option>
+                                        <option value="1964">1964</option>
+                                        <option value="1963">1963</option>
+                                        <option value="1962">1962</option>
+                                        <option value="1961">1961</option>
+                                        <option value="1960">1960</option>
+                                        <option value="1959">1959</option>
+                                        <option value="1958">1958</option>
+                                        <option value="1957">1957</option>
+                                        <option value="1956">1956</option>
+                                        <option value="1955">1955</option>
+                                        <option value="1954">1954</option>
+                                        <option value="1953">1953</option>
+                                        <option value="1952">1952</option>
+                                        <option value="1951">1951</option>
+                                        <option value="1950">1950</option>
+                                        <option value="1949">1949</option>
+                                        <option value="1948">1948</option>
+                                        <option value="1947">1947</option>
+                                        <option value="1946">1946</option>
+                                        <option value="1945">1945</option>
+                                        <option value="1944">1944</option>
+                                        <option value="1943">1943</option>
+                                        <option value="1942">1942</option>
+                                        <option value="1941">1941</option>
+                                        <option value="1940">1940</option>
+                                        <option value="1939">1939</option>
+                                        <option value="1938">1938</option>
+                                        <option value="1937">1937</option>
+                                        <option value="1936">1936</option>
+                                        <option value="1935">1935</option>
+                                        <option value="1934">1934</option>
+                                        <option value="1933">1933</option>
+                                        <option value="1932">1932</option>
+                                        <option value="1931">1931</option>
+                                        <option value="1930">1930</option>
+                                        <option value="1929">1929</option>
+                                        <option value="1928">1928</option>
+                                        <option value="1927">1927</option>
+                                        <option value="1926">1926</option>
+                                        <option value="1925">1925</option>
+                                        <option value="1924">1924</option>
+                                        <option value="1923">1923</option>
+                                        <option value="1922">1922</option>
+                                        <option value="1921">1921</option>
+                                        <option value="1920">1920</option>
+                                        <option value="1919">1919</option>
+                                        <option value="1918">1918</option>
+                                        <option value="1917">1917</option>
+                                        <option value="1916">1916</option>
+                                        <option value="1915">1915</option>
+                                        <option value="1914">1914</option>
+                                        <option value="1913">1913</option>
+                                        <option value="1912">1912</option>
+                                        <option value="1911">1911</option>
+                                        <option value="1910">1910</option>
+                                        <option value="1909">1909</option>
+                                        <option value="1908">1908</option>
+                                        <option value="1907">1907</option>
+                                        <option value="1906">1906</option>
+                                        <option value="1905">1905</option>
+                                        <option value="1904">1904</option>
+                                        <option value="1903">1903</option>
+                                        <option value="1902">1902</option>
+                                        <option value="1901">1901</option>
+                                        <option value="1900">1900</option>
+                                    </select>
+                                        <select style="width:120px" id="selMonth" title="월">
+                                            <option value="선택" selected>월</option>
+                                            <option value="01">01</option>
+                                            <option value="02">02</option>
+                                            <option value="03">03</option>
+                                            <option value="04">04</option>
+                                            <option value="05">05</option>
+                                            <option value="06">06</option>
+                                            <option value="07">07</option>
+                                            <option value="08">08</option>
+                                            <option value="09">09</option>
+                                            <option value="10">10</option>
+                                            <option value="11">11</option>
+                                            <option value="12">12</option>
+                                        </select>
+                                        <select style="width:120px" id="selDay" title="일">
+                                            <option value="선택" selected>일</option>
+                                            <option value="">일</option>
+                                            <option value="01">01</option>
+                                            <option value="02">02</option>
+                                            <option value="03">03</option>
+                                            <option value="04">04</option>
+                                            <option value="05">05</option>
+                                            <option value="06">06</option>
+                                            <option value="07">07</option>
+                                            <option value="08">08</option>
+                                            <option value="09">09</option>
+                                            <option value="10">10</option>
+                                            <option value="11">11</option>
+                                            <option value="12">12</option>
+                                            <option value="13">13</option>
+                                            <option value="14">14</option>
+                                            <option value="15">15</option>
+                                            <option value="16">16</option>
+                                            <option value="17">17</option>
+                                            <option value="18">18</option>
+                                            <option value="19">19</option>
+                                            <option value="20">20</option>
+                                            <option value="21">21</option>
+                                            <option value="22">22</option>
+                                            <option value="23">23</option>
+                                            <option value="24">24</option>
+                                            <option value="25">25</option>
+                                            <option value="26">26</option>
+                                            <option value="27">27</option>
+                                            <option value="28">28</option>
+                                            <option value="29">29</option>
+                                            <option value="30">30</option>
+
+                                        </select>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </fieldset>
+
+                    <!-- btn_btwrap -->
+                    <div class="btn_btwrap">
+                        <input type="button" class="btn wt_ss" value="회원탈퇴" id="memberSecessionBtn">
+                    </div>
+                    <div class="btnwrap mypage2">
+                        <input type="button" class="btn wt" value="취소" id="cancleBtn">
+                        <input type="button" class="btn gray" value="변경사항 저장" id="saveBtn">
+                    </div>
+                    <!-- //btn_btwrap -->
+                </div>
+            </form><!-- 다국어 한국 이외의 언어에서 사용 -->
+        </div>
+
+    </div>
+</div>
+<div th:replace="/footer.html::footer"></div>
+</body>
+</html>
