@@ -24,13 +24,11 @@
 
 
     $().ready(function () {
-        console.log("test");
         $.ajax({
             type: "GET",
             url: "/api/category/" + getFilterUri(large, medium, small, pageNum, brand, color, size, minPrice, maxPrice, sortType),
             contentType: "application/json",
             success: function (data) {
-                console.log(data);
                 let count = data.count;
                 // pageGroup
                 let page = data.page;

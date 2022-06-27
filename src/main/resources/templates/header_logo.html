@@ -1,7 +1,7 @@
 <div id="headerWrap" th:fragment="header_logo">
     <div class="header header_fixed header_main1903">
-        <script type="text/javascript" th:src="@{/js/SsoAjax.js}"></script>
-<script>
+        <script th:src="@{/js/SsoAjax.js}" type="text/javascript"></script>
+        <script>
             $(document).ready(function () {
 
                 $('.gnb_nav.hscene1906 .cate_m .hscene').mouseover(function () { // 툴팁
@@ -117,60 +117,6 @@
 
                 //자동로그인
 
-
-                //vip 채팅 서비스
-                if ("PASS" != "") {
-                    var pag = "myManToManInquiryPage";
-
-                    var chkPag = ["svCenterMainPage", "noticePage", "manToManInquiryPage", "faqPage",
-                        "mendingPage", "vocProvisionPage", "vocInfoFormPage", "memberJoinGuidePage", "theClubInfoPage",
-                        "memberBenefitGuidePage", "pointGuidePage", "couponGuidePage", "paymentGuidePage", "asGuidePage"];
-
-                    var vipPassCheck = "N"; // VVIP/THESTAR/STAR 등급 체크
-                    var timePassCheck = "N"; // 평일 0900~1800 체크
-
-                    if ("" == "VVIP" || ("" == "THESTAR" || "" == "STAR")) {
-                        vipPassCheck = "Y";
-                    }
-
-                    if (vipPassCheck == "N" && "PASS" == "PASS") { // MANIA 이하 등급, 평일 체크
-                        // chatbotInfo "PASS" : 등급이 VVIP/THESTAR/STAR/MANIA 이거나 평일 0900~1800
-                        var hour = new Date().format("HHmm");
-                        var weekName = new Date().format("E");
-                        if (weekName != "일요일" && weekName != "토요일" && hour >= "0900" && hour <= "1800") {
-                            $.ajax({
-                                type: "POST",
-                                url: "/ko/chatbot/chkholiday",
-                                data: {"CSRFToken": "873f1ef0-6048-44e3-bfa2-15b52ff60d0c"},
-                                async: false,
-                                success: function (result) {
-                                    if (result == true) {
-                                        timePassCheck = "Y";
-                                    }
-                                },
-                                error: function (request, statuss, error) {
-                                    ;
-                                }
-                            });
-                        }
-                    }
-
-                    if ((vipPassCheck == "Y" || timePassCheck == "Y") && "myManToManInquiryPage" == "main201903Page") {
-                        $('#chatbotMain').show();
-                    } else {
-                        $('#chatbotMain').hide();
-                    }
-
-                    if (chkPag.indexOf(pag) > -1) {
-                        if (vipPassCheck == "Y" || timePassCheck == "Y") {
-                            $('#chatbot').show();
-                        } else {
-                            $('#chatbot').hide();
-                        }
-                    } else {
-                        $('#chatbot').hide();
-                    }
-                }
 
                 //athome
                 if ("" != "") {
@@ -354,7 +300,7 @@
                 /*
         // 내가 찾은 검색어(로그인 상태) : set, get in cookie
         getLoginMyKeyWord($("#query").val());
-     */
+        */
 
                 // if (navigator.userAgfent.toLowerCase().indexOf("firefox") > -1) {
                 //     $("#searchBox").on("keypress", function (event) {
@@ -542,25 +488,18 @@
         <th:block th:replace="~{/top_nav :: top_nav}"></th:block>
 
         <!-- validation check message global -->
-        <input type="hidden" id="validationCheckPwd" value="비밀번호를 재입력 하셔야 합니다.">
-        <input type="hidden" id="validationCheck" value="필수데이터가 입력되지 않았습니다.">
-        <input type="hidden" id="validationCheckMsg" value="다음 사항을 확인해 주세요.">
-        <input type="hidden" id="validationCheckMsg1" value="필수데이터가 입력되지 않았습니다.">
-        <input type="hidden" id="validationCheckMsg2" value="동일문자를 3번 이상 사용할 수 없습니다.">
-        <input type="hidden" id="validationCheckMsg3" value="연속된 문자열(123 또는 321, abc, cba 등) 3자리이상 올 수 없습니다.">
-        <input type="hidden" id="validationCheckMsg4" value="Caps Lock 이 켜져 있습니다.">
-        <input type="hidden" id="validationCheckMsg5" value="이메일 아이디의 중복 확인이 필요합니다.">
-        <input type="hidden" id="validationCheckMsg6" value="이메일의 중복확인이 필요합니다.">
-        <input type="hidden" id="deliveryOkMsg" value="확인">
-        <input type="hidden" id="deliveryCancelMsg" value="취소">
+        <input id="validationCheckPwd" type="hidden" value="비밀번호를 재입력 하셔야 합니다.">
+        <input id="validationCheck" type="hidden" value="필수데이터가 입력되지 않았습니다.">
+        <input id="validationCheckMsg" type="hidden" value="다음 사항을 확인해 주세요.">
+        <input id="validationCheckMsg1" type="hidden" value="필수데이터가 입력되지 않았습니다.">
+        <input id="validationCheckMsg2" type="hidden" value="동일문자를 3번 이상 사용할 수 없습니다.">
+        <input id="validationCheckMsg3" type="hidden" value="연속된 문자열(123 또는 321, abc, cba 등) 3자리이상 올 수 없습니다.">
+        <input id="validationCheckMsg4" type="hidden" value="Caps Lock 이 켜져 있습니다.">
+        <input id="validationCheckMsg5" type="hidden" value="이메일 아이디의 중복 확인이 필요합니다.">
+        <input id="validationCheckMsg6" type="hidden" value="이메일의 중복확인이 필요합니다.">
+        <input id="deliveryOkMsg" type="hidden" value="확인">
+        <input id="deliveryCancelMsg" type="hidden" value="취소">
 
-        <form id="chatbotForm" action="https://talk.thehandsome.com/front/v1/jsp/view/chat.jsp" method="post"
-              target="chatwindow"><input type="hidden" name="token" id="chatbot_token">
-            <input type="hidden" name="talkId" id="chatbot_talkId">
-            <div>
-                <input type="hidden" name="CSRFToken" value="873f1ef0-6048-44e3-bfa2-15b52ff60d0c">
-            </div>
-        </form>
         <!--         //headerWrap-->
         <th:block th:replace="~{/gnbwarp_image :: gnbwarp_image}"></th:block>
         <!-- //201803 util menu -->
