@@ -905,8 +905,8 @@
             <!-- 회원정보 -->
             <div class="profile_info1 clearfix review_betterment1905">
                 <div class="name type2">
-                    <span class="ico_grade" th:text="${#authentication.name}"님></span>
-                    <span class="grade_txt"></span>
+                    <span class="ico_grade" th:text="${#authentication.principal.name}+'님'" ></span>
+                    <span class="grade_txt">등급 : SILVER</span>
                 </div>
                 <div class="point" style="border:0; padding-left:0; width:95px">
                     <p class="title">COUPON</p>
