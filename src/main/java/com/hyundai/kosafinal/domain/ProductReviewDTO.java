@@ -1,10 +1,12 @@
 package com.hyundai.kosafinal.domain;
 
+import java.sql.Blob;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Builder
@@ -19,7 +21,7 @@ public class ProductReviewDTO {
     private String content;
     private Date editDate;
     private int rate;
-    private byte[] imgFile;
+    private String imgURI;
 //    private String imageUri;
     private String ctryLarge;
     private String ctryMedium;
