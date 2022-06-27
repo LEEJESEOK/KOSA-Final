@@ -13,18 +13,9 @@
 <!-- End Sidebar-->
 
 <!-- ======= main ======= -->
-<main id="main" class="main">
+<main class="main" id="main">
 
-    <div class="pagetitle">
-        <h1>Dashboard</h1>
-        <nav>
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/biz}">Home</a></li>
-                <li class="breadcrumb-item active">Dashboard</li>
-            </ol>
-        </nav>
-    </div>
-    <!-- End Page Title -->
+    <th:block th:replace="~{/biz/fragment/pagetitle::pagetitle}"></th:block>
 
     <section class="section dashboard">
         <div class="row">
@@ -38,7 +29,7 @@
                         <div class="card info-card sales-card">
 
                             <div class="filter">
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                <a class="icon" data-bs-toggle="dropdown" href="#"><i class="bi bi-three-dots"></i></a>
                                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                                     <li class="dropdown-header text-start">
                                         <h6>Filter</h6>
@@ -74,7 +65,7 @@
                         <div class="card info-card revenue-card">
 
                             <div class="filter">
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                <a class="icon" data-bs-toggle="dropdown" href="#"><i class="bi bi-three-dots"></i></a>
                                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                                     <li class="dropdown-header text-start">
                                         <h6>Filter</h6>
@@ -111,7 +102,7 @@
                         <div class="card info-card customers-card">
 
                             <div class="filter">
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                <a class="icon" data-bs-toggle="dropdown" href="#"><i class="bi bi-three-dots"></i></a>
                                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                                     <li class="dropdown-header text-start">
                                         <h6>Filter</h6>
@@ -148,7 +139,7 @@
                         <div class="card">
 
                             <div class="filter">
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                <a class="icon" data-bs-toggle="dropdown" href="#"><i class="bi bi-three-dots"></i></a>
                                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                                     <li class="dropdown-header text-start">
                                         <h6>Filter</h6>
@@ -230,7 +221,7 @@
                         <div class="card recent-sales overflow-auto">
 
                             <div class="filter">
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                <a class="icon" data-bs-toggle="dropdown" href="#"><i class="bi bi-three-dots"></i></a>
                                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                                     <li class="dropdown-header text-start">
                                         <h6>Filter</h6>
@@ -259,35 +250,35 @@
                                     <tr>
                                         <th scope="row"><a href="#">#2457</a></th>
                                         <td>Brandon Jacob</td>
-                                        <td><a href="#" class="text-primary">At praesentium minu</a></td>
+                                        <td><a class="text-primary" href="#">At praesentium minu</a></td>
                                         <td>$64</td>
                                         <td><span class="badge bg-success">Approved</span></td>
                                     </tr>
                                     <tr>
                                         <th scope="row"><a href="#">#2147</a></th>
                                         <td>Bridie Kessler</td>
-                                        <td><a href="#" class="text-primary">Blanditiis dolor omnis similique</a></td>
+                                        <td><a class="text-primary" href="#">Blanditiis dolor omnis similique</a></td>
                                         <td>$47</td>
                                         <td><span class="badge bg-warning">Pending</span></td>
                                     </tr>
                                     <tr>
                                         <th scope="row"><a href="#">#2049</a></th>
                                         <td>Ashleigh Langosh</td>
-                                        <td><a href="#" class="text-primary">At recusandae consectetur</a></td>
+                                        <td><a class="text-primary" href="#">At recusandae consectetur</a></td>
                                         <td>$147</td>
                                         <td><span class="badge bg-success">Approved</span></td>
                                     </tr>
                                     <tr>
                                         <th scope="row"><a href="#">#2644</a></th>
                                         <td>Angus Grady</td>
-                                        <td><a href="#" class="text-primar">Ut voluptatem id earum et</a></td>
+                                        <td><a class="text-primar" href="#">Ut voluptatem id earum et</a></td>
                                         <td>$67</td>
                                         <td><span class="badge bg-danger">Rejected</span></td>
                                     </tr>
                                     <tr>
                                         <th scope="row"><a href="#">#2644</a></th>
                                         <td>Raheem Lehner</td>
-                                        <td><a href="#" class="text-primary">Sunt similique distinctio</a></td>
+                                        <td><a class="text-primary" href="#">Sunt similique distinctio</a></td>
                                         <td>$165</td>
                                         <td><span class="badge bg-success">Approved</span></td>
                                     </tr>
@@ -304,7 +295,7 @@
                         <div class="card top-selling overflow-auto">
 
                             <div class="filter">
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                <a class="icon" data-bs-toggle="dropdown" href="#"><i class="bi bi-three-dots"></i></a>
                                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                                     <li class="dropdown-header text-start">
                                         <h6>Filter</h6>
@@ -331,40 +322,40 @@
                                     </thead>
                                     <tbody>
                                     <tr>
-                                        <th scope="row"><a href="#"><img src="biz/img/product-1.jpg" alt=""></a></th>
-                                        <td><a href="#" class="text-primary fw-bold">Ut inventore ipsa voluptas
+                                        <th scope="row"><a href="#"><img alt="" src="biz/img/product-1.jpg"></a></th>
+                                        <td><a class="text-primary fw-bold" href="#">Ut inventore ipsa voluptas
                                             nulla</a></td>
                                         <td>$64</td>
                                         <td class="fw-bold">124</td>
                                         <td>$5,828</td>
                                     </tr>
                                     <tr>
-                                        <th scope="row"><a href="#"><img src="biz/img/product-2.jpg" alt=""></a></th>
-                                        <td><a href="#" class="text-primary fw-bold">Exercitationem similique
+                                        <th scope="row"><a href="#"><img alt="" src="biz/img/product-2.jpg"></a></th>
+                                        <td><a class="text-primary fw-bold" href="#">Exercitationem similique
                                             doloremque</a></td>
                                         <td>$46</td>
                                         <td class="fw-bold">98</td>
                                         <td>$4,508</td>
                                     </tr>
                                     <tr>
-                                        <th scope="row"><a href="#"><img src="biz/img/product-3.jpg" alt=""></a></th>
-                                        <td><a href="#" class="text-primary fw-bold">Doloribus nisi exercitationem</a>
+                                        <th scope="row"><a href="#"><img alt="" src="biz/img/product-3.jpg"></a></th>
+                                        <td><a class="text-primary fw-bold" href="#">Doloribus nisi exercitationem</a>
                                         </td>
                                         <td>$59</td>
                                         <td class="fw-bold">74</td>
                                         <td>$4,366</td>
                                     </tr>
                                     <tr>
-                                        <th scope="row"><a href="#"><img src="biz/img/product-4.jpg" alt=""></a></th>
-                                        <td><a href="#" class="text-primary fw-bold">Officiis quaerat sint rerum
+                                        <th scope="row"><a href="#"><img alt="" src="biz/img/product-4.jpg"></a></th>
+                                        <td><a class="text-primary fw-bold" href="#">Officiis quaerat sint rerum
                                             error</a></td>
                                         <td>$32</td>
                                         <td class="fw-bold">63</td>
                                         <td>$2,016</td>
                                     </tr>
                                     <tr>
-                                        <th scope="row"><a href="#"><img src="biz/img/product-5.jpg" alt=""></a></th>
-                                        <td><a href="#" class="text-primary fw-bold">Sit unde debitis delectus
+                                        <th scope="row"><a href="#"><img alt="" src="biz/img/product-5.jpg"></a></th>
+                                        <td><a class="text-primary fw-bold" href="#">Sit unde debitis delectus
                                             repellendus</a></td>
                                         <td>$79</td>
                                         <td class="fw-bold">41</td>
@@ -387,7 +378,7 @@
                 <!-- Recent Activity -->
                 <div class="card">
                     <div class="filter">
-                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                        <a class="icon" data-bs-toggle="dropdown" href="#"><i class="bi bi-three-dots"></i></a>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                             <li class="dropdown-header text-start">
                                 <h6>Filter</h6>
@@ -408,7 +399,7 @@
                                 <div class="activite-label">32 min</div>
                                 <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
                                 <div class="activity-content">
-                                    Quia quae rerum <a href="#" class="fw-bold text-dark">explicabo officiis</a> beatae
+                                    Quia quae rerum <a class="fw-bold text-dark" href="#">explicabo officiis</a> beatae
                                 </div>
                             </div><!-- End activity item-->
 
@@ -432,7 +423,7 @@
                                 <div class="activite-label">1 day</div>
                                 <i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
                                 <div class="activity-content">
-                                    Tempore autem saepe <a href="#" class="fw-bold text-dark">occaecati voluptatem</a>
+                                    Tempore autem saepe <a class="fw-bold text-dark" href="#">occaecati voluptatem</a>
                                     tempore
                                 </div>
                             </div><!-- End activity item-->
@@ -461,7 +452,7 @@
                 <!-- Budget Report -->
                 <div class="card">
                     <div class="filter">
-                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                        <a class="icon" data-bs-toggle="dropdown" href="#"><i class="bi bi-three-dots"></i></a>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                             <li class="dropdown-header text-start">
                                 <h6>Filter</h6>
@@ -476,7 +467,7 @@
                     <div class="card-body pb-0">
                         <h5 class="card-title">Budget Report <span>| This Month</span></h5>
 
-                        <div id="budgetChart" style="min-height: 400px;" class="echart"></div>
+                        <div class="echart" id="budgetChart" style="min-height: 400px;"></div>
 
                         <script>
                             document.addEventListener("DOMContentLoaded", () => {
@@ -535,7 +526,7 @@
                 <!-- Website Traffic -->
                 <div class="card">
                     <div class="filter">
-                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                        <a class="icon" data-bs-toggle="dropdown" href="#"><i class="bi bi-three-dots"></i></a>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                             <li class="dropdown-header text-start">
                                 <h6>Filter</h6>
@@ -550,7 +541,7 @@
                     <div class="card-body pb-0">
                         <h5 class="card-title">Website Traffic <span>| Today</span></h5>
 
-                        <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
+                        <div class="echart" id="trafficChart" style="min-height: 400px;"></div>
 
                         <script>
                             document.addEventListener("DOMContentLoaded", () => {
@@ -613,7 +604,7 @@
                 <!-- News & Updates Traffic -->
                 <div class="card">
                     <div class="filter">
-                        <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                        <a class="icon" data-bs-toggle="dropdown" href="#"><i class="bi bi-three-dots"></i></a>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                             <li class="dropdown-header text-start">
                                 <h6>Filter</h6>
@@ -630,31 +621,31 @@
 
                         <div class="news">
                             <div class="post-item clearfix">
-                                <img src="biz/img/news-1.jpg" alt="">
+                                <img alt="" src="biz/img/news-1.jpg">
                                 <h4><a href="#">Nihil blanditiis at in nihil autem</a></h4>
                                 <p>Sit recusandae non aspernatur laboriosam. Quia enim eligendi sed ut harum...</p>
                             </div>
 
                             <div class="post-item clearfix">
-                                <img src="biz/img/news-2.jpg" alt="">
+                                <img alt="" src="biz/img/news-2.jpg">
                                 <h4><a href="#">Quidem autem et impedit</a></h4>
                                 <p>Illo nemo neque maiores vitae officiis cum eum turos elan dries werona nande...</p>
                             </div>
 
                             <div class="post-item clearfix">
-                                <img src="biz/img/news-3.jpg" alt="">
+                                <img alt="" src="biz/img/news-3.jpg">
                                 <h4><a href="#">Id quia et et ut maxime similique occaecati ut</a></h4>
                                 <p>Fugiat voluptas vero eaque accusantium eos. Consequuntur sed ipsam et totam...</p>
                             </div>
 
                             <div class="post-item clearfix">
-                                <img src="biz/img/news-4.jpg" alt="">
+                                <img alt="" src="biz/img/news-4.jpg">
                                 <h4><a href="#">Laborum corporis quo dara net para</a></h4>
                                 <p>Qui enim quia optio. Eligendi aut asperiores enim repellendusvel rerum cuder...</p>
                             </div>
 
                             <div class="post-item clearfix">
-                                <img src="biz/img/news-5.jpg" alt="">
+                                <img alt="" src="biz/img/news-5.jpg">
                                 <h4><a href="#">Et dolores corrupti quae illo quod dolor</a></h4>
                                 <p>Odit ut eveniet modi reiciendis. Atque cupiditate libero beatae dignissimos
                                     eius...</p>
