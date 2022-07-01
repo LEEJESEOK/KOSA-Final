@@ -24,38 +24,63 @@
                     <div class="card-body">
                         <h5 class="card-title">기본정보</h5>
                         <form class="row g-3">
-                            <div class="col-12">
-                                <label class="form-label" for="name">상품명</label>
-                                <input class="form-control" id="name" type="text">
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <label class="form-label" for="name">상품명</label>
+                                    <input class="form-control" id="name" type="text">
+                                </div>
                             </div>
-                            <div class="col-12">
-                                <label class="form-label" for="color">색상</label>
-                                <input class="form-control" id="color" type="text">
+                            <div class="row mb-3">
+                                <div class="col-4">
+                                    <label class="form-label" for="id">상품코드</label>
+                                    <input class="form-control" id="id" type="text">
+                                </div>
+                                <div class="col-8">
+
+                                </div>
                             </div>
-                            <div class="col-12">
-                                <label class="form-label" for="size">사이즈</label>
-                                <input class="form-control" id="size" type="text">
+                            <div class="row mb-3">
+                                <div class="col-4">
+                                    <label class="form-label" for="price">가격</label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text">₩</span>
+                                        <input aria-label="Price" class="form-control" id="price" min="0"
+                                               type="number">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-4">
-                                <label class="form-label" for="large">대분류</label>
-                                <select class="form-select" id="large">
-                                    <option selected="">Choose...</option>
-                                    <option>...</option>
-                                </select>
+                            <div class="row mb-3">
+                                <div class="col-4">
+                                    <label class="form-label" for="color">색상</label>
+                                    <input class="form-control" id="color" type="text">
+                                </div>
+                                <div class="col-4">
+                                    <label class="form-label" for="size">사이즈</label>
+                                    <input class="form-control" id="size" type="text">
+                                </div>
                             </div>
-                            <div class="col-4">
-                                <label class="form-label" for="medium">중분류</label>
-                                <select class="form-select" id="medium">
-                                    <option selected="">Choose...</option>
-                                    <option>...</option>
-                                </select>
-                            </div>
-                            <div class="col-4">
-                                <label class="form-label" for="small">소분류</label>
-                                <select class="form-select" id="small">
-                                    <option selected="">Choose...</option>
-                                    <option>...</option>
-                                </select>
+                            <div class="row mb-3">
+                                <div class="col-4">
+                                    <label class="form-label" for="large">대분류</label>
+                                    <select class="form-select" id="large">
+                                        <option selected="">Choose...</option>
+                                        <option th:value="${null}">미설정</option>
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <label class="form-label" for="medium">중분류</label>
+                                    <select class="form-select" id="medium">
+                                        <option selected="">Choose...</option>
+                                        <option th:value="${null}">미설정</option>
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <label class="form-label" for="small">소분류</label>
+                                    <select class="form-select" id="small">
+                                        <option selected="">Choose...</option>
+                                        <option th:value="${null}">미설정</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="col-12">
                                 <label class="form-label" for="detail">상품 설명</label>
@@ -63,20 +88,32 @@
                                           style="height: 100px;"></textarea>
                             </div>
                             <div class="col-12">
-                                <label for="image1" class="col-sm-2 col-form-label">이미지</label>
+                                <label class="col-sm-2 col-form-label" for="image1">이미지</label>
                                 <div class="col-12 mb-3">
-                                    <input class="form-control" type="file" accept="image/*" id="image1">
+                                    <input accept="image/*" class="form-control" id="image1" type="file">
                                 </div>
                                 <div class="col-12 mb-3">
-                                    <input class="form-control" type="file" accept="image/*" id="image2">
+                                    <input accept="image/*" class="form-control" id="image2" type="file">
                                 </div>
                                 <div class="col-12 mb-3">
-                                    <input class="form-control" type="file" accept="image/*" id="image3">
+                                    <input accept="image/*" class="form-control" id="image3" type="file">
                                 </div>
+                            </div>
+                            <div class="col-4">
+                                <label class="form-label" for="stockAmount">초기재고</label>
+                                <input class="form-control" id="stockAmount" min="0" type="number">
                             </div>
                             <div class="text-center">
                                 <button class="btn btn-primary" type="submit">상품등록</button>
                             </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">옵션설정</h5>
+                        <form class="row g-3">
+
                         </form>
                     </div>
                 </div>
