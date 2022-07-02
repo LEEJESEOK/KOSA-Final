@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="head">
-    <title th:text="${pageTitle}+' - 더한섬닷컴'"></title>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+
+    <title th:text="${pageTitle}+' - 더한섬닷컴'"></title>
 
     <!-- Favicons -->
     <link rel="icon" th:href="@{/images/favicon.ico}" type="image/x-icon"/>
@@ -31,6 +32,7 @@
     <!-- Template Main CSS File -->
     <link rel="stylesheet" th:href="@{/biz/css/style.css}">
 
-    <th:block th:replace="~{/include/csrf::csrf}"></th:block>
+    <!-- jQuery -->
+    <script th:src="@{/js/jquery-1.11.2.min.js}"></script>
 </th:block>
 </html>

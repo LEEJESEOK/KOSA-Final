@@ -14,15 +14,140 @@
 
 <!-- ======= main ======= -->
 <main class="main" id="main">
-
     <th:block th:replace="~{/biz/fragment/pagetitle::pagetitle}"></th:block>
+    <script>
+        $().ready(function () {
 
+            // 테이블 선택한 행 table-active 적용
+            $("input[type=checkbox]:not(#checkAll)").change(function () {
+                if ($(this).is(":checked")) {
+                    $(this).closest('tr').addClass("table-active");
+                } else {
+                    $(this).closest('tr').removeClass("table-active");
+                }
+            });
+
+            // 체크박스 전체선택/해제
+            $("#checkAll").click(function () {
+                $("input[type=checkbox]").prop("checked", this.checked).trigger("change");
+            });
+
+            // 체크된 체크박스 개수에 따라 checkAll 변경
+            $("input[type=checkbox]:not(#checkAll)").click(function () {
+                let total = $("input[type=checkbox]:not(#checkAll)").length;
+                let checked = $("input[type=checkbox]:checked:not(#checkAll)").length;
+
+                $("#checkAll").prop("checked", total == checked);
+            });
+        });
+    </script>
     <section class="section">
         <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-
+            <div class="col-12">
+                <!-- 검색옵션 -->
+                <div class="card p-3">
+                    <form class="row">
+                        <div class="row mb-3">
+                            <div class="col-2">
+                                <label class="form-label" for="keyword">검색분류</label>
+                            </div>
+                            <div class="col-3">
+                                <select class="form-select">
+                                    <option>상품명</option>
+                                    <option>상품코드</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <input autofocus class="form-control" id="keyword" type="text">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-2">
+                                <label class="form-label">상품분류</label>
+                            </div>
+                            <div class="col-3">
+                                <select class="form-select" id="large">
+                                    <option selected="">Choose...</option>
+                                    <option th:value="${null}">미설정</option>
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                <select class="form-select" id="medium">
+                                    <option selected="">Choose...</option>
+                                    <option th:value="${null}">미설정</option>
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                <select class="form-select" id="small">
+                                    <option selected="">Choose...</option>
+                                    <option th:value="${null}">미설정</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-2">
+                                <label class="form-label" for="brand">브랜드</label>
+                            </div>
+                            <div class="col-3">
+                                <input class="form-control" id="brand" type="text">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <button class="btn btn-outline-primary" type="reset">초기화</button>
+                                <button class="btn btn-primary" type="submit">검색</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
+                <!-- End 검색옵션 -->
+                <!-- 검색결과 -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">상품목록</h5>
+                        <form class="row">
+                            <table class="table table-hover table-bordered">
+                                <thead class="table-light">
+                                <tr>
+                                    <th scope="col"><input class="form-check-input" id="checkAll" type="checkbox"></th>
+                                    <th scope="col">#</th>
+                                    <th scope="col">상품명</th>
+                                    <th scope="col">판매가</th>
+                                    <th scope="col">상품분류</th>
+                                    <th scope="col">상품 등록일</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td><input class="form-check-input" type="checkbox"></td>
+                                    <td>1</td>
+                                    <td>샘플상품1</td>
+                                    <td>10000</td>
+                                    <td>대분류 &gt; 중분류 &gt; 소분류</td>
+                                    <td>2022-07-03</td>
+                                </tr>
+                                <tr>
+                                    <td><input class="form-check-input" type="checkbox"></td>
+                                    <td>2</td>
+                                    <td>샘플상품2</td>
+                                    <td>70000</td>
+                                    <td>대분류 &gt; 중분류 &gt; 소분류</td>
+                                    <td>2022-07-03</td>
+                                </tr>
+                                <tr>
+                                    <td><input class="form-check-input" type="checkbox"></td>
+                                    <td>3</td>
+                                    <td>샘플상품3</td>
+                                    <td>250000</td>
+                                    <td>대분류 &gt; 중분류 &gt; 소분류</td>
+                                    <td>2022-07-03</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+                <!-- End 검색결과 -->
             </div>
         </div>
     </section>
