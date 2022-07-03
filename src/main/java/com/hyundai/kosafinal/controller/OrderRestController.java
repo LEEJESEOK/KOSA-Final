@@ -3,6 +3,7 @@ package com.hyundai.kosafinal.controller;
 import com.hyundai.kosafinal.domain.AuthMemberDTO;
 import com.hyundai.kosafinal.domain.OrderItemDTO;
 import com.hyundai.kosafinal.domain.OrderedListDTO;
+import com.hyundai.kosafinal.entity.CartProduct;
 import com.hyundai.kosafinal.entity.OrderProduct;
 import com.hyundai.kosafinal.service.OrderService;
 import com.hyundai.kosafinal.service.ProductService;
@@ -29,6 +30,7 @@ public class OrderRestController {
     @Autowired
     private ProductService pService;
 
+    // 주문 추가
     @PostMapping("")
     public ResponseEntity<String> insertOrder(@RequestParam Map<String, Object> orderInfo) {
         ResponseEntity<String> entry = null;
@@ -78,6 +80,7 @@ public class OrderRestController {
         return entry;
     }
 
+    // 주문번호 반환
     @PostMapping("/getId")
     public ResponseEntity<Integer> getOrderId() {
         ResponseEntity<Integer> entry = null;
@@ -86,7 +89,8 @@ public class OrderRestController {
 
         return entry;
     }
-    
+
+    // 해당 주문의 상품들 반환
     @PostMapping("/getOrderItems/{id}")
     public ResponseEntity<List<OrderProduct>> getOrderItems(@PathVariable String id) {
         ResponseEntity<List<OrderProduct>> entry = null;
@@ -96,6 +100,7 @@ public class OrderRestController {
         return entry;
     }
 
+    // 주문 배송지 수정
     @PostMapping("/updateDelivery")
     public ResponseEntity<Boolean> updateDelivery(@RequestParam Map<String, String> deliveryInfo) {
         String id = deliveryInfo.get("id");
@@ -114,6 +119,36 @@ public class OrderRestController {
         return entry;
     }
 
+    // 주문 상품 재고 체크
+    @PostMapping("/checkStock")
+    public CartProduct checkStock(@RequestParam Map<String, Object> map) {
+
+        log.info("주문 상품 재고 체크 : " + map);
+
+        CartProduct cp = null;
+        int count = Integer.parseInt(map.get("pcount").toString());
+        for(int i = 1; i <= count; i++) {
+            String id = map.get("id"+i).toString();
+            String psize = map.get("psize"+i).toString();
+            String pcolor = map.get("pcolor"+i).toString();
+            int amount = Integer.parseInt(map.get("amount"+i).toString());
+
+            if(!oService.checkStock(id, psize, pcolor, amount)) {
+                cp = new CartProduct();
+                cp.setPid(id);
+                cp.setPsize(psize);
+                cp.setPcolor(pcolor);
+                cp.setAmount(amount);
+                cp.setName(map.get("name"+i).toString());
+
+                return cp;
+            }
+        }
+
+        return null;
+    }
+
+    // 주문 취소
     @PostMapping("/cancel")
     public ResponseEntity<Boolean> cancelOrder(@RequestParam String id, @AuthenticationPrincipal AuthMemberDTO authentication) {
 

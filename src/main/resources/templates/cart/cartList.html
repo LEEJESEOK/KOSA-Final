@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>더한섬닷컴</title>
+    <title>장바구니 | 더한섬닷컴</title>
 
     <!-- head -->
     <th:block th:replace="~{/head :: head}"></th:block>
@@ -259,8 +259,8 @@
     //주문하기 버튼 눌렀을 때
     function checkoutPage() {
 		let form_contents = '';
-		let orderNumber = 0;
 		let count = 0;
+		let data = new FormData();
 
         // 체크된 상품을 orderForm에 input hidden 태그로 정보 추가
         $("input:checkbox[name='cartlist']:checked").each(function () {
@@ -278,16 +278,24 @@
 			let amount = form.find('input[name=oldpamount]').val();
 			let price = form.find('input[name=price]').val();
 
-            form_contents += "<input name='pid" + count + "' type='hidden' value='" + pid + "'>";
+			form_contents += "<input name='pid" + count + "' type='hidden' value='" + pid + "'>";
 			form_contents += "<input name='name" + count + "' type='hidden' value='" + name + "'>";
 			form_contents += "<input name='brand" + count + "' type='hidden' value='" + brand + "'>";
-            form_contents += "<input name='image" + count + "' type='hidden' value='" + image + "'>";
-            form_contents += "<input name='pcolor" + count + "' type='hidden' value='" + pcolor + "'>";
-            form_contents += "<input name='psize" + count + "' type='hidden' value='" + psize + "'>";
+			form_contents += "<input name='image" + count + "' type='hidden' value='" + image + "'>";
+			form_contents += "<input name='pcolor" + count + "' type='hidden' value='" + pcolor + "'>";
+			form_contents += "<input name='psize" + count + "' type='hidden' value='" + psize + "'>";
 			form_contents += "<input name='amount" + count + "' type='hidden' value='" + amount + "'>";
 			form_contents += "<input name='price" + count + "' type='hidden' value='" + price + "'>";
 
+
+			// 재고 체크를 위해 데이터에 추가
+			data.append('id'+count, pid);
+			data.append('psize'+count, psize);
+			data.append('pcolor'+count, pcolor);
+			data.append('amount'+count, amount);
+			data.append('name'+count, name);
         });
+		data.append('pcount', count);
 
         // 총 개수 추가로 전달
         form_contents += "<input name='pcount' type='hidden' value='" + count + "'>";
@@ -296,18 +304,39 @@
         if (count == 0) {
             layerAlert("주문하실 상품을 선택해주세요.");
             return false;
-        }
-
-        var lc = new layerConfirm("주문하시겠습니까?", "YES", "NO");
-        lc.confirmAction = function () {
-            // html에 추가
-            $(".orderForm").append(form_contents);
-            $(".orderForm").submit();
-        };
-
+        } else {
+			// 재고 체크
+			$.ajax({
+				url: "[(@{/order/checkStock})]",
+				method: "post",
+				data: data,
+				dataType: 'json',
+				async : false,
+				enctype: "multipart/form-data", //form data 설정
+				processData: false,
+				contentType: false,
+				success: function (data) {
+					let la = new layerAlert("주문 가능한 수량이 없습니다.<br> <span style='color:red;'>주문 불가능한 상품 <br>" + data.name + "(" + data.psize + ", " + data.pcolor + ", " + data.amount + "개)</span>");
+					la.confirmAction = function() {
+						return false;
+					}
+				},
+				error: function (request, status, error) {
+					let lc = new layerConfirm("주문하시겠습니까?", "YES", "NO");
+					lc.confirmAction = function () {
+						// html에 추가
+						$(".orderForm").append(form_contents);
+						$(".orderForm").submit();
+					};
+				},
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader(csrf_header, csrf_token);
+				}
+			});
+		}
     }
 
-    //]]>
+
 </script>
 
 <!-- bodyWrap -->
