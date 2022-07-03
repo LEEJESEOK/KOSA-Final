@@ -1,35 +1,132 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <th:block th:replace="~{/biz/fragment/head::head}"></th:block>
-</head>
-<body>
-<!-- ======= Header ======= -->
-<th:block th:replace="~{/biz/fragment/header::header}"></th:block>
-<!-- End Header -->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/biz/layout/default}">
+<th:block layout:fragment="content">
+    <script>
+        $().ready(function () {
 
-<!-- ======= Sidebar ======= -->
-<th:block th:replace="~{/biz/fragment/sidebar::sidebar}"></th:block>
-<!-- End Sidebar-->
+            // 테이블 선택한 행 table-active 적용
+            $("input[type=checkbox]:not(#checkAll)").change(function () {
+                if ($(this).is(":checked")) {
+                    $(this).closest('tr').addClass("table-active");
+                } else {
+                    $(this).closest('tr').removeClass("table-active");
+                }
+            });
 
-<!-- ======= main ======= -->
-<main class="main" id="main">
-    <th:block th:replace="~{/biz/fragment/pagetitle::pagetitle}"></th:block>
+            // 체크박스 전체선택/해제
+            $("#checkAll").click(function () {
+                $("input[type=checkbox]").prop("checked", this.checked).trigger("change");
+            });
 
+            // 체크된 체크박스 개수에 따라 checkAll 변경
+            $("input[type=checkbox]:not(#checkAll)").click(function () {
+                let total = $("input[type=checkbox]:not(#checkAll)").length;
+                let checked = $("input[type=checkbox]:checked:not(#checkAll)").length;
+
+                $("#checkAll").prop("checked", total == checked);
+            });
+        });
+    </script>
     <section class="section">
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-12">
+                <!-- 검색옵션 -->
+                <div class="card p-3">
+                    <form class="row">
+                        <div class="row mb-3">
+                            <div class="col-2">
+                                <label class="form-label" for="keyword">검색어</label>
+                            </div>
+                            <div class="col-2">
+                                <select class="form-select">
+                                    <option th:value="id">아이디</option>
+                                    <option th:value="name">이름</option>
+                                    <option th:value="tel">연락처</option>
+                                </select>
+                            </div>
+                            <div class="col-8">
+                                <input autofocus class="form-control" id="keyword" type="text">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-2">
+                                <label class="form-label">가입일</label>
+                            </div>
+                            <div class="col-2">
+                                <input type="date" class="form-control">
+                            </div>
+                            <div class="col-2">
+                                <input type="date" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <button class="btn btn-outline-primary" type="reset">초기화</button>
+                                <button class="btn btn-primary" type="submit">검색</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
                 <div class="card">
-
+                    <div class="card-body">
+                        <h5 class="card-title">회원목록</h5>
+                        <form class="row">
+                            <table class="table table-hover table-bordered">
+                                <thead class="table-light">
+                                <tr>
+                                    <th scope="col"><input class="form-check-input" id="checkAll" type="checkbox"></th>
+                                    <th scope="col">#</th>
+                                    <th scope="col">이름</th>
+                                    <th scope="col">아이디</th>
+                                    <th scope="col">연락처</th>
+                                    <th scope="col">나이</th>
+                                    <th scope="col">등급</th>
+                                    <th scope="col">가입일</th>
+                                    <th scope="col">비고</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td><input class="form-check-input" type="checkbox"></td>
+                                    <th scope="row" th:text="'1'"></th>
+                                    <td th:text="'이승연'"></td>
+                                    <td th:text="'isaa1107'"></td>
+                                    <td th:text="'01012345678'"></td>
+                                    <td th:text="'27'"></td>
+                                    <td th:text="'CREW'"></td>
+                                    <td th:text="${#dates.format(#calendars.createNow(), 'yyyy-MM-dd')}"></td>
+                                    <td th:text="''"></td>
+                                </tr>
+                                <tr>
+                                    <td><input class="form-check-input" type="checkbox"></td>
+                                    <th scope="row" th:text="'2'"></th>
+                                    <td th:text="'박주영'"></td>
+                                    <td th:text="'id'"></td>
+                                    <td th:text="'01012345678'"></td>
+                                    <td th:text="'25'"></td>
+                                    <td th:text="'STAR'"></td>
+                                    <td th:text="${#dates.format(#calendars.createNow(), 'yyyy-MM-dd')}"></td>
+                                    <td th:text="''"></td>
+                                </tr>
+                                <tr>
+                                    <td><input class="form-check-input" type="checkbox"></td>
+                                    <th scope="row" th:text="'3'"></th>
+                                    <td th:text="'유지훈'"></td>
+                                    <td th:text="'id'"></td>
+                                    <td th:text="'01012345678'"></td>
+                                    <td th:text="'27'"></td>
+                                    <td th:text="'THE STAR'"></td>
+                                    <td th:text="${#dates.format(#calendars.createNow(), 'yyyy-MM-dd')}"></td>
+                                    <td th:text="''"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-</main>
-<!-- End #main -->
-
-<!-- ======= Footer ======= -->
-<th:block th:replace="~{/biz/fragment/footer::footer}"></th:block>
-<!-- End Footer -->
-</body>
+</th:block>
 </html>

@@ -1,21 +1,7 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <th:block th:replace="~{/biz/fragment/head::head}"></th:block>
-</head>
-<body>
-<!-- ======= Header ======= -->
-<th:block th:replace="~{/biz/fragment/header::header}"></th:block>
-<!-- End Header -->
-
-<!-- ======= Sidebar ======= -->
-<th:block th:replace="~{/biz/fragment/sidebar::sidebar}"></th:block>
-<!-- End Sidebar-->
-
-<!-- ======= main ======= -->
-<main class="main" id="main">
-    <th:block th:replace="~{/biz/fragment/pagetitle::pagetitle}"></th:block>
-
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/biz/layout/default}">
+<th:block layout:fragment="content">
     <section class="section">
         <div class="row">
             <div class="col-12">
@@ -44,7 +30,7 @@
                                 <div class="col-2">
                                     <label class="form-label" for="price">가격</label>
                                 </div>
-                                <div class="col-9">
+                                <div class="col-3">
                                     <div class="input-group">
                                         <span class="input-group-text">₩</span>
                                         <input aria-label="Price" class="form-control" id="price" min="0"
@@ -113,7 +99,7 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-2">
-                                    <label class="col-2 col-form-label" for="image1">이미지</label>
+                                    <label class="col-form-label" for="image1">이미지</label>
                                 </div>
                                 <div class="col-6">
                                     <input accept="image/*" class="form-control mb-1" id="image1" type="file">
@@ -146,11 +132,5 @@
             </div>
         </div>
     </section>
-</main>
-<!-- End #main -->
-
-<!-- ======= Footer ======= -->
-<th:block th:replace="~{/biz/fragment/footer::footer}"></th:block>
-<!-- End Footer -->
-</body>
+</th:block>
 </html>

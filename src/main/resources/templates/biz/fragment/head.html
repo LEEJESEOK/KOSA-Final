@@ -6,33 +6,8 @@
 
     <title th:text="${pageTitle}+' - 더한섬닷컴'"></title>
 
-    <!-- Favicons -->
-    <link rel="icon" th:href="@{/images/favicon.ico}" type="image/x-icon"/>
-    <!--    <link href="biz/img/favicon.png" rel="icon">-->
-    <link href="biz/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <th:block th:replace="~{/biz/fragment/css::css}"></th:block>
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.gstatic.com" rel="preconnect">
-    <link href="https://fonts.googleapis.com" rel="preconnect">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-          rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
-          rel="stylesheet">
-
-
-    <!-- Vendor css Files -->
-    <link rel="stylesheet" th:href="@{/biz/vendor/bootstrap/css/bootstrap.min.css}">
-    <link rel="stylesheet" th:href="@{/biz/vendor/bootstrap-icons/bootstrap-icons.css}">
-    <link rel="stylesheet" th:href="@{/biz/vendor/boxicons/css/boxicons.min.css}">
-    <link rel="stylesheet" th:href="@{/biz/vendor/quill/quill.snow.css}">
-    <link rel="stylesheet" th:href="@{/biz/vendor/quill/quill.bubble.css}">
-    <link rel="stylesheet" th:href="@{/biz/vendor/remixicon/remixicon.css}">
-    <link rel="stylesheet" th:href="@{/biz/vendor/simple-datatables/style.css}">
-
-    <!-- Template Main CSS File -->
-    <link rel="stylesheet" th:href="@{/biz/css/style.css}">
-
-    <!-- jQuery -->
-    <script th:src="@{/js/jquery-1.11.2.min.js}"></script>
+    <th:block th:replace="~{/biz/fragment/script::script}"></th:block>
 </th:block>
 </html>

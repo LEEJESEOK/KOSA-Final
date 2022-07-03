@@ -1,35 +1,166 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <th:block th:replace="~{/biz/fragment/head::head}"></th:block>
-</head>
-<body>
-<!-- ======= Header ======= -->
-<th:block th:replace="~{/biz/fragment/header::header}"></th:block>
-<!-- End Header -->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/biz/layout/default}">
+<th:block layout:fragment="content">
+    <script>
+        $().ready(function () {
 
-<!-- ======= Sidebar ======= -->
-<th:block th:replace="~{/biz/fragment/sidebar::sidebar}"></th:block>
-<!-- End Sidebar-->
+            // 테이블 선택한 행 table-active 적용
+            $("input[type=checkbox]:not(#checkAll)").change(function () {
+                if ($(this).is(":checked")) {
+                    $(this).closest('tr').addClass("table-active");
+                } else {
+                    $(this).closest('tr').removeClass("table-active");
+                }
+            });
 
-<!-- ======= main ======= -->
-<main class="main" id="main">
-    <th:block th:replace="~{/biz/fragment/pagetitle::pagetitle}"></th:block>
+            // 체크박스 전체선택/해제
+            $("#checkAll").click(function () {
+                $("input[type=checkbox]").prop("checked", this.checked).trigger("change");
+            });
 
+            // 체크된 체크박스 개수에 따라 checkAll 변경
+            $("input[type=checkbox]:not(#checkAll)").click(function () {
+                let total = $("input[type=checkbox]:not(#checkAll)").length;
+                let checked = $("input[type=checkbox]:checked:not(#checkAll)").length;
+
+                $("#checkAll").prop("checked", total == checked);
+            });
+        });
+    </script>
     <section class="section">
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-12">
+                <div class="card p-3">
+                    <div class="card-body">
+                        <form class="row">
+                            <div class="row mb-3">
+                                <div class="col-2">
+                                    <label class="form-label" for="orderKeyword">검색분류</label>
+                                </div>
+                                <div class="col-2">
+                                    <select class="form-select" id="orderKeywordType">
+                                        <option>주문번호</option>
+                                        <option>품목별 주문번호</option>
+                                        <option>주문자명</option>
+                                        <option>주문자 아이디</option>
+                                        <option>주문서 이메일</option>
+                                        <option>주문서 연락처</option>
+                                    </select>
+                                </div>
+                                <div class="col-7">
+                                    <input autofocus class="form-control" id="orderKeyword" type="text">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-2">
+                                    <label class="form-label">기간</label>
+                                </div>
+                                <div class="col-2">
+                                    <input type="date" class="form-control">
+                                </div>
+                                <div class="col-2">
+                                    <input type="date" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-2">
+                                    <label class="form-label" for="productKeyword">상품</label>
+                                </div>
+                                <div class="col-2">
+                                    <select class="form-select" id="productKeywordType">
+                                        <option>상품명</option>
+                                        <option>상품코드</option>
+                                        <option>브랜드</option>
+                                    </select>
+                                </div>
+                                <div class="col-7">
+                                    <input class="form-control" type="text" id="productKeyword">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-2">
+                                    <label class="form-label">배송상태</label>
+                                </div>
+                                <div class="col-10">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" id="">
+                                        <label class="form-check-label">결제완료</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" id="">
+                                        <label class="form-check-label">배송중</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" id="delivery">
+                                        <label class="form-check-label" for="delivery">배송완료</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" id="order_cancel">
+                                        <label class="form-check-label" for="order_cancel">주문취소</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <button class="btn btn-outline-primary" type="reset">초기화</button>
+                                    <button class="btn btn-primary" type="submit">검색</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
                 <div class="card">
-
+                    <div class="card-body">
+                        <h5 class="card-title"></h5>
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                            <tr>
+                                <th scope="col" class="text-center">
+                                    <input class="form-check-input" id="checkAll" type="checkbox">
+                                </th>
+                                <th scope="col" class="text-center">#</th>
+                                <th scope="col" class="text-center">주문일</th>
+                                <th scope="col" class="text-center">주문번호</th>
+                                <th scope="col" class="text-center">주문자</th>
+                                <th scope="col" class="text-center">상품명</th>
+                                <th scope="col" class="text-center">결제금액</th>
+                                <th scope="col" class="text-center">결제수단</th>
+                                <th scope="col" class="text-center">배송상태</th>
+                                <th scope="col" class="text-center">비고</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><input class="form-check-input" type="checkbox"></td>
+                                <td th:text="${1}"></td>
+                                <td th:text="${#dates.format(#calendars.createNow(), 'yyyy-MM-dd')}"></td>
+                                <td th:text="'1'"></td>
+                                <td th:text="'이제석'"></td>
+                                <td th:text="'샘플상품1(색상, 사이즈, 개수)'"></td>
+                                <td th:text="'10000원'"></td>
+                                <td th:text="'카드'"></td>
+                                <td th:text="'배송완료'"></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><input class="form-check-input" type="checkbox"></td>
+                                <td th:text="${2}"></td>
+                                <td th:text="${#dates.format(#calendars.createNow(), 'yyyy-MM-dd')}"></td>
+                                <td th:text="'2'"></td>
+                                <td th:text="'이제석'"></td>
+                                <td th:text="'샘플상품2(색상, 사이즈, 개수)'"></td>
+                                <td th:text="'70000원'"></td>
+                                <td th:text="'카드'"></td>
+                                <td th:text="'배송중'"></td>
+                                <td></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-</main>
-<!-- End #main -->
-
-<!-- ======= Footer ======= -->
-<th:block th:replace="~{/biz/fragment/footer::footer}"></th:block>
-<!-- End Footer -->
-</body>
+</th:block>
 </html>
