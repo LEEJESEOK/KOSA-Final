@@ -14,9 +14,8 @@
   <div class="adaptive_wrap">
     <div class="clearfix prd_detail1905" id="clearfix">
       <div class="clearfix image_view3">
-        <a href="javascript:imageZoom()" id="btn_zoom" class="btn_zoom"
-           onclick="GA_Event('상품_상세','크게보기','클릭')">크게보기</a><!-- 버튼 클릭시 item_visual 에 zoom 클래스 추가 -->
-        <!-- 2021.08.18 동영상 재생 수정, 상품 imageDivisionCode에 VOD가 있는 경우 동영상 url 세팅 -->
+
+        <a href="javascript:imageZoom()" id="btn_zoom" class="btn_zoom">크게보기</a>
 
         <div class="image_view1" id="image_view1">
           <div class="item_visual" id="imageDiv" style="margin-top: 20px;">
@@ -33,6 +32,8 @@
           var imageList = {};
           var productInfo = document.location.href.split("/");
           var productId = productInfo[5];
+
+          var arkQuery = $.noConflict(true);
 
           console.log(productInfo);
           console.log(productId);
@@ -67,17 +68,30 @@
               $("#prodTotalStarScore").css("width", starWidth+"%");
               $("#totalStarScore").css("width", starWidth+"%");
             }
-
-
-            //상품평 입력시 별점 활성화
-            $('.btn_star_score li a').on('click',function(){
-              var idx=$(this).parent('li').index()+1;
-              for(var i=1;i<6;i++){
-                $('.write_star_score1807 .cmt_star .cmt_per').removeClass('star'+i);
-              }
-              $('.write_star_score1807 .cmt_star .cmt_per').addClass('star'+idx);
-            });
           });
+
+          //상품평 입력시 별점 활성화
+          //삼품평 입력시의 별점 선택시 자동 반영
+          function changeStarReviewInput(tag){
+            var idx=parseInt(tag.getAttribute('data-value'));
+            for(var i=1;i<6;i++){
+              $('.write_star_score1807 .cmt_star .cmt_per').removeClass(' star'+i);
+            }
+            $('.write_star_score1807 .cmt_star .cmt_per').addClass(' star'+idx);
+            $("#rating").val(idx);
+          }
+
+          //상품 연령 선택시 hidden input에 값 넣기
+          function setReviewAge(age){
+            var ageStr = age.getAttribute('name');
+            $("#reviewAge").val(ageStr);
+          }
+
+          //상품 체형 입력시 hidden input에 값 넣기
+          function setReviewBody(body){
+            var bodyStr = body.getAttribute('bodyType');
+            $("#reviewBody").val(bodyStr);
+          }
 
           function priceToString(price) {
             return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -746,35 +760,12 @@
       <p class="reqd_txt float_right"><strong class="reqd">*</strong> 표시는 필수항목입니다.</p>
     </div>
     <div class="pop_cnt evaluation_write1905 options1811">
-      <form id="reviewForm" name="reviewForm" action="/ko/HANDSOME/MEN/OUTER/DOWN-JUMPER/%ED%9B%84%EB%93%9C-%ED%8C%A8%EB%94%A9-%ED%94%8C%EB%9D%BC%EC%9D%B4%ED%8A%B8-%EC%A0%90%ED%8D%BC/p/TH2B9WJM335N_BK?categoryCode=ME03" method="post" enctype="multipart/form-data"><input type="hidden" name="productCode">
+      <form id="reviewForm" name="reviewForm" action="/ko/HANDSOME/MEN/OUTER/DOWN-JUMPER/%ED%9B%84%EB%93%9C-%ED%8C%A8%EB%94%A9-%ED%94%8C%EB%9D%BC%EC%9D%B4%ED%8A%B8-%EC%A0%90%ED%8D%BC/p/TH2B9WJM335N_BK?categoryCode=ME03" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="productCode">
         <input type="hidden" name="productCodeType">
-        <input type="hidden" name="orderNumber" id="orderNumber" value="">
-        <input type="hidden" name="purchaseColor" id="purchaseColor" value="BK">
-        <input type="hidden" name="purchaseColorName" id="purchaseColorName" value="BLACK">
-        <input type="hidden" name="purchaseSize" id="purchaseSize" value="">
-        <input type="hidden" name="purchaseProdYN" id="purchaseProdYN" value="">
-        <input type="hidden" name="orderWriteChk" id="orderWriteChk" value="Y">
-        <input type="hidden" name="closeWriteChk" id="closeWriteChk" value="">
-        <input type="hidden" name="productId" id="productId" value="">
-        <input type="hidden" name="fileDeleteYN" id="fileDeleteYN">
-
-        <!-- 상품평활성화 -->
-        <input type="hidden" name="categoryCode" id="categoryCode" value="SZ08">
-        <input type="hidden" name="shoulderWidth" id="shoulderWidth" value="">
-        <input type="hidden" name="chestSize" id="chestSize" value="">
-        <input type="hidden" name="waistSize" id="waistSize" value="">
-        <input type="hidden" name="buttSize" id="buttSize" value="">
-        <input type="hidden" name="totalSize" id="totalSize" value="">
-        <input type="hidden" name="photoAccumulationRightYn" id="photoAccumulationRightYn" value="">
-        <input type="hidden" name="offlineOrdDt" id="offlineOrdDt" value="">
-        <input type="hidden" name="offlineShpCd" id="offlineShpCd" value="">
-        <input type="hidden" name="offlineShpNm" id="offlineShpNm" value="">
-        <input type="hidden" name="tempProductId" id="tempProductId" value="">
-        <input type="hidden" name="reviewFileCd" id="reviewFileCd" value="">
-        <input type="hidden" name="reviewFileCd1" id="reviewFileCd1" value="">
-        <input type="hidden" name="reviewFileCd2" id="reviewFileCd2" value="">
-        <input type="hidden" name="reviewFileCd3" id="reviewFileCd3" value="">
-        <input type="hidden" name="reviewFileCd4" id="reviewFileCd4" value="">
+        <input type="hidden" name="ctryLarge" id="ctryLarge" th:value="${productDetail.categoryLarge}">
+        <input type="hidden" name="ctryMedium" id="ctryMedium" th:value="${productDetail.categoryMedium}">
+        <input type="hidden" name="ctrySmall" id="ctrySmall" th:value="${productDetail.categorySmall}">
 
         <fieldset>
           <legend>상품평쓰기</legend>
@@ -814,17 +805,18 @@
               <tr class="radio_btn_1905 bk">
                 <th scope="row" class="th_space">연 령</th>
                 <td colspan="3">
-                  <input id="ageG1" type="radio" name="age" value="18세 이하">
+                  <input type="hidden" id="reviewAge" name="reviewAge">
+                  <input onclick="setReviewAge(this)" id="ageG1" type="radio" name="age" value="18세 이하">
                   <label for="ageG1">18세 이하</label>
-                  <input id="ageG2" type="radio" name="age" value="20대">
+                  <input onclick="setReviewAge(this)" id="ageG2" type="radio" name="age" value="20대">
                   <label for="ageG2">20대</label>
-                  <input id="ageG3" type="radio" name="age" value="30대">
+                  <input onclick="setReviewAge(this)" id="ageG3" type="radio" name="age" value="30대">
                   <label for="ageG3">30대</label>
-                  <input id="ageG4" type="radio" name="age" value="40대">
+                  <input onclick="setReviewAge(this)" id="ageG4" type="radio" name="age" value="40대">
                   <label for="ageG4">40대</label>
-                  <input id="ageG5" type="radio" name="age" value="50대">
+                  <input onclick="setReviewAge(this)" id="ageG5" type="radio" name="age" value="50대">
                   <label for="ageG5">50대</label>
-                  <input id="ageG6" type="radio" name="age" value="60대 이상">
+                  <input onclick="setReviewAge(this)" id="ageG6" type="radio" name="age" value="60대 이상">
                   <label for="ageG6">60대 이상</label>
                 </td>
               </tr>
@@ -843,11 +835,12 @@
                   <strong class="reqd">*</strong>
                   체 형</th>
                 <td colspan="3">
-                  <input id="dark1" type="radio" name="bodyType" value="마른 체형">
+                  <input type="hidden" id="reviewBody" name="reviewBody">
+                  <input onclick="setReviewBody(this)" id="dark1" type="radio" name="bodyType" value="마른 체형">
                   <label for="dark1">마른 체형</label>
-                  <input id="dark2" type="radio" name="bodyType" value="보통">
+                  <input onclick="setReviewBody(this)" id="dark2" type="radio" name="bodyType" value="보통">
                   <label for="dark2">보통</label>
-                  <input id="dark3" type="radio" name="bodyType" value="통통한 체형">
+                  <input onclick="setReviewBody(this)" id="dark3" type="radio" name="bodyType" value="통통한 체형">
                   <label for="dark3">통통한 체형</label>
                 </td>
               </tr>
@@ -858,15 +851,15 @@
                 <th colspan="4">
                   <div class="write_star_score1807">
                       <span class="cmt_star">
-                          <span class="cmt_per star5">별점</span>
+                          <span class="cmt_per">별점</span>
                       </span>
                     <ul class="btn_star_score">
-                      <li><a href="#;" value="1">1점</a></li>
-                      <li><a href="#;" value="2">2점</a></li>
-                      <li><a href="#;" value="3">3점</a></li>
-                      <li><a href="#;" value="4">4점</a></li>
-                      <li><a href="#;" value="5">5점</a></li>
-                      <input type="hidden" id="rating" name="rating" value="5">
+                      <li><a href="javascript:;" onclick="changeStarReviewInput(this)" data-value="1">1점</a></li>
+                      <li><a href="javascript:;" onclick="changeStarReviewInput(this)" data-value="2">2점</a></li>
+                      <li><a href="javascript:;" onclick="changeStarReviewInput(this)" data-value="3">3점</a></li>
+                      <li><a href="javascript:;" onclick="changeStarReviewInput(this)" data-value="4">4점</a></li>
+                      <li><a href="javascript:;" onclick="changeStarReviewInput(this)" data-value="5">5점</a></li>
+                      <input type="hidden" id="rating" name="rating" value="">
                     </ul>
                     <p>평점을 선택해 주세요.</p>
                   </div>
@@ -876,7 +869,7 @@
                 <th scope="row">
                   <strong class="reqd" style="margin-top:6px;">*</strong>
                   <label style="margin-top:6px;">상품평<br>
-                    <span class="subtxt_1905">
+                    <span class="subtxt_1905">자
                                             (20자 이상<br>&nbsp;200자 이하)</span>
                   </label>
                 </th>
@@ -892,7 +885,7 @@
                     <div class="upload_wrap2003">
                       <input type="text" id="textReviewFile" class="text" title="파일 첨부하기" readonly="readonly" name="fileText">
                       <div class="upload_btn">
-                        <input type="file" name="reviewFile" id="reviewFile" class="btn add_s" title="파일찾기">
+                        <input type="file" name="reviewFile" id="reviewFile" class="btn add_s" title="파일찾기" onchange="handleFiles(this.files)">
                         <label for="reviewFile">
                           <!-- 	 <button type="button" id="uploadFile1" class="img_upload" title="파일찾기">  -->
                           <span id="uploadFile1" class="img_upload">파일찾기</span>
@@ -918,7 +911,7 @@
           </div>
           <div class="btnwrap mt40">
             <input type="button" id="reviewCancle" value="취소하기" class="btn wt">
-            <input type="button" id="reviewWriteSend" value="등록하기" class="btn gray mr0">
+            <input type="button" onclick="reviewInsertForm()" id="reviewWriteSend" value="등록하기" class="btn gray mr0">
           </div>
 
         </fieldset>
@@ -936,8 +929,9 @@
 <div class="layerArea" id="productLayer" style="display: none;">
   <div class="layerBg" tabindex="-1"></div>
 </div>
-
 <script text="javascript">
+
+  //상품평 모달 창
   const modal = document.getElementById("customerReviewDiv");
   const btnOpenPopup = document.getElementById("customerReview");
   const background = document.getElementById("productLayer");
@@ -953,23 +947,160 @@
   const modal2 = document.getElementById("customerReviewWriteDiv");
   const btnOpenPopupInputForm = document.getElementById("customerReviewWrite"); //상품평 입력폼
 
+  let userEmail = "dbwlgns98";
+  var productSize;
+  var productColorId;
+
+  //상품평 입력하기 버튼 클릭시
   btnOpenPopupInputForm.addEventListener('click', () => {
-    //상품평 입력시 이 회원이 주문 -> 결제 까지 했는지 확인 로직 필요
-    // 없으면 -> 결제가 제대로 이뤄지지 않았다고 표시하기
 
-    //상품평 작성시 : 상품평에 필요한 가격표 form 변경
-    var reviewInputTag = $("#reviewProducPrice");
-    var changePriceForm = priceToString(reviewInputTag.text());
-    reviewInputTag.text(changePriceForm);
+    //user가 로그인 되어 있는지 확인 필요
+    var getLoginUserEmail;
 
-    // 기존 상품평 가리기
-    modal.style.display = 'none';
 
-    //성공시 띄우기
-    modal2.style.display = 'block';
-    modal2.style.top = '50%';
-    modal2.style.top = '50%';
+
+    $.ajax({
+      type: "GET",
+      url: "/user/order/list" + userEmail,
+      contentType: "application/json; charset=utf-8",
+      success: function (results) {
+
+        //userEmail , productId 로 주문 조회하여 있는지 확인하기!!
+        // 해당하는 productId에서 상품 사이즈랑 컬러 아이디를 조회
+
+
+        userEmail = results.email;
+
+        //로그인이 되어 있는지
+        if(userEmail){
+
+        }
+        else{ //로그인 되어 있지 않으면 이동
+          location.replace("/login");
+          return;
+        }
+
+        //주문 했는지
+        if(results.isOrdered){
+
+        } else{
+          alert("주문한 상품이 아닙니다.")
+          return;
+        }
+
+        //상품평 작성시 : 상품평에 필요한 가격표 form 변경
+        var reviewInputTag = $("#reviewProducPrice");
+        var changePriceForm = priceToString(reviewInputTag.text());
+        reviewInputTag.text(changePriceForm);
+
+        // 기존 상품평 가리기
+        modal.style.display = 'none';
+
+        //성공시 띄우기
+        modal2.style.display = 'block';
+        modal2.style.top = '50%';
+        modal2.style.top = '50%';
+      },
+      error: function (request, status, error) {
+        alert("Ajax 통신 에러 발생");
+      }
+    });
   });
+
+  //상품 입력 처리 Ajax
+  function reviewInsertForm(){
+    const age = $("#reviewForm [name=reviewAge]").val();
+    const height = $("#reviewForm [name=height]").val();
+    const avgSize = $("#reviewForm [name=enjoySize]").val();
+    const bodyType = $("#reviewForm [name=reviewBody]").val();
+    const rate = $("#reviewForm [name=rating]").val();
+    const reviewContents = $("#reviewForm [name=headline]").val();
+    const imgFile = document.querySelector("#reviewForm [name=reviewFile]").files[0];
+
+    // 값을 채워줘야한다.
+    var ctryLarge = $("#ctryLarge").val();
+    var ctryMedium = $("#ctryMedium").val();
+    var ctrySmall = $("#ctrySmall").val();
+
+    //Multipart/form-data
+    const formData = new FormData();
+    formData.append("email", userEmail); //임의로 넣은 값
+    formData.append("productId", productId);
+    formData.append("age", age);
+    formData.append("height", height);
+    formData.append("avgSize", avgSize);
+    formData.append("bodyType", bodyType);
+    formData.append("rate", rate);
+    formData.append("content", reviewContents);
+    formData.append("title", '상품 리뷰 입력');
+    formData.append("productSize", productSize);
+    formData.append("productColorId", productColorId);
+    formData.append("ctryLarge", ctryLarge);
+    formData.append("ctryMedium", ctryMedium);
+    formData.append("ctrySmall", ctrySmall);
+    if(imgFile) {
+      formData.append("imgFIle", imgFile);
+    }
+
+    const csrf_token = "[[${_csrf.token}]]";
+    const csrf_header = "[[${_csrf.headerName}]]";
+
+    $.ajax({
+      type: "POST",
+      url: "/product_review/insert",
+      processData: false,
+      contentType: false,
+      cache: false,
+      data: formData,
+      beforeSend : function(xhr)
+      {
+        xhr.setRequestHeader(csrf_header, csrf_token);
+      },
+      success: function (data) {
+        console.log('입력 성공!!!! 젭알 돼라돼라돼라 ');
+        console.log(data);
+
+        xhr.setRequestHeader(csrf_header, csrf_token);
+
+        //상품 입력창 닫기
+        var reviewInputTag = $("#reviewCloseBtn");
+        popUpCloseInputForm(reviewInputTag);
+
+        //상품평 다시 조회
+        getProductReview(); //상품평은 다시 조회 되는데 -> 이때 평균 상품평 갯수 및 다른 것들도 업데이트를 해줘야할듯?
+
+      },
+      error: function (request, status, error) {
+        alert("Ajax 통신 에러 발생");
+        alert(error);
+      }
+    });
+  }
+
+  //상품 리뷰 입력시 이미지 파일 처리
+  var reviewFileElement = $("#textReviewFile");
+  function handleFiles(files){
+    console.log(files);
+    // 이미지 파일인지 확인
+    confirmFileExtension(files);
+  }
+
+  //이미지 파일인지 확인하는 로직
+  function confirmFileExtension(files) {
+    var reg = /(.*?)\.(jpg|jpeg|png|gif|bmp)$/;
+
+    $.each(files, function(idx, val) {
+      if((val.name).match(reg)) {
+        // alert("해당 파일은 이미지 파일입니다.");
+        reviewFileElement.val(val.name);
+        console.log("파일 이름 : "+ val.name);
+      } else {
+        alert("해당 파일은 이미지 파일이 아닙니다.");
+        //파일 초기화
+        $("#reviewFile").val("");
+      }
+    });
+  }
 
   function popUpClose(popUp){
     $("#customerReviewDiv").hide();

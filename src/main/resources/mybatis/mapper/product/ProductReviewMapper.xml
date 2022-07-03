@@ -18,6 +18,9 @@
     <result property="ctryLarge" column="product_category_large"/>
     <result property="ctryMedium" column="product_category_medium"/>
     <result property="ctrySmall" column="product_category_small"/>
+    <result property="age" column="age"/>
+    <result property="height" column="height"/>
+    <result property="bodyType" column="body_type"/>
   </resultMap>
 
   <select id="getProductReviewByProductId" resultMap="ProductReviewMap">
@@ -25,22 +28,26 @@
     FROM TABLE(SF_REVIEW_SELECT_GET(#{productId}))
   </select>
 
-  <insert id="insertProductReview" statementType="CALLABLE" parameterType="com.hyundai.kosafinal.domain.ProductReviewDTO">
+  <insert id="insertProductReview" statementType="CALLABLE"
+    parameterType="com.hyundai.kosafinal.domain.ProductReviewDTO">
     <![CDATA[
     {call SP_REVIEW_INSERT(
-          #{email},
-          #{productId},
-          #{productSize},
-          #{productColorId},
-          #{title},
-          #{content},
-          #{editDate},
-          #{rate},
-          #{imgURI},
-          #{ctryLarge},
-          #{ctryMedium},
-          #{ctrySmall})
-    }
-        ]]>
+      #{email},
+      #{productId},
+      #{productSize},
+      #{productColorId},
+      #{title},
+      #{content},
+      #{editDate},
+      #{rate},
+      #{imgURI},
+      #{ctryLarge},
+      #{ctryMedium},
+      #{ctrySmall},
+      #{age},
+      #{height},
+      #{bodyType})
+      }
+    ]]>
   </insert>
 </mapper>
