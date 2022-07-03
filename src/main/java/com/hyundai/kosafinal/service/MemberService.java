@@ -10,4 +10,5 @@ public interface MemberService {
     public String checkPW(String email);
     Member2DTO findByEmail(String email);
     public int checkId(String email); //이메일 중복 확인
+    public Member2DTO findByEmail(String email); // 회원 정보 조회
 }
