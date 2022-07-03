@@ -8,6 +8,7 @@ import com.hyundai.kosafinal.domain.OrderItemDTO;
 import com.hyundai.kosafinal.domain.OrderedListDTO;
 import com.hyundai.kosafinal.entity.Criteria;
 import com.hyundai.kosafinal.entity.OrderProduct;
+import com.hyundai.kosafinal.service.MemberService;
 import com.hyundai.kosafinal.service.OrderService;
 
 import lombok.extern.log4j.Log4j2;
@@ -43,11 +44,14 @@ public class MypageController {
     @Autowired
     OrderService oService;
 
+    @Autowired
+    MemberService mService;
+
     @GetMapping("/modify")
 
     public void modify(Model model, Authentication authentication) {
         log.info("회원정보 수정 페이지 이동");
-        Member2DTO member=service.findByEmail(authentication.getName());
+        Member2DTO member = mService.findByEmail(authentication.getName());
 
         model.addAttribute("gender",member.getGender());
         model.addAttribute("tel",member.getTel());

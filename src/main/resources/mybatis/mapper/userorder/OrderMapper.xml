@@ -58,6 +58,12 @@
         { CALL SP_ORDER_CANCEL(#{id}, #{userEmail}) }
     </update>
 
+    <!-- 주문 재고 체크 -->
+    <select id="getStock" resultType="int">
+        SELECT stock_amount FROM product.product
+        WHERE id = #{id} AND "SIZE" = #{psize} AND color_id = #{pcolor}
+    </select>
+
     <!-- 마지막 주문번호 조회 -->
     <select id="getOrderId" resultType="int">
         SELECT SQ_ORDERED_LIST.NEXTVAL FROM DUAL
