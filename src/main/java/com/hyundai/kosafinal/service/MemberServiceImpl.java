@@ -72,7 +72,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member2DTO findByEmail(String email) {
+    public Member2DTO findByEmail(String email){
         return mapper.findByEmail(email);
     }
 }

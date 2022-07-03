@@ -1,7 +1,9 @@
 package com.hyundai.kosafinal.controller;
 
 import com.hyundai.kosafinal.domain.ProductDTO;
+import com.hyundai.kosafinal.domain.ProductReviewDTO;
 import com.hyundai.kosafinal.service.ProductDetailService;
+import com.hyundai.kosafinal.service.ProductReviewService;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,8 +18,14 @@ public class ProductWebController {
 
   private ProductDetailService productDetailService;
 
-  public ProductWebController(ProductDetailService productDetailService) {
+  private ProductReviewService productReviewService;
+
+  public ProductWebController(
+    ProductDetailService productDetailService,
+    ProductReviewService productReviewService
+  ) {
     this.productDetailService = productDetailService;
+    this.productReviewService = productReviewService;
   }
 
   @RequestMapping("/product/detail/{productId}")
@@ -47,6 +55,25 @@ public class ProductWebController {
       }
     }
     model.addAttribute("colorImageList", colorImageList);
+
+    //평균 상품평 계산
+    List<ProductReviewDTO> reviewDTOList = productReviewService.getProductReviewByProductId(productId);
+    long total = 0;
+    long imgCnt = 0;
+    long textCnt = 0;
+    for(ProductReviewDTO p : reviewDTOList){
+      total += p.getRate();
+      if(p.getImgURI() == null || p.getImgURI().equals("")){
+        textCnt++;
+      }
+    }
+    imgCnt = reviewDTOList.size() - textCnt;
+    double avgTotal = total / (double) reviewDTOList.size();
+    avgTotal = Math.round(avgTotal*100)/100.0;
+    model.addAttribute("avgTotal", avgTotal);
+    model.addAttribute("reviewCnt", reviewDTOList.size());
+    model.addAttribute("imgCnt", imgCnt);
+    model.addAttribute("textCnt", textCnt);
 
     return "productDetail/detail";
   }
