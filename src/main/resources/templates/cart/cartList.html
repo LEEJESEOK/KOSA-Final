@@ -86,7 +86,10 @@
                     },
                     error: function (request, status, error) {
                         alert(error);
-                    }
+                    },
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader(csrf_header, csrf_token);
+					}
                 });
             }
 
@@ -107,12 +110,19 @@
                     data: formData,
                     processData: false,
                     contentType: false,
-                    cache: false
-                }).done(() => {
-                    let la = new layerAlert("장바구니 상품이 삭제되었습니다.");
-                    la.confirmAction = function () {
-						window.location.reload();
-                    };
+                    cache: false,
+					success: function () {
+						let la = new layerAlert("장바구니 상품이 삭제되었습니다.");
+						la.confirmAction = function () {
+							window.location.reload();
+						};
+					},
+					error: function (request, status, error) {
+						alert(error);
+					},
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader(csrf_header, csrf_token);
+					}
                 });
             }
 
@@ -248,35 +258,42 @@
 
     //주문하기 버튼 눌렀을 때
     function checkoutPage() {
-        var form_contents = '';
-        var orderNumber = 0;
+		let form_contents = '';
+		let orderNumber = 0;
+		let count = 0;
 
         // 체크된 상품을 orderForm에 input hidden 태그로 정보 추가
         $("input:checkbox[name='cartlist']:checked").each(function () {
 
-            var form = $('#updateCartForm' + $(this).val());
-            var pid = form.find('input[name=pid]').val();
-            var pamount = form.find('input[name=oldpamount]').val();
+			count++;
 
-            orderNumber = $(this).val();
+			let id = $(this).val();
+            let form = $('#updateCartForm' + id);
+			let pid = form.find('input[name=pid]').val();
+			let name = form.find('input[name=name]').val();
+			let brand = form.find('input[name=brand]').val();
+			let image = form.find('input[name=image]').val();
+			let pcolor = form.find('input[name=pcolor]').val();
+			let psize = form.find('input[name=psize]').val();
+			let amount = form.find('input[name=oldpamount]').val();
+			let price = form.find('input[name=price]').val();
 
-            var pid_input = "<input name='pid" + orderNumber + "' type='hidden' value='" + pid + "'>";
-            form_contents += pid_input;
-            var pcolor_input = "<input name='ccolorcode" + orderNumber + "' type='hidden' value=' '>";
-            form_contents += pcolor_input;
-            var psize_input = "<input name='ssize" + orderNumber + "' type='hidden' value='FR'>";
-            form_contents += psize_input;
-            var pamount_input = "<input name='oamount" + orderNumber + "' type='hidden' value='" + pamount + "'>";
-            form_contents += pamount_input;
-
+            form_contents += "<input name='pid" + count + "' type='hidden' value='" + pid + "'>";
+			form_contents += "<input name='name" + count + "' type='hidden' value='" + name + "'>";
+			form_contents += "<input name='brand" + count + "' type='hidden' value='" + brand + "'>";
+            form_contents += "<input name='image" + count + "' type='hidden' value='" + image + "'>";
+            form_contents += "<input name='pcolor" + count + "' type='hidden' value='" + pcolor + "'>";
+            form_contents += "<input name='psize" + count + "' type='hidden' value='" + psize + "'>";
+			form_contents += "<input name='amount" + count + "' type='hidden' value='" + amount + "'>";
+			form_contents += "<input name='price" + count + "' type='hidden' value='" + price + "'>";
 
         });
+
         // 총 개수 추가로 전달
-        var pid_count = "<input name='pcount' type='hidden' value='" + orderNumber + "'>";
-        form_contents += pid_count;
+        form_contents += "<input name='pcount' type='hidden' value='" + count + "'>";
 
         // 선택된 상품이 없을 경우
-        if (orderNumber == 0) {
+        if (count == 0) {
             layerAlert("주문하실 상품을 선택해주세요.");
             return false;
         }
@@ -284,7 +301,7 @@
         var lc = new layerConfirm("주문하시겠습니까?", "YES", "NO");
         lc.confirmAction = function () {
             // html에 추가
-            $(".orderForm").html(form_contents);
+            $(".orderForm").append(form_contents);
             $(".orderForm").submit();
         };
 
@@ -369,11 +386,11 @@
 								<td class="pt_list_wrap">
 									<!-- pt_list_all -->
 									<div class="pt_list_all">
-										<a th:href="@{/product/detail/${cart.pid}}">
+										<a th:href="@{/product/detail/{id}(id = ${cart.pid})}">
 											<img th:src="${cart.image}">
 										</a>
 										<div class="tlt_wrap">
-											<a th:href="@{/product/detail/${cart.pid}}"
+											<a th:href="@{/product/detail/{id}(id = ${cart.pid})}"
                                                class="basket_tlt">
 												<span class="tlt" th:text="${cart.brand}"></span>
 												<span class="sb_tlt" th:text="${cart.name}"></span>
@@ -397,10 +414,12 @@
 
 								<td class="al_middle">
 									<!-- 상품 정보 업데이트 form (박주영) -->
-									<form th:id="'updateCartForm' + ${cart.id}" th:action="@{/cart/${cart.id}}"
-                                          method="post">
+									<form th:id="'updateCartForm' + ${cart.id}">
 										<input type="hidden" name="id" th:value="${cart.id}">
 										<input type="hidden" name="pid" th:value="${cart.pid}">
+										<input type="hidden" name="name" th:value="${cart.name}">
+										<input type="hidden" name="brand" th:value="${cart.brand}">
+										<input type="hidden" name="image" th:value="${cart.image}">
 										<input type="hidden" name="pcolor" th:value="${cart.pcolor}">
 										<input type="hidden" name="psize" th:value="${cart.psize}">
 										<input type="hidden" name="oldpamount" th:value="${cart.amount}">
@@ -418,7 +437,6 @@
 										<a th:href="@{#none}" th:id="'QuantityProduct_' + ${cart.id}"
                                            class="btn wt_ss qty_w mr0">변경
 										</a>
-                                        <!--											<input type="hidden" name="CSRFToken" value="27683fce-14ac-46b4-9704-eef7e178928d">-->
 									</form>
 								</td>
 								<td class="al_middle">
@@ -431,8 +449,7 @@
 									</div> <!-- //Price -->
 								</td>
 								<td class="al_middle">
-									<form th:id="'deleteCartForm' + ${cart.id}" th:action="@{/cart}"
-                                          method="post">
+									<form th:id="'deleteCartForm' + ${cart.id}">
 										<input type="hidden" name="_method" value="DELETE"/>
 										<input type="hidden" name="id" th:value="${cart.id}">
 										<input type="hidden" name="userEmail" th:value="${cart.userEmail}">
@@ -454,15 +471,12 @@
                                         <div class="info">
                                             <!-- Products -->
                                             <div class="pt_list" id="pt_list_1">
-												<a href="/ko/HANDSOME/WOMEN/DRESS/LONG-MAXI-DRESS/%EB%B2%A8%ED%8B%B0%EB%93%9C-%ED%8C%A8%EB%84%90-%EB%93%9C%EB%A0%88%EC%8A%A4/p/SY2C3WOP553W_DR">
                                         	<img th:src="${cart.image}" alt="">
-                                            </a>
                                         <div class="tlt_wrap">
-                                            <a href="/ko/HANDSOME/WOMEN/DRESS/LONG-MAXI-DRESS/%EB%B2%A8%ED%8B%B0%EB%93%9C-%ED%8C%A8%EB%84%90-%EB%93%9C%EB%A0%88%EC%8A%A4/p/SY2C3WOP553W_DR"
-                                               class="basket_tlt">
-                                                <span class="tlt" th:text="${cart.brand}"></span>
-                                                <span class="sb_tlt" th:text="${cart.name}"></span>
-                                            </a>
+											<a th:href="@{/product/detail/{id}(id = ${cart.pid})}" class="basket_tlt">
+												<span class="tlt" th:text="${cart.brand}"></span>
+												<span class="sb_tlt" th:text="${cart.name}"></span>
+											</a>
                                             <!-- color_size -->
                                             <dl class="cs_wrap">
                                                 <dt>COLOR</dt>
@@ -559,8 +573,8 @@
                 <!--//button wrap-->
 
                 <!-- 주문 form(동적으로 input태그 추가) -->
-				<form th:action="@{/order/order}" method="post" class="orderForm">
-
+				<form th:action="@{/order/orderForm}" method="post" class="orderForm">
+					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 				</form>
 
                 <!-- 프로모션 -->
@@ -574,36 +588,20 @@
                                 </strong>
                                 <ul class="bul_sty01_li promotion_img">
                                     <li class="img"><img
-                                            src="/medias/KakaoTalk-20220609-153233279.jpg?context=bWFzdGVyfHJvb3R8OTE5NDl8aW1hZ2UvanBlZ3xoZWQvaDgyLzkzMDY1OTkwNjM1ODIuanBnfDAzODNhYzljYmNjODQyMTg5YjRjMGVjNWJiNjlmNjZiNjI1Y2IwZWYzNzYzYTMwNWU0YTk5NzhmNGIzZjg0YTg"></li>
+                                            src="http://www.thehandsome.com/medias/KakaoTalk-20220609-153233279.jpg?context=bWFzdGVyfHJvb3R8OTE5NDl8aW1hZ2UvanBlZ3xoZWQvaDgyLzkzMDY1OTkwNjM1ODIuanBnfDAzODNhYzljYmNjODQyMTg5YjRjMGVjNWJiNjlmNjZiNjI1Y2IwZWYzNzYzYTMwNWU0YTk5NzhmNGIzZjg0YTg"></li>
                                     <li>사은품 : Liquides 로고 에코백</li>
                                     <li>기간 내 리퀴드 퍼퓸바 향수 구매 고객님께 시그니처 로고 에코백을 사은품으로 드립니다.<br>주문 1건당 1개 제공되며, 사은품은 주문하신 배송지로 7월  15일 이후 별도 발송됩니다. <br>- 기간 : 6월 20일 ~ 7월 10일(선착순 증정)</li>
                                 </ul>
                             </dd>
                             <dd class="promotion_con2">
                                 <strong>혜택 2 /
-                                500,000원 이상
-
-                                구매하신 고객님께 사은품을 드립니다.
-                                </strong>
-                                <ul class="bul_sty01_li promotion_img">
-                                    <li class="img"><img
-                                            src="/medias/0531-04423.jpg?context=bWFzdGVyfHJvb3R8Mjk0MzR8aW1hZ2UvanBlZ3xoNjQvaDQ5LzkzMDYwOTM5MTIwOTQuanBnfGY2YmQ3YmU4NGFjODFhMTVmZjQwNWU4NDZjYzY5NDBkOGJkZmQyODI2MWFmNDg1YTIzNzBlYzk4ZTNiMzdhZjU"></li>
-                                    <li>사은품 : 타임 썸머 스페셜 기프트_탐브렐라</li>
-                                    <li>타임 아울렛 실결제 50만원 이상 구매 고객님께  "탐브렐라(TIME+UMBRELLA)" 사은품을 드립니다. <br>
-(실 결제금액 기준, 타임 아울렛 상품만 해당) <br>
-* 기간 : 6월 17일 ~ 7월 10일 (소진 시 종료, 선착순 증정)
-* 사은품은 취소 및 반품을 고려하여 주문하신 배송지로 7월 29일 이후 순차적으로 발송됩니다.</li>
-                                </ul>
-                            </dd>
-                            <dd class="promotion_con1">
-                                <strong>혜택 3 /
                                 30,000원 이상
 
                                 구매하신 고객님께 사은품을 드립니다.
                                 </strong>
                                 <ul class="bul_sty01_li promotion_img">
                                     <li class="img"><img
-                                            src="/medias/GIFT.jpg?context=bWFzdGVyfHJvb3R8NTI5OTI1fGltYWdlL2pwZWd8aGJmL2hmNS85Mjg0MzMwMTYwMTU4LmpwZ3xjYjNhYmMwNDU1ZTExZTM3ZTYwN2M4YzNiNWY5YjRkOWNhZTYyOTZhZmQxNGYwMjE0OThkZWVmMzVmMGQ3NGE3"></li>
+                                            src="http://www.thehandsome.com/medias/GIFT.jpg?context=bWFzdGVyfHJvb3R8NTI5OTI1fGltYWdlL2pwZWd8aGJmL2hmNS85Mjg0MzMwMTYwMTU4LmpwZ3xjYjNhYmMwNDU1ZTExZTM3ZTYwN2M4YzNiNWY5YjRkOWNhZTYyOTZhZmQxNGYwMjE0OThkZWVmMzVmMGQ3NGE3"></li>
                                     <li>사은품 : 바디 브러쉬 &amp; 코튼 매쉬 파우치</li>
                                     <li>더캐시미어띵즈 내 WEEKNDERS 상품 3만원 이상 구매하신 고객님께 "바디 브러쉬 &amp; 코튼 매쉬 파우치"을 드립니다.<br>기간 : 5월 31일~소진 시 까지<br>*WEEKNDERS 상품 필수 구매<br>사은품은 주문하신 상품과 함께 동봉하여 발송될 예정입니다.<br>본 사은품은 주문번호당 1회 증정되며, 반품 및 교환시 사은품은 반드시 동봉하여 회수됩니다.</li>
                                 </ul>
