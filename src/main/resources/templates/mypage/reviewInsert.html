@@ -160,6 +160,9 @@
                 error: function (request, status, error) {
                     alert("Ajax 통신 에러 발생");
                     alert(error);
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(csrf_header, csrf_token);
                 }
             });
 
@@ -257,8 +260,7 @@
                     <p class="reqd_txt"><strong class="reqd">*</strong> 표시는 필수항목입니다.</p>
                 </div>
                 <!-- (박주영) 1:1 문의 등록 폼 -->
-                <form id="mypageReviewForm" name="mypageReviewForm"
-                      action="/mypage/review/register" method="POST">
+                <form id="mypageReviewForm" name="mypageReviewForm">
                     <fieldset>
                         <legend>1:1 문의 입력</legend>
                         <div class="tblwrap">

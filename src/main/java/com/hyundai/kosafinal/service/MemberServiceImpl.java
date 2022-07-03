@@ -70,4 +70,9 @@ public class MemberServiceImpl implements MemberService {
         String result=mapper.checkPW(email);
         return result;
     }
+
+    @Override
+    public Member2DTO findByEmail(String email) {
+        return mapper.findByEmail(email);
+    }
 }

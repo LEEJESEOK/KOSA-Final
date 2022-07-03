@@ -155,11 +155,11 @@
 .profile_info .point.type2 .btn {display:block; float:right; width:150px; height:30px; background:#4a4a4a; font-size:12px; color:#fff; line-height:28px; text-align:center; margin-top:4px}
 /* // 2017-06-12 추가 */
 .calendar_wrap .input_date{margin-right:0;width:100px;}
-.calendar_wrap .ico_cld{display:inline-block;width:28px;height:28px;border:1px solid #ccc;border-left:0;background:#fff url("/resources/img/common/ico_calendar.png") 50% 50% no-repeat;text-indent: -999em;vertical-align: top}
+.calendar_wrap .ico_cld{display:inline-block;width:28px;height:28px;border:1px solid #ccc;border-left:0;background:#fff url("https://www.thehandsome.com/_ui/desktop/common/images/common/ico_calendar.png") 50% 50% no-repeat;text-indent: -999em;vertical-align: top}
 .calendar_wrap button.ico_cld{height:30px;cursor:pointer;}
 .delivery_step{padding-top: 60px}
 .delivery_step .title{padding-bottom:20px;color:#222;font-size:16px;font-weight:bold;}
-.delivery_step ol{overflow:hidden;height:168px;background: url("/_ui/desktop/common/images/common/delivery_step.gif") 0 0 no-repeat}
+.delivery_step ol{overflow:hidden;height:168px;background: url("https://www.thehandsome.com/_ui/desktop/common/images/common/delivery_step.gif") 0 0 no-repeat}
 .delivery_step ol li{float:left;width:150px;padding-left: 20px;}
 .delivery_step ol li:first-child{width:150px;padding-left: 0}
 .delivery_step .step {font-size: 14px;color: #222;padding-bottom:20px;}
@@ -169,7 +169,7 @@
 .option_wrap .sns_wrap .facebook{background-position: 0 -39px;}
 .option_wrap .sns_wrap .twitter{background-position: -32px -39px;}
 .option_wrap .sns_wrap .pinterest{background-position: -64px -39px;}
-.div_line{padding-top:15px;margin-top:15px;background:url("/_ui/desktop/common/images/common/dividing_line.gif") top center no-repeat;}
+.div_line{padding-top:15px;margin-top:15px;background:url("https://www.thehandsome.com/_ui/desktop/common/images/common/dividing_line.gif") top center no-repeat;}
 .order_info{margin-bottom:55px;background: #f5f5f5;border:1px solid #e3e3e3;}
 .order_info > div{float:left;padding:21px 20px;}
 .order_info .order_num{width:560px;border-right:1px solid #e3e3e3;}
