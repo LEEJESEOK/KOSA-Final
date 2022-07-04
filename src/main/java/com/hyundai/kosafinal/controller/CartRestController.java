@@ -18,7 +18,7 @@ public class CartRestController {
     @Autowired
     private CartService service;
 
-    @PostMapping("")
+    @PostMapping("/insert")
     public ResponseEntity<CartDTO> insertCart(@RequestBody CartDTO dto) {
         ResponseEntity<CartDTO> entry = null;
 
@@ -30,7 +30,7 @@ public class CartRestController {
         return entry;
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/update/{id}")
     public ResponseEntity<Boolean> updateCart(@RequestBody CartDTO dto) {
         ResponseEntity<Boolean> entry = null;
 
@@ -42,7 +42,7 @@ public class CartRestController {
         return entry;
     }
 
-    @DeleteMapping("")
+    @DeleteMapping("/delete")
     public ResponseEntity<Boolean> deleteCart(int id, String userEmail) {
         ResponseEntity<Boolean> entry = null;
 
