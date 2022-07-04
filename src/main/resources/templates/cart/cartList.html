@@ -73,7 +73,7 @@
                     "userEmail": userEmail
                 }
                 $.ajax({
-                    url: "[(@{/cart/})]" + id,
+                    url: "[(@{/cart/update/})]" + id,
                     method: "post",
                     data: JSON.stringify(formData),
                     dataType: 'json',
@@ -105,7 +105,7 @@
                 formData.append("userEmail", userEmail);
 
                 $.ajax({
-                    url: "[(@{/cart})]",
+                    url: "[(@{/cart/delete})]",
                     method: "delete",
                     data: formData,
                     processData: false,

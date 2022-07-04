@@ -10,6 +10,7 @@
 </head>
 <body>
 <th:block th:replace="/header_logo.html::header_logo"></th:block>
+<th:block th:replace="/header_logo.html::header_logo"></th:block>
 
 <script>
     // jQuery 충돌 방지
@@ -104,7 +105,9 @@
         rows += "<tr class='al_middle'>";
         if (idx == 0) {
             rows += "<td rowspan='" + len + "' class='frt'>";
-            rows += "<p class='num'>" + id + "</p>";
+            let dates = date.split("-");
+            let strDate = dates[0] + dates[1] + dates[2];
+            rows += "<p class='num'>" + strDate + "H" + id + "</p>";
             rows += "<span class='sum_date'>" + date + "</span>";
             rows += "<a href='/mypage/myorderDetail?id=" + id + "' class='btn_view'>상세보기</a></td>";
         }

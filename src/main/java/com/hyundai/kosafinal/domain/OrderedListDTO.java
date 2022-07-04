@@ -23,4 +23,6 @@ public class OrderedListDTO {
     private int status;
     private String deliveryMsg;
     private String payType;
+
+    private String orderId;
 }
