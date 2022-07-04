@@ -3,7 +3,19 @@
 <th:block th:fragment="sidebar">
     <!--현재 페이지 적용-->
     <script>
+        $().ready(function () {
 
+            // 로그아웃 버튼
+            $("#logoutBtn").click(function () {
+                console.log("logout");
+                $.ajax({
+                        type: "post",
+                        url: "/logout"
+                    }
+                );
+            });
+
+        });
     </script>
     <aside class="sidebar" id="sidebar">
         <ul class="sidebar-nav" id="sidebar-nav">
@@ -69,9 +81,25 @@
             </li><!-- End 주문관리 Nav -->
 
             <li class="nav-item">
-                <a class="nav-link collapsed" th:href="@{/biz/member/memberManage}">
-                    <i class="bi bi-person"></i> <span>고객관리</span>
+                <a class="nav-link collapsed" data-bs-target="#member-nav"
+                   data-bs-toggle="collapse" th:href="@{#}">
+                    <i class="bi bi-person"></i><span>고객관리</span>
+                    <i class="bi bi-chevron-down ms-auto"></i>
                 </a>
+                <ul class="nav-content collapse" data-bs-parent="#sidebar-nav"
+                    id="member-nav">
+                    <li>
+                        <a th:href="@{/biz/member/memberManage}">
+                            <i class="bi bi-circle"></i> <span>고객목록</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/biz/member/reviewManage}">
+                            <i class="bi bi-circle"></i> <span>문의목록</span>
+                        </a>
+                    </li>
+
+                </ul>
             </li><!-- End 고객관리 Nav -->
 
             <li class="nav-item">
@@ -105,7 +133,7 @@
                     <i class="bi bi-bar-chart"></i> <span>통계분석</span>
                     <i class="bi bi-chevron-down ms-auto"></i>
                 </a>
-                <ul class="nav-content collapse " data-bs-parent="#sidebar-nav"
+                <ul class="nav-content collapse" data-bs-parent="#sidebar-nav"
                     id="statistics-nav">
                     <li>
                         <a th:href="@{#}">
@@ -134,7 +162,7 @@
             </li><!-- End F.A.Q Page Nav -->
 
             <li class="nav-item">
-                <a class="nav-link collapsed" th:href="@{/logout}">
+                <a class="nav-link collapsed" th:href="@{#}">
                     <i class="bi bi-box-arrow-in-right"></i> <span>Logout</span>
                 </a>
             </li><!-- End Login Page Nav -->

@@ -129,18 +129,34 @@ public class BizController {
     }
 
     /**
-     * 고객관리<br>
+     * 고객관리 > 고객목록<br>
      *
      * @param model
+     * @return
      */
     @RequestMapping("/member/memberManage")
     public String memberManage(Model model) {
         List<String> breadCrumbs = toBreadCrumbs(new String[]{
-                "고객관리"
+                "고객관리", "고객목록"
         });
         model.addAttribute("breadCrumbs", breadCrumbs);
         model.addAttribute("pageTitle", breadCrumbs.get(breadCrumbs.size() - 1));
 
         return "biz/member/memberManage";
+    }
+
+    /**
+     * @param model
+     * @return
+     */
+    @RequestMapping("/member/reviewManage")
+    public String reviewManage(Model model) {
+        List<String> breadCrumbs = toBreadCrumbs(new String[]{
+                "고객관리", "문의목록"
+        });
+        model.addAttribute("breadCrumbs", breadCrumbs);
+        model.addAttribute("pageTitle", breadCrumbs.get(breadCrumbs.size() - 1));
+
+        return "biz/member/reviewManage";
     }
 }

@@ -8,7 +8,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">기본정보</h5>
-                        <form class="row g-3" method="post">
+                        <form class="row g-3">
                             <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
                             <div class="row mb-3">
                                 <div class="col-2">
@@ -67,23 +67,20 @@
                                     <label class="form-label">분류</label>
                                 </div>
                                 <div class="col-3">
-                                    <label class="form-label" for="large">대분류</label>
                                     <select class="form-select" id="large">
-                                        <option selected="">Choose...</option>
+                                        <option selected="">대분류</option>
                                         <option th:value="${null}">미설정</option>
                                     </select>
                                 </div>
                                 <div class="col-3">
-                                    <label class="form-label" for="medium">중분류</label>
                                     <select class="form-select" id="medium">
-                                        <option selected="">Choose...</option>
+                                        <option selected="">중분류</option>
                                         <option th:value="${null}">미설정</option>
                                     </select>
                                 </div>
                                 <div class="col-3">
-                                    <label class="form-label" for="small">소분류</label>
                                     <select class="form-select" id="small">
-                                        <option selected="">Choose...</option>
+                                        <option selected="">소분류</option>
                                         <option th:value="${null}">미설정</option>
                                     </select>
                                 </div>
@@ -125,6 +122,7 @@
                     <div class="card-body">
                         <h5 class="card-title">옵션설정</h5>
                         <form class="row g-3">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
                         </form>
                     </div>
