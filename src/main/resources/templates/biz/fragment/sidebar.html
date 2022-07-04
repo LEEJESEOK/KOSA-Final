@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="sidebar">
+    <!--현재 페이지 적용-->
+    <script>
+        $().ready(function () {
+
+            // 로그아웃 버튼
+            $("#logoutBtn").click(function () {
+                console.log("logout");
+                $.ajax({
+                        type: "post",
+                        url: "/logout"
+                    }
+                );
+            });
+
+        });
+    </script>
+    <aside class="sidebar" id="sidebar">
+        <ul class="sidebar-nav" id="sidebar-nav">
+            <li class="nav-item">
+                <a class="nav-link collapsed" th:href="@{/biz}">
+                    <i class="bi bi-grid"></i> <span>Dashboard</span>
+                </a>
+            </li><!-- End Dashboard Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#product-nav"
+                   data-bs-toggle="collapse" th:href="@{#}">
+                    <i class="bi bi-menu-button-wide"></i> <span>상품관리</span>
+                    <i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul class="nav-content collapse " data-bs-parent="#sidebar-nav"
+                    id="product-nav">
+                    <li>
+                        <a th:href="@{/biz/product/productRegister}">
+                            <i class="bi bi-circle"></i> <span>상품 등록</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/biz/product/productManage}">
+                            <i class="bi bi-circle"></i> <span>상품 목록</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/biz/product/categoryManage}">
+                            <i class="bi bi-circle"></i> <span>상품 분류 관리</span>
+                        </a>
+                    </li>
+                </ul>
+            </li><!-- End 상품관리 Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#order-nav"
+                   data-bs-toggle="collapse" th:href="@{#}">
+                    <i class="bi bi-cart"></i> <span>주문관리</span>
+                    <i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul class="nav-content collapse " data-bs-parent="#sidebar-nav"
+                    id="order-nav">
+                    <li>
+                        <a th:href="@{/biz/order/orderList}">
+                            <i class="bi bi-circle"></i> <span>주문 목록</span>
+                        </a>
+                    </li>
+                    <!-- TODO 배송관리 -->
+                    <th:block th:if="false">
+                        <li>
+                            <a th:href="@{/biz/order/shipping}">
+                                <i class="bi bi-circle"></i> <span>배송관리</span>
+                            </a>
+                        </li>
+                    </th:block>
+                    <li>
+                        <a th:href="@{/biz/order/orderModify}">
+                            <i class="bi bi-circle"></i> <span>취소/교환/반품/환불</span>
+                        </a>
+                    </li>
+                </ul>
+            </li><!-- End 주문관리 Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#member-nav"
+                   data-bs-toggle="collapse" th:href="@{#}">
+                    <i class="bi bi-person"></i><span>고객관리</span>
+                    <i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul class="nav-content collapse" data-bs-parent="#sidebar-nav"
+                    id="member-nav">
+                    <li>
+                        <a th:href="@{/biz/member/memberManage}">
+                            <i class="bi bi-circle"></i> <span>고객목록</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/biz/member/reviewManage}">
+                            <i class="bi bi-circle"></i> <span>문의목록</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li><!-- End 고객관리 Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#mvp-nav"
+                   data-bs-toggle="collapse" th:href="@{#}">
+                    <i class="bi bi-gem"></i> <span>VIP</span>
+                    <i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul class="nav-content collapse " data-bs-parent="#sidebar-nav" id="mvp-nav">
+                    <li>
+                        <a th:href="@{#}">
+                            <i class="bi bi-circle"></i> <span>Bootstrap Icons</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{#}">
+                            <i class="bi bi-circle"></i> <span>Remix Icons</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{#}">
+                            <i class="bi bi-circle"></i> <span>Box Icons</span>
+                        </a>
+                    </li>
+                </ul>
+            </li><!-- End VIP Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#statistics-nav"
+                   data-bs-toggle="collapse" th:href="@{#}">
+                    <i class="bi bi-bar-chart"></i> <span>통계분석</span>
+                    <i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul class="nav-content collapse" data-bs-parent="#sidebar-nav"
+                    id="statistics-nav">
+                    <li>
+                        <a th:href="@{#}">
+                            <i class="bi bi-circle"></i> <span>Chart.js</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{#}">
+                            <i class="bi bi-circle"></i> <span>ApexCharts</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{#}">
+                            <i class="bi bi-circle"></i> <span>ECharts</span>
+                        </a>
+                    </li>
+                </ul>
+            </li><!-- End 통계분석 Nav -->
+
+            <li class="nav-heading">Pages</li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" th:href="@{#}">
+                    <i class="bi bi-question-circle"></i> <span>F.A.Q</span>
+                </a>
+            </li><!-- End F.A.Q Page Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" th:href="@{#}">
+                    <i class="bi bi-box-arrow-in-right"></i> <span>Logout</span>
+                </a>
+            </li><!-- End Login Page Nav -->
+
+        </ul>
+    </aside>
+</th:block>
+</html>

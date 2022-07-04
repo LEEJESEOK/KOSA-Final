@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/biz/layout/default}">
+<th:block layout:fragment="content">
+    <section class="section">
+        <div class="row">
+            <div class="col-12">
+                <div class="card p-3">
+                    <div class="card-body p-3">
+                        <div class="row mb-3">
+                            <div class="col-2">
+                                <label class="form-label" for="reviewKeyword">검색분류</label>
+                            </div>
+                            <div class="col-2">
+                                <select class="form-select" id="reviewKeywordType">
+                                    <option>고객명</option>
+                                    <option>고객 아이디</option>
+                                </select>
+                            </div>
+                            <div class="col-7">
+                                <input class="form-control" type="text" id="reviewKeyword" autofocus>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-2">
+                                <label class="form-label">기간</label>
+                            </div>
+                            <div class="col-2">
+                                <input type="date" class="form-control">
+                            </div>
+                            <div class="col-2">
+                                <input type="date" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-2">
+                                <label>문의종류</label>
+                            </div>
+                            <div class="col-2">
+                                <select class="form-select">
+                                    <option value="">선택</option>
+                                    <option value="QA09">행사/이벤트</option>
+                                    <option value="QA07">쿠폰/혜택문의</option>
+                                    <option value="QA02">주문/확인취소</option>
+                                    <option value="QA13">웨딩 프로모션</option>
+                                    <option value="QA06">온라인수선</option>
+                                    <option value="QA17">오프라인 문의</option>
+                                    <option value="QA15">오에라 문의</option>
+                                    <option value="QA01">상품문의</option>
+                                    <option value="QA04">배송관련</option>
+                                    <option value="QA05">반품</option>
+                                    <option value="QA08">기프트카드문의</option>
+                                    <option value="QA10">기타</option>
+                                    <option value="QA16">교환</option>
+                                    <option value="QA11">고객정보</option>
+                                    <option value="QA03">결제/환불문의</option>
+                                    <option value="QA12">현대카드 레드바우처 문의</option>
+                                    <option value="QA14">SYSTEM X BTS 문의</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-2">
+                                <label class="form-label">처리상태</label>
+                            </div>
+                            <div class="col-10">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="" name="reviewStatus" checked>
+                                    <label class="form-check-label" for="">전체</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="reviewStatus">
+                                    <label class="form-check-label">답변대기</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="reviewStatus">
+                                    <label class="form-check-label">답변완료</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <button class="btn btn-outline-primary" type="reset">초기화</button>
+                                <button class="btn btn-primary" type="submit">검색</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"></h5>
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                            <tr>
+                                <th scope="col" class="text-center">
+                                    <input class="form-check-input" id="checkAll" type="checkbox">
+                                </th>
+                                <th scope="col" class="text-center">#</th>
+                                <th scope="col" class="text-center">문의제목</th>
+                                <th scope="col" class="text-center">처리상태</th>
+                                <th scope="col" class="text-center">문의일</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="text-center"><input class="form-check-input" type="checkbox"></td>
+                                <th class="text-center" scope="row">1</th>
+                                <td class="text-center">간단한 문의제목이 나타납니다.</td>
+                                <td class="text-center">답변대기</td>
+                                <td class="text-center">2022-07-04</td>
+                            </tr>
+                            <tr data-toggle="collapse">
+                                <td class="text-center"><input class="form-check-input" type="checkbox"></td>
+                                <th class="text-center" scope="row">2</th>
+                                <td class="text-center">간단한 문의제목이 나타납니다.</td>
+                                <td class="text-center">답변완료</td>
+                                <td class="text-center">2022-07-04</td>
+                            </tr>
+                            <tr>
+
+                            </tr>
+
+                            </tbody>
+                        </table>
+
+                        <!-- TODO pagination 페이징 -->
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">이전</a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">다음</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</th:block>
+</html>
