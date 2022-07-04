@@ -38,6 +38,9 @@ public interface OrderService {
     // 마지막 주문번호 조회
     public int getOrderId();
 
+    // 재고 체크
+    public boolean checkStock(String id, String psize, String pcolor, int amount);
+
     // 포인트 변경
     public int updatePoint(String userEmail, int point, int flag);
 

@@ -41,6 +41,9 @@ public interface OrderMapper {
     // 마지막 주문번호 조회
     public int getOrderId();
 
+    // 재고 체크
+    public int getStock(String id, String psize, String pcolor);
+
     // 포인트 변경
     public int updatePoint(String userEmail, int point, int flag);
 
