@@ -23,7 +23,17 @@
         <result property="recentLoginDate" column="RECENT_LOGIN_DATE"/>
         <result property="signUpDate" column="SIGN_UP_DATE"/>
     </resultMap>
+    <select id="findGrade" resultType="String">
+        select grade_id
+        from member
+        where email=#{email}
+    </select>
 
+    <select id="findByEmail2" resultType ="VipDTO">
+        select EMAIL,NAME,PERIOD,CNT_1,FLAG
+        FROM MEMBER
+        WHERE EMAIL=#{email}
+    </select>
     <select id="findByEmail" resultMap="MemberMap">
         select EMAIL,
                PASSWORD,

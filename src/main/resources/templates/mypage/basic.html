@@ -905,8 +905,17 @@
             <!-- 회원정보 -->
             <div class="profile_info1 clearfix review_betterment1905">
                 <div class="name type2">
+                    <th:block th:switch="${grade_id}">
+                        <span class="grade_txt" th:case=1 th:text="FRIEND"></span>
+                        <span class="grade_txt" th:case=2 th:text="CREW"></span>
+                        <span class="grade_txt" th:case=3 th:text="MANIA"></span>
+                        <span class="grade_txt" th:case=3 th:text="STAR"></span>
+                        <span class="grade_txt" th:case=3 th:text="THE STAR"></span>
+                        <span th:case="b">No 등급</span>
+                    </th:block>
                     <span class="ico_grade" th:text="${#authentication.principal.name}+'님'" ></span>
-                    <span class="grade_txt">등급 : SILVER</span>
+<!--                    <span th:text="${grade_id}"></span>-->
+
                 </div>
                 <div class="point" style="border:0; padding-left:0; width:95px">
                     <p class="title">COUPON</p>
