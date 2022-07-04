@@ -6,17 +6,19 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @Log4j2
 @RestController
 @RequestMapping("/cart")
+@PreAuthorize("hasRole('USER')")
 public class CartRestController {
 
     @Autowired
     private CartService service;
 
-    @PostMapping("")
+    @PostMapping("/insert")
     public ResponseEntity<CartDTO> insertCart(@RequestBody CartDTO dto) {
         ResponseEntity<CartDTO> entry = null;
 
@@ -28,7 +30,7 @@ public class CartRestController {
         return entry;
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/update/{id}")
     public ResponseEntity<Boolean> updateCart(@RequestBody CartDTO dto) {
         ResponseEntity<Boolean> entry = null;
 
@@ -40,7 +42,7 @@ public class CartRestController {
         return entry;
     }
 
-    @DeleteMapping("")
+    @DeleteMapping("/delete")
     public ResponseEntity<Boolean> deleteCart(int id, String userEmail) {
         ResponseEntity<Boolean> entry = null;
 

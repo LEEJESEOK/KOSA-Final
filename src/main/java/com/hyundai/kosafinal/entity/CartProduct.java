@@ -2,12 +2,10 @@ package com.hyundai.kosafinal.entity;
 
 import com.hyundai.kosafinal.domain.ProductDTO;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.util.List;
-import java.util.Map;
 
 @Getter
 @Setter

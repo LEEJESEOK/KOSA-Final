@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hyundai.kosafinal.mapper.userorder.OrderMapper">
+
+    <!-- 주문 목록 조회 -->
+    <select id="getOrderedList" resultType="OrderedListDTO">
+        SELECT * FROM ordered_list
+        WHERE user_email = #{user_email}
+        ORDER BY id DESC
+    </select>
+
+    <!-- 주문 상품 목록 조회 -->
+    <select id="getOrderItem" resultType="com.hyundai.kosafinal.entity.OrderProduct">
+        SELECT oi.id, oi.pid, oi.pcolor, oi.psize, oi.amount, oi.ordered_list_id, p.name, p.price, p.brand, p.image1_uri
+        FROM order_item oi, product.product p
+        WHERE oi.ordered_list_id = #{orderedListId}
+        AND oi.pid = p.id
+        AND oi.pcolor = p.color_id
+        AND oi.psize = p."SIZE"
+        ORDER BY oi.id
+    </select>
+
+    <!-- 주문 상세 조회 -->
+    <select id="getOrderDetail" resultType="OrderedListDTO">
+        SELECT * FROM ordered_list
+        WHERE id = #{id}
+    </select>
+
+
+    <!-- 주문 추가 -->
+    <insert id="insertOrderedList" statementType="CALLABLE">
+        { CALL SP_ORDEREDLIST_INSERT(#{id}, #{zipcode}, #{address1}, #{address2}, #{receiver}, #{tel}, #{usedPoint}, #{userEmail}, #{totalPrice}, #{deliveryMsg}, #{payType}) }
+    </insert>
+
+    <!-- 주문 아이템 추가 -->
+    <insert id="insertOrderItem" statementType="CALLABLE">
+        <!-- SEQUENCE 미리 조회 -->
+        <selectKey resultType="string" keyProperty="id" order="BEFORE">
+            SELECT SQ_ORDER_ITEM.nextval FROM dual
+        </selectKey>
+        { CALL SP_ORDERITEM_INSERT(#{id}, #{pid}, #{pcolor}, #{psize}, #{amount}, #{orderedListId}) }
+    </insert>
+
+    <!-- 배송정보 변경 -->
+    <update id="updateOrderDelivery" statementType="CALLABLE">
+        { CALL SP_ORDER_DELIVERY_UPDATE(#{id}, #{zipcode}, #{address1}, #{address2}, #{receiver}, #{tel}, #{deliveryMsg}) }
+    </update>
+
+    <!-- 주문 상태 변경 -->
+    <update id="updateOrderStatus" statementType="CALLABLE">
+        { CALL SP_ORDER_UPDATE_STATUS(#{id}, #{userEmail}, #{status}) }
+    </update>
+
+    <!-- 주문 취소 -->
+    <update id="cancelOrder" statementType="CALLABLE">
+        { CALL SP_ORDER_CANCEL(#{id}, #{userEmail}) }
+    </update>
+
+    <!-- 주문 재고 체크 -->
+    <select id="getStock" resultType="int">
+        SELECT stock_amount FROM product.product
+        WHERE id = #{id} AND "SIZE" = #{psize} AND color_id = #{pcolor}
+    </select>
+
+    <!-- 마지막 주문번호 조회 -->
+    <select id="getOrderId" resultType="int">
+        SELECT SQ_ORDERED_LIST.NEXTVAL FROM DUAL
+    </select>
+
+    <!-- 포인트 변경 -->
+    <update id="updatePoint" statementType="CALLABLE">
+        { CALL SP_ORDER_UPDATE_POINT(#{userEmail}, #{point}, #{flag}) }
+    </update>
+
+</mapper>

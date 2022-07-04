@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/biz/layout/default}">
+<th:block layout:fragment="content">
+    <section class="section">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">기본정보</h5>
+                        <form class="row g-3">
+                            <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
+                            <div class="row mb-3">
+                                <div class="col-2">
+                                    <label class="form-label" for="name">상품명</label>
+                                </div>
+                                <div class="col-9">
+                                    <input autofocus class="form-control" id="name" type="text">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-2">
+                                    <label class="form-label" for="id">상품코드</label>
+                                </div>
+                                <div class="col-9">
+                                    <input class="form-control" id="id" type="text">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-2">
+                                    <label class="form-label" for="price">가격</label>
+                                </div>
+                                <div class="col-3">
+                                    <div class="input-group">
+                                        <span class="input-group-text">₩</span>
+                                        <input aria-label="Price" class="form-control" id="price" min="0"
+                                               type="number">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-2">
+                                    <label class="form-label" for="color">색상</label>
+                                </div>
+                                <div class="col-3">
+                                    <input class="form-control" id="color" type="text">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-2">
+                                    <label class="form-label" for="size">사이즈</label>
+                                </div>
+                                <div class="col-3">
+                                    <input class="form-control" id="size" type="text">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-2">
+                                    <label class="form-label" for="brand">브랜드</label>
+                                </div>
+                                <div class="col-3">
+                                    <input class="form-control" id="brand" type="text">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-2">
+                                    <label class="form-label">분류</label>
+                                </div>
+                                <div class="col-3">
+                                    <select class="form-select" id="large">
+                                        <option selected="">대분류</option>
+                                        <option th:value="${null}">미설정</option>
+                                    </select>
+                                </div>
+                                <div class="col-3">
+                                    <select class="form-select" id="medium">
+                                        <option selected="">중분류</option>
+                                        <option th:value="${null}">미설정</option>
+                                    </select>
+                                </div>
+                                <div class="col-3">
+                                    <select class="form-select" id="small">
+                                        <option selected="">소분류</option>
+                                        <option th:value="${null}">미설정</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-2">
+                                    <label class="form-label" for="detail">상품 설명</label>
+                                </div>
+                                <div class="col-9">
+                                <textarea class="form-control" id="detail"
+                                          style="height: 100px;"></textarea>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-2">
+                                    <label class="col-form-label" for="image1">이미지</label>
+                                </div>
+                                <div class="col-6">
+                                    <input accept="image/*" class="form-control mb-1" id="image1" type="file">
+                                    <input accept="image/*" class="form-control mb-1" id="image2" type="file">
+                                    <input accept="image/*" class="form-control mb-1" id="image3" type="file">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-2">
+                                    <label class="form-label" for="stockAmount">초기재고</label>
+                                </div>
+                                <div class="col-3">
+                                    <input class="form-control" id="stockAmount" min="0" type="number">
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button class="btn btn-primary" type="submit">상품등록</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">옵션설정</h5>
+                        <form class="row g-3">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</th:block>
+</html>
