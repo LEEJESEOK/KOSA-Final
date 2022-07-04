@@ -69,6 +69,7 @@ public class MypageRestController {
         MemberDTO member = new MemberDTO();
         member.setEmail((String) params.get("email"));
         member.setName((String) params.get("name"));
+        member.setTel((String)params.get("tel"));
         member.setPassword((String) params.get("password"));
         member.setAddress1((String)params.get("address1"));
         member.setAddress2((String)params.get("address2"));

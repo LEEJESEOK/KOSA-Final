@@ -3,6 +3,7 @@ package com.hyundai.kosafinal.service;
 import com.hyundai.kosafinal.domain.Member2DTO;
 import com.hyundai.kosafinal.domain.MemberDTO;
 import com.hyundai.kosafinal.domain.RoleSetDTO;
+import com.hyundai.kosafinal.domain.VipDTO;
 import com.hyundai.kosafinal.mapper.userorder.MemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,7 +30,11 @@ public class MemberServiceImpl implements MemberService {
 
         return result;
     }
-
+    @Override
+    public String findGrade(String email){
+        String result=mapper.findGrade(email);
+        return result;
+    }
     @Override
     public boolean updateMember(MemberDTO member) { //회원정보 수정
         System.out.println("서비스임");
@@ -68,6 +73,12 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public String checkPW(String email){
         String result=mapper.checkPW(email);
+        return result;
+    }
+
+    @Override
+    public VipDTO findByEmail2(String email) {
+        VipDTO result=mapper.findByEmail2(email);
         return result;
     }
 
