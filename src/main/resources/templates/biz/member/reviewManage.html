@@ -109,24 +109,23 @@
                             <tr>
                                 <td class="text-center"><input class="form-check-input" type="checkbox"></td>
                                 <th class="text-center" scope="row">1</th>
-                                <td class="text-center">간단한 문의제목이 나타납니다.</td>
+                                <td class="text-center" data-bs-toggle="modal" data-bs-target="#reviewModal">간단한 문의제목이
+                                    나타납니다.
+                                </td>
                                 <td class="text-center">답변대기</td>
                                 <td class="text-center">2022-07-04</td>
                             </tr>
                             <tr data-toggle="collapse">
                                 <td class="text-center"><input class="form-check-input" type="checkbox"></td>
                                 <th class="text-center" scope="row">2</th>
-                                <td class="text-center">간단한 문의제목이 나타납니다.</td>
+                                <td class="text-center" data-bs-toggle="modal" data-bs-target="#reviewModal">간단한 문의제목이
+                                    나타납니다.
+                                </td>
                                 <td class="text-center">답변완료</td>
                                 <td class="text-center">2022-07-04</td>
                             </tr>
-                            <tr>
-
-                            </tr>
-
                             </tbody>
                         </table>
-
                         <!-- TODO pagination 페이징 -->
                         <nav aria-label="Page navigation example">
                             <ul class="pagination justify-content-center">
@@ -141,6 +140,62 @@
                                 </li>
                             </ul>
                         </nav>
+                        <div class="modal fade" id="reviewModal" tabindex="-1" style="display: none;"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-xl">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">간단한 문의 제목이 나타납니다.</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form class="row" id="reviewReplyForm">
+                                            <input type="hidden" th:name="${_csrf.parameterName}"
+                                                   th:value="${_csrf.token}"/>
+                                            <div class="row mb-3">
+                                                <div class="col-2">
+                                                    <label class="form-label" for="title">문의제목</label>
+                                                </div>
+                                                <div class="col-9">
+                                                    <p id="title">간단한 문의 제목이 나타납니다.</p>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-2">
+                                                    <label class="form-label" for="content">문의내용</label>
+                                                </div>
+                                                <div class="col-9">
+                                                    <p id="content">
+                                                        고민이네<br>
+                                                        이 메세지가 줄이 넘어갈까요?
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-2">
+                                                    <label class="form-label" for="replyContent">답변</label>
+                                                </div>
+                                                <div class="col-9">
+                                                    <textarea class="form-control" rows="5" id="replyContent"
+                                                              autofocus></textarea>
+                                                </div>
+                                            </div>
+
+                                        </form>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                            취소
+                                        </button>
+                                        <button type="button" class="btn btn-primary">
+                                            등록
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
