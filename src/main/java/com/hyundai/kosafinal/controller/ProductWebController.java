@@ -4,9 +4,12 @@ import com.hyundai.kosafinal.domain.ProductDTO;
 import com.hyundai.kosafinal.domain.ProductReviewDTO;
 import com.hyundai.kosafinal.service.ProductDetailService;
 import com.hyundai.kosafinal.service.ProductReviewService;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -74,6 +77,13 @@ public class ProductWebController {
     model.addAttribute("reviewCnt", reviewDTOList.size());
     model.addAttribute("imgCnt", imgCnt);
     model.addAttribute("textCnt", textCnt);
+
+    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    UserDetails userDetails = (UserDetails)principal;
+    String userEmail = ((UserDetails) principal).getUsername();
+    model.addAttribute("userEmail", userEmail);
+
+    System.out.println(" 회원 정보 : " + userDetails);
 
     return "productDetail/detail";
   }

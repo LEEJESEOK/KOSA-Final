@@ -1,5 +1,6 @@
 package com.hyundai.kosafinal.mapper.userorder;
 
+import com.hyundai.kosafinal.domain.MemberOrderConfirmDTO;
 import com.hyundai.kosafinal.domain.OrderItemDTO;
 import com.hyundai.kosafinal.domain.OrderedListDTO;
 import com.hyundai.kosafinal.entity.Criteria;
@@ -42,5 +43,7 @@ public interface OrderMapper {
 
     // 포인트 변경
     public int updatePoint(String userEmail, int point, int flag);
+
+    public MemberOrderConfirmDTO getOrderConfirmByEmail(@Param("productId") String productId, @Param("email") String email);
 
 }

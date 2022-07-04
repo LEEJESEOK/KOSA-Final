@@ -1,11 +1,13 @@
 package com.hyundai.kosafinal.controller;
 
 import com.hyundai.kosafinal.domain.AuthMemberDTO;
+import com.hyundai.kosafinal.domain.MemberOrderConfirmDTO;
 import com.hyundai.kosafinal.domain.OrderItemDTO;
 import com.hyundai.kosafinal.domain.OrderedListDTO;
 import com.hyundai.kosafinal.entity.OrderProduct;
 import com.hyundai.kosafinal.service.OrderService;
 import com.hyundai.kosafinal.service.ProductService;
+import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -125,5 +127,24 @@ public class OrderRestController {
 
         return entry;
     }
+
+    @GetMapping("/confirm")
+    public ResponseEntity<MemberOrderConfirmDTO> getProductItem(@RequestParam String productId, @RequestParam String email){
+
+        ResponseEntity<MemberOrderConfirmDTO> entry = null;
+        MemberOrderConfirmDTO result = oService.confirmOrderByEmail(productId, email);
+        result.setOrderConfirm(true);
+
+        if(result == null || result.getConfirm() != 1){
+            MemberOrderConfirmDTO empty = MemberOrderConfirmDTO
+              .builder()
+              .orderConfirm(false)
+              .confirm(0)
+              .build();
+            return new ResponseEntity<>(empty, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
 
 }
