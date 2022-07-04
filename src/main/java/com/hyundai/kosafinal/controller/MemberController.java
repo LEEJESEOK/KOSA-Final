@@ -13,7 +13,6 @@ import java.security.Principal;
 
 @Log4j2
 @Controller
-
 @RequestMapping("/member")
 public class MemberController {
     @Autowired
@@ -33,24 +32,5 @@ public class MemberController {
     public String signUp() {
         return "member/signUp";
     }
-
-    @PostMapping("/delete")
-    public String delete(String email) {
-        log.info("이승연" + email);
-        service.deleteMember(email);
-
-        return "redirect:/logout";
-    }
-
-    @GetMapping("/modify") //회원정보 수정버튼 눌렀을때
-    public void modify(MemberDTO member) {
-        log.info("modify");
-    }
-
-    @GetMapping("/basic") //마이페이지 첫화면
-    public void basic() {
-        log.info("마이페이지 첫 화면 이동");
-    }
-
 
 }

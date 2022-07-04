@@ -26,7 +26,7 @@
             $("#submainForm").submit();
         });
         $("#goManToManInquiry").click(function(){
-            $("#submainForm").attr("action", "/mypage/review/list");
+            $("#submainForm").attr("action", "/mypage/reviewList");
             $("#submainForm").submit();
         });
     });
@@ -38,57 +38,11 @@
         <span id="menuTitle">1:1 문의</span>
     </h3>
     <div class="sub_container">
-<!--        &lt;!&ndash; lnb &ndash;&gt;-->
-<!--        <div class="lnb_wrap">-->
-<!--            <h4><a href="/mypage">마이페이지&lt;!&ndash; 마이페이지 &ndash;&gt;</a></h4>-->
-<!--            <div class="lnb">-->
-<!--                <dl>-->
-<!--                    <dt>주문조회</dt>-->
-<!--                    <dd><a href="/mypage/order/myorders" onclick="GA_Event('마이페이지','LNB','주문/배송/반품/취소');">주문/배송/반품/취소</a></dd>-->
-<!--                </dl>-->
-<!--                <dl>-->
-<!--                    <dt>혜택관리</dt>-->
-<!--                    <dd><a href="/mypage/myGradeInfo" onclick="GA_Event('마이페이지','LNB','나의 회원 등급');">나의 회원 등급</a></dd>-->
-<!--                    <dd><a href="/mypage/voucher" onclick="GA_Event('마이페이지','LNB','나의 쿠폰');">나의 쿠폰&lt;!&ndash; 쿠폰함 &ndash;&gt;</a></dd>-->
-<!--                    <dd><a href="/mypage/mypoint" onclick="GA_Event('마이페이지','LNB','나의 한섬마일리지');">나의 한섬마일리지</a></dd>-->
-<!--                    <dd><a href="/mypage/myEGiftCard" onclick="GA_Event('마이페이지','LNB','E-GIFT CARD');">e-Gift Card</a></dd>-->
-<!--                </dl>-->
-<!--                <dl>-->
-<!--                    <dt>나의 상품관리</dt>-->
-<!--                    <dd><a href="/mypage/myWish" onclick="GA_Event('마이페이지','LNB','위시리스트');">위시리스트&lt;!&ndash; 위시리스트 &ndash;&gt;</a></dd>-->
-<!--                    <dd><a href="/mypage/rsalarm" onclick="GA_Event('마이페이지','LNB','재입고 알림');">재입고 알림&lt;!&ndash; 재입고알림 &ndash;&gt;</a></dd>-->
-<!--                </dl>-->
-<!--                <dl>-->
-<!--                    <dt>나의 정보관리</dt>-->
-<!--                    <dd><a href="/mypage/personInfomationChangePWCheck" onclick="GA_Event('마이페이지','LNB','개인정보 변경/탈퇴');">개인정보 변경/탈퇴</a></dd>-->
-<!--                    <dd><a href="/mypage/shoppingAddressPWCheck" onclick="GA_Event('마이페이지','LNB','배송지 관리');">배송지 관리</a></dd>-->
-<!--                    <dd><a href="/mypage/oneClick" onclick="GA_Event('마이페이지','LNB','원클릭 결제 관리');">원클릭 결제 관리</a></dd>-->
-<!--                    <dd><a href="/mypage/mergeCustomerInfo" onclick="GA_Event('마이페이지','LNB','한섬 멤버십 통합');">한섬 멤버십 통합</a></dd>-->
-<!--                </dl>-->
-<!--                <dl>-->
-<!--                    <dt>나의 활동관리</dt>-->
-<!--                    &lt;!&ndash; <dd><a href="#">회원등급</a></dd> &ndash;&gt;-->
-<!--                    <dd><a href="/mypage/myreview" onclick="GA_Event('마이페이지','LNB','내 상품평');">내 상품평</a></dd>-->
-<!--                    <dd><a href="/mypage/myqna" onclick="GA_Event('마이페이지','LNB','상품 Q&amp;A');">상품 Q&amp;A</a></dd>-->
-<!--                    <dd><a href="/mypage/review/list" onclick="GA_Event('마이페이지','LNB','1:1 문의');">1:1 문의</a></dd>-->
-<!--                    &lt;!&ndash; <dd><a href="#">이벤트 참여현황</a></dd> &ndash;&gt;-->
-<!--                </dl>-->
-<!--            </div>-->
-<!--            &lt;!&ndash; ph_guide &ndash;&gt;-->
-<!--            <div class="ph_guide">-->
-<!--                <p class="tlt">고객센터 운영 안내</p>-->
-<!--                <p class="phone">1800-5700<span style="color:#c69c6d;" class="txt">(유료)</span></p>-->
-<!--                <p class="txt">평일(월~금)<br>am 09:00 ~ pm 18:00<span>토/일, 공휴일 휴무</span></p>-->
-<!--                <a href="mailto:shophelp@thehandsome.com">shophelp<br>@thehandsome.com</a>-->
-<!--            </div>-->
-<!--            &lt;!&ndash; //ph_guide &ndash;&gt;-->
-<!--        </div>-->
-        <!-- //lnb -->
         <div class="sub_cnts ml50">
             <div class="box_type_1 mt70">
                 <div class="asking_complt">
                     <p class="title">더한섬닷컴을 이용해 주셔서 감사합니다.</p>
-                    <p class="txt">빠른 시간 내에 고객님의 문의에 답변을 드릴 수 있도록 하겠습니다.<br>문의 하신 내용은 <em class="ft_point01">'입력하신 이메일'</em> 또는 <br><a href="/mypage/review/list" class="ft_point01">마이페이지 &gt; 1:1 문의내역</a>에서 확인하실 수 있습니다.</p>
+                    <p class="txt">빠른 시간 내에 고객님의 문의에 답변을 드릴 수 있도록 하겠습니다.<br>문의 하신 내용은 <em class="ft_point01">'입력하신 이메일'</em> 또는 <br><a href="/mypage/reviewList" class="ft_point01">마이페이지 &gt; 1:1 문의내역</a>에서 확인하실 수 있습니다.</p>
                 </div>
             </div>
             <form id="submainForm" method="GET">
@@ -100,7 +54,7 @@
                 <!-- //btn -->
             </form>
             <ul class="bul_sty01_li mt60">
-                <li>문의하신 내용에 대한 답변은 이메일 또는 <a href="/mypage/review/list" class="ft_point01">마이페이지 &gt; 1:1 문의내역</a>에서 확인하실 수 있습니다.</li>
+                <li>문의하신 내용에 대한 답변은 이메일 또는 <a href="/mypage/reviewList" class="ft_point01">마이페이지 &gt; 1:1 문의내역</a>에서 확인하실 수 있습니다.</li>
                 <li>SMS 문자와 이메일로 답변 완료 알림을 받아보실 수 있습니다.</li>
             </ul>
         </div>

@@ -4,7 +4,23 @@
 
 <mapper namespace="com.hyundai.kosafinal.mapper.product.ProductReviewMapper">
 
-  <select id="getProductReviewByProductId" resultType="com.hyundai.kosafinal.domain.ProductReviewDTO">
+  <resultMap id="ProductReviewMap" type="ProductReviewDTO">
+    <result property="id" column="id"/>
+    <result property="email" column="email"/>
+    <result property="productId" column="product_id"/>
+    <result property="productSize" column="product_size"/>
+    <result property="productColorId" column="product_color_id"/>
+    <result property="title" column="title"/>
+    <result property="content" column="content"/>
+    <result property="editDate" column="edit_date"/>
+    <result property="rate" column="rate"/>
+    <result property="imgURI" column="image_uri"/>
+    <result property="ctryLarge" column="product_category_large"/>
+    <result property="ctryMedium" column="product_category_medium"/>
+    <result property="ctrySmall" column="product_category_small"/>
+  </resultMap>
+
+  <select id="getProductReviewByProductId" resultMap="ProductReviewMap">
     SELECT *
     FROM TABLE(SF_REVIEW_SELECT_GET(#{productId}))
   </select>
@@ -20,7 +36,7 @@
           #{content},
           #{editDate},
           #{rate},
-          #{imgFile},
+          #{imgURI},
           #{ctryLarge},
           #{ctryMedium},
           #{ctrySmall})

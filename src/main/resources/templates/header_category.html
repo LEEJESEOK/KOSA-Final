@@ -111,66 +111,11 @@
                     }
                 }
 
-
                 // deletecookie("memberGb");
 
 
                 //자동로그인
 
-
-                //vip 채팅 서비스
-                if ("PASS" != "") {
-                    var pag = "myManToManInquiryPage";
-
-                    var chkPag = ["svCenterMainPage", "noticePage", "manToManInquiryPage", "faqPage",
-                        "mendingPage", "vocProvisionPage", "vocInfoFormPage", "memberJoinGuidePage", "theClubInfoPage",
-                        "memberBenefitGuidePage", "pointGuidePage", "couponGuidePage", "paymentGuidePage", "asGuidePage"];
-
-                    var vipPassCheck = "N"; // VVIP/THESTAR/STAR 등급 체크
-                    var timePassCheck = "N"; // 평일 0900~1800 체크
-
-                    if ("" == "VVIP" || ("" == "THESTAR" || "" == "STAR")) {
-                        vipPassCheck = "Y";
-                    }
-
-                    if (vipPassCheck == "N" && "PASS" == "PASS") { // MANIA 이하 등급, 평일 체크
-                        // chatbotInfo "PASS" : 등급이 VVIP/THESTAR/STAR/MANIA 이거나 평일 0900~1800
-                        var hour = new Date().format("HHmm");
-                        var weekName = new Date().format("E");
-                        if (weekName != "일요일" && weekName != "토요일" && hour >= "0900" && hour <= "1800") {
-                            $.ajax({
-                                type: "POST",
-                                url: "/ko/chatbot/chkholiday",
-                                data: {"CSRFToken": "873f1ef0-6048-44e3-bfa2-15b52ff60d0c"},
-                                async: false,
-                                success: function (result) {
-                                    if (result == true) {
-                                        timePassCheck = "Y";
-                                    }
-                                },
-                                error: function (request, statuss, error) {
-                                    ;
-                                }
-                            });
-                        }
-                    }
-
-                    if ((vipPassCheck == "Y" || timePassCheck == "Y") && "myManToManInquiryPage" == "main201903Page") {
-                        $('#chatbotMain').show();
-                    } else {
-                        $('#chatbotMain').hide();
-                    }
-
-                    if (chkPag.indexOf(pag) > -1) {
-                        if (vipPassCheck == "Y" || timePassCheck == "Y") {
-                            $('#chatbot').show();
-                        } else {
-                            $('#chatbot').hide();
-                        }
-                    } else {
-                        $('#chatbot').hide();
-                    }
-                }
 
                 //athome
                 if ("" != "") {
