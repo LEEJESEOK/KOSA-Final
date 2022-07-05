@@ -25,4 +25,5 @@ public class ProductReviewDTO {
     private String age;
     private String height;
     private String bodyType;
+    private String avgSize;
 }

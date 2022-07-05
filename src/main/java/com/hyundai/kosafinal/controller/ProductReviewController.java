@@ -32,6 +32,9 @@ public class ProductReviewController {
   public List<ProductReviewDTO> getProductReviewByProductId(@PathVariable("productId") String productId) {
     List<ProductReviewDTO> list = productReviewService.getProductReviewByProductId(productId);
     for (ProductReviewDTO p : list) {
+      String s1 = p.getEmail().substring(0,3);
+      String s2 = p.getEmail().substring(3).replaceAll("[a-z/A-Z/0-9]","*");
+      p.setEmail(s1+s2);
       if (p.getImgURI() == null || p.getImgURI().equals("")) {
         continue;
       }
@@ -46,6 +49,10 @@ public class ProductReviewController {
     List<ProductReviewDTO> list = productReviewService.getProductReviewByProductId(productId);
     List<ProductReviewDTO> imageReviewList = new ArrayList<>();
     for (ProductReviewDTO p : list) {
+      String s1 = p.getEmail().substring(0,3);
+      String s2 = p.getEmail().substring(3).replaceAll("[a-z/A-Z/0-9]","*");
+      p.setEmail(s1+s2);
+
       if (p.getImgURI() == null || p.getImgURI().equals("")) {
         continue;
       }
@@ -61,6 +68,9 @@ public class ProductReviewController {
     List<ProductReviewDTO> list = productReviewService.getProductReviewByProductId(productId);
     List<ProductReviewDTO> textReviewList = new ArrayList<>();
     for (ProductReviewDTO p : list) {
+      String s1 = p.getEmail().substring(0,3);
+      String s2 = p.getEmail().substring(3).replaceAll("[a-z/A-Z/0-9]","*");
+      p.setEmail(s1+s2);
       if (p.getImgURI() == null || p.getImgURI().equals("")) {
         textReviewList.add(p);
         System.out.println(p.toString());
@@ -102,17 +112,21 @@ public class ProductReviewController {
       .ctryLarge(request.getParameter("ctryLarge"))
       .ctryMedium(request.getParameter("ctryMedium"))
       .ctrySmall(request.getParameter("ctrySmall"))
+      .title(request.getParameter("title"))
+      .avgSize(request.getParameter("avgSize"))
       .build();
 
     List<MultipartFile> fileList = new ArrayList<MultipartFile>();
 
     // input file 에 아무것도 없을 경우 (파일을 업로드 하지 않았을 때 처리)
-    if(request.getFiles("imgFIle").get(0).getSize() != 0){
+    if(!request.getFiles("imgFIle").isEmpty() && request.getFiles("imgFIle").get(0).getSize() != 0){
       fileList = request.getFiles("imgFIle");
+      log.info("이미지 파일 정보 : " + fileList.get(0).getOriginalFilename());
+      productReviewService.saveProductReview(productReviewDTO, fileList.get(0));
+      return productReviewDTO;
     }
 
-    log.info("이미지 파일 정보 : " + fileList.get(0).getOriginalFilename());
-    productReviewService.saveProductReview(productReviewDTO, fileList.get(0));
+    productReviewService.saveProductReview(productReviewDTO, null);
     return productReviewDTO;
   }
 }

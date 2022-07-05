@@ -4,12 +4,11 @@
 
 <mapper namespace="com.hyundai.kosafinal.mapper.userorder.OrderMapper">
 
-    <resultMap id="MemberOrderProductMap" type="MemberOrderConfirmDTO">
-        <result property="confirm" column="rownum"/>
-        <result property="pSize" column="psize"/>
-        <result property="pColor" column="pcolor"/>
+    <resultMap id="MemberOrderProductMap" type="com.hyundai.kosafinal.domain.MemberOrderConfirmDTO">
+        <result property="confirm" column="RNUM"/>
+        <result property="pSize" column="PSIZE"/>
+        <result property="pColor" column="PCOLOR"/>
     </resultMap>
-
 
     <!-- 주문 목록 조회 -->
     <select id="getOrderedList" resultType="OrderedListDTO">
@@ -84,9 +83,9 @@
     <!-- 유저가 구매한 상품이 있는지 조회 + 배송 완료 -->
     <select id="getOrderConfirmByEmail" resultMap="MemberOrderProductMap">
         select
-               ROWNUM,
-               ol.PSIZE,
-               ol.PCOLOR
+               ROWNUM as RNUM,
+               ol.PSIZE as PSIZE,
+               ol.PCOLOR as PCOLOR
         from
              (
                select *
@@ -101,7 +100,3 @@
     </select>
 
 </mapper>
-
-<!--  case when count(*) >= 1 then 1 else 0 end as isExisted-->
-<!--  , o.PSIZE-->
-<!--  , o.PCOLOR-->

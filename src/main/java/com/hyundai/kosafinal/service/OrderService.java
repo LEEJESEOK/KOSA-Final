@@ -22,7 +22,6 @@ public interface OrderService {
     // 주문 추가
     public String insertOrderedList(OrderedListDTO dto);
 
-
     // 주문 아이템 추가
     public String insertOrderItem(OrderItemDTO dto);
 

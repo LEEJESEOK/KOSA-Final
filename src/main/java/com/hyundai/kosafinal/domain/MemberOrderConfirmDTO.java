@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberOrderConfirmDTO {
-  boolean orderConfirm;
-  int confirm;
-  String pSize;
-  String pColor;
+  private int confirm;
+  private String pSize;
+  private String pColor;
 }

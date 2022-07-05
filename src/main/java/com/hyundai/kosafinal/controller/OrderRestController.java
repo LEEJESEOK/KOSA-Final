@@ -168,16 +168,17 @@ public class OrderRestController {
 
         ResponseEntity<MemberOrderConfirmDTO> entry = null;
         MemberOrderConfirmDTO result = oService.confirmOrderByEmail(productId, email);
-        result.setOrderConfirm(true);
+
 
         if(result == null || result.getConfirm() != 1){
             MemberOrderConfirmDTO empty = MemberOrderConfirmDTO
               .builder()
-              .orderConfirm(false)
               .confirm(0)
               .build();
             return new ResponseEntity<>(empty, HttpStatus.OK);
         }
+        System.out.println(result.toString());
+
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 

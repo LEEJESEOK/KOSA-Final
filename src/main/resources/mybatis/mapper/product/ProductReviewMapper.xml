@@ -21,6 +21,7 @@
     <result property="age" column="age"/>
     <result property="height" column="height"/>
     <result property="bodyType" column="body_type"/>
+    <result property="avgSize" column="avg_size"/>
   </resultMap>
 
   <select id="getProductReviewByProductId" resultMap="ProductReviewMap">
@@ -46,7 +47,8 @@
       #{ctrySmall},
       #{age},
       #{height},
-      #{bodyType})
+      #{bodyType},
+      #{avgSize})
       }
     ]]>
   </insert>
