@@ -45,58 +45,63 @@
 
                 // listItem
                 productList.forEach((product, idx) => {
-                    let listItemHTML = "";
-                    listItemHTML += "<li" + ((idx + 1) % colMax == 0 ? " class=\"mr1m\"" : "") + "> ";
-                    listItemHTML += "<div class=\"item_box\">";
-                    // item_info1 상품 이미지
-                    listItemHTML += "<a href=\"/product/detail/" + product.id + "\" class=\"item_info1\" \"> ";
-                    listItemHTML += "<span class=\"item_img\">";
-                    // TODO 썸네일 URI
-                    listItemHTML += "<img src=\"" + product.image1Uri + "\" id=\"T01_IMG_0\" alt=\"" + product.name + "\" targetcode=\"" + product.id + "\" class=\"respon_image\" onerror=\"this.src='http://cdn.thehandsome.com/_ui/desktop/common/images/products/no_img3.jpg'\">";
-                    listItemHTML += "<img src=\"" + product.image2Uri + "\" id=\"T02_IMG_0\" alt=\"" + product.name + "\" targetcode=\"" + product.id + "\" class=\"respon_image on\" onerror=\"this.src='http://cdn.thehandsome.com/_ui/desktop/common/images/products/no_img3.jpg'\" style=\"display: none; opacity: 1;\">";
-                    listItemHTML += "</span>";
-                    listItemHTML += "<span class=\"item_size\" id=\"itemsize_0\"\n" +
-                        "        style=\"display: none; height: 20px; padding-top: 15px; margin-top: 0px; padding-bottom: 15px; margin-bottom: 0px;\">";
-                    listItemHTML += "</span>";
-                    listItemHTML += "</a>";
-                    // item_info2 상품 간략한 설명
-                    listItemHTML += "<a class=\"item_info2\" href=\"/ko/p/IL2C5WJC385WP_OT?categoryCode=we051\" \">";
-                    listItemHTML += "<span class=\"brand\">" + product.brand + "</span>";
-                    listItemHTML += "<span class=\"title\">" + product.name + "</span>";
-                    listItemHTML += "<span class=\"price\"><span id=\"price_IL2C5WJC385WP_OT\"><span>" + product.price + "</span></span></span>";
-                    listItemHTML += "</a>";
-                    listItemHTML += "<div class=\"color_more_wrap\">";
-                    colorList[idx].forEach(color => {
-                        listItemHTML += "<a class=\"cl wt\" href=\"\" onclick=\"\"\n" +
-                            "style=\"background:#e5dcd5 url('" + color.colorChipUri + "');\"></a>";
-                    });
-                    listItemHTML += "</div>";
+                    let listItemHTML =
+                        `<li${((idx + 1) % colMax == 0) ? " class=\"mr1m\"" : ""}>
+                            <div class="item_box">
+                                <a href="/product/detail/${product.id}" class="item_info1">
+                                    <span class="item_img">
+                                    <img src="${product.image1Uri}" id="T01_IMG_0" alt="${product.name}" targetcode="${product.id}" class="respon_image" onerror="this.src='http://cdn.thehandsome.com/_ui/desktop/common/images/products/no_img3.jpg'">
+                                    <img src="${product.image2Uri}" id="T02_IMG_0" alt="${product.name}" targetcode="${product.id}" class="respon_image on" onerror="this.src='http://cdn.thehandsome.com/_ui/desktop/common/images/products/no_img3.jpg'" style="display: none; opacity: 1;">
+                                    </span>
+                                    <span class="item_size" id="itemsize_${idx}"
+                                        style="display: none; height: 20px; padding-top: 15px; margin-top: 0px; padding-bottom: 15px; margin-bottom: 0px;">
+                                        <div id="${product.id}">`;
 
-                    listItemHTML += "</div>";
-                    listItemHTML += "</li>";
+                    // 사이즈
+                    sizeList[idx].forEach(size => {
+                        listItemHTML += `
+                                            <span>${size.size}</span>
+                        `;
+                    });
+
+                    listItemHTML += `
+                                        </div>
+                                    </span>
+                                </a>
+                                <a class="item_info2" href="/product/detail/${product.id}">
+                                    <span class="brand">${product.brand}</span>
+                                    <span class="title">${product.name}</span>
+                                    <span class="price"><span id="price_${product.id}"><span>${product.price}</span></span></span>
+                                </a>
+                                <div class="color_more_wrap">`;
+
+                    // 컬러칩
+                    colorList[idx].forEach(color => {
+                        listItemHTML += `
+                                    <a class="cl wt" onclick=""
+                                        style="background:#e5dcd5 url('${color.colorChipUri}');"></a>
+                        `;
+                    });
+                    listItemHTML += `
+                                </div>
+                            </div>
+                        </li>
+                    `;
 
                     $("#listBody").append(listItemHTML);
                 })
 
-                let pageHTML = "";
-                // 가장 첫 페이지
-                pageHTML += "<a class=\"prev2\" href=\"" + "/category/" + getFilterUri(large, medium, small, 1, brand, color, size, minPrice, maxPrice, sortType) + "\"> 처음 페이지로 이동</a>";
-                // 이전 페이지
-                pageHTML += "<a href=\"" + "/category/" + getFilterUri(large, medium, small, page.criteria.pageNum - 1, brand, color, size, minPrice, maxPrice, sortType) + "\" class=\"prev\"> 이전 페이지로 이동</a>";
-                // 페이지 번호
-                pageHTML += "<span class=\"num\">";
+                let pageHTML = `
+                <a class="prev2" href="/category/${getFilterUri(large, medium, small, 1, brand, color, size, minPrice, maxPrice, sortType)}">처음 페이지로 이동</a>
+                <a class="prev" href="/category/${getFilterUri(large, medium, small, page.criteria.pageNum - 1, brand, color, size, minPrice, maxPrice, sortType)}">이전 페이지로 이동</a>
+                <span class="num">`;
                 for (idx = page.startPage; idx <= page.endPage; idx++) {
-                    pageHTML += "<a href=\"" + "/category/" + getFilterUri(large, medium, small, idx, brand, color, size, minPrice, maxPrice, sortType) + "\" class=\"pageBtn ";
-                    if (idx == page.criteria.pageNum)
-                        pageHTML += "on";
-                    pageHTML += "\" pagenum=\"" + idx + "\">" + idx + "</a>";
+                    pageHTML += `<a href="/category/${getFilterUri(large, medium, small, idx, brand, color, size, minPrice, maxPrice, sortType)}" class="pageBtn ${(idx == page.criteria.pageNum) ? "on" : ""}" pageNum=${idx}">${idx}</a>`;
                 }
-                pageHTML += "</span>";
-
-                // 다음 페이지
-                pageHTML += "<a href=\"" + "/category/" + getFilterUri(large, medium, small, page.criteria.pageNum + 1, brand, color, size, minPrice, maxPrice, sortType) + "\" class=\"next\"> 다음 페이지로 이동</a>";
-                // 마지막 페이지
-                pageHTML += "<a href=\"" + "/category/" + getFilterUri(large, medium, small, page.realEnd, brand, color, size, minPrice, maxPrice, sortType) + "\" class=\"next2\"> 마지막 페이지로 이동</a>";
+                pageHTML += `</span>`;
+                pageHTML += `
+                               <a href="/category/${getFilterUri(large, medium, small, page.criteria.pageNum + 1, brand, color, size, minPrice, maxPrice, sortType)}" class="next">다음 페이지로 이동</a>
+                               <a href="/category/${getFilterUri(large, medium, small, page.realEnd, brand, color, size, minPrice, maxPrice, sortType)}" class="next2">마지막 페이지로 이동</a>`;
 
                 $("#pageGroup").append(pageHTML);
             },
@@ -120,6 +125,76 @@
         console.log(message);
     }
 
+    categoryListList.afterSetAction = function(){
+
+        let $item_boxs = $(".items_list .item_box .item_info1");
+        $(".items_list .item_info1 .item_size").hide();
+        $item_boxs.on( 'mouseenter', function(){
+            active( this );
+        });
+        $item_boxs.on( 'mouseleave', function(){
+            deactive( this );
+        });
+
+        //리스트 4개일때(예외 - 카테고리 리스트)
+        let cate_item4 = $('.cate_item4 > ul > li').length;
+        $('.cate_item4 > ul > li').each(function(cate_item4){
+            if((cate_item4%4) == 0){
+                $('.cate_item4 > ul > li:nth-child('+(cate_item4+4)+')').addClass('mr1m');
+            }
+        });
+
+        //이미지가 1px이라도 어긋나면 밀리는 현상 방지용
+        $(".cate_item4 .mr1m").next("li").css("clear","both");
+
+        //전체 상품수 세팅
+        $(".num").html(this.PARAMS.resourceObjectData.pagination.totalNumberOfResults);
+
+        //페이지 세팅 정보 기억 - HASH : page_색상_사이즈_가격_정렬순_상품갯수
+        setHashInfo(this.PARAMS.pageNum);
+
+        //에러 이미지 재 조정
+        let checkImageUrl1 = "";
+        let checkImageUrl2 = "";
+        $(".item_box img").on("error",function(){
+            let image = "http://media.thehandsome.com/"+$(this).attr("targetCode") +"_"+ $(this).attr("id").split("_")[0]+".jpg";
+            if(checkImageUrl1 == $(this).attr("targetCode")){
+                if(checkImageUrl2 == $(this).attr("targetCode")){
+                    $(this).attr("src","http://cdn.thehandsome.com/_ui/desktop/common/images/products/no_img3.jpg");
+                    checkImageUrl1 = "";
+                    checkImageUrl2 = "";
+                }else{
+                    $(this).attr("src",image);
+                    checkImageUrl2 = $(this).attr("targetCode");
+                }
+            }else{
+                $(this).attr("src",image);
+                checkImageUrl1 = $(this).attr("targetCode");
+            }
+        });
+    }
+
+    function active( item ){
+        let $item_box = $( item );
+        $item_box.find('.item_size').stop().slideDown('fast');
+        $item_box.find('.item_img .on').stop().fadeIn('fast');
+    }
+    function deactive( item ){
+        let $item_box = $( item );
+        $item_box.find('.item_size').stop().slideUp('fast');
+        $item_box.find('.item_img .on').stop().fadeOut('fast');
+    }
+
+    function resultLayout_none(){
+        $('#searchResult_None').css("display", "block");
+        $('.paging').css("display", "none");
+        $('#listContent').css("display", "none");
+    }
+    function resultLayout_Exist(){
+        $('#searchResult_None').css("display", "none");
+        $('.paging').css("display", "block");
+        $('#listContent').css("display", "block");
+    }
 </script>
 <div class="products" id="bodyWrap">
     <h3 class="cnts_title ou1804">

@@ -4,10 +4,7 @@
     <!--현재 페이지 적용-->
     <script>
         $().ready(function () {
-
-            // 로그아웃 버튼
             $("#logoutBtn").click(function () {
-                console.log("logout");
                 $.ajax({
                         type: "post",
                         url: "/logout"
@@ -90,12 +87,12 @@
                     id="member-nav">
                     <li>
                         <a th:href="@{/biz/member/memberManage}">
-                            <i class="bi bi-circle"></i> <span>고객목록</span>
+                            <i class="bi bi-circle"></i> <span>고객 목록</span>
                         </a>
                     </li>
                     <li>
                         <a th:href="@{/biz/member/reviewManage}">
-                            <i class="bi bi-circle"></i> <span>문의목록</span>
+                            <i class="bi bi-circle"></i> <span>문의 목록</span>
                         </a>
                     </li>
 
@@ -110,18 +107,8 @@
                 </a>
                 <ul class="nav-content collapse " data-bs-parent="#sidebar-nav" id="mvp-nav">
                     <li>
-                        <a th:href="@{#}">
-                            <i class="bi bi-circle"></i> <span>Bootstrap Icons</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:href="@{#}">
-                            <i class="bi bi-circle"></i> <span>Remix Icons</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:href="@{#}">
-                            <i class="bi bi-circle"></i> <span>Box Icons</span>
+                        <a th:href="@{/biz/vip/vipManage}">
+                            <i class="bi bi-circle"></i> <span>VIP 목록</span>
                         </a>
                     </li>
                 </ul>
@@ -162,7 +149,7 @@
             </li><!-- End F.A.Q Page Nav -->
 
             <li class="nav-item">
-                <a class="nav-link collapsed" th:href="@{#}">
+                <a class="nav-link collapsed" href="" id="logoutBtn">
                     <i class="bi bi-box-arrow-in-right"></i> <span>Logout</span>
                 </a>
             </li><!-- End Login Page Nav -->

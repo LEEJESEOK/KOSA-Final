@@ -8,10 +8,12 @@
         const csrf_token = "[[${_csrf.token}]]";
         const csrf_header = "[[${_csrf.headerName}]]";
 
-        $.ajaxSetup({
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader(csrf_header, csrf_token);
-            }
+        $().ready(function() {
+            $.ajaxSetup({
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(csrf_header, csrf_token);
+                }
+            });
         });
     </script>
 </th:block>
