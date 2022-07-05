@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <th:block th:fragment="head">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -43,5 +43,6 @@
     <script type="text/javascript" th:src="@{/js/unorm.js}"></script>
     <script type="text/javascript" th:src="@{/js/appboy.min.js}"></script>
 
+    <th:block th:replace="~{/include/ga::ga}"></th:block>
 </th:block>
 </html>
