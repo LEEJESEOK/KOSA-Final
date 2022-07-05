@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>LoginPage</title>
-    <th:block th:replace="~{/head :: head}"></th:block>
+    <th:block th:replace="~{/fragment/head :: head}"></th:block>
 
 <!--    <script>-->
 <!--        function check_form(){-->
@@ -22,7 +22,7 @@
 <!--    </script>-->
 </head>
 <body>
-<th:block th:replace="/header_logo.html::header_logo"></th:block>
+<th:block th:replace="~{/fragment/header_logo::header_logo}"></th:block>
 <div id="bodyWrap" class="login">
     <h3 class="cnts_title"><span>로그인</span></h3>
     <div class="sub_container">
@@ -71,6 +71,6 @@
         </div>
     </div>
 </div>
-<th:block th:replace="/footer.html::footer"></th:block>
+<th:block th:replace="~{/fragment/footer::footer}"></th:block>
 </body>
 </html>

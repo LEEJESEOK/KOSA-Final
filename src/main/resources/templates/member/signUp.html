@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <th:block th:replace="~{/head :: head}"></th:block>
+    <th:block th:replace="~{/fragment/head :: head}"></th:block>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script>
         <!-- 주소 API include -->
@@ -584,7 +584,7 @@
     </script>
 </head>
 <body>
-<th:block th:replace="/header_logo.html::header_logo"></th:block>
+<th:block th:replace="~{/fragment/header_logo::header_logo}"></th:block>
 
 <form id="memberJoinForm" action="/member/register" method="POST">
     <input type="hidden" name="emailDuplChk" id="emailDuplChk" value="" title="이메일 중복"/>
@@ -753,6 +753,6 @@
         <!--//sub container-->
     </div>
 </form>
-<th:block th:replace="/footer.html::footer"></th:block>
+<th:block th:replace="~{/fragment/footer::footer}"></th:block>
 </body>
 </html>

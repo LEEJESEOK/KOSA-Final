@@ -4,10 +4,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <th:block th:replace="/head.html::head"></th:block>
+    <th:block th:replace="~{/fragment/head::head}"></th:block>
 </head>
 <body>
-<th:block th:replace="/header_logo.html::header_logo"></th:block>
+<th:block th:replace="~{/fragment/header_logo::header_logo}"></th:block>
 <script>
     // jQuery 충돌 방지
     var arkQuery = $.noConflict(true);
@@ -67,6 +67,6 @@
 </div>
 
 <!-- footer.jsp include -->
-<th:block th:replace="/footer.html::footer"></th:block>
+<th:block th:replace="~{/footer::footer}"></th:block>
 </body>
 </html>

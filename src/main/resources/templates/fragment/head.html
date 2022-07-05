@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:fragment="head">
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!--favicon-->
+    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.ico}"/>
+
+    <!--css-->
+    <th:block th:replace="~{/fragment/css::css}"></th:block>
+
+    <!--js-->
+    <th:block th:replace="~{/fragment/script::script}"></th:block>
+
+    <!-- GA google analytics -->
+    <th:block th:replace="~{/fragment/ga::ga}"></th:block>
+</th:block>
+</html>

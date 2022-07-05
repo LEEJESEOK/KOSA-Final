@@ -5,13 +5,13 @@
     <title>
         나의주문내역상세 | 더한섬닷컴</title>
     <!-- head -->
-    <th:block th:replace="~{/head :: head}"></th:block>
+    <th:block th:replace="~{/fragment/head :: head}"></th:block>
     <!-- //head -->
 </head>
 
 <body oncontextmenu="return false">
 
-<th:block th:replace="/header_logo.html::header_logo"></th:block>
+<th:block th:replace="~{/fragment/header_logo::header_logo}"></th:block>
 
 <script>
     // jQuery 충돌 방지
@@ -190,7 +190,7 @@
     </h3>
     <div class="sub_container">
         <!-- lnb -->
-        <th:block th:replace="~{/lnb :: lnb}"></th:block>
+        <th:block th:replace="~{/fragment/lnb :: lnb}"></th:block>
         <!-- //lnb -->
         <!-- cnts -->
         <div class="sub_cnts">
@@ -548,7 +548,7 @@
 <!--//layer popup-->
 
 <!-- footerWrap -->
-<th:block th:replace="~{/footer :: footer}"></th:block>
+<th:block th:replace="~{/fragment/footer :: footer}"></th:block>
 <!-- //footerWrap -->
 
 

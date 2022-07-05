@@ -5,14 +5,14 @@
     <title>더한섬닷컴</title>
 
     <!-- head -->
-    <th:block th:replace="~{/head :: head}"></th:block>
+    <th:block th:replace="~{/fragment/head :: head}"></th:block>
     <!-- //head -->
 
 </head>
 <body oncontextmenu="return false">
 
 <!-- headerWrap -->
-<th:block th:replace="~{/header_logo :: header_logo}"></th:block>
+<th:block th:replace="~{/fragment/header_logo :: header_logo}"></th:block>
 <!-- //headerWrap -->
 
 <script>
@@ -26,7 +26,7 @@
     </h3>
     <div class="sub_container">
         <!-- lnb -->
-        <th:block th:replace="~{/lnb :: lnb}"></th:block>
+        <th:block th:replace="~{/fragment/lnb :: lnb}"></th:block>
         <!-- //lnb -->
         <!-- cnts -->
         <div class="sub_cnts">
@@ -192,7 +192,7 @@
 </div>
 
 <!-- footerWrap -->
-<th:block th:replace="~{/footer :: footer}"></th:block>
+<th:block th:replace="~{/fragment/footer :: footer}"></th:block>
 
 </body>
 </html>
