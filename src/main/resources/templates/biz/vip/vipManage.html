@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/biz/layout/default}">
+<th:block layout:fragment="content">
+    <script>
+        // 주소, 팝업창 이름, 창크기(w, h, left, top)
+
+        function showPopup() {
+            let url = "/biz/vip/vipDetail"
+            let windowName = "VIP Detail"
+            let windowOption = "width=1280, height=720, left=50, top=50"
+            window.open(url, windowName, windowOption);
+        }
+    </script>
+    <section>
+        <div class="row">
+            <div class="col-12">
+                <div class="card p-3">
+                    <div class="card-body">
+                        <form class="row">
+                            <div class="row mb-3">
+                                <div class="col-2">
+                                    <label class="form-label" for="keyword">검색어</label>
+                                </div>
+                                <div class="col-2">
+                                    <select class="form-select">
+                                        <option th:value="id">아이디</option>
+                                        <option th:value="name">이름</option>
+                                        <option th:value="tel">연락처</option>
+                                    </select>
+                                </div>
+                                <div class="col-8">
+                                    <input autofocus class="form-control" id="keyword" type="text">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-2">
+                                    <label>구분</label>
+                                </div>
+                                <div class="col-10">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" id="all" name="vipStatus"
+                                               checked>
+                                        <label class="form-check-label" for="all">전체</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" id="vip_the_star"
+                                               name="vipStatus">
+                                        <label class="form-check-label" for="vip_the_star">THE STAR</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" id="vip_star"
+                                               name="vipStatus">
+                                        <label class="form-check-label" for="vip_star">STAR</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <button class="btn btn-outline-primary" type="reset">초기화</button>
+                                    <button class="btn btn-primary" type="submit">검색</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">VIP 목록</h5>
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                            <tr>
+                                <th scope="col" class="text-center">
+                                    <input class="form-check-input" id="checkAll" type="checkbox">
+                                </th>
+                                <th scope="col" class="text-center">#</th>
+                                <th scope="col" class="text-center">이름</th>
+                                <th scope="col" class="text-center">아이디</th>
+                                <th scope="col" class="text-center">연락처</th>
+                                <th scope="col" class="text-center">성별</th>
+                                <th scope="col" class="text-center">생년월일</th>
+                                <th scope="col" class="text-center">등급</th>
+                                <th scope="col" class="text-center">가입일</th>
+                                <th scope="col" class="text-center">최근 로그인</th>
+                                <th scope="col" class="text-center">탈퇴분석</th>
+                                <th scope="col" class="text-center">비고</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="text-center"><input class="form-check-input" type="checkbox"></td>
+                                <th scope="row" class="text-center">1</th>
+                                <td class="text-center" href="#" onclick="showPopup()">이제석</td>
+                                <td class="text-center" href="#" onclick="showPopup()">jadyn03</td>
+                                <!-- <td class="text-center" data-bs-toggle="modal" data-bs-target="#vipModal">이제석</td>-->
+                                <!-- <td class="text-center" data-bs-toggle="modal" data-bs-target="#vipModal">jadyn03</td>-->
+                                <td class="text-center">01046623126</td>
+                                <td class="text-center">남</td>
+                                <td class="text-center">1994-12-03</td>
+                                <td class="text-center">CREW</td>
+                                <td class="text-center">2018-07-01</td>
+                                <td class="text-center">2022-07-01</td>
+                                <td class="text-center">-</td>
+                                <td class="text-center">-</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <!--                        <div class="modal fade" id="vipModal" tabindex="-1" style="display: none;"-->
+                        <!--                             aria-hidden="true">-->
+                        <!--                            <div class="modal-dialog modal-xl">-->
+                        <!--                                <div class="modal-content">-->
+                        <!--                                    <div class="modal-header">-->
+                        <!--                                        <h5 class="modal-title">제목</h5>-->
+                        <!--                                        <button type="button" class="btn-close" data-bs-dismiss="modal"-->
+                        <!--                                                aria-label="Close"></button>-->
+                        <!--                                    </div>-->
+                        <!--                                    <div class="modal-body">-->
+                        <!--                                        <form class="row">-->
+                        <!--                                            <input type="hidden" th:name="${_csrf.parameterName}"-->
+                        <!--                                                   th:value="${_csrf.token}"/>-->
+                        <!--                                            <div class="row mb-3">-->
+                        <!--                                                <div class="col-2">-->
+                        <!--                                                    <label class="form-label" for="name">이름</label>-->
+                        <!--                                                </div>-->
+                        <!--                                                <div class="col-9">-->
+                        <!--                                                    <p id="name">이제석</p>-->
+                        <!--                                                </div>-->
+                        <!--                                            </div>-->
+                        <!--                                            <div class="row mb-3">-->
+                        <!--                                                <div class="col-2">-->
+                        <!--                                                    <label class="form-label" for="id">아이디</label>-->
+                        <!--                                                </div>-->
+                        <!--                                                <div class="col-10">-->
+                        <!--                                                    <p id="id">jadyn03</p>-->
+                        <!--                                                </div>-->
+                        <!--                                            </div>-->
+                        <!--                                            <div class="row mb-3">-->
+                        <!--                                                <div class="col-2">-->
+                        <!--                                                    <label class="form-label" for="tel">연락처</label>-->
+                        <!--                                                </div>-->
+                        <!--                                                <div class="col-10">-->
+                        <!--                                                    <p id="tel">01046623126</p>-->
+                        <!--                                                </div>-->
+                        <!--                                            </div>-->
+                        <!--                                        </form>-->
+
+                        <!--                                    </div>-->
+                        <!--                                    <div class="modal-footer">-->
+                        <!--                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">-->
+                        <!--                                            닫기-->
+                        <!--                                        </button>-->
+                        <!--                                    </div>-->
+                        <!--                                </div>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</th:block>
+</html>

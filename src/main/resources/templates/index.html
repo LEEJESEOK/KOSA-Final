@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/layout/default}">
+<head>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
 <th:block layout:fragment="script">
-
     <script type="text/javascript">
         var newItemsSlider = "";
         var bestItemsSlider = "";
@@ -223,7 +225,7 @@
             }
 
             // braze 메인 진입시
-            brazeLogCustomEvent("ENTER", "");
+            // brazeLogCustomEvent("ENTER", "");
         });
 
 
@@ -805,62 +807,61 @@
             return exchangePrice;
         }
 
-        function brazeLogCustomEvent(type, idx) {
-            var currentActionTime = new Date().format("yyyyMMddHHmmss");
-            var prodList;
-
-            if (type == "ENTER") {
-                appboy.logCustomEvent(
-                    "LCE_viewMain",
-                    {
-                        "accessDate": currentActionTime
-                    }
-                );
-            } else { //RECOMMEND
-                prodList = JSON.parse(window.sessionStorage.getItem('main_recommend_ecommerceDataList'));
-
-                if (prodList != null && typeof prodList != undefined) {
-                    if (prodList.length > 0) {
-                        var prodInfo = prodList[idx];
-                        //20201222 상품코드 세분화 작업
-                        var baseCd = "";
-                        var styleCd = "";
-                        var sizeCd = "";
-                        if (prodInfo.baseProductCode.indexOf("_") > -1) {
-                            var tmp = prodInfo.baseProductCode.split("_");
-                            if (tmp.length == 3) { // size
-                                baseCd = tmp[0];
-                                styleCd = tmp[1];
-                                sizeCd = tmp[2];
-                            } else if (tmp.length == 2) { // color
-                                baseCd = tmp[0];
-                                styleCd = tmp[1];
-                            }
-                        } else { // base
-                            baseCd = prodInfo.baseProductCode;
-                        }
-                        var productCateKoName = setCategoryNameInKO(prodInfo.productCategoryCode, prodInfo.productCategoryName);
-                        appboy.logCustomEvent(
-                            "LCE_recommendAreaClick",
-                            {
-                                "productName": prodInfo.productName
-                                , "productCode": baseCd
-                                , "colorCode": styleCd
-                                , "sizeCode": sizeCd
-                                , "accessDate": currentActionTime
-                                , "productCategoryCode": prodInfo.productCategoryCode
-                                , "productCategoryName": productCateKoName
-                            }
-                        );
-                    }
-                }
-            }
-        }
+        // function brazeLogCustomEvent(type, idx) {
+        //     var currentActionTime = new Date().format("yyyyMMddHHmmss");
+        //     var prodList;
+        //
+        //     if (type == "ENTER") {
+        //         appboy.logCustomEvent(
+        //             "LCE_viewMain",
+        //             {
+        //                 "accessDate": currentActionTime
+        //             }
+        //         );
+        //     } else { //RECOMMEND
+        //         prodList = JSON.parse(window.sessionStorage.getItem('main_recommend_ecommerceDataList'));
+        //
+        //         if (prodList != null && typeof prodList != undefined) {
+        //             if (prodList.length > 0) {
+        //                 var prodInfo = prodList[idx];
+        //                 //20201222 상품코드 세분화 작업
+        //                 var baseCd = "";
+        //                 var styleCd = "";
+        //                 var sizeCd = "";
+        //                 if (prodInfo.baseProductCode.indexOf("_") > -1) {
+        //                     var tmp = prodInfo.baseProductCode.split("_");
+        //                     if (tmp.length == 3) { // size
+        //                         baseCd = tmp[0];
+        //                         styleCd = tmp[1];
+        //                         sizeCd = tmp[2];
+        //                     } else if (tmp.length == 2) { // color
+        //                         baseCd = tmp[0];
+        //                         styleCd = tmp[1];
+        //                     }
+        //                 } else { // base
+        //                     baseCd = prodInfo.baseProductCode;
+        //                 }
+        //                 var productCateKoName = setCategoryNameInKO(prodInfo.productCategoryCode, prodInfo.productCategoryName);
+        //                 appboy.logCustomEvent(
+        //                     "LCE_recommendAreaClick",
+        //                     {
+        //                         "productName": prodInfo.productName
+        //                         , "productCode": baseCd
+        //                         , "colorCode": styleCd
+        //                         , "sizeCode": sizeCd
+        //                         , "accessDate": currentActionTime
+        //                         , "productCategoryCode": prodInfo.productCategoryCode
+        //                         , "productCategoryName": productCateKoName
+        //                     }
+        //                 );
+        //             }
+        //         }
+        //     }
+        // }
     </script>
 </th:block>
 <th:block layout:fragment="bodyWrap">
     <div id="bodyWrap" style="padding-bottom:0;">
-        <!-- main_container-->
         <div class="big_banner1903">
             <div class="swiper-container big_banner_inner" id="mainSlider1903_0">
                 <div class="big_banner_frame"></div>
@@ -1822,6 +1823,7 @@
             <div class="swiper-button-prev bigb"></div>
             <div class="swiper-button-next bigb"></div>
         </div>
+        <!-- main_container-->
         <div class="main_container">
             <div class="mid_banner" style="display:none;">
                 <div class="banner1 banner1_N">
