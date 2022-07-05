@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="head">
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+
+    <title th:text="${pageTitle}+' - 더한섬닷컴'"></title>
+
+    <th:block th:replace="~{/biz/fragment/css::css}"></th:block>
+
+    <th:block th:replace="~{/biz/fragment/script::script}"></th:block>
+</th:block>
+</html>

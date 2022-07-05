@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/biz/layout/default}">
+<th:block layout:fragment="content">
+    <script>
+        $().ready(function () {
+
+            // 테이블 선택한 행 table-active 적용
+            $("input[type=checkbox]:not(#checkAll)").change(function () {
+                if ($(this).is(":checked")) {
+                    $(this).closest('tr').addClass("table-active");
+                } else {
+                    $(this).closest('tr').removeClass("table-active");
+                }
+            });
+
+            // 체크박스 전체선택/해제
+            $("#checkAll").click(function () {
+                $("input[type=checkbox]").prop("checked", this.checked).trigger("change");
+            });
+
+            // 체크된 체크박스 개수에 따라 checkAll 변경
+            $("input[type=checkbox]:not(#checkAll)").click(function () {
+                let total = $("input[type=checkbox]:not(#checkAll)").length;
+                let checked = $("input[type=checkbox]:checked:not(#checkAll)").length;
+
+                $("#checkAll").prop("checked", total == checked);
+            });
+        });
+    </script>
+    <section class="section">
+        <div class="row">
+            <div class="col-12">
+                <!-- 검색옵션 -->
+                <div class="card p-3">
+                    <form class="row">
+                        <div class="row mb-3">
+                            <div class="col-2">
+                                <label class="form-label" for="keyword">검색어</label>
+                            </div>
+                            <div class="col-2">
+                                <select class="form-select">
+                                    <option th:value="id">아이디</option>
+                                    <option th:value="name">이름</option>
+                                    <option th:value="tel">연락처</option>
+                                </select>
+                            </div>
+                            <div class="col-8">
+                                <input autofocus class="form-control" id="keyword" type="text">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-2">
+                                <label class="form-label">가입일</label>
+                            </div>
+                            <div class="col-2">
+                                <input type="date" class="form-control">
+                            </div>
+                            <div class="col-2">
+                                <input type="date" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <button class="btn btn-outline-primary" type="reset">초기화</button>
+                                <button class="btn btn-primary" type="submit">검색</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">회원목록</h5>
+                        <form class="row">
+                            <table class="table table-hover table-bordered">
+                                <thead class="table-light">
+                                <tr>
+                                    <th scope="col" class="text-center"><input class="form-check-input" id="checkAll"
+                                                                               type="checkbox"></th>
+                                    <th scope="col" class="text-center">#</th>
+                                    <th scope="col" class="text-center">이름</th>
+                                    <th scope="col" class="text-center">아이디</th>
+                                    <th scope="col" class="text-center">연락처</th>
+                                    <th scope="col" class="text-center">나이</th>
+                                    <th scope="col" class="text-center">등급</th>
+                                    <th scope="col" class="text-center">가입일</th>
+                                    <th scope="col" class="text-center">비고</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="text-center"><input class="form-check-input" type="checkbox"></td>
+                                    <th class="text-center" scope="row" th:text="'1'"></th>
+                                    <td class="text-center">이승연</td>
+                                    <td class="text-center">isaa1107</td>
+                                    <td class="text-center">01012345678</td>
+                                    <td class="text-center">27</td>
+                                    <td class="text-center">CREW</td>
+                                    <td class="text-center"
+                                        th:text="${#dates.format(#calendars.createNow(), 'yyyy-MM-dd')}"></td>
+                                    <td class="text-center"></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center"><input class="form-check-input" type="checkbox"></td>
+                                    <th class="text-center" scope="row" th:text="'2'"></th>
+                                    <td class="text-center" th:text="'박주영'"></td>
+                                    <td class="text-center" th:text="'id'"></td>
+                                    <td class="text-center" th:text="'01012345678'"></td>
+                                    <td class="text-center">25</td>
+                                    <td class="text-center">STAR</td>
+                                    <td class="text-center"
+                                        th:text="${#dates.format(#calendars.createNow(), 'yyyy-MM-dd')}"></td>
+                                    <td class="text-center"></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center"><input class="form-check-input" type="checkbox"></td>
+                                    <th class="text-center" scope="row">3</th>
+                                    <td class="text-center">유지훈</td>
+                                    <td class="text-center">jihun</td>
+                                    <td class="text-center">01012345678</td>
+                                    <td class="text-center">27</td>
+                                    <td class="text-center">THE STAR</td>
+                                    <td class="text-center"
+                                        th:text="${#dates.format(#calendars.createNow(), 'yyyy-MM-dd')}"></td>
+                                    <td class="text-center" th:text="''"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </form>
+
+                        <!-- TODO pagination 페이징 -->
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">이전</a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">다음</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</th:block>
+</html>

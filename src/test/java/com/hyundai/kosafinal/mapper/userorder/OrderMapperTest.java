@@ -39,7 +39,7 @@ public class OrderMapperTest {
     @Test
     public void insertOrderedList() {
         OrderedListDTO dto = new OrderedListDTO("1", "zip", "addr1", "addr2", "박",
-                "01012341234", 10, "TEST1", 45000, new Date(), 0, "배송 메시지", "신용카드");
+                "01012341234", 10, "TEST1", 45000, new Date(), 0, "배송 메시지", "신용카드", "");
         log.info(mapper.insertOrderedList(dto));
 //        log.info(service.insertOrderedList(dto));
     }

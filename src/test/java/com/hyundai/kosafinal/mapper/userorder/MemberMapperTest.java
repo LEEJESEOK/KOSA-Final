@@ -24,9 +24,10 @@ class MemberMapperTest {
     void insertMember() {
         MemberDTO member = new MemberDTO();
 
-        member.setEmail("TEST5");
+        member.setEmail("TEST7708");
         member.setPassword(passwordencoder.encode("1111"));
         member.setName("이승연");
+        member.setGradeId(2);
 //        member.setGender(0);
         Date date = new Date();
 //        member.setBirth(date);
@@ -52,7 +53,7 @@ class MemberMapperTest {
     void insertRoleSet() {
         RoleSetDTO roleset = new RoleSetDTO();
         String role = null;
-        roleset.setUser_email("TEST3");
+        roleset.setUser_email("TEST7788");
         roleset.setRole_set(MemberRole.USER.toString());
         mapper.insertRoleSet(roleset);
     }
@@ -88,7 +89,7 @@ class MemberMapperTest {
 
     @Test
     void deleteMember() {
-        String email = "TEST1";
+        String email = "TEST588";
         mapper.deleteMember(email);
     }
 

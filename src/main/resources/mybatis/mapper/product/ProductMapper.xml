@@ -78,6 +78,10 @@
                                     , #{sortType}) p)
                      )
     </select>
+
+    <select id="selectProductListByQuery">
+
+    </select>
     
     <select id="selectProductDetailById" resultType="com.hyundai.kosafinal.domain.ProductDTO">
         <![CDATA[

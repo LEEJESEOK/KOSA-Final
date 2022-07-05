@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{/head :: head}"></th:block>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<th:block th:replace="~{/include/csrf::csrf}"></th:block>
+<script>
+    $(document).ready(function () {
+        $("#Btn").click(function () {
+            console.log("클릭");
+            $.ajax({
+                type: "POST",
+                data: JSON.stringify({
+                    email: $("#email").val()
+
+                }),
+                url: "/ml2/vip",
+                dataType: "json",
+                contentType: "application/json; charset=UTF-8",
+                success: function () {
+                    // location.href = "/member/signUpComplete"
+                },
+                error: function (request, status, error) {
+                    ajaxError(request, status, error)
+                }
+            });
+        });
+    });
+</script>
+
+<form>
+    <input type="text" id="email" name="email">
+    <input type="button" class="btn gray" value="변경사항 저장" id="Btn">
+</form>
+</body>
+</html>

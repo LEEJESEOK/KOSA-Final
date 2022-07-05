@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="pagetitle">
+    <div class="pagetitle">
+        <h1 th:text="${breadCrumbs[#lists.size(breadCrumbs)-1]}"></h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/biz}">Home</a></li>
+                <th:block th:each="item: ${breadCrumbs}">
+                    <li class="breadcrumb-item"
+                        th:classappend="${item == breadCrumbs[#lists.size(breadCrumbs)-1]}?'active'"
+                        th:text="${item}"></li>
+                </th:block>
+            </ol>
+        </nav>
+    </div>
+    <!-- End Page Title -->
+</th:block>
+</html>

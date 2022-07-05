@@ -71,8 +71,10 @@ public class MypageController {
     }
 
     @GetMapping(value = {"", "/"}) //마이페이지 첫화면
-    public String basic() {
+    public String basic(Model model, Authentication authentication) {
         log.info("마이페이지 이동");
+        System.out.println("등급"+service.findGrade(authentication.getName()));
+        model.addAttribute("grade_id",service.findGrade(authentication.getName()));
         return "mypage/basic";
     }
 

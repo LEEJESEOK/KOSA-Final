@@ -200,7 +200,7 @@
             <div class="order_info clearfix">
                 <div class="order_num">
                     <strong>주문번호 :
-                        <span class="orderCode" th:text="${order.id}"></span><span class="shoppingbagYn">쇼핑백 선택</span></strong>
+                        <span class="orderCode" th:text="${order.orderId}"></span><span class="shoppingbagYn">쇼핑백 선택</span></strong>
                 </div>
                 <div class="order_date">주문일시 : <span th:text="${#dates.format(order.date, 'yyyy.MM.dd HH:mm')}"></span></div>
             </div>
