@@ -1,5 +1,6 @@
 package com.hyundai.kosafinal.mapper.userorder;
 
+import com.hyundai.kosafinal.domain.MemberOrderConfirmDTO;
 import com.hyundai.kosafinal.domain.OrderItemDTO;
 import com.hyundai.kosafinal.domain.OrderedListDTO;
 import com.hyundai.kosafinal.service.OrderService;
@@ -58,5 +59,19 @@ public class OrderMapperTest {
 //    public void cancleOrder() {
 //        mapper.cancleOrder("4", "TEST1");
 //    }
+
+    @Test
+    public void confirmOrderList() {
+        MemberOrderConfirmDTO memberOrderConfirmDTO = mapper.getOrderConfirmByEmail("IL2B3WOT222W", "dbwlgna98");
+        System.out.println(memberOrderConfirmDTO);
+    }
+
+    @Test
+    public void changeUserEmail(){
+        String p = "dbwlngs98";
+        String s1 = p.substring(0,3);
+        String s2 = p.substring(3).replaceAll("[a-z/A-Z/0-9]","*");
+        System.out.println(s1+s2);
+    }
 
 }

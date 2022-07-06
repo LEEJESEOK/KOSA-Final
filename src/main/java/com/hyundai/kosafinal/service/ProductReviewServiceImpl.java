@@ -37,7 +37,7 @@ public class ProductReviewServiceImpl implements ProductReviewService {
 
   @Override
   public void saveProductReview(ProductReviewDTO productReviewDTO, MultipartFile imgFile) {
-    if(!imgFile.isEmpty()){
+    if(imgFile != null){
       this.uploadProfileImage(imgFile, productReviewDTO);
     }
     productReviewMapper.insertProductReview(productReviewDTO);

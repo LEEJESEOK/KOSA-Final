@@ -4,6 +4,12 @@
 
 <mapper namespace="com.hyundai.kosafinal.mapper.userorder.OrderMapper">
 
+    <resultMap id="MemberOrderProductMap" type="com.hyundai.kosafinal.domain.MemberOrderConfirmDTO">
+        <result property="confirm" column="RNUM"/>
+        <result property="pSize" column="PSIZE"/>
+        <result property="pColor" column="PCOLOR"/>
+    </resultMap>
+
     <!-- 주문 목록 조회 -->
     <select id="getOrderedList" resultType="OrderedListDTO">
         SELECT * FROM ordered_list
@@ -73,5 +79,24 @@
     <update id="updatePoint" statementType="CALLABLE">
         { CALL SP_ORDER_UPDATE_POINT(#{userEmail}, #{point}, #{flag}) }
     </update>
+
+    <!-- 유저가 구매한 상품이 있는지 조회 + 배송 완료 -->
+    <select id="getOrderConfirmByEmail" resultMap="MemberOrderProductMap">
+        select
+               ROWNUM as RNUM,
+               ol.PSIZE as PSIZE,
+               ol.PCOLOR as PCOLOR
+        from
+             (
+               select *
+               from ORDER_ITEM o,
+                    ORDERED_LIST l
+               where o.ORDERED_LIST_ID = l.ID
+                 AND o.PID = #{productId}
+                 AND l.USER_EMAIL = #{email}
+                 AND l.STATUS = 2
+            ) ol
+        where ROWNUM = 1
+    </select>
 
 </mapper>

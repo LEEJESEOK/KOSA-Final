@@ -1,5 +1,6 @@
 package com.hyundai.kosafinal.service;
 
+import com.hyundai.kosafinal.domain.MemberOrderConfirmDTO;
 import com.hyundai.kosafinal.domain.OrderItemDTO;
 import com.hyundai.kosafinal.domain.OrderedListDTO;
 import com.hyundai.kosafinal.entity.Criteria;
@@ -89,5 +90,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public int updatePoint(String userEmail, int point, int flag) {
         return mapper.updatePoint(userEmail, point, flag);
+    }
+
+    @Override
+    public MemberOrderConfirmDTO confirmOrderByEmail(String productId, String email) {
+        return mapper.getOrderConfirmByEmail(productId, email);
     }
 }
