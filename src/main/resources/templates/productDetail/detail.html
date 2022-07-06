@@ -8,7 +8,7 @@
   <!-- //head -->
 </head>
 <body oncontextmenu="return false">
-<!--<th:block th:replace="~{/header_category :: header_category}"></th:block>-->
+<th:block th:replace="~{/header_category :: header_category}"></th:block>
 
 <div id="bodyWrap" class="item_detail">
   <div class="adaptive_wrap">
@@ -84,7 +84,7 @@
           //상품 연령 선택시 hidden input에 값 넣기
           function setReviewAge() {
             var ageStr = $('input[name=age]:checked').val();
-            console.log("age : "+ageStr);
+            console.log("age : " + ageStr);
             $("#reviewAge").val(ageStr);
           }
 
@@ -110,6 +110,8 @@
 
             if (imageTag.css('display') == 'none') {
               imageTag.show();
+              var imgUriValue = imageDivTag.children('li:eq(0)').children('img').attr("src");
+              $('#imgUri').val(imgUriValue);
               $('#colorNameVal').val(colorTag.id);
             } else {
               imageTag.hide();
@@ -180,10 +182,7 @@
                      th:text="${productDetail.brand}"></a>
                 </div>
                 <span class="name ko_fir_spel" th:text="${productDetail.name}">
-					<input type="hidden" id="brandName" th:value="${productDetail.brand}">
-					<input type="hidden" id="productName" th:value="${productDetail.name}">
-					<input type="hidden" id="productCode" th:value="${productDetail.id}">
-				</span>
+        				</span>
               </h4>
               <div class="flag">
               </div>
@@ -261,7 +260,7 @@
                   <div class="txt">
                     <input type="hidden" id="colorName" value="">
                     <ul class="color_chip clearfix">
-                      <input type="hidden" class="colorNameVal" id="colorNameVal" >
+                      <input type="hidden" class="colorNameVal" id="colorNameVal">
                       <li th:each="colorChip : ${colorChipList}"
                           th:id="|${colorChip.id}_${colorChip.colorId}|">
                         <a th:id="${colorChip.colorId}"
@@ -348,10 +347,6 @@
                       $("#txtqty").val(qty);
                     }
 								    </script>
-
-                    <input type="hidden" id="erpWorkOrderNumber">
-                    <input type="hidden" id="reserveSalesStockpile">
-                    <input type="hidden" id="erpWorkOrderProdCode">
                   </span>
                 </li>
               </ul>
@@ -402,40 +397,23 @@
               <!--//190508 추가 -->
 
               <form id="addToCartForm" name="addToCartForm"
-                    action="/ko/HANDSOME/MEN/OUTER/DOWN-JUMPER/%ED%9B%84%EB%93%9C-%ED%8C%A8%EB%94%A9-%ED%94%8C%EB%9D%BC%EC%9D%B4%ED%8A%B8-%EC%A0%90%ED%8D%BC/p/TH2B9WJM335N_BK?categoryCode=me03"
-                    method="post"><input type="hidden" maxlength="3" size="1" name="qty"
-                                         class="qty">
-                <input type="hidden" name="productCodePost" value="TH2B9WJM335N_BK">
-                <input type="hidden" id="productCodeType" name="productCodeType"
-                       value="ApparelStyleVariantProduct">
-                <input type="hidden" id="stockCnt" value="0">
-                <input type="hidden" name="storeId" id="storeId" value="">
-                <input type="hidden" name="storePickupDate" id="storePickupDate" value="">
-                <input type="hidden" name="workOrder" id="workOrder" value="">
-                <input type="hidden" name="recommendProduct" id="recommendProduct" value="">
-                <input type="hidden" name="deliveryKind" id="deliveryKind" value="">
-                <input type="hidden" name="streetname" id="streetname" value="">
-                <input type="hidden" name="streetnumber" id="streetnumber" value="">
-                <input type="hidden" name="postalcode" id="postalcode" value="">
-                <input type="hidden" name="quickStreetname" id="quickStreetname" value="">
-                <input type="hidden" name="quickStreetnumber" id="quickStreetnumber" value="">
-                <input type="hidden" name="quickPostalcode" id="quickPostalcode" value="">
-                <input type="hidden" name="fourpmList" id="fourpmList">
-                <input type="hidden" name="athomeList" id="athomeList">
-                <input type="hidden" name="pickupList" id="pickupList">
-                <input type="hidden" name="quickList" id="quickList">
-                <input type="hidden" name="buyNowYn" id="buyNowYn" value="false">
-
+                    th:action="@{/order/orderForm}"
+                    method="post">
+                <input type="hidden" name="brand1" id="brandName" th:value="${productDetail.brand}">
+                <input type="hidden" name="name1" id="productName" th:value="${productDetail.name}">
+                <input type="hidden" name="pid1" id="productCode" th:value="${productDetail.id}">
+                <input type="hidden" name="price1" id="pPrice" th:value="${productDetail.price}">
+                <input type="hidden" name = "image1" id="imgUri">
+                <input type="hidden" name = "pcolor1" id="pcolor1">
+                <input type="hidden" name = "psize1" id="psize1">
+                <input type="hidden" name = "amount1" id="amount1">
+                <input type="hidden" name = "pcount" value="1">
                 <input type="button" value="쇼핑백 담기" class="btn cart1803 float_left ml0"
                        id="addToCartButton"
                        onclick="addToCart();">
-                <div>
-
-                </div>
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <input type="button" onclick="addToOrder()" value="바로주문" class="btn order float_right mr0" id="addToCartBuyNowButton">
               </form>
-              <input type="button" value="바로주문" class="btn order float_right mr0"
-                     id="addToCartBuyNowButton"
-                     onclick="GA_Event('상품_상세','하단 고정 버튼','바로주문');addToCart(true);">
             </div>
 
             <dl class="toggle_type1" style="margin-top:80px;">
@@ -955,15 +933,13 @@
               &nbsp;&nbsp;(마일리지 적립은 오프라인 구매 및 간편회원 제외)</p>
           </div>
           <div class="btnwrap mt40">
-            <input type="button" onclick="popUpCloseInputForm()" id="reviewCancle" value="취소하기" class="btn wt">
+            <input type="button" onclick="popUpCloseInputForm()" id="reviewCancle" value="취소하기"
+                   class="btn wt">
             <input type="button" onclick="reviewInsertForm()" id="reviewWriteSend" value="등록하기"
                    class="btn gray mr0">
           </div>
 
         </fieldset>
-        <!--        <div>-->
-        <!--          <input type="hidden" name="CSRFToken" value="da5c1c2a-2952-4bf1-b844-124d000a1235">-->
-        <!--        </div>-->
       </form>
     </div>
     <a href="javascript:popUpCloseInputForm();" id="reviewCloseBtn"
@@ -1017,18 +993,17 @@
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         data: {
-          productId : productId,
-          email : getLoginUserEmail
+          productId: productId,
+          email: getLoginUserEmail
         },
         success: function (results) {
-          if(results.confirm === 1){
+          if (results.confirm === 1) {
             //주문 사이즈 , 주문 컬러
             productSize = results.psize;
             productColorId = results.pcolor;
             console.log("confirm : " + results.confirm);
             console.log("productSize : " + results.psize);
             console.log("productColorId : " + results.pcolor);
-
 
             //상품평 작성시 : 상품평에 필요한 가격표 form 변경
             var reviewInputTag = $("#reviewProducPrice");
@@ -1042,12 +1017,11 @@
             modal2.style.display = 'block';
             modal2.style.top = '50%';
             modal2.style.top = '50%';
-          }
-          else if(results.confirm === 0){
+          } else if (results.confirm === 0) {
             alert("주문 완료 또는 배송이 완료되지 않았습니다.");
-          }else if(results.confirm === 2){
+          } else if (results.confirm === 2) {
             alert("이미 상품평을 작성하셨습니다.")
-          }else{
+          } else {
             alert("주문 완료후 7일 이내에만 작성이 가능합니다.")
           }
         },
@@ -1058,8 +1032,23 @@
       });
     });
 
+    function addToOrder() {
+      const pcolor = $('#colorNameVal').val();
+      const psize = $('#sizeVal').val();
+      const amount = parseInt($('#txtqty').val());
+      const p_price = $('#pPrice').val() * amount;
+
+      //hidden tag에 넣어주기
+      $('#pcolor1').val(pcolor);
+      $('#psize1').val(psize);
+      $('#amount1').val(amount);
+      $('#pPrice').val(p_price);
+
+      $('#addToCartForm').submit();
+    }
+
     //장바구니 담기 Ajax
-    function addToCart(){
+    function addToCart() {
       const pid = productId;
       const p_color = $('#colorNameVal').val();
       const p_size = $('#sizeVal').val();
@@ -1089,7 +1078,7 @@
 
       $.ajax({
         type: "POST",
-        url: "/cart",
+        url: "/cart/insert",
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(data),
         dataType: "json",
@@ -1116,6 +1105,7 @@
       const rate = $("#reviewForm [name=rating]").val();
       const reviewContents = $("#reviewForm [name=headline]").val();
       const imgFile = document.querySelector("#reviewForm [name=reviewFile]").files[0];
+      const getUserEmail = $("#userEmail").val();
 
       // 값을 채워줘야한다.
       var ctryLarge = $("#ctryLarge").val();
@@ -1124,7 +1114,7 @@
 
       //Multipart/form-data
       const formData = new FormData();
-      formData.append("email", getLoginUserEmail); //임의로 넣은 값
+      formData.append("email", getUserEmail); //임의로 넣은 값
       formData.append("productId", productId);
       formData.append("age", age);
       formData.append("height", height);
@@ -1262,8 +1252,9 @@
               reviewListTag += "<ul>";
               reviewListTag += "<li class=" + "'choice'>" + " • ";
               reviewListTag += "<span>" + review.age + "</span>" + " / " + "<span>"
-                  + review.height+"CM" + "</span>" + " / " + "<span>"+ review.bodyType +"</span>"
-                  + " / " + "<span>평소사이즈 : "+ review.avgSize +"</span>";
+                  + review.height + "CM" + "</span>" + " / " + "<span>" + review.bodyType
+                  + "</span>"
+                  + " / " + "<span>평소사이즈 : " + review.avgSize + "</span>";
               reviewListTag += "</li>";
               reviewListTag += "<li class=" + "'must'>" + " • 구매 정보 : ";
               reviewListTag += "<span>" + review.productColorId + "</span>" + " / " + "<span>"
@@ -1350,8 +1341,9 @@
               reviewListTag += "<ul>";
               reviewListTag += "<li class=" + "'choice'>" + " • ";
               reviewListTag += "<span>" + review.age + "</span>" + " / " + "<span>"
-                  + review.height+"CM" + "</span>" + " / " + "<span>"+ review.bodyType +"</span>"
-                  + " / " + "<span>평소사이즈 : "+ review.avgSize +"</span>";
+                  + review.height + "CM" + "</span>" + " / " + "<span>" + review.bodyType
+                  + "</span>"
+                  + " / " + "<span>평소사이즈 : " + review.avgSize + "</span>";
               reviewListTag += "</li>";
               reviewListTag += "<li class=" + "'must'>" + " • 구매 정보 : ";
               reviewListTag += "<span>" + review.productColorId + "</span>" + " / " + "<span>"
@@ -1432,8 +1424,9 @@
               reviewListTag += "<ul>";
               reviewListTag += "<li class=" + "'choice'>" + " • ";
               reviewListTag += "<span>" + review.age + "</span>" + " / " + "<span>"
-                  + review.height+"CM" + "</span>" + " / " + "<span>"+ review.bodyType +"</span>"
-                  + " / " + "<span>평소사이즈 : "+ review.avgSize +"</span>";
+                  + review.height + "CM" + "</span>" + " / " + "<span>" + review.bodyType
+                  + "</span>"
+                  + " / " + "<span>평소사이즈 : " + review.avgSize + "</span>";
               reviewListTag += "</li>";
               reviewListTag += "<li class=" + "'must'>" + " • 구매 정보 : ";
               reviewListTag += "<span>" + review.productColorId + "</span>" + " / " + "<span>"
