@@ -1,5 +1,6 @@
 package com.hyundai.kosafinal.service;
 
+import com.hyundai.kosafinal.domain.MemberOrderConfirmDTO;
 import com.hyundai.kosafinal.domain.OrderItemDTO;
 import com.hyundai.kosafinal.domain.OrderedListDTO;
 import com.hyundai.kosafinal.entity.Criteria;
@@ -21,7 +22,6 @@ public interface OrderService {
     // 주문 추가
     public String insertOrderedList(OrderedListDTO dto);
 
-
     // 주문 아이템 추가
     public String insertOrderItem(OrderItemDTO dto);
 
@@ -42,5 +42,7 @@ public interface OrderService {
 
     // 포인트 변경
     public int updatePoint(String userEmail, int point, int flag);
+
+    public MemberOrderConfirmDTO confirmOrderByEmail(String productId, String email);
 
 }

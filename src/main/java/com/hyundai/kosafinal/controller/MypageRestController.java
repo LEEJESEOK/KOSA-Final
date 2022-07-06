@@ -1,5 +1,6 @@
 package com.hyundai.kosafinal.controller;
 
+import com.hyundai.kosafinal.domain.AuthMemberDTO;
 import com.hyundai.kosafinal.domain.MemberDTO;
 import com.hyundai.kosafinal.domain.MypageReviewDTO;
 import com.hyundai.kosafinal.domain.ReplyDTO;
@@ -9,6 +10,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -31,21 +33,24 @@ public class MypageRestController {
 
     // 1:1 문의 게시글 목록 조회
     @GetMapping("/review/all")
-    public ResponseEntity<List<MypageReviewDTO>> getMypageReviewList() {
+    public ResponseEntity<List<MypageReviewDTO>> getMypageReviewList(@AuthenticationPrincipal AuthMemberDTO authentication) {
+        // 회원 정보 찾기
+        String userEmail = authentication.getEmail();
         ResponseEntity<List<MypageReviewDTO>> entry = null;
-        entry = new ResponseEntity<List<MypageReviewDTO>>(service.getList("TEST1"), HttpStatus.OK);
-        log.info(entry);
+        entry = new ResponseEntity<List<MypageReviewDTO>>(service.getList(userEmail), HttpStatus.OK);
+        log.info("문의글 목록 : " + entry);
 
         return entry;
     }
 
     // 1:1 문의 작성
     @PostMapping("/review/register")
-    public boolean insert(@RequestBody MypageReviewDTO dto) {
-        dto.setUserEmail("TEST1");
-        log.info(dto);
+    public boolean insert(@RequestBody MypageReviewDTO dto, @AuthenticationPrincipal AuthMemberDTO authentication) {
+        // 회원 정보 찾기
+        String userEmail = authentication.getEmail();
+        dto.setUserEmail(userEmail);
         service.insert(dto);
-        log.info("INSERT 완료 : " + dto);
+        log.info("문의글 작성 : " + dto);
 
         return true;
     }
@@ -55,7 +60,7 @@ public class MypageRestController {
     public ResponseEntity<ReplyDTO> getMypageReviewReply(@PathVariable int id) {
         ResponseEntity<ReplyDTO> entry = null;
         entry = new ResponseEntity<ReplyDTO>(service.getReply(id), HttpStatus.OK);
-        log.info(entry);
+        log.info("문의 답글 : " + entry);
 
         return entry;
     }

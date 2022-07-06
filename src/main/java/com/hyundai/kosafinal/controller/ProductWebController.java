@@ -1,12 +1,20 @@
 package com.hyundai.kosafinal.controller;
 
+import com.hyundai.kosafinal.domain.AuthMemberDTO;
+import com.hyundai.kosafinal.domain.Member2DTO;
 import com.hyundai.kosafinal.domain.ProductDTO;
 import com.hyundai.kosafinal.domain.ProductReviewDTO;
+import com.hyundai.kosafinal.service.MemberService;
 import com.hyundai.kosafinal.service.ProductDetailService;
 import com.hyundai.kosafinal.service.ProductReviewService;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,16 +28,20 @@ public class ProductWebController {
 
   private ProductReviewService productReviewService;
 
+  private MemberService mService;
+
   public ProductWebController(
     ProductDetailService productDetailService,
-    ProductReviewService productReviewService
+    ProductReviewService productReviewService,
+    MemberService mService
   ) {
     this.productDetailService = productDetailService;
     this.productReviewService = productReviewService;
+    this.mService = mService;
   }
 
   @RequestMapping("/product/detail/{productId}")
-  public String getSignupPage(Model model, @PathVariable("productId") String productId)
+  public String getSignupPage(Model model, @PathVariable("productId") String productId, Authentication authentication)
   {
     //컬러칩 ID + URI
     List<ProductDTO> colorList = productDetailService.getColorsChip(productId);
@@ -49,7 +61,6 @@ public class ProductWebController {
       for(ProductDTO product : productDTOList){
         if(color.getColorId().equals(product.getColorId())){
           colorImageList.add(product);
-          System.out.println("  색   "+color.getColorId() +"  아이디  "+product.getId());
           break;
         }
       }
@@ -74,6 +85,12 @@ public class ProductWebController {
     model.addAttribute("reviewCnt", reviewDTOList.size());
     model.addAttribute("imgCnt", imgCnt);
     model.addAttribute("textCnt", textCnt);
+
+    if(authentication != null){
+      Member2DTO member = mService.findByEmail(authentication.getName());
+      String userEmail = member.getEmail();
+      model.addAttribute("userEmail", userEmail);
+    }
 
     return "productDetail/detail";
   }

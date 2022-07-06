@@ -45,11 +45,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .antMatchers("/member/login").permitAll() //login.html은 모든 사용자가 볼 수 있다.
-                .antMatchers("/mypage/modify").hasRole("USER")
-                .antMatchers("/mypage").hasRole("USER");
+                .antMatchers("/cart/*").hasRole("USER")
+                .antMatchers("/order/*").hasRole("USER")
+                .antMatchers("/mypage/*").hasRole("USER");
 
-        //일반 사용자 로그인, 로그인 페이지 우회
+        //일반 사용자 로그인
         http.formLogin().loginPage("/member/login")
                 .loginProcessingUrl("/login")
                 .usernameParameter("email") //DB의 Member 테이블과 연동하기 위해 username을 email로 설정한다.
@@ -64,9 +64,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         //소셜 로그인 (카카오)
 
-        // csrf 토큰 비활성화
+        // csrf 설정
         http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
-
 
         //로그아웃
         http.logout().logoutUrl("/logout")
