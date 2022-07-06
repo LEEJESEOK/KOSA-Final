@@ -46,10 +46,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/member/login").permitAll() //login.html은 모든 사용자가 볼 수 있다.
                 .antMatchers("/product_review/insert").permitAll()
                 .antMatchers("/product/detail/{productId}").permitAll()
-                .antMatchers("/cart").hasRole("USER")
-                .antMatchers("/board/board").hasRole("USER")
-                .antMatchers("/mypage/modify").hasRole("USER")
-                .antMatchers("/mypage").hasRole("USER");
+                .antMatchers("/cart/*").hasRole("USER")
+                .antMatchers("/order/*").hasRole("USER")
+                .antMatchers("/mypage/*").hasRole("USER");
         //일반 사용자 로그인, 로그인 페이지 우회
         http.formLogin().loginPage("/member/login")
                 .loginProcessingUrl("/login")
