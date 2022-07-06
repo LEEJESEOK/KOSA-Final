@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/logo}">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <th:block th:replace="~{/fragment/head :: head}"></th:block>
+    <title>회원가입 | 더한섬닷컴</title>
+
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script>
         <!-- 주소 API include -->
@@ -342,9 +340,6 @@
                     ($("#selDay").val()))
                 // TODO 생년월일
                 if (vc.isValid()) {
-                    let gender_check;
-                    if($("#gender option:selected").text()==="남"){ gender_check=1;}
-                    else if($("#gender option:selected").text()==="여"){gender_check=2;}
 
                     $.ajax({
                         type: "POST",
@@ -352,7 +347,7 @@
                             email: $("#email").val(),
                             password: $("#pw").val(),
                             name: $("#name").val(),
-                            gender: gender_check,
+                            gender: parseInt($("#gender option:selected").val()),
                             birth1: $("#selYear").val(),
                             birth2: $("#selMonth").val(),
                             birth3: $("#selDay").val().substring(0, 2),
@@ -363,15 +358,16 @@
                             height: $("#height").val(),
                             weight: $("#weight").val()
                         }),
-
                         url: "/member/register",
                         dataType: "json",
                         contentType: "application/json; charset=UTF-8",
-                        success: function () {
+                        success: function (data) {
                              location.href = "/member/signUpComplete"
                         },
                         error: function (request, status, error) {
                             ajaxError(request, status, error)
+                        },complete: function(xhr, status){
+                            console.log(status);
                         }
                     })
 
@@ -583,176 +579,173 @@
         }
     </script>
 </head>
-<body>
-<th:block th:replace="~{/fragment/header_logo::header_logo}"></th:block>
-
-<form id="memberJoinForm" action="/member/register" method="POST">
-    <input type="hidden" name="emailDuplChk" id="emailDuplChk" value="" title="이메일 중복"/>
-    <input type="hidden" name="pwTypeChk" id="pwTypeChk" value="" title="비밀번호 형식"/>
-    <!--    <input type="hidden" name="pwConfirmChk" id="pwConfirmChk" value="" title="비밀번호 일치" />-->
-    <!--    <input type="hidden" id="uid" name="uid" value="isaa1107@gmail.com" />-->
-    <input type="hidden" id="emailAddress" name="emailAddress" value=""/>
-    <!--    <input type="hidden" id="sBirthday" name="sBirthday" value=""/>-->
-    <!--    <input type="hidden" id="gender" name="gender" value=""/>-->
-    <input type="hidden" id="collectionAgreementYN" name="collectionAgreementYN" value=""/>
+<th:block layout:fragment="bodyWrap">
+    <form id="memberJoinForm" action="/member/register" method="POST">
+        <input type="hidden" name="emailDuplChk" id="emailDuplChk" value="" title="이메일 중복"/>
+        <input type="hidden" name="pwTypeChk" id="pwTypeChk" value="" title="비밀번호 형식"/>
+        <!--    <input type="hidden" name="pwConfirmChk" id="pwConfirmChk" value="" title="비밀번호 일치" />-->
+        <!--    <input type="hidden" id="uid" name="uid" value="isaa1107@gmail.com" />-->
+        <input type="hidden" id="emailAddress" name="emailAddress" value=""/>
+        <!--    <input type="hidden" id="sBirthday" name="sBirthday" value=""/>-->
+        <!--    <input type="hidden" id="gender" name="gender" value=""/>-->
+        <input type="hidden" id="collectionAgreementYN" name="collectionAgreementYN" value=""/>
 
 
-    <div id="bodyWrap">
-        <!--title-->
-        <h3 class="cnts_title"><span>회원가입</span></h3>
-        <div class="sub_container">
-            <div class="join_title">
-                <p class="title">고객님의 회원정보를 입력해주세요.</p>
-            </div>
-            <fieldset>
-                <legend>회원정보입력</legend>
-                <div class="box_type_1">
-                    <div class="title_wrap clearfix">
-                        <h4 class="float_left">회원정보</h4>
-                        <p class="reqd_txt float_right"><strong class="reqd">*</strong> 표시는 필수항목입니다.</p>
-                    </div>
-                    <div class="tblwrap">
-                        <table class="tbl_wtype1">
-                            <caption>회원가입 입력항목</caption>
-                            <colgroup>
-                                <col style="width:160px"/>
-                                <col/>
-                            </colgroup>
-                            <tbody>
-                            <tr>
-                                <th scope="row"><strong class="reqd">*</strong><label for="email">아이디</label></th>
-                                <td>
-                                    <input type="text" style="width:120px" title="이메일" id="email">
-                                    <input type="button" class="btn add_s" id="idDubChkBtn" value="중복확인"
-                                           onclick="dupCheck()">
-                                    <span class="guide_comment" id="emailMsg"></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row"><strong class="reqd">*</strong><label for="pw">비밀번호</label></th>
-                                <td>
-                                    <input type="password" id="pw" name="passwd" style="width:150px" title="비밀번호"/>
-                                    <span class="guide_comment lh_30" id="pwMsg"></span>
-                                    <span class="guide_comment lh_30" id="pwcapsLockMsg"></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row"><strong class="reqd">*</strong><label for="name">이름</label></th>
-                                <td>
-                                    <input type="text" style="width:120px" id="name" name="name"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row"><strong class="reqd">*</strong><label for="birth">생년월일</label></th>
-                                <td id="birth">
-                                    <select style="width:80px" id="selYear" title="년도">
-                                        <option value="">년</option>
-                                    </select>
-                                    <select style="width:80px" id="selMonth" title="월">
-                                        <option value="">월</option>
-                                        <option value="01">01</option>
-                                        <option value="02">02</option>
-                                        <option value="03">03</option>
-                                        <option value="04">04</option>
-                                        <option value="05">05</option>
-                                        <option value="06">06</option>
-                                        <option value="07">07</option>
-                                        <option value="08">08</option>
-                                        <option value="09">09</option>
-                                        <option value="10">10</option>
-                                        <option value="11">11</option>
-                                        <option value="12">12</option>
-                                    </select>
-                                    <select style="width:80px" id="selDay" title="일">
-                                        <option value="">일</option>
-                                        <option value="01">01</option>
-                                        <option value="02">02</option>
-                                        <option value="03">03</option>
-                                        <option value="04">04</option>
-                                        <option value="05">05</option>
-                                        <option value="06">06</option>
-                                        <option value="07">07</option>
-                                        <option value="08">08</option>
-                                        <option value="09">09</option>
-                                        <option value="10">10</option>
-                                        <option value="11">11</option>
-                                        <option value="12">12</option>
-                                        <option value="13">13</option>
-                                        <option value="14">14</option>
-                                        <option value="15">15</option>
-                                        <option value="16">16</option>
-                                        <option value="17">17</option>
-                                        <option value="18">18</option>
-                                        <option value="19">19</option>
-                                        <option value="20">20</option>
-                                        <option value="21">21</option>
-                                        <option value="22">22</option>
-                                        <option value="23">23</option>
-                                        <option value="24">24</option>
-                                        <option value="25">25</option>
-                                        <option value="26">26</option>
-                                        <option value="27">27</option>
-                                        <option value="28">28</option>
-                                        <option value="29">29</option>
-                                        <option value="30">30</option>
-                                        <option value="31">31</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row"><label for="gender">성별</label></th>
-                                <td>
-                                    <select  id="gender" title="성별">
-                                        <option value="선택" selected>선택</option>
-                                        <option value="">남</option>
-                                        <option value="">여</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row"><label for="tel">연락처(-빼고 입력)</label></th>
-                                <td>
-                                    <input type="text" style="width:120px" id="tel" name="tel"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row"><label for="address">주소</label></th>
-                                <td class="address" id="address">
-                                    <input type="text" id="zipcode" disabled>
-                                    <input type="button" class="btn add_s" onclick="searchAddress()" value="우편번호찾기"><br>
-                                    <input type="text" id="address1" name="address1" size="60" disabled><br>
-                                    <input type="text" id="address2" name="address2" size="60">
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <th scope="row"><label for="height">키(cm)</label></th>
-                                <td>
-                                    <input type="text" style="width:120px" id="height" name="height"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row"><label for="weight">체중(kg)</label></th>
-                                <td>
-                                    <input type="text" style="width:120px" id="weight" name="weight"/>
-                                </td>
-                            </tr>
-
-                            </tbody>
-                        </table>
-                    </div>
-
-
-                    <div class="btnwrap">
-                        <input type="button" value="취소" class="btn wt" id="cancleBtn"/>
-                        <input type="button" value="회원가입" class="btn gray mr0" id="joinBtn"/>
-                    </div>
+        <div id="bodyWrap">
+            <!--title-->
+            <h3 class="cnts_title"><span>회원가입</span></h3>
+            <div class="sub_container">
+                <div class="join_title">
+                    <p class="title">고객님의 회원정보를 입력해주세요.</p>
                 </div>
-            </fieldset>
+                <fieldset>
+                    <legend>회원정보입력</legend>
+                    <div class="box_type_1">
+                        <div class="title_wrap clearfix">
+                            <h4 class="float_left">회원정보</h4>
+                            <p class="reqd_txt float_right"><strong class="reqd">*</strong> 표시는 필수항목입니다.</p>
+                        </div>
+                        <div class="tblwrap">
+                            <table class="tbl_wtype1">
+                                <caption>회원가입 입력항목</caption>
+                                <colgroup>
+                                    <col style="width:160px"/>
+                                    <col/>
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <th scope="row"><strong class="reqd">*</strong><label for="email">아이디</label></th>
+                                    <td>
+                                        <input type="text" style="width:120px" title="이메일" id="email">
+                                        <input type="button" class="btn add_s" id="idDubChkBtn" value="중복확인"
+                                               onclick="dupCheck()">
+                                        <span class="guide_comment" id="emailMsg"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><strong class="reqd">*</strong><label for="pw">비밀번호</label></th>
+                                    <td>
+                                        <input type="password" id="pw" name="passwd" style="width:150px" title="비밀번호"/>
+                                        <span class="guide_comment lh_30" id="pwMsg"></span>
+                                        <span class="guide_comment lh_30" id="pwcapsLockMsg"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><strong class="reqd">*</strong><label for="name">이름</label></th>
+                                    <td>
+                                        <input type="text" style="width:120px" id="name" name="name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><strong class="reqd">*</strong><label for="birth">생년월일</label></th>
+                                    <td id="birth">
+                                        <select style="width:80px" id="selYear" title="년도">
+                                            <option value="">년</option>
+                                        </select>
+                                        <select style="width:80px" id="selMonth" title="월">
+                                            <option value="">월</option>
+                                            <option value="01">01</option>
+                                            <option value="02">02</option>
+                                            <option value="03">03</option>
+                                            <option value="04">04</option>
+                                            <option value="05">05</option>
+                                            <option value="06">06</option>
+                                            <option value="07">07</option>
+                                            <option value="08">08</option>
+                                            <option value="09">09</option>
+                                            <option value="10">10</option>
+                                            <option value="11">11</option>
+                                            <option value="12">12</option>
+                                        </select>
+                                        <select style="width:80px" id="selDay" title="일">
+                                            <option value="">일</option>
+                                            <option value="01">01</option>
+                                            <option value="02">02</option>
+                                            <option value="03">03</option>
+                                            <option value="04">04</option>
+                                            <option value="05">05</option>
+                                            <option value="06">06</option>
+                                            <option value="07">07</option>
+                                            <option value="08">08</option>
+                                            <option value="09">09</option>
+                                            <option value="10">10</option>
+                                            <option value="11">11</option>
+                                            <option value="12">12</option>
+                                            <option value="13">13</option>
+                                            <option value="14">14</option>
+                                            <option value="15">15</option>
+                                            <option value="16">16</option>
+                                            <option value="17">17</option>
+                                            <option value="18">18</option>
+                                            <option value="19">19</option>
+                                            <option value="20">20</option>
+                                            <option value="21">21</option>
+                                            <option value="22">22</option>
+                                            <option value="23">23</option>
+                                            <option value="24">24</option>
+                                            <option value="25">25</option>
+                                            <option value="26">26</option>
+                                            <option value="27">27</option>
+                                            <option value="28">28</option>
+                                            <option value="29">29</option>
+                                            <option value="30">30</option>
+                                            <option value="31">31</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><label for="gender">성별</label></th>
+                                    <td>
+                                        <select  id="gender" title="성별">
+                                            <option value="" selected>선택</option>
+                                            <option value="1">남</option>
+                                            <option value="2">여</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><label for="tel">연락처(-빼고 입력)</label></th>
+                                    <td>
+                                        <input type="text" style="width:120px" id="tel" name="tel"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><label for="address">주소</label></th>
+                                    <td class="address" id="address">
+                                        <input type="text" id="zipcode" disabled>
+                                        <input type="button" class="btn add_s" onclick="searchAddress()" value="우편번호찾기"><br>
+                                        <input type="text" id="address1" name="address1" size="60" disabled><br>
+                                        <input type="text" id="address2" name="address2" size="60">
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th scope="row"><label for="height">키(cm)</label></th>
+                                    <td>
+                                        <input type="text" style="width:120px" id="height" name="height"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><label for="weight">체중(kg)</label></th>
+                                    <td>
+                                        <input type="text" style="width:120px" id="weight" name="weight"/>
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                        <div class="btnwrap">
+                            <input type="button" value="취소" class="btn wt" id="cancleBtn"/>
+                            <input type="button" value="회원가입" class="btn gray mr0" id="joinBtn"/>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <!--//sub container-->
         </div>
-        <!--//sub container-->
-    </div>
-</form>
-<th:block th:replace="~{/fragment/footer::footer}"></th:block>
-</body>
+    </form>
+</th:block>
 </html>

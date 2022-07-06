@@ -1,417 +1,400 @@
 <!-- 마이페이지 1:1 문의글 목록 조회 -->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/logo}">
 <head>
     <title>더한섬닷컴</title>
-
-    <!-- head -->
-    <th:block th:replace="~{/fragment/head :: head}"></th:block>
-    <!-- //head -->
 </head>
-<body oncontextmenu="return false">
-<!-- headerWrap -->
-<th:block th:replace="~{/fragment/header_logo :: header_logo}"></th:block>
-<!-- //headerWrap -->
-
-<script>
-    // jQuery 충돌 방지
-    var arkQuery = $.noConflict(true);
-</script>
-
-<script type="text/javascript">
-    //<![CDATA[
-    $(document).ready(function () {
-        $('#smsAlarmReceiveYN').click(function () {
-            if ($(this).is(':checked')) {
-                if ($("select[name=hp1]").val() == "") {
-                    var lc = new layerAlert("핸드폰번호를 입력하세요");
-                    lc.confirmAction = function () {
-                        $("select[name=hp1]").focus();
-                    };
-                    return false;
-                }
-                if ($('#hp2').val() == "" || isNaN($('#hp2').val())) {
-                    var lc = new layerAlert("핸드폰번호를 입력하세요");
-                    lc.confirmAction = function () {
-                        $('#hp2').focus();
-                    };
-                    return false;
-                }
-                if ($('#hp3').val() == "" || isNaN($('#hp3').val())) {
-                    var lc = new layerAlert("핸드폰번호를 입력하세요");
-                    lc.confirmAction = function () {
-                        $('#hp3').focus();
-                    };
-                    return false;
-                }
-            }
-        });
-
-        // 이메일 변경
-        $("#uidDomainSel").change(function () {
-            $("#emailDomain").val($("#uidDomainSel").val());
-        });
-
-        // (박주영) 취소버튼 눌렀을 때
-        // 확인 버튼 누르면 리스트로 이동
-        $("#cancleBtn").click(function () {
-            var lc = new layerConfirm("문의 내용 작성을 취소하시겠습니까?");
-            lc.confirmAction = function () {
-                location.href = "/mypage/reviewList";
-            };
-        });
-
-        //(박주영) 등록버튼 눌렀을 때
-        $("#registerBtn").click(function () {
-            registerMypageReview();
-        });
-
-        // (박주영) 문의 등록하는 함수
-        function registerMypageReview() {
-            // 필수항목 확인
-            if ($("select[name=largeClassificationCode]").val() == "") {
-                var lc = new layerAlert("대분류를 선택해주시길 바랍니다.");
-                lc.confirmAction = function () {
-                    $('#largeClassificationCode').focus();
-                };
-                return false;
-            }
-            if ($('#subject').val() == "") {
-                var lc = new layerAlert("문의제목을 입력해주시길 바랍니다.");
-                lc.confirmAction = function () {
-                    $('#subject').focus();
-                };
-                return false;
-            }
-            if ($('#contents').val() == "") {
-                var lc = new layerAlert("문의내용을 입력해주시길 바랍니다.");
-                lc.confirmAction = function () {
-                    $('#contents').focus();
-                };
-                return false;
-            }
-            if ($('#email').val() == "") {
-                var lc = new layerAlert("이메일아이디를 입력해주시길 바랍니다.");
-                lc.confirmAction = function () {
-                    $('#email').focus();
-                };
-                return false;
-            }
-            if ($('#emailDomain').val() == "") {
-                var lc = new layerAlert("이메일도메인을 입력해주시길 바랍니다.");
-                lc.confirmAction = function () {
-                    $('#emailDomain').focus();
-                };
-                return false;
-            }
-            if ($('#smsAlarmReceiveYN').is(':checked')) {
-                // 2017-03-08, 이현승, 전화번호데이터검증
-                //==>>
-                var hpCheckResult = phoneNumbericCheck();
-                if (hpCheckResult != "SUCCESS") {
-                    var lc = new layerAlert("전화번호는 숫자만 입력가능 합니다.");
-                    lc.confirmAction = function () {
-                        $('#' + hpCheckResult).focus();
-                    };
-                    return;
-                }
-                //<<==
-                if ($("select[name=hp1]").val() == "") {
-                    var lc = new layerAlert("핸드폰번호를 입력하세요");
-                    lc.confirmAction = function () {
-                        $("select[name=hp1]").focus();
-                    };
-                    return false;
-                }
-                if ($('#hp2').val() == "" || isNaN($('#hp2').val())) {
-                    var lc = new layerAlert("핸드폰번호를 입력하세요");
-                    lc.confirmAction = function () {
-                        $('#hp2').focus();
-                    };
-                    return false;
-                }
-                if ($('#hp3').val() == "" || isNaN($('#hp3').val())) {
-                    var lc = new layerAlert("핸드폰번호를 입력하세요");
-                    lc.confirmAction = function () {
-                        $('#hp3').focus();
-                    };
-                    return false;
-                }
-            }
-
-            // 문의 내용 개행 넣어서 재설정
-            var dbTxt = $('#contents').val();
-            var replacement = replaceAll(dbTxt, /\n/g, '<br/>');
-            $('#contents').val(replacement);
-
-            $.ajax({
-                type: "POST",
-                url: "/mypage/review/register",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                data: JSON.stringify({
-                    title: $('#subject').val(),
-                    content: $('#contents').val(),
-                    category: $("#largeClassificationCode option:checked").text()
-                }),
-                success: function () {
-                    location.replace("/mypage/reviewInsertComplete");
-                },
-                error: function (request, status, error) {
-                    alert("Ajax 통신 에러 발생");
-                    alert(error);
-                },
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader(csrf_header, csrf_token);
+<th:block layout:fragment="script">
+    <script type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function () {
+            $('#smsAlarmReceiveYN').click(function () {
+                if ($(this).is(':checked')) {
+                    if ($("select[name=hp1]").val() == "") {
+                        var lc = new layerAlert("핸드폰번호를 입력하세요");
+                        lc.confirmAction = function () {
+                            $("select[name=hp1]").focus();
+                        };
+                        return false;
+                    }
+                    if ($('#hp2').val() == "" || isNaN($('#hp2').val())) {
+                        var lc = new layerAlert("핸드폰번호를 입력하세요");
+                        lc.confirmAction = function () {
+                            $('#hp2').focus();
+                        };
+                        return false;
+                    }
+                    if ($('#hp3').val() == "" || isNaN($('#hp3').val())) {
+                        var lc = new layerAlert("핸드폰번호를 입력하세요");
+                        lc.confirmAction = function () {
+                            $('#hp3').focus();
+                        };
+                        return false;
+                    }
                 }
             });
 
-        }
+            // 이메일 변경
+            $("#uidDomainSel").change(function () {
+                $("#emailDomain").val($("#uidDomainSel").val());
+            });
 
-        var ph = "문의하실 상품의 상품명/제품코드/사이즈/컬러를 정확히 적어주세요.\n\n";
-        ph += "주문하신 상품이라면 주문번호와 문의 하실 상품명/제품코드/사이즈/컬러와 함께 궁금하신 사항을 적어 주시면\n";
+            // (박주영) 취소버튼 눌렀을 때
+            // 확인 버튼 누르면 리스트로 이동
+            $("#cancleBtn").click(function () {
+                var lc = new layerConfirm("문의 내용 작성을 취소하시겠습니까?");
+                lc.confirmAction = function () {
+                    location.href = "/mypage/reviewList";
+                };
+            });
 
-        ph += "정확한 답변을 드리는데 도움이 됩니다.";
-        ph += "\n";
+            //(박주영) 등록버튼 눌렀을 때
+            $("#registerBtn").click(function () {
+                registerMypageReview();
+            });
 
-        ph += '\n반품접수는 마이페이지 주문내역에서 “반품 신청“ 버튼을 클릭하여 반품을 접수해주셔야 합니다.';
-
-        $("#contents").attr("placeholder", ph);
-        $("#contents").focus(function () {
-            $("#contents").attr("placeholder", "");
-        });
-        $("#contents").focusout(function () {
-            $("#contents").attr("placeholder", ph);
-        });
-
-        var hp1 = '010';
-        $("select#hp1 option").each(function () {
-            this.selected = (this.text == hp1);
-        });
-
-        $(".btn_close").on("click", function () {
-            hideShowLayer();
-            $(".popwrap").hide();
-        });
-
-    });
-
-    //팝업레이아웃숨김
-    function hideShowLayer() {
-        $("#productLayer .layerBg").removeClass("white");
-        $("#productLayer").hide();
-        $("#popwrap").hide();
-    }
-
-    function replaceAll(str, target, replacement) {
-        return str.split(target).join(replacement);
-    };
-
-    //팝업오픈
-    function viewPopup(v) {
-        var obj = $(v);
-        //var lp=($(window).width()-obj.width())/2;
-        var tp = ($(window).height() - obj.height()) / 2 + $(window).scrollTop();
-        //if(lp < 0) lp=0;
-        if (tp < 0) tp = 0;
-
-        $("#productLayer").show();
-
-        obj.css("top", tp).css("position", "absolute").css("z-index", 101);
-
-        obj.show();
-        $('input:checkbox[name="chkedprodcuct"]:checked').prop("checked", false);
-
-        $('#popwrap').keypress(function (event) {
-            var keycode = (event.keyCode ? event.keyCode : event.which);
-            if (keycode == '13') {
-                $('#btnSearch').click();
-                event.stopPropagation();
-                return false;
-            }
-        });
-    }
-
-    //]]>
-</script>
-
-<!-- bodyWrap -->
-<div id="bodyWrap">
-    <h3 class="cnts_title">
-        <span>1:1 문의 하기</span>
-    </h3>
-    <div class="sub_container clearfix">
-        <!-- lnb -->
-        <th:block th:replace="~{/fragment/lnb :: lnb}"></th:block>
-        <!-- //lnb -->
-        <!-- cnts -->
-        <div class="sub_cnts">
-
-            <style type="text/css">
-                tr.hidden {
-                    display: none;
+            // (박주영) 문의 등록하는 함수
+            function registerMypageReview() {
+                // 필수항목 확인
+                if ($("select[name=largeClassificationCode]").val() == "") {
+                    var lc = new layerAlert("대분류를 선택해주시길 바랍니다.");
+                    lc.confirmAction = function () {
+                        $('#largeClassificationCode').focus();
+                    };
+                    return false;
+                }
+                if ($('#subject').val() == "") {
+                    var lc = new layerAlert("문의제목을 입력해주시길 바랍니다.");
+                    lc.confirmAction = function () {
+                        $('#subject').focus();
+                    };
+                    return false;
+                }
+                if ($('#contents').val() == "") {
+                    var lc = new layerAlert("문의내용을 입력해주시길 바랍니다.");
+                    lc.confirmAction = function () {
+                        $('#contents').focus();
+                    };
+                    return false;
+                }
+                if ($('#email').val() == "") {
+                    var lc = new layerAlert("이메일아이디를 입력해주시길 바랍니다.");
+                    lc.confirmAction = function () {
+                        $('#email').focus();
+                    };
+                    return false;
+                }
+                if ($('#emailDomain').val() == "") {
+                    var lc = new layerAlert("이메일도메인을 입력해주시길 바랍니다.");
+                    lc.confirmAction = function () {
+                        $('#emailDomain').focus();
+                    };
+                    return false;
+                }
+                if ($('#smsAlarmReceiveYN').is(':checked')) {
+                    // 2017-03-08, 이현승, 전화번호데이터검증
+                    //==>>
+                    var hpCheckResult = phoneNumbericCheck();
+                    if (hpCheckResult != "SUCCESS") {
+                        var lc = new layerAlert("전화번호는 숫자만 입력가능 합니다.");
+                        lc.confirmAction = function () {
+                            $('#' + hpCheckResult).focus();
+                        };
+                        return;
+                    }
+                    //<<==
+                    if ($("select[name=hp1]").val() == "") {
+                        var lc = new layerAlert("핸드폰번호를 입력하세요");
+                        lc.confirmAction = function () {
+                            $("select[name=hp1]").focus();
+                        };
+                        return false;
+                    }
+                    if ($('#hp2').val() == "" || isNaN($('#hp2').val())) {
+                        var lc = new layerAlert("핸드폰번호를 입력하세요");
+                        lc.confirmAction = function () {
+                            $('#hp2').focus();
+                        };
+                        return false;
+                    }
+                    if ($('#hp3').val() == "" || isNaN($('#hp3').val())) {
+                        var lc = new layerAlert("핸드폰번호를 입력하세요");
+                        lc.confirmAction = function () {
+                            $('#hp3').focus();
+                        };
+                        return false;
+                    }
                 }
 
-            </style>
+                // 문의 내용 개행 넣어서 재설정
+                var dbTxt = $('#contents').val();
+                var replacement = replaceAll(dbTxt, /\n/g, '<br/>');
+                $('#contents').val(replacement);
 
-            <div class="sub_cnts mt30 ml20">
-                <div class="title_wrap clearfix">
-                    <h4 class="float_left">1:1 문의 등록</h4>
-                    <p class="reqd_txt"><strong class="reqd">*</strong> 표시는 필수항목입니다.</p>
-                </div>
-                <!-- (박주영) 1:1 문의 등록 폼 -->
-                <form id="mypageReviewForm" name="mypageReviewForm">
-                    <fieldset>
-                        <legend>1:1 문의 입력</legend>
-                        <div class="tblwrap">
-                            <table class="tbl_wtype1">
-                                <caption>1:1 문의 입력</caption>
-                                <colgroup>
-                                    <col style="width:140px">
-                                    <col>
-                                </colgroup>
-                                <tbody>
-                                <tr>
-                                    <th scope="row"><strong class="reqd">*</strong>문의 항목</th>
-                                    <td class="storeQue">
-                                        <p>더한섬닷컴 문의</p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row"><strong class="reqd">*</strong>문의 종류</th>
-                                    <td>
-                                        <select id="largeClassificationCode" name="largeClassificationCode"
-                                                title="대분류 선택" style="width:160px">
-                                            <option value="">대분류</option>
-                                            <option value="QA09">행사/이벤트</option>
-                                            <option value="QA07">쿠폰/혜택문의</option>
-                                            <option value="QA02">주문/확인취소</option>
-                                            <option value="QA13">웨딩 프로모션</option>
-                                            <option value="QA06">온라인수선</option>
-                                            <option value="QA17">오프라인 문의</option>
-                                            <option value="QA15">오에라 문의</option>
-                                            <option value="QA01">상품문의</option>
-                                            <option value="QA04">배송관련</option>
-                                            <option value="QA05">반품</option>
-                                            <option value="QA08">기프트카드문의</option>
-                                            <option value="QA10">기타</option>
-                                            <option value="QA16">교환</option>
-                                            <option value="QA11">고객정보</option>
-                                            <option value="QA03">결제/환불문의</option>
-                                            <option value="QA12">현대카드 레드바우처 문의</option>
-                                            <option value="QA14">SYSTEM X BTS 문의</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row"><strong class="reqd">*</strong>문의제목</th>
-                                    <td>
-                                        <input type="text" id="subject" name="subject" title="문의제목" class="w_all">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">
-                                        <strong class="reqd">*</strong>문의 내용<span class="com_txt_p">(2000자 이하)</span>
-                                    </th>
-                                    <td>
-                                        <!-- textarea -->
-                                        <textarea id="contents" name="contents" title="문의내용" rows="20"
-                                                  placeholder="문의하실 상품의 상품명/제품코드/사이즈/컬러를 정확히 적어주세요.&#13;&#10;주문하신 상품이라면 주문번호와 문의 하실 상품명/제품코드/사이즈/컬러와 함께 궁금하신 사항을 적어 주시면 &#13;&#10;정확한 답변을 드리는데 도움이 됩니다.&#13;&#10;반품접수는 마이페이지 주문내역에서 “반품 신청“ 버튼을 클릭하여 반품을 접수해주셔야 합니다."></textarea>
-                                        <!-- //textarea -->
-                                    </td>
-                                </tr>
-                                <!-- popup end -->
+                $.ajax({
+                    type: "POST",
+                    url: "/mypage/review/register",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: JSON.stringify({
+                        title: $('#subject').val(),
+                        content: $('#contents').val(),
+                        category: $("#largeClassificationCode option:checked").text()
+                    }),
+                    success: function () {
+                        location.replace("/mypage/reviewInsertComplete");
+                    },
+                    error: function (request, status, error) {
+                        alert("Ajax 통신 에러 발생");
+                        alert(error);
+                    },
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(csrf_header, csrf_token);
+                    }
+                });
 
-                                <tr>
-                                    <th scope="row" class="th_space">SMS 알림받기</th>
-                                    <td>
-                                        <!-- hp -->
-                                        <select id="hp1" name="hp1" title="휴대폰 번호 앞자리" class="hp_num1">
-                                            <option value="">선택</option>
-                                            <option value="010">010</option>
-                                            <option value="011">011</option>
-                                            <option value="016">016</option>
-                                            <option value="017">017</option>
-                                            <option value="018">018</option>
-                                            <option value="019">019</option>
-                                        </select>
-                                        <div class="form_hyphen">-</div>
-                                        <input type="text" id="hp2" name="hp2" value="" title="휴대폰 번호 가운데자리"
-                                               class="hp_num2" numberonly="true" maxlength="4">
-                                        <div class="form_hyphen">-</div>
-                                        <input type="text" id="hp3" name="hp3" value="" title="휴대폰 번호 뒷자리"
-                                               class="hp_num2" numberonly="true" maxlength="4">
-                                        <!-- //hp -->
-                                        <!-- check -->
-                                        <span class="wtype_comment pt10">
+            }
+
+            var ph = "문의하실 상품의 상품명/제품코드/사이즈/컬러를 정확히 적어주세요.\n\n";
+            ph += "주문하신 상품이라면 주문번호와 문의 하실 상품명/제품코드/사이즈/컬러와 함께 궁금하신 사항을 적어 주시면\n";
+
+            ph += "정확한 답변을 드리는데 도움이 됩니다.";
+            ph += "\n";
+
+            ph += '\n반품접수는 마이페이지 주문내역에서 “반품 신청“ 버튼을 클릭하여 반품을 접수해주셔야 합니다.';
+
+            $("#contents").attr("placeholder", ph);
+            $("#contents").focus(function () {
+                $("#contents").attr("placeholder", "");
+            });
+            $("#contents").focusout(function () {
+                $("#contents").attr("placeholder", ph);
+            });
+
+            var hp1 = '010';
+            $("select#hp1 option").each(function () {
+                this.selected = (this.text == hp1);
+            });
+
+            $(".btn_close").on("click", function () {
+                hideShowLayer();
+                $(".popwrap").hide();
+            });
+
+        });
+
+        //팝업레이아웃숨김
+        function hideShowLayer() {
+            $("#productLayer .layerBg").removeClass("white");
+            $("#productLayer").hide();
+            $("#popwrap").hide();
+        }
+
+        function replaceAll(str, target, replacement) {
+            return str.split(target).join(replacement);
+        };
+
+        //팝업오픈
+        function viewPopup(v) {
+            var obj = $(v);
+            //var lp=($(window).width()-obj.width())/2;
+            var tp = ($(window).height() - obj.height()) / 2 + $(window).scrollTop();
+            //if(lp < 0) lp=0;
+            if (tp < 0) tp = 0;
+
+            $("#productLayer").show();
+
+            obj.css("top", tp).css("position", "absolute").css("z-index", 101);
+
+            obj.show();
+            $('input:checkbox[name="chkedprodcuct"]:checked').prop("checked", false);
+
+            $('#popwrap').keypress(function (event) {
+                var keycode = (event.keyCode ? event.keyCode : event.which);
+                if (keycode == '13') {
+                    $('#btnSearch').click();
+                    event.stopPropagation();
+                    return false;
+                }
+            });
+        }
+
+        //]]>
+    </script>
+</th:block>
+<th:block layout:fragment="bodyWrap">
+    <div id="bodyWrap">
+        <h3 class="cnts_title">
+            <span>1:1 문의 하기</span>
+        </h3>
+        <div class="sub_container clearfix">
+            <!-- lnb -->
+            <th:block th:replace="~{/fragment/lnb :: lnb}"></th:block>
+            <!-- //lnb -->
+            <!-- cnts -->
+            <div class="sub_cnts">
+
+                <style type="text/css">
+                    tr.hidden {
+                        display: none;
+                    }
+
+                </style>
+
+                <div class="sub_cnts mt30 ml20">
+                    <div class="title_wrap clearfix">
+                        <h4 class="float_left">1:1 문의 등록</h4>
+                        <p class="reqd_txt"><strong class="reqd">*</strong> 표시는 필수항목입니다.</p>
+                    </div>
+                    <!-- (박주영) 1:1 문의 등록 폼 -->
+                    <form id="mypageReviewForm" name="mypageReviewForm">
+                        <fieldset>
+                            <legend>1:1 문의 입력</legend>
+                            <div class="tblwrap">
+                                <table class="tbl_wtype1">
+                                    <caption>1:1 문의 입력</caption>
+                                    <colgroup>
+                                        <col style="width:140px">
+                                        <col>
+                                    </colgroup>
+                                    <tbody>
+                                    <tr>
+                                        <th scope="row"><strong class="reqd">*</strong>문의 항목</th>
+                                        <td class="storeQue">
+                                            <p>더한섬닷컴 문의</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><strong class="reqd">*</strong>문의 종류</th>
+                                        <td>
+                                            <select id="largeClassificationCode" name="largeClassificationCode"
+                                                    title="대분류 선택" style="width:160px">
+                                                <option value="">대분류</option>
+                                                <option value="QA09">행사/이벤트</option>
+                                                <option value="QA07">쿠폰/혜택문의</option>
+                                                <option value="QA02">주문/확인취소</option>
+                                                <option value="QA13">웨딩 프로모션</option>
+                                                <option value="QA06">온라인수선</option>
+                                                <option value="QA17">오프라인 문의</option>
+                                                <option value="QA15">오에라 문의</option>
+                                                <option value="QA01">상품문의</option>
+                                                <option value="QA04">배송관련</option>
+                                                <option value="QA05">반품</option>
+                                                <option value="QA08">기프트카드문의</option>
+                                                <option value="QA10">기타</option>
+                                                <option value="QA16">교환</option>
+                                                <option value="QA11">고객정보</option>
+                                                <option value="QA03">결제/환불문의</option>
+                                                <option value="QA12">현대카드 레드바우처 문의</option>
+                                                <option value="QA14">SYSTEM X BTS 문의</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><strong class="reqd">*</strong>문의제목</th>
+                                        <td>
+                                            <input type="text" id="subject" name="subject" title="문의제목" class="w_all">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <strong class="reqd">*</strong>문의 내용<span class="com_txt_p">(2000자 이하)</span>
+                                        </th>
+                                        <td>
+                                            <!-- textarea -->
+                                            <textarea id="contents" name="contents" title="문의내용" rows="20"
+                                                      placeholder="문의하실 상품의 상품명/제품코드/사이즈/컬러를 정확히 적어주세요.&#13;&#10;주문하신 상품이라면 주문번호와 문의 하실 상품명/제품코드/사이즈/컬러와 함께 궁금하신 사항을 적어 주시면 &#13;&#10;정확한 답변을 드리는데 도움이 됩니다.&#13;&#10;반품접수는 마이페이지 주문내역에서 “반품 신청“ 버튼을 클릭하여 반품을 접수해주셔야 합니다."></textarea>
+                                            <!-- //textarea -->
+                                        </td>
+                                    </tr>
+                                    <!-- popup end -->
+
+                                    <tr>
+                                        <th scope="row" class="th_space">SMS 알림받기</th>
+                                        <td>
+                                            <!-- hp -->
+                                            <select id="hp1" name="hp1" title="휴대폰 번호 앞자리" class="hp_num1">
+                                                <option value="">선택</option>
+                                                <option value="010">010</option>
+                                                <option value="011">011</option>
+                                                <option value="016">016</option>
+                                                <option value="017">017</option>
+                                                <option value="018">018</option>
+                                                <option value="019">019</option>
+                                            </select>
+                                            <div class="form_hyphen">-</div>
+                                            <input type="text" id="hp2" name="hp2" value="" title="휴대폰 번호 가운데자리"
+                                                   class="hp_num2" numberonly="true" maxlength="4">
+                                            <div class="form_hyphen">-</div>
+                                            <input type="text" id="hp3" name="hp3" value="" title="휴대폰 번호 뒷자리"
+                                                   class="hp_num2" numberonly="true" maxlength="4">
+                                            <!-- //hp -->
+                                            <!-- check -->
+                                            <span class="wtype_comment pt10">
                                                 <input type="checkbox" id="smsAlarmReceiveYN" name="smsAlarmReceiveYN"
                                                        class="mr5"><label for="ck1">SMS 알람고지</label>
                                             </span>
-                                        <!-- //check -->
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row"><strong class="reqd">*</strong>이메일 답변받기</th>
-                                    <td>
-                                        <!-- email -->
-                                        <input type="text" id="email" name="email" value="" title="이메일 아이디"
-                                               class="em_form">
-                                        <span class="andmail">@</span>
-                                        <input type="text" id="emailDomain" name="emailDomain" value=""
-                                               title="이메일 도메인" class="em_form">
-                                        <select id="uidDomainSel" name="uidDomainSel" class="em_select">
-                                            <option value="">직접입력</option>
-                                            <option value="naver.com">naver.com</option>
-                                            <option value="daum.net">daum.net</option>
-                                            <option value="yahoo.co.kr">yahoo.co.kr</option>
-                                            <option value="lycos.co.kr">lycos.co.kr</option>
-                                            <option value="nate.com">nate.com</option>
-                                            <option value="empas.com">empas.com</option>
-                                            <option value="hotmail.com">hotmail.com</option>
-                                            <option value="msn.com">msn.com</option>
-                                            <option value="gmail.com">gmail.com</option>
-                                            <option value="hanmir.com">hanmir.com</option>
-                                            <option value="chol.net">chol.net</option>
-                                            <option value="korea.com">korea.com</option>
-                                            <option value="netsgo.com">netsgo.com</option>
-                                            <option value="dreamwiz.com">dreamwiz.com</option>
-                                            <option value="hanafos.com">hanafos.com</option>
-                                            <option value="freechal.com">freechal.com</option>
-                                            <option value="hitel.net">hitel.net</option>
-                                        </select>
-                                        <!-- //email -->
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- btn -->
-                        <div class="btnwrap">
-                            <input type="button" id="cancleBtn" value="취소" class="btn wt">
-                            <input type="button" id="registerBtn" value="등록" class="btn gray mr0">
-                        </div>
-                        <!-- //btn -->
-                    </fieldset>
-                </form>
-                <ul class="bul_sty01_li mt60">
-                    <li>문의하신 내용에 대한 답변은 이메일 또는 <a href="/mypage/reviewList"><em class="ft_point01">마이페이지 &gt;
-                        1:1 문의내역</em></a>에서 확인하실 수 있습니다.
-                    </li>
-                    <li>SMS 문자와 이메일로 답변 완료 알림을 받아보실 수 있습니다.</li>
-                </ul>
+                                            <!-- //check -->
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"><strong class="reqd">*</strong>이메일 답변받기</th>
+                                        <td>
+                                            <!-- email -->
+                                            <input type="text" id="email" name="email" value="" title="이메일 아이디"
+                                                   class="em_form">
+                                            <span class="andmail">@</span>
+                                            <input type="text" id="emailDomain" name="emailDomain" value=""
+                                                   title="이메일 도메인" class="em_form">
+                                            <select id="uidDomainSel" name="uidDomainSel" class="em_select">
+                                                <option value="">직접입력</option>
+                                                <option value="naver.com">naver.com</option>
+                                                <option value="daum.net">daum.net</option>
+                                                <option value="yahoo.co.kr">yahoo.co.kr</option>
+                                                <option value="lycos.co.kr">lycos.co.kr</option>
+                                                <option value="nate.com">nate.com</option>
+                                                <option value="empas.com">empas.com</option>
+                                                <option value="hotmail.com">hotmail.com</option>
+                                                <option value="msn.com">msn.com</option>
+                                                <option value="gmail.com">gmail.com</option>
+                                                <option value="hanmir.com">hanmir.com</option>
+                                                <option value="chol.net">chol.net</option>
+                                                <option value="korea.com">korea.com</option>
+                                                <option value="netsgo.com">netsgo.com</option>
+                                                <option value="dreamwiz.com">dreamwiz.com</option>
+                                                <option value="hanafos.com">hanafos.com</option>
+                                                <option value="freechal.com">freechal.com</option>
+                                                <option value="hitel.net">hitel.net</option>
+                                            </select>
+                                            <!-- //email -->
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- btn -->
+                            <div class="btnwrap">
+                                <input type="button" id="cancleBtn" value="취소" class="btn wt">
+                                <input type="button" id="registerBtn" value="등록" class="btn gray mr0">
+                            </div>
+                            <!-- //btn -->
+                        </fieldset>
+                    </form>
+                    <ul class="bul_sty01_li mt60">
+                        <li>문의하신 내용에 대한 답변은 이메일 또는 <a href="/mypage/reviewList"><em class="ft_point01">마이페이지 &gt;
+                            1:1 문의내역</em></a>에서 확인하실 수 있습니다.
+                        </li>
+                        <li>SMS 문자와 이메일로 답변 완료 알림을 받아보실 수 있습니다.</li>
+                    </ul>
+                </div>
             </div>
         </div>
+
+        <div class="layerArea" id="productLayer" style="display:none">
+            <div class="layerBg" tabindex="-1"></div>
+        </div>
+
     </div>
-
-    <div class="layerArea" id="productLayer" style="display:none">
-        <div class="layerBg" tabindex="-1"></div>
-    </div>
-
-</div>
-<!-- //bodyWrap -->
-
-<!-- footerWrap -->
-<th:block th:replace="~{/fragment/footer :: footer}"></th:block>
-<!-- //footerWrap -->
-</body>
+</th:block>
 </html>

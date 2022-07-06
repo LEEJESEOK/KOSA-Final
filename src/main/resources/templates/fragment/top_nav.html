@@ -9,20 +9,13 @@
 
             $().ready(function () {
 
-                $("#logoutBtn").click(function () {
-                    $.ajax({
-                        type: "post",
-                        url: "/logout"
-                    });
-                });
-
                 $('#gnbsearch').click(function () {
                     var searchwords = $('#gnbsearchwords').val();
-                    searchwords = searchwords.replace(/(^\s*)|(\s*$)/g,"");
+                    searchwords = searchwords.replace(/(^\s*)|(\s*$)/g, "");
 
-                    if(searchwords!=""){
-                        location.href="/ko/hssearch?searchwords="+searchwords;
-                    }else{
+                    if (searchwords != "") {
+                        location.href = "/ko/hssearch?searchwords=" + searchwords;
+                    } else {
                         $('#gnbsearchwords').val("");
                         alert("검색어를 입력해주세요.");
                     }
@@ -30,7 +23,11 @@
 
             });
 
-            function searchOn(){
+            function logout() {
+                $("#logoutForm").submit();
+            }
+
+            function searchOn() {
                 searchInit();
                 $('div.gnb_sh_wrap').css("display", "block");
                 $('div.util_menu').css("display", "none");
@@ -38,14 +35,14 @@
 
             }
 
-            function searchOff(){
+            function searchOff() {
 
                 $('div.util_menu').css("display", "block");
                 $('div.gnb_sh_wrap').css("display", "none");
 
             }
 
-            function showTab(){
+            function showTab() {
 
                 $('div.gnb_sh_result').css("display", "block");
 
@@ -55,7 +52,7 @@
             <div class="brand_menu brand_menu1903">
                 <ul class="clearfix">
                     <!-- 선호 브랜드 없음 -->
-                    <li><span class="on"><a href="/static" onclick="GA_Event('공통','탑_네비게이션','HOME')">HOME</a></span>
+                    <li><span class="on"><a href="/" onclick="GA_Event('공통','탑_네비게이션','HOME')">HOME</a></span>
                     </li>
                     <!-- 로그인 상태 -->
                     <p class="brand_menu_guide_text">아래 '브랜드' 메뉴에서 좋아하는 브랜드를 <span
@@ -271,7 +268,11 @@
                 <ul class="clearfix">
                     <!-- 로그인/로그아웃에 따라 다르게 보이게 처리 -->
                     <li sec:authorize="!isAuthenticated()"><a href="/member/login">로그인</a></li>
-                    <li sec:authorize="isAuthenticated()"><a href="" id="logoutBtn">로그아웃</a></li>
+                    <li sec:authorize="isAuthenticated()">
+                        <form id="logoutForm" th:action="@{/logout}" method="post">
+                        </form>
+                        <a href="javascript:void(0)" onclick="logout()" id="logoutBtn">로그아웃</a>
+                    </li>
                     <li class="header_dropmemu mypage">
 
                         <a class="btn" href="/mypage" onclick="GA_Event('공통','헤더_메뉴','마이페이지')">마이페이지</a>

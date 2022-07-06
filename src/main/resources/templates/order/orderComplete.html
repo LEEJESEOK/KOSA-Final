@@ -1,97 +1,83 @@
 <!-- 주문 완료 페이지 -->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/logo}">
 <head>
     <title> 주문완료 | 더한섬닷컴</title>
-
-    <!-- head -->
-    <th:block th:replace="~{/fragment/head :: head}"></th:block>
-    <!-- //head -->
 </head>
+<th:block layout:fragment="script">
 
-<body oncontextmenu="return false">
+</th:block>
+<th:block layout:fragment="bodyWrap">
+    <!-- bodyWrap -->
+    <div id="bodyWrap">
+        <!--title-->
+        <h3 class="cnts_title">
+            <span>주문완료</span>
+        </h3>
+        <!--//title-->
+        <!--sub_container-->
+        <div class="sub_container">
+            <!--title wrap-->
+            <div class="order_title ">
+                <p class="title mt20">주문이 완료되었습니다.</p>
+                <p class="s_title">주문번호 : [[${order.orderId}]] (주문일시 : <span
+                        th:text="${#dates.format(order.date, 'yyyy-MM-dd HH:mm:ss')}"></span>)</p>
+            </div>
+            <!--//title wrap-->
 
-<!-- headerWrap -->
-<th:block th:replace="~{/fragment/header_logo :: header_logo}"></th:block>
-<!-- //headerWrap -->
-
-<script>
-    // jQuery 충돌 방지
-    var arkQuery = $.noConflict(true);
-</script>
-
-<!-- bodyWrap -->
-<div id="bodyWrap">
-    <!--title-->
-    <h3 class="cnts_title">
-        <span>주문완료</span>
-    </h3>
-    <!--//title-->
-    <!--sub_container-->
-    <div class="sub_container">
-        <!--title wrap-->
-        <div class="order_title ">
-            <p class="title mt20">주문이 완료되었습니다.</p>
-            <p class="s_title">주문번호 : [[${order.orderId}]] (주문일시 : <span th:text="${#dates.format(order.date, 'yyyy-MM-dd HH:mm:ss')}"></span>)</p>
+            <!--title wrap & table wrap1-->
+            <div class="title_wrap clearfix">
+                <h4 class="float_left">결제수단</h4>
+            </div>
+            <div class="tblwrap mb40">
+                <table class="tbl_wtype1">
+                    <caption>결제수단</caption>
+                    <colgroup>
+                        <col style="width:140px">
+                        <col>
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <th scope="row" class="th_space">결제수단</th>
+                        <td th:text="${order.payType}"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="th_space">결제금액</th>
+                        <td>[[${#numbers.formatInteger(order.totalPrice, 0, 'COMMA')}]]원</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!--//title wrap & table wrap1-->
+            <!--title wrap & table wrap2-->
+            <div class="title_wrap clearfix mt10">
+                <h4 class="float_left">포인트</h4>
+                <p class="reqd_txt float_right">(배송 완료 시점을 기준으로 지급됩니다.)</p>
+            </div>
+            <div class="tblwrap mb40">
+                <table class="tbl_wtype1">
+                    <caption>한섬마일리지</caption>
+                    <colgroup>
+                        <col style="width:300px">
+                        <col>
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <th scope="row" class="th_space">지급 예정 Point</th>
+                        <td>[[${#numbers.formatInteger(order.totalPrice * 0.01, 0, 'COMMA')}]]P</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!--//title wrap & table wrap2-->
+            <div class="btnwrap order mt20">
+                <a href="/mypage/myorder"><input value="주문내역조회" class="btn wt" type="button"></a>
+                <a href="/"><input value="쇼핑계속하기" class="btn gray mr0" type="button"></a>
+            </div>
         </div>
-        <!--//title wrap-->
-
-        <!--title wrap & table wrap1-->
-        <div class="title_wrap clearfix">
-            <h4 class="float_left">결제수단</h4>
-        </div>
-        <div class="tblwrap mb40">
-            <table class="tbl_wtype1">
-                <caption>결제수단</caption>
-                <colgroup>
-                    <col style="width:140px">
-                    <col>
-                </colgroup>
-                <tbody>
-                <tr>
-                    <th scope="row" class="th_space">결제수단</th>
-                    <td th:text="${order.payType}"></td>
-                </tr>
-                <tr>
-                    <th scope="row" class="th_space">결제금액</th>
-                    <td>[[${#numbers.formatInteger(order.totalPrice, 0, 'COMMA')}]]원</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <!--//title wrap & table wrap1-->
-        <!--title wrap & table wrap2-->
-        <div class="title_wrap clearfix mt10">
-            <h4 class="float_left">포인트</h4>
-            <p class="reqd_txt float_right">(배송 완료 시점을 기준으로 지급됩니다.)</p>
-        </div>
-        <div class="tblwrap mb40">
-            <table class="tbl_wtype1">
-                <caption>한섬마일리지</caption>
-                <colgroup>
-                    <col style="width:300px">
-                    <col>
-                </colgroup>
-                <tbody>
-                <tr>
-                    <th scope="row" class="th_space">지급 예정 Point</th>
-                    <td>[[${#numbers.formatInteger(order.totalPrice * 0.01, 0, 'COMMA')}]]P</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <!--//title wrap & table wrap2-->
-        <div class="btnwrap order mt20">
-            <a href="/mypage/myorder"><input value="주문내역조회" class="btn wt" type="button"></a>
-            <a href="/"><input value="쇼핑계속하기" class="btn gray mr0" type="button"></a>
-        </div>
+        <!--//sub_container-->
     </div>
-    <!--//sub_container-->
-</div>
-<!-- //bodyWrap -->
-
-<!-- footerWrap -->
-<th:block th:replace="~{/fragment/footer :: footer}"></th:block>
-<!-- //footerWrap -->
-</body>
+    <!-- //bodyWrap -->
+</th:block>
 </html>

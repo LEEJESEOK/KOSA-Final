@@ -1,557 +1,555 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/logo}">
 <head>
-    <meta charset="UTF-8">
-    <title>
-        나의주문내역상세 | 더한섬닷컴</title>
-    <!-- head -->
-    <th:block th:replace="~{/fragment/head :: head}"></th:block>
-    <!-- //head -->
+    <title>나의주문내역상세 | 더한섬닷컴</title>
 </head>
+<th:block layout:fragment="script">
+    <script type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function () {
 
-<body oncontextmenu="return false">
+            $("#menuTitle").text("주문 상세 조회");
 
-<th:block th:replace="~{/fragment/header_logo::header_logo}"></th:block>
+            $('.addrModBtn').click(function () {
 
-<script>
-    // jQuery 충돌 방지
-    var arkQuery = $.noConflict(true);
-</script>
+                $l = layerPopup('addrModPop');
+                $l.attr('id', 'addrModPop_clone');
+                $l.find('#code').val($(this).attr('code'));
+                $l.find('#zipCode').val($(this).attr('zip'));
+                $l.find('#address1').val($(this).attr('addr1'));
+                $l.find('#address2').val($(this).attr('addr2'));
 
-<script type="text/javascript">
-    //<![CDATA[
-    $(document).ready(function () {
-
-        $("#menuTitle").text("주문 상세 조회");
-
-        $('.addrModBtn').click(function () {
-
-            $l = layerPopup('addrModPop');
-            $l.attr('id', 'addrModPop_clone');
-            $l.find('#code').val($(this).attr('code'));
-            $l.find('#zipCode').val($(this).attr('zip'));
-            $l.find('#address1').val($(this).attr('addr1'));
-            $l.find('#address2').val($(this).attr('addr2'));
-
-            if (getByteLength($(this).attr('rcname')) > 40) {
-                $l.find('#name').val(subStringBytes($(this).attr('rcname'), 40, 3));
-            } else {
-                $l.find('#name').val($(this).attr('rcname'));
-            }
-            $l.find('#hp1').val($(this).attr('hp1'));
-            $l.find('#hp2').val($(this).attr('hp2'));
-            $l.find('#hp3').val($(this).attr('hp3'));
-            if ($(this).attr('or')) {
-                $l.find('#orderr').val($(this).attr('or'));
-                if ($(this).attr('or') != '배송 전 연락 바랍니다' && $(this).attr('or') != '부재 시 문 앞에 놓아주세요'
-                    && $(this).attr('or') != '부재 시 경비실에 맡겨주세요'
-                    && $(this).attr('or') != '빠른 배송 부탁드립니다'
-                    && $(this).attr('or') != '부재 시 핸드폰으로 연락바랍니다') {
-                    $l.find('.enter-door211026').hide();
-                }
-            }
-            $l.find('#findAddrBtn').click(function () {
-                searchAddressLayer('addrModPop_clone #address1', 'addrModPop_clone #address2', 'addrModPop_clone #zipCode');
-            });
-
-            $("body").unbind('click');
-
-            // 211026 공동현관 출입방법 S
-            $l.find('.input_sumtxt').click(function (e) {
-                $(this).find('~.delivery_comt').toggle(),
-                    e.stopPropagation();
-            });
-
-            // 211026 공동현관 출입방법 E
-            $("body").click(function () {
-                $('.delivery_comt').hide();
-            });
-
-            $l.find(".input_sumtxt input").keydown(function () {
-                $(this).find('~.delivery_comt').hide();
-            });
-
-            $l.find('.deliveryMsg').click(function () {
-                <!-- 211028 공동현관 출입방법 S -->
-                if ($(this).find('a').data('readonly') === 'readonly') {
-                    //배송 메세지 (default)
-                    $l.find('#orderr').val($(this).find('a').attr("deliveryRequestMessage"));
-                    $l.find('#orderr').prop('readonly', true);
-                    $l.find('.enter-door211026').show();
-                } else if ($(this).find('a').data('readonly') === 'write') {
-                    //배송 메세지 (직접입력)
-                    $l.find('#orderr').val("").focus();
-                    $l.find('#orderr').attr('placeholder', $(this).find('a').attr("deliveryRequestMessage"));
-                    $l.find('#orderr').prop('readonly', false);
-                    $l.find('.enter-door211026').hide();
-                } else if ($(this).find('a').data('inputDisplay') === 'block') {
-                    //공동현관 출입방법 (default)
-                    if ($(this).find('a').data('recentryMessage')) {
-                        $(this).parents(".input_sumtxt_box").find('input').val($(this).find('a').data('default'));
-                        $l.find('#frontDoorMessage').val($(this).find('a').data('recentryMessage'))
-                    } else {
-                        $(this).parents(".input_sumtxt_box").find('input').val($(this).find('a').text());
-                        $l.find('#frontDoorMessage').val('')
-                    }
-                    if ($(this).find('a').data('default') === '기타') {
-                        $l.find('#frontDoorMessage').attr('placeholder', '15자 이내로 입력하세요');
-                    } else {
-                        $l.find('#frontDoorMessage').attr('placeholder', '예) #12341234# (최대 15자)');
-                    }
-                    $l.find('.enter_front').show();
-                } else if ($(this).find('a').data('inputDisplay') === 'none') {
-                    //공동현관 출입방법 (자유 출입 가능)
-                    if ($(this).find('a').data('recentryMessage')) {
-                        $(this).parents(".input_sumtxt_box").find('input').val($(this).find('a').data('default'));
-                        $l.find('#frontDoorMessage').val($(this).find('a').data('recentryMessage'))
-                    } else {
-                        $(this).parents(".input_sumtxt_box").find('input').val($(this).find('a').text());
-                        $l.find('#frontDoorMessage').val($(this).find('a').text());
-                    }
-                    $l.find('.enter_front').hide();
+                if (getByteLength($(this).attr('rcname')) > 40) {
+                    $l.find('#name').val(subStringBytes($(this).attr('rcname'), 40, 3));
                 } else {
-                    console.log('else');
+                    $l.find('#name').val($(this).attr('rcname'));
                 }
-                <!-- 211028 공동현관 출입방법 E -->
+                $l.find('#hp1').val($(this).attr('hp1'));
+                $l.find('#hp2').val($(this).attr('hp2'));
+                $l.find('#hp3').val($(this).attr('hp3'));
+                if ($(this).attr('or')) {
+                    $l.find('#orderr').val($(this).attr('or'));
+                    if ($(this).attr('or') != '배송 전 연락 바랍니다' && $(this).attr('or') != '부재 시 문 앞에 놓아주세요'
+                        && $(this).attr('or') != '부재 시 경비실에 맡겨주세요'
+                        && $(this).attr('or') != '빠른 배송 부탁드립니다'
+                        && $(this).attr('or') != '부재 시 핸드폰으로 연락바랍니다') {
+                        $l.find('.enter-door211026').hide();
+                    }
+                }
+                $l.find('#findAddrBtn').click(function () {
+                    searchAddressLayer('addrModPop_clone #address1', 'addrModPop_clone #address2', 'addrModPop_clone #zipCode');
+                });
+
+                $("body").unbind('click');
+
+                // 211026 공동현관 출입방법 S
+                $l.find('.input_sumtxt').click(function (e) {
+                    $(this).find('~.delivery_comt').toggle(),
+                        e.stopPropagation();
+                });
+
+                // 211026 공동현관 출입방법 E
+                $("body").click(function () {
+                    $('.delivery_comt').hide();
+                });
+
+                $l.find(".input_sumtxt input").keydown(function () {
+                    $(this).find('~.delivery_comt').hide();
+                });
+
+                $l.find('.deliveryMsg').click(function () {
+                    <!-- 211028 공동현관 출입방법 S -->
+                    if ($(this).find('a').data('readonly') === 'readonly') {
+                        //배송 메세지 (default)
+                        $l.find('#orderr').val($(this).find('a').attr("deliveryRequestMessage"));
+                        $l.find('#orderr').prop('readonly', true);
+                        $l.find('.enter-door211026').show();
+                    } else if ($(this).find('a').data('readonly') === 'write') {
+                        //배송 메세지 (직접입력)
+                        $l.find('#orderr').val("").focus();
+                        $l.find('#orderr').attr('placeholder', $(this).find('a').attr("deliveryRequestMessage"));
+                        $l.find('#orderr').prop('readonly', false);
+                        $l.find('.enter-door211026').hide();
+                    } else if ($(this).find('a').data('inputDisplay') === 'block') {
+                        //공동현관 출입방법 (default)
+                        if ($(this).find('a').data('recentryMessage')) {
+                            $(this).parents(".input_sumtxt_box").find('input').val($(this).find('a').data('default'));
+                            $l.find('#frontDoorMessage').val($(this).find('a').data('recentryMessage'))
+                        } else {
+                            $(this).parents(".input_sumtxt_box").find('input').val($(this).find('a').text());
+                            $l.find('#frontDoorMessage').val('')
+                        }
+                        if ($(this).find('a').data('default') === '기타') {
+                            $l.find('#frontDoorMessage').attr('placeholder', '15자 이내로 입력하세요');
+                        } else {
+                            $l.find('#frontDoorMessage').attr('placeholder', '예) #12341234# (최대 15자)');
+                        }
+                        $l.find('.enter_front').show();
+                    } else if ($(this).find('a').data('inputDisplay') === 'none') {
+                        //공동현관 출입방법 (자유 출입 가능)
+                        if ($(this).find('a').data('recentryMessage')) {
+                            $(this).parents(".input_sumtxt_box").find('input').val($(this).find('a').data('default'));
+                            $l.find('#frontDoorMessage').val($(this).find('a').data('recentryMessage'))
+                        } else {
+                            $(this).parents(".input_sumtxt_box").find('input').val($(this).find('a').text());
+                            $l.find('#frontDoorMessage').val($(this).find('a').text());
+                        }
+                        $l.find('.enter_front').hide();
+                    } else {
+                        console.log('else');
+                    }
+                    <!-- 211028 공동현관 출입방법 E -->
+                });
+
+                // chkInputCount($l.find('#orderr'), $l.find('#textCnt'), 20);
+                // chkInputCount($l.find('#frontDoorMessage'), $l.find('#frontDoorMessageLength'), 15);
+
+
+                $l.find("[numberOnly=true]").keypress(function (event) {
+                    if (!isNum(event.which)) return false;
+                }).keydown(function (event) {
+                    if (!isNum(event.which)) return false;
+                });
+
+
+                $l.find('#cancleBtn').click(function () {
+                    $l.find('.btn_close').click();
+                });
+
+                $l.find('#applyBtn').click(function () {
+                    $l.find("#tel").val($l.find("#hp1").val() + $l.find("#hp2").val() + $l.find("#hp3").val());
+
+                    addrModFn();
+                    $l.find('.btn_close').click();
+                });
+
+
             });
-
-            // chkInputCount($l.find('#orderr'), $l.find('#textCnt'), 20);
-            // chkInputCount($l.find('#frontDoorMessage'), $l.find('#frontDoorMessageLength'), 15);
-
-
-            $l.find("[numberOnly=true]").keypress(function (event) {
-                if (!isNum(event.which)) return false;
-            }).keydown(function (event) {
-                if (!isNum(event.which)) return false;
-            });
-
-
-            $l.find('#cancleBtn').click(function () {
-                $l.find('.btn_close').click();
-            });
-
-            $l.find('#applyBtn').click(function () {
-                $l.find("#tel").val($l.find("#hp1").val() + $l.find("#hp2").val() + $l.find("#hp3").val());
-
-                addrModFn();
-                $l.find('.btn_close').click();
-            });
-
 
         });
+        var addrModFn = function () {
+            var paramDatas = $("#addrModPop_clone #addrModForm").serialize();
+            console.log(paramDatas);
+            $.ajax({
+                type: "post",
+                url: "[[@{/order/updateDelivery}]]",
+                data: paramDatas,
+                success: function (result) {
+                    if (result) {
+                        layerAlert("배송지 수정을 완료하였습니다.", true);
+                    } else {
+                        layerAlert("배송지 수정을 실패하였습니다.");
+                    }
 
-    });
-    var addrModFn = function () {
-        var paramDatas = $("#addrModPop_clone #addrModForm").serialize();
-        console.log(paramDatas);
-        $.ajax({
-            type: "post",
-            url: "[[@{/order/updateDelivery}]]",
-            data: paramDatas,
-            success: function (result) {
-                if (result) {
-                    layerAlert("배송지 수정을 완료하였습니다.", true);
-                } else {
-                    layerAlert("배송지 수정을 실패하였습니다.");
+                },
+                error: function (request, status, error) {
+                    alert(error);
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(csrf_header, csrf_token);
                 }
-
-            },
-            error: function (request, status, error) {
-                alert(error);
-            },
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader(csrf_header, csrf_token);
-            }
-        });
+            });
 
 
-    };
+        };
 
 
-    function receiptRequest(gbn) {
+        function receiptRequest(gbn) {
 
-        var afterPay = "false";
-        var lastPayId = (afterPay == "true") ? "" : "StdpayCARDhandsomep120220623091859504040";
-        var lastPayAmount = (afterPay == "true") ? "" : "10000.0";
-        showReceipt('https://iniweb.inicis.com/app/publication/apReceipt.jsp?noTid=' + lastPayId, '1', '유지훈', lastPayAmount);
+            var afterPay = "false";
+            var lastPayId = (afterPay == "true") ? "" : "StdpayCARDhandsomep120220623091859504040";
+            var lastPayAmount = (afterPay == "true") ? "" : "10000.0";
+            showReceipt('https://iniweb.inicis.com/app/publication/apReceipt.jsp?noTid=' + lastPayId, '1', '유지훈', lastPayAmount);
 
-    }
+        }
 
 
+    </script>
+</th:block>
+<th:block th:fragment="bodyWrap">
+    <!-- 주소 API Key(한섬) -->
+    <input type="hidden" id="apiConfmKey" value="U01TX0FVVEgyMDE5MDYxNzE2NDczMzEwODgxNTI=">
 
-</script>
+    <div id="bodyWrap">
+        <h3 class="cnts_title">
+            <span id="menuTitle">주문 상세 조회</span>
+        </h3>
+        <div class="sub_container">
+            <!-- lnb -->
+            <th:block th:replace="~{/fragment/lnb :: lnb}"></th:block>
+            <!-- //lnb -->
+            <!-- cnts -->
+            <div class="sub_cnts">
+                <script type="text/javascript" src="https://pgweb.uplus.co.kr/WEB_SERVER/js/receipt_link.js"></script>
+                <script language="JavaScript" src="https://iniweb.inicis.com/js/auth.js"></script>
 
-<!-- 주소 API Key(한섬) -->
-<input type="hidden" id="apiConfmKey" value="U01TX0FVVEgyMDE5MDYxNzE2NDczMzEwODgxNTI=">
-
-<div id="bodyWrap">
-    <h3 class="cnts_title">
-        <span id="menuTitle">주문 상세 조회</span>
-    </h3>
-    <div class="sub_container">
-        <!-- lnb -->
-        <th:block th:replace="~{/fragment/lnb :: lnb}"></th:block>
-        <!-- //lnb -->
-        <!-- cnts -->
-        <div class="sub_cnts">
-            <script type="text/javascript" src="https://pgweb.uplus.co.kr/WEB_SERVER/js/receipt_link.js"></script>
-            <script language="JavaScript" src="https://iniweb.inicis.com/js/auth.js"></script>
-
-            <div class="order_info clearfix">
-                <div class="order_num">
-                    <strong>주문번호 :
-                        <span class="orderCode" th:text="${order.orderId}"></span><span class="shoppingbagYn">쇼핑백 선택</span></strong>
+                <div class="order_info clearfix">
+                    <div class="order_num">
+                        <strong>주문번호 :
+                            <span class="orderCode" th:text="${order.orderId}"></span><span
+                                    class="shoppingbagYn">쇼핑백 선택</span></strong>
+                    </div>
+                    <div class="order_date">주문일시 : <span
+                            th:text="${#dates.format(order.date, 'yyyy.MM.dd HH:mm')}"></span></div>
                 </div>
-                <div class="order_date">주문일시 : <span th:text="${#dates.format(order.date, 'yyyy.MM.dd HH:mm')}"></span></div>
+
+                <div class="title_wrap mt50">
+                    <h4>주문상품</h4></div>
+                <!-- Table -->
+                <div class="tblwrap lncl1812">
+                    <table class="tbl_ltype ">
+                        <caption>주문상품</caption>
+                        <colgroup>
+                            <col style="width:340px;">
+                            <col style="width:45px;">
+                            <col style="width:96px">
+                            <col style="width:96px">
+
+                            <col style="width:121px">
+                            <col style="width:110px">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th scope="col">상품정보</th>
+                            <th scope="col" style="word-break:keep-all;">수량</th>
+                            <th scope="col">판매가</th>
+                            <th scope="col" style="word-break:keep-all;">실결제금액</th>
+                            <th scope="col">적립 한섬마일리지</th>
+                            <th scope="col">주문상태</th>
+                        </tr>
+                        </thead>
+                        <tbody class="tbody_200618">
+                        <tr class="al_middle" th:each="item:${items}">
+                            <td class="frt">
+                                <!-- pt_list_all -->
+                                <div class="pt_list_all">
+
+                                    <a th:href="@{/product/detail/{id}(id = ${item.pid})}"><img
+                                            th:src="${item.image1Uri}"
+                                            alt="상품 이미지"></a>
+                                    <div class="tlt_wrap">
+                                        <a th:href="@{/product/detail/{id}(id = ${item.pid})}" class="basket_tlt">
+                                            <span class="tlt" th:text="${item.brand}"></span>
+                                            <span class="sb_tlt sb_tlt_wrap2006" th:text="${item.name}"></span>
+                                        </a>
+                                        <p class="color_op">
+                                            color : [[${item.pcolor}]]<span class="and_line">/</span>size :
+                                            [[${item.psize}]]</p>
+                                        <p class="prd_mileage_txt2006">Point : 1%</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                [[${item.amount}]]
+                            </td>
+                            <td>
+                                <!-- price_wrap -->
+                                <div class="price_wrap">
+                                    <span style="word-break:keep-all;white-space: nowrap;"
+                                          th:text="${'₩ ' + #numbers.formatInteger(item.price * item.amount, 3, 'COMMA')}"></span>
+                                </div>
+                                <!-- //price_wrap -->
+                            </td>
+                            <td>
+                                <!-- price_wrap -->
+                                <div class="price_wrap">
+                                    <!-- 글로벌 관세 적용 상품금액 표시시 관세 제외금액으로 표시 20191118 남일희 -->
+                                    <span th:text="${'₩ ' + #numbers.formatInteger(item.price * item.amount, 3, 'COMMA')}"></span>
+                                </div>
+                                <!-- //price_wrap -->
+                            </td>
+                            <td rowspan="1">
+                                Point<br>
+                                <p class="num"
+                                   th:text="${#numbers.formatInteger(order.totalPrice * 0.01, 3, 'COMMA')} + 'P'"></p>
+                            </td>
+                            <td>
+                                <p class="num">
+                                    결제완료<span class="sum_date" style="margin:0 auto;">([[${#dates.format(order.date, 'yyyy.MM.dd')}]])</span>
+                                </p>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                    <!-- //Table -->
+                </div>
+
+                <div class="title_wrap mt50 clearfix">
+                    <h4 class="float_left">결제정보</h4>
+                    <div class="btn_wrap">
+                        <a href="javascript:receiptRequest('1');" id="receiptBtn" class="btn add_ss mr0">영수증출력</a><br>
+                    </div>
+                </div>
+                <!-- Table -->
+                <div class="tblwrap">
+
+                    <table class="tbl_ltype payment_info">
+                        <caption>결제정보 항목</caption>
+                        <colgroup>
+                            <col style="width:25%">
+                            <col style="width:25%">
+                            <col style="width:25%">
+                            <col style="width:25%">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th scope="col">판매가</th>
+                            <th scope="col">배송비</th>
+                            <th scope="col">총할인금액</th>
+                            <th scope="col">총결제금액</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="al_middle">
+                            <td class="frt"
+                                th:text="${'₩ ' + #numbers.formatInteger(order.totalPrice + order.usedPoint, 3, 'COMMA')}"></td>
+                            <td>₩ 0</td>
+                            <td><span><span class="minus">-</span>₩ 0</span></td>
+                            <td class="total"
+                                th:text="${'₩ ' + #numbers.formatInteger(order.totalPrice, 3, 'COMMA')}"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="frt">&nbsp;</td>
+                            <td>
+                                <ul class="price_info">
+                                    <li style="overflow:hidden">
+                                        <em>등급 할인</em> <span><span class="minus">-</span>₩ 0</span>
+                                    </li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul class="price_info">
+                                    <li>
+                                        <em>
+                                            [[${order.payType}]]</em> <span
+                                            th:text="${'₩ ' + #numbers.formatInteger(order.totalPrice + order.usedPoint, 3, 'COMMA')}"></span>
+                                    </li>
+                                    <li>
+                                        <em>Point 할인</em> <span><span class="minus"
+                                                                      th:text="${#numbers.formatInteger(order.usedPoint, 3, 'COMMA')} + 'P'">-</span></span>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+
+                    <table class="tbl_wtype1 none mt10 e-gift1812">
+                        <caption>결제정보 항목</caption>
+                        <colgroup>
+                            <col style="width:18%">
+                            <col style="width:82%">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row">주 결제수단</th>
+                            <td>[[${order.payType}]]</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">실 결제금액</th>
+                            <td th:text="${'₩ ' + #numbers.formatInteger(order.totalPrice, 3, 'COMMA')}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">할부 개월 수</th>
+                            <td>일시불</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- //Table -->
+
+
+                <div class="title_wrap mt50 clearfix">
+                    <h4 class="float_left">배송지 정보</h4>
+                    <div class="btn_wrap">
+
+                        <a href="javascript:void(0);" class="btn add_ss mr0 addrModBtn" code="220623P14176043"
+                           th:addr1="${order.address1}" th:addr2="${order.address2}" th:zip="${order.zipcode}"
+                           th:rcname="${order.receiver}" hp1="010"
+                           th:hp2="${order.tel.substring(3, 7)}" th:hp3="${order.tel.substring(7, 11)}"
+                           th:or="${order.deliveryMsg}">배송정보 수정</a></div>
+                </div>
+
+                <!-- Table -->
+                <div class="tblwrap">
+                    <table class="tbl_wtype1 mt10">
+                        <caption>배송지 정보</caption>
+                        <colgroup>
+                            <col style="width:18%">
+                            <col style="width:82%">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row">배송지 주소</th>
+                            <td>
+
+                                ([[${order.zipcode}]]) [[${order.address1 + " " + order.address2}]]
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">수령인</th>
+                            <td th:text="${order.receiver}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">휴대폰</th>
+                            <td th:text="${order.tel}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">배송 메시지</th>
+                            <td th:text="${order.deliveryMsg}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- //Table -->
+
+                <!-- Guide Table -->
+                <div class="gd_list com pl0">
+                    <dl>
+                        <dt>증빙서류출력 안내</dt>
+                        <dd>
+                            <ul class="bul_sty01_li">
+                                <li>신용카드로 결제하신 경우에만 카드전표를 출력할 수 있습니다.</li>
+                                <li>실시간계좌이체 혹은 가상계좌를 통해 결제하신 경우 영수증 출력이 가능하나, 결제 시 현금 영수증 미발행을 <br>선택하셨다면 영수증 출력이 불가능
+                                    합니다.
+                                </li>
+                                <li>한섬마일리지 및 기프트카드의 경우 일부 현금영수증 발행 대상 금액에서 제외되며, 결제금액과 상이할 수 있습니다.</li>
+                                <li>부분취소 발생시 취소금액이 적용되어, 증빙 금액이 변경될 수 있습니다.</li>
+                            </ul>
+                        </dd>
+                    </dl>
+                </div>
+                <!-- //Guide Table -->
+                <div class="btnwrap mt0 ">
+                    <a href="javascript:history.back();" class="btn wt">이전 페이지로</a></div>
+
             </div>
+            <!-- //cnts -->
+        </div>
+    </div>
 
-            <div class="title_wrap mt50">
-                <h4>주문상품</h4></div>
-            <!-- Table -->
-            <div class="tblwrap lncl1812">
-                <table class="tbl_ltype ">
-                    <caption>주문상품</caption>
+    <!--layer popup-->
+    <div class="popwrap w_type_4" id="addrModPop" style="display:none;">
+        <!-- Title1 -->
+        <div class="title_wrap">
+            <h4 class="float_left">배송지 수정</h4>
+            <p class="reqd_txt none"><strong class="reqd">*</strong> 표시는 필수항목입니다.</p>
+        </div>
+        <!-- //Title1 -->
+        <!-- Table -->
+        <div class="tblwrap">
+            <form id="addrModForm">
+                <input type="hidden" name="id" id="id" th:value="${order.id}">
+                <input type="hidden" name="tel" id="tel" value="">
+                <table class="tbl_wtype1">
+                    <caption>제목입력</caption>
                     <colgroup>
-                        <col style="width:340px;">
-                        <col style="width:45px;">
-                        <col style="width:96px">
-                        <col style="width:96px">
-
-                        <col style="width:121px">
-                        <col style="width:110px">
+                        <col style="width:150px">
+                        <col>
                     </colgroup>
-                    <thead>
+                    <tbody>
                     <tr>
-                        <th scope="col">상품정보</th>
-                        <th scope="col" style="word-break:keep-all;">수량</th>
-                        <th scope="col">판매가</th>
-                        <th scope="col" style="word-break:keep-all;">실결제금액</th>
-                        <th scope="col">적립 한섬마일리지</th>
-                        <th scope="col">주문상태</th>
+                        <th scope="row"><strong class="reqd">*</strong><label for="adress">배송지 주소</label></th>
+                        <td>
+                            <!-- address -->
+                            <input type="text" name="zipcode" title="우편번호" id="zipCode" class="post" readonly="">
+                            <input type="button" value="우편번호 조회" class="btn add_s" id="findAddrBtn"><br>
+                            <input type="text" name="address1" id="address1" title="주소1" class="post_wall top"
+                                   readonly="">
+                            <input type="text" name="address2" id="address2" value="나머지 주소를 입력해 주세요." title="주소2"
+                                   class="post_wall" readonly="">
+                            <!-- //address -->
+                        </td>
                     </tr>
-                    </thead>
-                    <tbody class="tbody_200618">
-                    <tr class="al_middle" th:each="item:${items}">
-                        <td class="frt">
-                            <!-- pt_list_all -->
-                            <div class="pt_list_all">
-
-                                <a th:href="@{/product/detail/{id}(id = ${item.pid})}"><img
-                                        th:src="${item.image1Uri}"
-                                        alt="상품 이미지"></a>
-                                <div class="tlt_wrap">
-                                    <a th:href="@{/product/detail/{id}(id = ${item.pid})}" class="basket_tlt">
-                                        <span class="tlt" th:text="${item.brand}"></span>
-                                        <span class="sb_tlt sb_tlt_wrap2006" th:text="${item.name}"></span>
-                                    </a>
-                                    <p class="color_op">
-                                        color : [[${item.pcolor}]]<span class="and_line">/</span>size : [[${item.psize}]]</p>
-                                    <p class="prd_mileage_txt2006">Point : 1%</p>
+                    <tr>
+                        <th scope="row"><strong class="reqd">*</strong><label for="name">수령인</label></th>
+                        <td><input type="text" name="receiver" id="name" title="수령인" value="" maxlength="13"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><strong class="reqd">*</strong><label for="hp1">휴대폰 번호</label></th>
+                        <td>
+                            <!-- hp -->
+                            <select id="hp1" title="휴대폰 번호 앞자리" class="hp_num1">
+                                <option value="010">010</option>
+                                <option value="011">011</option>
+                                <option value="016">016</option>
+                                <option value="017">017</option>
+                                <option value="018">018</option>
+                                <option value="019">019</option>
+                            </select>
+                            <div class="form_hyphen">-</div>
+                            <input type="text" id="hp2" title="휴대폰 번호 가운데자리" class="hp_num2" numberonly="true"
+                                   maxlength="4">
+                            <div class="form_hyphen">-</div>
+                            <input type="text" id="hp3" title="휴대폰 번호 뒷자리" class="hp_num2" numberonly="true"
+                                   maxlength="4">
+                            <!-- //hp -->
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="th_space"><label for="orderr">배송 요청사항</label></th>
+                        <td id="orderrArea">
+                            <!-- input -->
+                            <div class="input_sumtxt">
+                                <input name="deliveryMsg" id="orderr" type="text" value="" autocomplete="off"
+                                       title="배송요청사항"
+                                       readonly="">
+                                <div>
+                                    <span id="textCnt">0</span>
+                                    <span>/20자</span>
                                 </div>
                             </div>
-                        </td>
-                        <td>
-                            [[${item.amount}]]
-                        </td>
-                        <td>
-                            <!-- price_wrap -->
-                            <div class="price_wrap">
-                                <span style="word-break:keep-all;white-space: nowrap;" th:text="${'₩ ' + #numbers.formatInteger(item.price * item.amount, 3, 'COMMA')}"></span>
+                            <!-- //input -->
+                            <div class="delivery_comt" style="display:none;">
+                                <ul>
+                                    <li class="deliveryMsg">
+                                        <a href="#;" data-readonly="readonly" deliveryrequestmessage="배송 전 연락 바랍니다">
+                                            배송 전 연락 바랍니다</a>
+                                    </li>
+                                    <li class="deliveryMsg" style="background: rgb(248, 248, 248);">
+                                        <a href="#;" data-readonly="readonly" deliveryrequestmessage="부재 시 문 앞에 놓아주세요">
+                                            부재 시 문 앞에 놓아주세요</a>
+                                    </li>
+                                    <li class="deliveryMsg">
+                                        <a href="#;" data-readonly="readonly" deliveryrequestmessage="부재 시 경비실에 맡겨주세요">
+                                            부재 시 경비실에 맡겨주세요</a>
+                                    </li>
+                                    <li class="deliveryMsg" style="background: rgb(248, 248, 248);">
+                                        <a href="#;" data-readonly="readonly" deliveryrequestmessage="빠른 배송 부탁드립니다">
+                                            빠른 배송 부탁드립니다</a>
+                                    </li>
+                                    <li class="deliveryMsg">
+                                        <a href="#;" data-readonly="readonly"
+                                           deliveryrequestmessage="부재 시 핸드폰으로 연락바랍니다">
+                                            부재 시 핸드폰으로 연락바랍니다</a>
+                                    </li>
+                                    <li class="deliveryMsg" style="background: rgb(248, 248, 248);">
+                                        <a href="#;" data-readonly="write" deliveryrequestmessage="직접입력">
+                                            직접입력</a>
+                                    </li>
+                                </ul>
                             </div>
-                            <!-- //price_wrap -->
-                        </td>
-                        <td>
-                            <!-- price_wrap -->
-                            <div class="price_wrap">
-                                <!-- 글로벌 관세 적용 상품금액 표시시 관세 제외금액으로 표시 20191118 남일희 -->
-                                <span th:text="${'₩ ' + #numbers.formatInteger(item.price * item.amount, 3, 'COMMA')}"></span>
-                            </div>
-                            <!-- //price_wrap -->
-                        </td>
-                        <td rowspan="1">
-                            Point<br>
-                            <p class="num" th:text="${#numbers.formatInteger(order.totalPrice * 0.01, 3, 'COMMA')} + 'P'"></p>
-                        </td>
-                        <td>
-                            <p class="num">
-                                결제완료<span class="sum_date" style="margin:0 auto;">([[${#dates.format(order.date, 'yyyy.MM.dd')}]])</span>
-                            </p>
-                        </td>
-                    </tr>
-
-                    </tbody>
-                </table>
-                <!-- //Table -->
-            </div>
-
-            <div class="title_wrap mt50 clearfix">
-                <h4 class="float_left">결제정보</h4>
-                <div class="btn_wrap">
-                    <a href="javascript:receiptRequest('1');" id="receiptBtn" class="btn add_ss mr0">영수증출력</a><br></div>
-            </div>
-            <!-- Table -->
-            <div class="tblwrap">
-
-                <table class="tbl_ltype payment_info">
-                    <caption>결제정보 항목</caption>
-                    <colgroup>
-                        <col style="width:25%">
-                        <col style="width:25%">
-                        <col style="width:25%">
-                        <col style="width:25%">
-                    </colgroup>
-                    <thead>
-                    <tr>
-                        <th scope="col">판매가</th>
-                        <th scope="col">배송비</th>
-                        <th scope="col">총할인금액</th>
-                        <th scope="col">총결제금액</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr class="al_middle">
-                        <td class="frt" th:text="${'₩ ' + #numbers.formatInteger(order.totalPrice + order.usedPoint, 3, 'COMMA')}"></td>
-                        <td>₩ 0</td>
-                        <td><span><span class="minus">-</span>₩ 0</span></td>
-                        <td class="total" th:text="${'₩ ' + #numbers.formatInteger(order.totalPrice, 3, 'COMMA')}"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" class="frt">&nbsp;</td>
-                        <td>
-                            <ul class="price_info">
-                                <li style="overflow:hidden">
-                                    <em>등급 할인</em> <span><span class="minus">-</span>₩ 0</span>
-                                </li>
-                            </ul>
-                        </td>
-                        <td>
-                            <ul class="price_info">
-                                <li>
-                                    <em>
-                                        [[${order.payType}]]</em> <span th:text="${'₩ ' + #numbers.formatInteger(order.totalPrice + order.usedPoint, 3, 'COMMA')}"></span>
-                                </li>
-                                <li>
-                                    <em>Point 할인</em> <span><span class="minus" th:text="${#numbers.formatInteger(order.usedPoint, 3, 'COMMA')} + 'P'">-</span></span>
-                                </li>
-                            </ul>
                         </td>
                     </tr>
                     </tbody>
                 </table>
-
-
-                <table class="tbl_wtype1 none mt10 e-gift1812">
-                    <caption>결제정보 항목</caption>
-                    <colgroup>
-                        <col style="width:18%">
-                        <col style="width:82%">
-                    </colgroup>
-                    <tbody>
-                    <tr>
-                        <th scope="row">주 결제수단</th>
-                        <td>[[${order.payType}]]</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">실 결제금액</th>
-                        <td th:text="${'₩ ' + #numbers.formatInteger(order.totalPrice, 3, 'COMMA')}"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">할부 개월 수</th>
-                        <td>일시불</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <!-- //Table -->
-
-
-            <div class="title_wrap mt50 clearfix">
-                <h4 class="float_left">배송지 정보</h4>
-                <div class="btn_wrap">
-
-                    <a href="javascript:void(0);" class="btn add_ss mr0 addrModBtn" code="220623P14176043"
-                       th:addr1="${order.address1}" th:addr2="${order.address2}" th:zip="${order.zipcode}" th:rcname="${order.receiver}" hp1="010"
-                       th:hp2="${order.tel.substring(3, 7)}" th:hp3="${order.tel.substring(7, 11)}" th:or="${order.deliveryMsg}">배송정보 수정</a></div>
-            </div>
-
-            <!-- Table -->
-            <div class="tblwrap">
-                <table class="tbl_wtype1 mt10">
-                    <caption>배송지 정보</caption>
-                    <colgroup>
-                        <col style="width:18%">
-                        <col style="width:82%">
-                    </colgroup>
-                    <tbody>
-                    <tr>
-                        <th scope="row">배송지 주소</th>
-                        <td>
-
-                            ([[${order.zipcode}]]) [[${order.address1 + " " + order.address2}]]
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">수령인</th>
-                        <td th:text="${order.receiver}"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">휴대폰</th>
-                        <td th:text="${order.tel}"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">배송 메시지</th>
-                        <td th:text="${order.deliveryMsg}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <!-- //Table -->
-
-            <!-- Guide Table -->
-            <div class="gd_list com pl0">
-                <dl>
-                    <dt>증빙서류출력 안내</dt>
-                    <dd>
-                        <ul class="bul_sty01_li">
-                            <li>신용카드로 결제하신 경우에만 카드전표를 출력할 수 있습니다.</li>
-                            <li>실시간계좌이체 혹은 가상계좌를 통해 결제하신 경우 영수증 출력이 가능하나, 결제 시 현금 영수증 미발행을 <br>선택하셨다면 영수증 출력이 불가능 합니다.
-                            </li>
-                            <li>한섬마일리지 및 기프트카드의 경우 일부 현금영수증 발행 대상 금액에서 제외되며, 결제금액과 상이할 수 있습니다.</li>
-                            <li>부분취소 발생시 취소금액이 적용되어, 증빙 금액이 변경될 수 있습니다.</li>
-                        </ul>
-                    </dd>
-                </dl>
-            </div>
-            <!-- //Guide Table -->
-            <div class="btnwrap mt0 ">
-                <a href="javascript:history.back();" class="btn wt">이전 페이지로</a></div>
-
+            </form>
         </div>
-        <!-- //cnts -->
+        <!-- //Table -->
+        <div class="btnwrap">
+            <input class="btn wt_s" value="취소" type="button" id="cancleBtn">
+            <input class="btn gray_s mr0" value="등록" type="button" id="applyBtn">
+        </div>
+
+        <!-- btn_close -->
+        <a href="#" class="btn_close"><img
+                src="http://cdn.thehandsome.com/_ui/desktop/common/images/popup/ico_close.png"
+                alt="닫기"></a>
+        <!-- //btn_close -->
     </div>
-</div>
-<!--layer popup-->
-<div class="popwrap w_type_4" id="addrModPop" style="display:none;">
-    <!-- Title1 -->
-    <div class="title_wrap">
-        <h4 class="float_left">배송지 수정</h4>
-        <p class="reqd_txt none"><strong class="reqd">*</strong> 표시는 필수항목입니다.</p>
-    </div>
-    <!-- //Title1 -->
-    <!-- Table -->
-    <div class="tblwrap">
-        <form id="addrModForm">
-            <input type="hidden" name="id" id="id" th:value="${order.id}">
-            <input type="hidden" name="tel" id="tel" value="">
-            <table class="tbl_wtype1">
-                <caption>제목입력</caption>
-                <colgroup>
-                    <col style="width:150px">
-                    <col>
-                </colgroup>
-                <tbody>
-                <tr>
-                    <th scope="row"><strong class="reqd">*</strong><label for="adress">배송지 주소</label></th>
-                    <td>
-                        <!-- address -->
-                        <input type="text" name="zipcode" title="우편번호" id="zipCode" class="post" readonly="">
-                        <input type="button" value="우편번호 조회" class="btn add_s" id="findAddrBtn"><br>
-                        <input type="text" name="address1" id="address1" title="주소1" class="post_wall top"
-                               readonly="">
-                        <input type="text" name="address2" id="address2" value="나머지 주소를 입력해 주세요." title="주소2"
-                               class="post_wall" readonly="">
-                        <!-- //address -->
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row"><strong class="reqd">*</strong><label for="name">수령인</label></th>
-                    <td><input type="text" name="receiver" id="name" title="수령인" value="" maxlength="13"></td>
-                </tr>
-                <tr>
-                    <th scope="row"><strong class="reqd">*</strong><label for="hp1">휴대폰 번호</label></th>
-                    <td>
-                        <!-- hp -->
-                        <select id="hp1" title="휴대폰 번호 앞자리" class="hp_num1">
-                            <option value="010">010</option>
-                            <option value="011">011</option>
-                            <option value="016">016</option>
-                            <option value="017">017</option>
-                            <option value="018">018</option>
-                            <option value="019">019</option>
-                        </select>
-                        <div class="form_hyphen">-</div>
-                        <input type="text" id="hp2" title="휴대폰 번호 가운데자리" class="hp_num2" numberonly="true"
-                               maxlength="4">
-                        <div class="form_hyphen">-</div>
-                        <input type="text" id="hp3" title="휴대폰 번호 뒷자리" class="hp_num2" numberonly="true" maxlength="4">
-                        <!-- //hp -->
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row" class="th_space"><label for="orderr">배송 요청사항</label></th>
-                    <td id="orderrArea">
-                        <!-- input -->
-                        <div class="input_sumtxt">
-                            <input name="deliveryMsg" id="orderr" type="text" value="" autocomplete="off" title="배송요청사항"
-                                   readonly="">
-                            <div>
-                                <span id="textCnt">0</span>
-                                <span>/20자</span>
-                            </div>
-                        </div>
-                        <!-- //input -->
-                        <div class="delivery_comt" style="display:none;">
-                            <ul>
-                                <li class="deliveryMsg">
-                                    <a href="#;" data-readonly="readonly" deliveryrequestmessage="배송 전 연락 바랍니다">
-                                        배송 전 연락 바랍니다</a>
-                                </li>
-                                <li class="deliveryMsg" style="background: rgb(248, 248, 248);">
-                                    <a href="#;" data-readonly="readonly" deliveryrequestmessage="부재 시 문 앞에 놓아주세요">
-                                        부재 시 문 앞에 놓아주세요</a>
-                                </li>
-                                <li class="deliveryMsg">
-                                    <a href="#;" data-readonly="readonly" deliveryrequestmessage="부재 시 경비실에 맡겨주세요">
-                                        부재 시 경비실에 맡겨주세요</a>
-                                </li>
-                                <li class="deliveryMsg" style="background: rgb(248, 248, 248);">
-                                    <a href="#;" data-readonly="readonly" deliveryrequestmessage="빠른 배송 부탁드립니다">
-                                        빠른 배송 부탁드립니다</a>
-                                </li>
-                                <li class="deliveryMsg">
-                                    <a href="#;" data-readonly="readonly" deliveryrequestmessage="부재 시 핸드폰으로 연락바랍니다">
-                                        부재 시 핸드폰으로 연락바랍니다</a>
-                                </li>
-                                <li class="deliveryMsg" style="background: rgb(248, 248, 248);">
-                                    <a href="#;" data-readonly="write" deliveryrequestmessage="직접입력">
-                                        직접입력</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </form>
-    </div>
-    <!-- //Table -->
-    <div class="btnwrap">
-        <input class="btn wt_s" value="취소" type="button" id="cancleBtn">
-        <input class="btn gray_s mr0" value="등록" type="button" id="applyBtn">
-    </div>
-
-    <!-- btn_close -->
-    <a href="#" class="btn_close"><img src="http://cdn.thehandsome.com/_ui/desktop/common/images/popup/ico_close.png"
-                                       alt="닫기"></a>
-    <!-- //btn_close -->
-</div>
-<!--//layer popup-->
-
-<!-- footerWrap -->
-<th:block th:replace="~{/fragment/footer :: footer}"></th:block>
-<!-- //footerWrap -->
-
-
-
-</body>
+    <!--//layer popup-->
+</th:block>
 </html>

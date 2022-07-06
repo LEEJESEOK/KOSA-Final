@@ -685,8 +685,8 @@ table td .receive_choice > span label{padding-right:25px;display:inline-block;}
 .basket_info .btns .btn:first-child{margin-top: 20px}
 
 /* 1차오픈시 세트상품
-.basket_info .pt_list.set{width:43%;} 
-.basket_info .pt_list.set .tlt_wrap{width:68%} 
+.basket_info .pt_list.set{width:43%;}
+.basket_info .pt_list.set .tlt_wrap{width:68%}
 .basket_info .pt_list.set .tlt_wrap.small{width:60%;}
 .basket_info .pt_list.set .tlt_wrap.small .cs_wrap dt{width:43px;}
 */
@@ -1575,14 +1575,16 @@ table.e-gift .tlt_wrap p{padding-top:10px;color:#c69c6c;font-size:11px;letter-sp
 .box_type_1.renewal1904 .border_box1 .title_wrap{border-bottom:1px solid #e3e3e3;width:457px;margin:0 auto;}
 .box_type_1.renewal1904 .border_box1 .title_wrap.login1904{border-bottom:none;margin:0;}
 .box_type_1.renewal1904 .border_box1 fieldset{padding:0 40px;}
-.box_type_1.renewal1904 .border_box1 .section_bottom{background:#f5f5f5;padding:22px 40px;height:184px}
+.box_type_1.renewal1904 .border_box1 .section_bottom{padding:22px 40px;height:184px}
 .login_wrap.renewal1904 .border_box1 .title_wrap.otp1904 h4:first-child{background:url("https://www.thehandsome.com/_ui/desktop/common/images/common/ico_txt_line.gif") right center no-repeat; padding-right:20px; margin-right:20px; margin-left:0}
 .login_wrap.renewal1904 .border_box2{border-top:1px solid #e3e3e3; border-right:1px solid #e3e3e3; border-bottom:1px solid #e3e3e3; overflow:hidden; float:left; width:415px; height:457px; padding:40px}
 .login_wrap.renewal1904 .border_box2 .inner_box .title_wrap h4{padding:0;margin-bottom:17px}
 .login_wrap.renewal1904 .inner_box .title_wrap.otp1904 h4{padding:0;}
 /*1905*/
 .box_type_1.renewal1904 .border_box1{position:relative;}
-.box_type_1.renewal1904 .border_box1 .section_bottom{background:#f5f5f5;padding:22px 40px;width:calc(100% - 80px);height:140px;position:absolute;bottom:0;left:0;}
+.box_type_1.renewal1904 .border_box1 .section_bottom{padding:0 20px;height:140px;bottom:0;left:0; text-align: center}
+.box_type_1.renewal1904 .border_box1 .section_bottom a{margin:auto; display: inline}
+.box_type_1.renewal1904 .border_box1 .section_bottom a img{width: 55%}
 .login_wrap.renewal1904 .inner_box{position:static;}
 /*쇼핑백 - 재입고 알림 툴팁*/
 .soldout_tbl1807.restock1904{margin-top:0;padding-top:35px;}
@@ -1804,7 +1806,7 @@ table.e-gift .tlt_wrap p{padding-top:10px;color:#c69c6c;font-size:11px;letter-sp
 .evt_minipop_maple .blsmflw1.leaf_10 a{background:url('http://cdn.thehandsome.com/pc/event/detail/image/190905_event/maple_evt_190902_leaf_10.png')center no-repeat;background-size:contain;}
 .evt_minipop_maple .blsmflw1.leaf_11 a{background:url('http://cdn.thehandsome.com/pc/event/detail/image/190905_event/maple_evt_190902_leaf_11.png')center no-repeat;background-size:contain;}
 .evt_minipop_maple .blsmflw1 a span{text-indent:-9999px;font-size:0;position:absolute;background:url('http://cdn.thehandsome.com/pc/event/detail/image/190905_event/pc_maple_evt_190902_miniPopTxt.png')center no-repeat;width:46px;height:58px;right:0;bottom:15px}
-.popwrap_maple_evt1909 .btn_close{position: absolute; top:20px; right:20px; width:20px; height:20px; background:url("http://cdn.thehandsome.com//_ui/desktop/common/images/popup/ico_close.png") center center no-repeat;}
+.popwrap_maple_evt1909 .btn_close{position: absolute; top:20px; right:20px; width:20px; height:20px; background:url("http://cdn.thehandsome.com/_ui/desktop/common/images/popup/ico_close.png") center center no-repeat;}
 /*주문서 - 글로벌정책변경(custom duties and import VAT)*/
 .tbl_wtype1 th .line_height22_1909{line-height:22px;margin-top:6px;}
 .custom_duty_radio_tab1909 .input_box1909 label{display:inline-block;width:26.73%;letter-spacing:.1px;}
@@ -1914,7 +1916,7 @@ div.deilvery_chk_order span.dco_on{ color:#a9a9a9; }
 .hs_input_file_wrap2003 .upload_wrap2003{overflow:hidden;}
 .hs_input_file_wrap2003 .file_image_wrap2003{clear: both;margin-top:5px;}
 .hs_input_file_wrap2003 .file_image > span{color:#444;font-size:12px;display:inline-block;white-space:nowrap;text-overflow:ellipsis;max-width:500px;overflow:hidden;}
-.hs_input_file_wrap2003 .file_image .file_del{display:inline-block;border:1px solid #ccc;width:17px;height:17px;top:0;right:0;background:#f5f5f5 url('http://cdn.thehandsome.com/_ui/desktop/common/images/common/btn_close.png') no-repeat;background-position:center;overflow:hidden;margin-left:5px;text-indent:-9999em;position:relative;top:1px;}
+.hs_input_file_wrap2003 .file_image .file_del{display:inline-block;border:1px solid #ccc;width:17px;height:17px;top:0;right:0;background:#f5f5f5 url("https://www.thehandsome.com/_ui/desktop/common/images/common/btn_close.png") no-repeat;background-position:center;overflow:hidden;margin-left:5px;text-indent:-9999em;position:relative;top:1px;}
 /*주문상세조회 - 상품정보 테이블 200618*/
 .tblwrap .tbody_200618 .basket_tlt span.sb_tlt_wrap2006{display:block;max-width:205px}
 .tblwrap .tbody_200618 .pt_list_all .color_op{margin-top:5px;}
@@ -2037,6 +2039,6 @@ div.deilvery_chk_order span.red-alert{font-size:11px; font-weight:bold !importan
 
 /* 서비스이용약관 내용 추가 - 220406 토탈케어서비스 이용약관추가  */
 .signup_page .title_wrap.tab5 .service_tab_wrap {float:left;margin-right:40px;}
-.signup_page .title_wrap.tab5 .service_tab_wrap:nth-child(1) {} 
+.signup_page .title_wrap.tab5 .service_tab_wrap:nth-child(1) {}
 .signup_page .title_wrap.tab5 .service_tab_wrap:nth-child(4) {float:right;margin:0;}
 .signup_page .title_wrap.tab5 .service_tab_wrap:nth-child(5) {padding:22px 0 10px;}
