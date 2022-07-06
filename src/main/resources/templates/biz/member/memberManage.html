@@ -3,6 +3,9 @@
       layout:decorate="~{/biz/layout/default}">
 <th:block layout:fragment="content">
     <script>
+        // 한 페이지에 띄울 개수
+        let amount = 10;
+
         $().ready(function () {
 
             // 테이블 선택한 행 table-active 적용
@@ -26,23 +29,214 @@
 
                 $("#checkAll").prop("checked", total == checked);
             });
+
+            // 기본적으로 1페이지 불러옴
+            let param = {"pageNum": 1, "amount": amount };
+            getPage(param);
         });
+
+        // 검색버튼 클릭 시
+        $(document).on("click", '#searchBtn', function () {
+            let param = {
+                "pageNum": 1, "amount": amount 
+            };
+
+            // 키워드 검색
+            let type = $(".form-select option:selected").val();
+            let keyword = $("#keyword").val();
+            if(keyword != "") {
+                param.type = type;
+                param.keyword = keyword;
+            }
+
+            // 날짜 검색
+            let start_date = $("#startDateInput").val();
+            let end_date = $("#endDateInput").val();
+            if(start_date != null && end_date != null) {
+                param.start_date = start_date;
+                param.end_date = end_date;
+            }
+
+            // 상태 검색
+            let status = $(":input:radio[name=status]:checked").val();
+            if(status != -1) {
+                param.selected = status;
+            }
+
+            getPage(param);
+        });
+
+        // 서버에 데이터를 요청해 받아와 페이지를 만드는 함수
+        function getPage(param) {
+            $.ajax({
+                url: "[(@{/member/searchMember})]",
+                method: "post",
+                data: JSON.stringify(param),
+                dataType: 'json',
+                contentType: "application/json; charset=UTF-8",
+                success: function (data) {
+                    let list = data.list;
+                    let page = data.page;
+
+                    $(".tbody").empty();
+                    $.each(list, function (idx, val) {
+                        addRow(param, idx, val);
+                    });
+
+                    addPagination(param.pageNum, page);
+
+                },
+                error: function (request, status, error) {
+                    alert(request + ", " + status + ", " + error);
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(csrf_header, csrf_token);
+                }
+            });
+        }
+
+        // 테이블에 동적으로 row 추가하는 함수
+        function addRow(param, idx, data) {
+            let tbody = $(".tbody");
+            let row = "<tr>";
+            row += "<td class=\"text-center\"><input class=\"form-check-input\" type=\"checkbox\"></td>";
+            let index = (param.pageNum-1) * (param.amount) + idx + 1;
+            row += "<th class=\"text-center\" scope=\"row\">" + index + "</th>";
+            row += "<td class=\"text-center\">" + data.name + "</td>";
+            row += "<td class=\"text-center\">" + data.email + "</td>";
+            if(data.tel == null) {
+                row += "<td class=\"text-center\">/</td>";
+            } else {
+                row += "<td class=\"text-center\">" + data.tel + "</td>";
+            }
+            if(data.gender == null) {
+                row += "<td class=\"text-center\">/</td>";
+            } else if(data.gender == 0){
+                row += "<td class=\"text-center\">남</td>";
+            } else {
+                row += "<td class=\"text-center\">여</td>";
+            }
+            if(data.birth == null) {
+                row += "<td class=\"text-center\">/</td>";
+            } else {
+                row += "<td class=\"text-center\">" + data.birth.toString().substring(0,10) + "</td>";
+            }
+
+            switch(data.gradeId) {
+                case 1:
+                    row += "<td class=\"text-center\">Friend</td>";
+                    break;
+                case 2:
+                    row += "<td class=\"text-center\">Crew</td>";
+                    break;
+                case 3:
+                    row += "<td class=\"text-center\">Mania</td>";
+                    break;
+                case 4:
+                    row += "<td class=\"text-center\">Star</td>";
+                    break;
+                case 5:
+                    row += "<td class=\"text-center\">The Star</td>";
+                    break;
+            }
+            row += "<td class=\"text-center\">" + data.signUpDate.toString().substring(0,10) + "</td>";
+            row += "<td class=\"text-center\">" + data.recentLoginDate.toString().substring(0,10) + "</td>";
+
+            // 비고 (0 : 이용중, 1 : 탈퇴, 2 : 휴면)
+            switch(data.status) {
+                case 0:
+                    row += "<td class=\"text-center\">이용중</td></tr>";
+                    break;
+                case 1:
+                    row += "<td class=\"text-center\">탈퇴</td></tr>";
+                    break;
+                case 2:
+                    row += "<td class=\"text-center\">휴면</td></tr>";
+                    break;
+            }
+
+
+            tbody.append(row);
+        }
+
+        // 페이지 버튼 동적으로 추가하는 함수
+        function addPagination(pageNum, page) {
+            let pagination = $(".pagination");
+            pagination.empty();
+
+            let row = "";
+            if(page.prev) {
+                row += "<li class=\"page-item\">\n" +
+                    "                <a class=\"page-link\" href=\"#\" onClick=\"paging(" + (page.startPage - 1) + ")\">이전</a>\n" +
+                    "            </li>";
+            }
+            for(var i = page.startPage; i <= page.endPage; i++) {
+                if(i == pageNum) {
+                    row += "<li class=\"page-item\"><a class=\"page-link on\" href=\"#\" onClick=\"paging(" + i + ")\">" + i + "</a></li>";
+                } else {
+                    row += "<li class=\"page-item\"><a class=\"page-link\" href=\"#\" onClick=\"paging(" + i + ")\">" + i + "</a></li>";
+                }
+
+            }
+            if(page.next) {
+                row += "<li class=\"page-item\">\n" +
+                    "                <a class=\"page-link\" href=\"#\" onClick=\"paging(" + (page.endPage + 1) + ")\">다음</a>\n" +
+                    "            </li>";
+            }
+
+            pagination.append(row);
+            
+        }
+
+        // 페이지를 눌렀을 때
+        function paging(page) {
+            let pageNum = parseInt(page);
+
+            let param = {
+                "pageNum": pageNum, "amount": amount 
+            };
+
+            // 키워드 검색
+            let type = $(".form-select option:selected").val();
+            let keyword = $("#keyword").val();
+            if(keyword != "") {
+                param.type = type;
+                param.keyword = keyword;
+            }
+
+            // 날짜 검색
+            let start_date = $("#startDateInput").val();
+            let end_date = $("#endDateInput").val();
+            if(start_date != null && end_date != null) {
+                param.start_date = start_date;
+                param.end_date = end_date;
+            }
+
+            // 상태 검색
+            let status = $(":input:radio[name=status]:checked").val();
+            if(status != -1) {
+                param.selected = status;
+            }
+
+            getPage(param);
+        }
+
     </script>
     <section class="section">
         <div class="row">
             <div class="col-12">
                 <!-- 검색옵션 -->
                 <div class="card p-3">
-                    <form class="row">
+                    <form id="searchForm" class="row">
                         <div class="row mb-3">
                             <div class="col-2">
                                 <label class="form-label" for="keyword">검색어</label>
                             </div>
                             <div class="col-2">
                                 <select class="form-select">
-                                    <option th:value="id">아이디</option>
-                                    <option th:value="name">이름</option>
-                                    <option th:value="tel">연락처</option>
+                                    <option value="id">아이디</option>
+                                    <option value="name">이름</option>
+                                    <option value="tel">연락처</option>
                                 </select>
                             </div>
                             <div class="col-8">
@@ -54,16 +248,43 @@
                                 <label class="form-label">가입일</label>
                             </div>
                             <div class="col-2">
-                                <input type="date" class="form-control">
+                                <input type="date" id="startDateInput" class="form-control">
                             </div>
                             <div class="col-2">
-                                <input type="date" class="form-control">
+                                <input type="date" id="endDateInput" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-2">
+                                <label class="form-label">상태</label>
+                            </div>
+                            <div class="col-10">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="all"
+                                           name="status" value="-1" checked>
+                                    <label class="form-check-label" for="all">전체</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="active"
+                                           name="status" value="0">
+                                    <label class="form-check-label" for="active">이용중</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="leave"
+                                           name="status" value="1">
+                                    <label class="form-check-label" for="leave">탈퇴</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="rest"
+                                           name="status" value="2">
+                                    <label class="form-check-label" for="rest">휴면</label>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12 text-center">
                                 <button class="btn btn-outline-primary" type="reset">초기화</button>
-                                <button class="btn btn-primary" type="submit">검색</button>
+                                <button id="searchBtn" class="btn btn-primary" type="button">검색</button>
                             </div>
                         </div>
                     </form>
@@ -72,58 +293,25 @@
                     <div class="card-body">
                         <h5 class="card-title">회원목록</h5>
                         <form class="row">
-                            <table class="table table-hover table-bordered">
+                            <table class="table table-hover table-bordered" style="table-layout: fixed;word-wrap: break-word;">
                                 <thead class="table-light">
                                 <tr>
-                                    <th scope="col" class="text-center"><input class="form-check-input" id="checkAll"
+                                    <th scope="col" class="text-center" style="width:5%"><input class="form-check-input" id="checkAll"
                                                                                type="checkbox"></th>
-                                    <th scope="col" class="text-center">#</th>
-                                    <th scope="col" class="text-center">이름</th>
-                                    <th scope="col" class="text-center">아이디</th>
-                                    <th scope="col" class="text-center">연락처</th>
-                                    <th scope="col" class="text-center">나이</th>
-                                    <th scope="col" class="text-center">등급</th>
-                                    <th scope="col" class="text-center">가입일</th>
-                                    <th scope="col" class="text-center">비고</th>
+                                    <th scope="col" class="text-center" style="width:5%">#</th>
+                                    <th scope="col" class="text-center" style="width:14%">이름</th>
+                                    <th scope="col" class="text-center" style="width:14%">아이디</th>
+                                    <th scope="col" class="text-center" style="width:10%">연락처</th>
+                                    <th scope="col" class="text-center" style="width:5%">성별</th>
+                                    <th scope="col" class="text-center" style="width:10%">생년월일</th>
+                                    <th scope="col" class="text-center" style="width:10%">등급</th>
+                                    <th scope="col" class="text-center" style="width:10%">가입일</th>
+                                    <th scope="col" class="text-center" style="width:10%">최근 로그인</th>
+                                    <th scope="col" class="text-center" style="width:7%">비고</th>
                                 </tr>
                                 </thead>
-                                <tbody>
-                                <tr>
-                                    <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-                                    <th class="text-center" scope="row" th:text="'1'"></th>
-                                    <td class="text-center">이승연</td>
-                                    <td class="text-center">isaa1107</td>
-                                    <td class="text-center">01012345678</td>
-                                    <td class="text-center">27</td>
-                                    <td class="text-center">CREW</td>
-                                    <td class="text-center"
-                                        th:text="${#dates.format(#calendars.createNow(), 'yyyy-MM-dd')}"></td>
-                                    <td class="text-center"></td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-                                    <th class="text-center" scope="row" th:text="'2'"></th>
-                                    <td class="text-center" th:text="'박주영'"></td>
-                                    <td class="text-center" th:text="'id'"></td>
-                                    <td class="text-center" th:text="'01012345678'"></td>
-                                    <td class="text-center">25</td>
-                                    <td class="text-center">STAR</td>
-                                    <td class="text-center"
-                                        th:text="${#dates.format(#calendars.createNow(), 'yyyy-MM-dd')}"></td>
-                                    <td class="text-center"></td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-                                    <th class="text-center" scope="row">3</th>
-                                    <td class="text-center">유지훈</td>
-                                    <td class="text-center">jihun</td>
-                                    <td class="text-center">01012345678</td>
-                                    <td class="text-center">27</td>
-                                    <td class="text-center">THE STAR</td>
-                                    <td class="text-center"
-                                        th:text="${#dates.format(#calendars.createNow(), 'yyyy-MM-dd')}"></td>
-                                    <td class="text-center" th:text="''"></td>
-                                </tr>
+                                <tbody class="tbody">
+
                                 </tbody>
                             </table>
                         </form>
@@ -131,15 +319,7 @@
                         <!-- TODO pagination 페이징 -->
                         <nav aria-label="Page navigation example">
                             <ul class="pagination justify-content-center">
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">이전</a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">다음</a>
-                                </li>
+
                             </ul>
                         </nav>
                     </div>

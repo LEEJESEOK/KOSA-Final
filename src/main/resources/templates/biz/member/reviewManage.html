@@ -2,6 +2,187 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/biz/layout/default}">
 <th:block layout:fragment="content">
+    <script>
+        // 한 페이지에 띄울 개수
+        let amount = 5;
+
+        $().ready(function () {
+
+            // 테이블 선택한 행 table-active 적용
+            $("input[type=checkbox]:not(#checkAll)").change(function () {
+                if ($(this).is(":checked")) {
+                    $(this).closest('tr').addClass("table-active");
+                } else {
+                    $(this).closest('tr').removeClass("table-active");
+                }
+            });
+
+            // 체크박스 전체선택/해제
+            $("#checkAll").click(function () {
+                $("input[type=checkbox]").prop("checked", this.checked).trigger("change");
+            });
+
+            // 체크된 체크박스 개수에 따라 checkAll 변경
+            $("input[type=checkbox]:not(#checkAll)").click(function () {
+                let total = $("input[type=checkbox]:not(#checkAll)").length;
+                let checked = $("input[type=checkbox]:checked:not(#checkAll)").length;
+
+                $("#checkAll").prop("checked", total == checked);
+            });
+
+            // 기본적으로 1페이지 불러옴
+            let param = {"pageNum": 1, "amount": amount};
+            getPage(param);
+        });
+
+        // 검색버튼 클릭 시
+        $(document).on("click", '#searchBtn', function () {
+            let param = {
+                "pageNum": 1, "amount": amount
+            };
+
+            // 문의 키워드 검색
+            let type = $("#reviewKeywordType option:selected").val();
+            let keyword = $("#reviewKeyword").val();
+            if (keyword != "") {
+                param.type = type;
+                param.keyword = keyword;
+            }
+            // 날짜 검색
+            let start_date = $("#startDateInput").val();
+            let end_date = $("#endDateInput").val();
+            if (start_date != null && end_date != null) {
+                param.start_date = start_date;
+                param.end_date = end_date;
+            }
+            // 문의 종류 선택
+            let category = $("#category option:selected").val();
+            if (category != "") {
+                param.category = category;
+            }
+            // 처리 상태 선택
+            let status = $(":input:radio[name=status]:checked").val();
+            if (status != -1) {
+                param.status = status;
+            }
+
+            getPage(param);
+        });
+
+        // 서버에 데이터를 요청해 받아와 페이지를 만드는 함수
+        function getPage(param) {
+            $.ajax({
+                url: "[(@{/mypage/searchMypageReview})]",
+                method: "post",
+                data: JSON.stringify(param),
+                dataType: 'json',
+                contentType: "application/json; charset=UTF-8",
+                success: function (data) {
+                    let list = data.list;
+                    let page = data.page;
+
+                    $(".tbody").empty();
+                    $.each(list, function (idx, val) {
+                        addRow(param, idx, val);
+                    });
+
+                    addPagination(param.pageNum, page);
+
+                },
+                error: function (request, status, error) {
+                    alert(request + ", " + status + ", " + error);
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(csrf_header, csrf_token);
+                }
+            });
+        }
+
+        // 테이블에 동적으로 row 추가하는 함수
+        function addRow(param, idx, data) {
+            let tbody = $(".tbody");
+            let row = "<tr>";
+            row += "<td class=\"text-center\"><input class=\"form-check-input\" type=\"checkbox\"></td>";
+            let index = (param.pageNum - 1) * (param.amount) + idx + 1;
+            row += "<th class=\"text-center\" scope=\"row\">" + index + "</th>";
+            row += "<td class=\"text-center\" data-bs-toggle=\"modal\" data-bs-target=\"#reviewModal\">" + data.title + "</td>";
+            if (data.status == 0) { // 0이면 답변대기, 1이면 답변완료
+                row += "<td class=\"text-center\">답변대기</td>";
+            } else {
+                row += "<td class=\"text-center\">답변완료</td>";
+            }
+            row += "<td class=\"text-center\">" + data.editDate.toString().substring(0, 10) + "</td></tr>";
+
+            tbody.append(row);
+        }
+
+
+        // 페이지 버튼 동적으로 추가하는 함수
+        function addPagination(pageNum, page) {
+            let pagination = $(".pagination");
+            pagination.empty();
+
+            let row = "";
+            if (page.prev) {
+                row += "<li class=\"page-item\">\n" +
+                    "                <a class=\"page-link\" href=\"#\" onClick=\"paging(" + (page.startPage - 1) + ")\">이전</a>\n" +
+                    "            </li>";
+            }
+            for (var i = page.startPage; i <= page.endPage; i++) {
+                if (i == pageNum) {
+                    row += "<li class=\"page-item\"><a class=\"page-link on\" href=\"#\" onClick=\"paging(" + i + ")\">" + i + "</a></li>";
+                } else {
+                    row += "<li class=\"page-item\"><a class=\"page-link\" href=\"#\" onClick=\"paging(" + i + ")\">" + i + "</a></li>";
+                }
+
+            }
+            if (page.next) {
+                row += "<li class=\"page-item\">\n" +
+                    "                <a class=\"page-link\" href=\"#\" onClick=\"paging(" + (page.endPage + 1) + ")\">다음</a>\n" +
+                    "            </li>";
+            }
+
+            pagination.append(row);
+
+        }
+
+        // 페이지를 눌렀을 때
+        function paging(page) {
+            let pageNum = parseInt(page);
+
+            let param = {
+                "pageNum": pageNum, "amount": amount
+            };
+
+            // 문의 키워드 검색
+            let type = $("#reviewKeywordType option:selected").val();
+            let keyword = $("#reviewKeyword").val();
+            if (keyword != "") {
+                param.type = type;
+                param.keyword = keyword;
+            }
+            // 날짜 검색
+            let start_date = $("#startDateInput").val();
+            let end_date = $("#endDateInput").val();
+            if (start_date != null && end_date != null) {
+                param.start_date = start_date;
+                param.end_date = end_date;
+            }
+            // 문의 종류 선택
+            let category = $("#category option:selected").val();
+            if (category != "") {
+                param.category = category;
+            }
+            // 처리 상태 선택
+            let status = $(":input:radio[name=status]:checked").val();
+            if (status != -1) {
+                param.status = status;
+            }
+
+            getPage(param);
+        }
+
+    </script>
     <section class="section">
         <div class="row">
             <div class="col-12">
@@ -37,7 +218,7 @@
                                 <label>문의종류</label>
                             </div>
                             <div class="col-2">
-                                <select class="form-select">
+                                <select class="form-select" id="category">
                                     <option value="">선택</option>
                                     <option value="QA09">행사/이벤트</option>
                                     <option value="QA07">쿠폰/혜택문의</option>
@@ -65,15 +246,15 @@
                             </div>
                             <div class="col-10">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="" name="reviewStatus" checked>
+                                    <input class="form-check-input" type="radio" id="" name="status" checked>
                                     <label class="form-check-label" for="">전체</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="reviewStatus">
+                                    <input class="form-check-input" type="radio" name="status">
                                     <label class="form-check-label">답변대기</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="reviewStatus">
+                                    <input class="form-check-input" type="radio" name="status">
                                     <label class="form-check-label">답변완료</label>
                                 </div>
                             </div>
@@ -81,7 +262,7 @@
                         <div class="row">
                             <div class="col-12 text-center">
                                 <button class="btn btn-outline-primary" type="reset">초기화</button>
-                                <button class="btn btn-primary" type="submit">검색</button>
+                                <button id="searchBtn" class="btn btn-primary" type="button">검색</button>
                             </div>
                         </div>
                     </div>
@@ -105,39 +286,14 @@
                                 <th scope="col" class="text-center">문의일</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr>
-                                <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-                                <th class="text-center" scope="row">1</th>
-                                <td class="text-center" data-bs-toggle="modal" data-bs-target="#reviewModal">간단한 문의제목이
-                                    나타납니다.
-                                </td>
-                                <td class="text-center">답변대기</td>
-                                <td class="text-center">2022-07-04</td>
-                            </tr>
-                            <tr data-toggle="collapse">
-                                <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-                                <th class="text-center" scope="row">2</th>
-                                <td class="text-center" data-bs-toggle="modal" data-bs-target="#reviewModal">간단한 문의제목이
-                                    나타납니다.
-                                </td>
-                                <td class="text-center">답변완료</td>
-                                <td class="text-center">2022-07-04</td>
-                            </tr>
+                            <tbody class="tbody">
+
                             </tbody>
                         </table>
                         <!-- TODO pagination 페이징 -->
                         <nav aria-label="Page navigation example">
                             <ul class="pagination justify-content-center">
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">이전</a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">다음</a>
-                                </li>
+
                             </ul>
                         </nav>
                         <div class="modal fade" id="reviewModal" tabindex="-1" style="display: none;"

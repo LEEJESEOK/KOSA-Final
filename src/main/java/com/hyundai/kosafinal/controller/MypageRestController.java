@@ -1,19 +1,21 @@
 package com.hyundai.kosafinal.controller;
 
-import com.hyundai.kosafinal.domain.MemberDTO;
-import com.hyundai.kosafinal.domain.MypageReviewDTO;
-import com.hyundai.kosafinal.domain.ReplyDTO;
+import com.hyundai.kosafinal.domain.*;
+import com.hyundai.kosafinal.entity.Criteria;
+import com.hyundai.kosafinal.entity.SearchMypageReviewCriteria;
 import com.hyundai.kosafinal.service.MemberService;
 import com.hyundai.kosafinal.service.MypageReviewService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -62,6 +64,42 @@ public class MypageRestController {
 
         return entry;
     }
+
+    // 1:1 문의 답글 추가
+    @PostMapping("/review/reply/register")
+    public boolean insert(@RequestBody ReplyDTO dto, @AuthenticationPrincipal AuthMemberDTO authentication) {
+        // 회원 정보 찾기
+        String userEmail = authentication.getEmail();
+        dto.setUserEmail(userEmail);
+
+        // reply에 insert
+        service.insertReply(dto);
+
+        // 게시글 상태정보 변경
+        int origin_id = dto.getOriginId();
+        service.updateStatus(origin_id);
+
+        log.info("문의 답글 작성 : " + dto);
+
+        return true;
+    }
+
+    @RequestMapping(value = "/searchMypageReview", method = RequestMethod.POST)
+    public Map<String, Object> searchMypageReview(@RequestBody SearchMypageReviewCriteria criteria) {
+        Map<String, Object> map = new HashMap<>();
+
+        int count = service.searchMypageReviewCount(criteria);
+        List<MypageReviewDTO> list = service.searchMypageReview(criteria);
+
+        PageDTO pageDTO = new PageDTO(criteria, count);
+        log.info("문의 검색: " + list);
+
+        map.put("list", list);
+        map.put("page", pageDTO);
+
+        return map;
+    }
+
 
     @RequestMapping(value = "/update", method = RequestMethod.POST) //업데이트
     public boolean update(@RequestBody Map<String, Object> params) throws ParseException {

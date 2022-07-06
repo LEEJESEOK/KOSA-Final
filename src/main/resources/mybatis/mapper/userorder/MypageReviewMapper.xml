@@ -29,7 +29,101 @@
         SELECT * FROM reply WHERE origin_id = #{id}
     </select>
 
+    <!-- 게시글 답글 추가 -->
+    <insert id="insertReply" statementType="CALLABLE">
+        <!-- SEQUENCE 미리 조회 -->
+        <selectKey resultType="int" keyProperty="id" order="BEFORE">
+            SELECT SQ_REPLY.nextval FROM dual
+        </selectKey>
+        { CALL SP_REPLY_INSERT(#{id}, #{content}, #{user_email}, #{origin_id}) }
+    </insert>
 
+    <!-- 게시글 상태 변경 -->
+    <update id="updateStatus">
+        UPDATE mypage_review
+        SET status = 1
+        WHERE id = #{id}
+    </update>
+
+    <!-- 백오피스 관련 문의 검색 결과 수 -->
+    <select id="searchMypageReviewCount" resultType="int">
+        SELECT COUNT(*)
+        FROM mypage_review
+        <where>
+            <!-- 키워드 필터링 -->
+            <if test="keyword != null">
+                <if test="type=='name'.toString()">
+                    UPPER(name) LIKE '%'||UPPER(#{keyword})||'%'
+                </if>
+                <if test="type=='id'.toString()">
+                    UPPER(id) LIKE '%'||UPPER(#{keyword})||'%'
+                </if>
+            </if>
+            <!-- 날짜 필터링 -->
+            <trim prefix = "and">
+                <if test="start_date != null and end_date != null">
+                    <![CDATA[
+                    TO_CHAR(edit_date, 'YYYYMMDD') >= TO_CHAR(#{start_date}, 'YYYYMMDD') AND TO_CHAR(edit_date, 'YYYYMMDD') <= TO_CHAR(#{end_date}, 'YYYYMMDD')
+                ]]>
+                </if>
+            </trim>
+            <!-- 문의종류 필터링 -->
+            <trim prefix = "and">
+                <if test="category != null or category != ''">
+                    category = #{category}
+                </if>
+            </trim>
+            <!-- 답변상태 필터링 -->
+            <trim prefix = "and">
+                <if test="status != -1">
+                    status = #{status}
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <!-- 백오피스 관련 문의 검색 결과, 페이징 적용 -->
+    <select id="searchMypageReview" resultType="MypageReviewDTO">
+        SELECT *
+        FROM (
+            SELECT rownum as rn, id, title, content, category, user_email, status, edit_date
+            FROM (SELECT * FROM mypage_review ORDER BY id DESC)
+        <where>
+            <!-- 키워드 필터링 -->
+            <if test="keyword != null">
+                <if test="type=='name'.toString()">
+                    UPPER(name) LIKE '%'||UPPER(#{keyword})||'%'
+                </if>
+                <if test="type=='id'.toString()">
+                    UPPER(id) LIKE '%'||UPPER(#{keyword})||'%'
+                </if>
+            </if>
+            <!-- 날짜 필터링 -->
+            <trim prefix = "and">
+                <if test="start_date != null and end_date != null">
+                    <![CDATA[
+                    TO_CHAR(edit_date, 'YYYYMMDD') >= TO_CHAR(#{start_date}, 'YYYYMMDD') AND TO_CHAR(edit_date, 'YYYYMMDD') <= TO_CHAR(#{end_date}, 'YYYYMMDD')
+                ]]>
+                </if>
+            </trim>
+            <!-- 문의종류 필터링 -->
+            <trim prefix = "and">
+                <if test="category != null or category != ''">
+                    category = #{category}
+                </if>
+            </trim>
+            <!-- 답변상태 필터링 -->
+            <trim prefix = "and">
+                <if test="status != -1">
+                    status = #{status}
+                </if>
+            </trim>
+        </where>
+        <![CDATA[
+            )
+            WHERE rn BETWEEN ((#{pageNum} - 1) * #{amount} + 1) AND (#{pageNum} * #{amount})
+        ]]>
+    </select>
 
 
 

@@ -3,6 +3,9 @@
       layout:decorate="~{/biz/layout/default}">
 <th:block layout:fragment="content">
     <script>
+        // 한 페이지에 띄울 개수
+        let amount = 5;
+
         $().ready(function () {
 
             // 테이블 선택한 행 table-active 적용
@@ -26,7 +29,232 @@
 
                 $("#checkAll").prop("checked", total == checked);
             });
+
+            // 기본적으로 1페이지 불러옴
+            let param = {"pageNum": 1, "amount": amount};
+            getPage(param);
         });
+
+        // 검색버튼 클릭 시
+        $(document).on("click", '#searchBtn', function () {
+            let param = {
+                "pageNum": 1, "amount": amount
+            };
+
+            // 주문 키워드 검색
+            let order_type = $("#orderKeywordType option:selected").val();
+            let order_keyword = $("#orderKeyword").val();
+            if (order_keyword != "") {
+                param.order_type = order_type;
+                param.order_keyword = order_keyword;
+            }
+            // 날짜 검색
+            let start_date = $("#startDateInput").val();
+            let end_date = $("#endDateInput").val();
+            if (start_date != null && end_date != null) {
+                param.start_date = start_date;
+                param.end_date = end_date;
+            }
+            // 상품 키워드 검색
+            let product_type = $("#productKeywordType option:selected").val();
+            let product_keyword = $("#productKeyword").val();
+            if (product_keyword != "") {
+                param.product_type = product_type;
+                param.product_keyword = product_keyword;
+            }
+            // 주문 키워드 검색
+            let order_status = $(":input:radio[name=orderStatus]:checked").val();
+            if (order_status != -1) {
+                param.order_status = order_status;
+            }
+
+            getPage(param);
+        });
+
+        // 서버에 데이터를 요청해 받아와 페이지를 만드는 함수
+        function getPage(param) {
+            $.ajax({
+                url: "[(@{/order/searchOrder})]",
+                method: "post",
+                data: JSON.stringify(param),
+                dataType: 'json',
+                contentType: "application/json; charset=UTF-8",
+                success: function (data) {
+                    let list = data.list;
+                    let page = data.page;
+
+                    $(".tbody").empty();
+                    $.each(list, function (idx, val) {
+                        addRow(param, idx, val);
+                        // 주문상품 세팅
+                        setItems(idx, val.id);
+                    });
+
+                    addPagination(param.pageNum, page);
+
+                },
+                error: function (request, status, error) {
+                    alert(request + ", " + status + ", " + error);
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(csrf_header, csrf_token);
+                }
+            });
+        }
+
+        // 테이블에 동적으로 row 추가하는 함수
+        function addRow(param, idx, data) {
+            let tbody = $(".tbody");
+            let row = "<tr>";
+            row += "<td class=\"text-center\"><input class=\"form-check-input\" type=\"checkbox\"></td>";
+            let index = (param.pageNum - 1) * (param.amount) + idx + 1;
+            row += "<th class=\"text-center\" scope=\"row\">" + index + "</th>";
+            row += "<td class=\"text-center\">" + data.date.toString().substring(0, 10) + "</td>";
+            row += "<td class=\"text-center\">" + data.orderId + "</td>";
+            row += "<td class=\"text-center\">" + data.receiver + "</td>";
+
+            // 주문 상품 넣기
+            row += "<td class=\"text-center\" id=\"item" + idx + "\">";
+
+            row += "</td>";
+            row += "<td class=\"text-center\">" + data.payType + "</td>";
+            row += "<td class=\"text-center\">" + addComma(data.totalPrice) + "원</td>";
+            switch (data.status) {
+                case 0:
+                    row += "<td class=\"text-center\">결제완료</td>";
+                    break;
+                case 1:
+                    row += "<td class=\"text-center\">배송중</td>";
+                    break;
+                case 2:
+                    row += "<td class=\"text-center\">배송완료</td>";
+                    break;
+                case 3:
+                    row += "<td class=\"text-center\">주문취소</td>";
+                    break;
+            }
+            if (data.status == 0) { // 결제완료 상태일 때만 취소버튼 보이게
+                row += "<td class=\"text-center\"><button class=\"btn btn-outline-danger\" onclick=\"cancelOrder(" + data.id + ")\">취소</button></td>";
+            } else {
+                row += "<td class=\"text-center\"></td>";
+            }
+            row += "<td class=\"text-center\"></td></tr>";
+
+            tbody.append(row);
+        }
+
+        function setItems(index, id) {
+            $.ajax({
+                url: "[(@{/order/getOrderItems/})]" + id,
+                method: "post",
+                dataType: 'json',
+                contentType: "application/json; charset=UTF-8",
+                success: function (data) {
+                    $.each(data, function (idx, val) {
+                        let itemHtml = val.name + "(" + val.pcolor + ", " + val.psize + ", " + val.amount + ")<br>";
+                        $("#item" + index).append(itemHtml);
+                    });
+                },
+                error: function (request, status, error) {
+                    alert(request + ", " + status + ", " + error);
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(csrf_header, csrf_token);
+                }
+            });
+        }
+
+        // 페이지 버튼 동적으로 추가하는 함수
+        function addPagination(pageNum, page) {
+            let pagination = $(".pagination");
+            pagination.empty();
+
+            let row = "";
+            if (page.prev) {
+                row += "<li class=\"page-item\">\n" +
+                    "                <a class=\"page-link\" href=\"#\" onClick=\"paging(" + (page.startPage - 1) + ")\">이전</a>\n" +
+                    "            </li>";
+            }
+            for (var i = page.startPage; i <= page.endPage; i++) {
+                if (i == pageNum) {
+                    row += "<li class=\"page-item\"><a class=\"page-link on\" href=\"#\" onClick=\"paging(" + i + ")\">" + i + "</a></li>";
+                } else {
+                    row += "<li class=\"page-item\"><a class=\"page-link\" href=\"#\" onClick=\"paging(" + i + ")\">" + i + "</a></li>";
+                }
+
+            }
+            if (page.next) {
+                row += "<li class=\"page-item\">\n" +
+                    "                <a class=\"page-link\" href=\"#\" onClick=\"paging(" + (page.endPage + 1) + ")\">다음</a>\n" +
+                    "            </li>";
+            }
+
+            pagination.append(row);
+
+        }
+
+        // 페이지를 눌렀을 때
+        function paging(page) {
+            let pageNum = parseInt(page);
+
+            let param = {
+                "pageNum": pageNum, "amount": amount
+            };
+
+            // 주문 키워드 검색
+            let order_type = $("#orderKeywordType option:selected").val();
+            let order_keyword = $("#orderKeyword").val();
+            if (order_keyword != "") {
+                param.order_type = order_type;
+                param.order_keyword = order_keyword;
+            }
+            // 날짜 검색
+            let start_date = $("#startDateInput").val();
+            let end_date = $("#endDateInput").val();
+            if (start_date != null && end_date != null) {
+                param.start_date = start_date;
+                param.end_date = end_date;
+            }
+            // 상품 키워드 검색
+            let product_type = $("#productKeywordType option:selected").val();
+            let product_keyword = $("#productKeyword").val();
+            if (product_keyword != "") {
+                param.product_type = product_type;
+                param.product_keyword = product_keyword;
+            }
+            // 주문 키워드 검색
+            let order_status = $(":input:radio[name=orderStatus]:checked").val();
+            if (order_status != -1) {
+                param.order_status = order_status;
+            }
+
+            getPage(param);
+        }
+
+        function cancelOrder(id) {
+            $.ajax({
+                url: "[(@{/order/cancel})]",
+                method: "post",
+                data: {
+                    id: id
+                },
+                success: function (data) {
+
+                },
+                error: function (request, status, error) {
+                    alert(error);
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(csrf_header, csrf_token);
+                }
+            });
+        }
+
+        function addComma(num) {
+            var regexp = /\B(?=(\d{3})+(?!\d))/g;
+            return num.toString().replace(regexp, ',');
+        }
+
     </script>
     <section class="section">
         <div class="row">
@@ -40,12 +268,10 @@
                                 </div>
                                 <div class="col-2">
                                     <select class="form-select" id="orderKeywordType">
-                                        <option>주문번호</option>
-                                        <option>품목별 주문번호</option>
-                                        <option>주문자명</option>
-                                        <option>주문자 아이디</option>
-                                        <option>주문서 이메일</option>
-                                        <option>주문서 연락처</option>
+                                        <option value="id">주문번호</option>
+                                        <option value="receiver">주문자명</option>
+                                        <option value="email">주문자 아이디</option>
+                                        <option value="tel">주문서 연락처</option>
                                     </select>
                                 </div>
                                 <div class="col-7">
@@ -57,10 +283,10 @@
                                     <label class="form-label">기간</label>
                                 </div>
                                 <div class="col-2">
-                                    <input type="date" class="form-control">
+                                    <input type="date" id="startDateInput" class="form-control">
                                 </div>
                                 <div class="col-2">
-                                    <input type="date" class="form-control">
+                                    <input type="date" id="endDateInput" class="form-control">
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -69,9 +295,9 @@
                                 </div>
                                 <div class="col-2">
                                     <select class="form-select" id="productKeywordType">
-                                        <option>상품명</option>
-                                        <option>상품코드</option>
-                                        <option>브랜드</option>
+                                        <option value="id">상품코드</option>
+                                        <option value="name">상품명</option>
+                                        <option value="brand">브랜드</option>
                                     </select>
                                 </div>
                                 <div class="col-7">
@@ -84,27 +310,28 @@
                                 </div>
                                 <div class="col-10">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" id="all" name="orderStatus"
-                                               checked>
+                                        <input class="form-check-input" type="radio" id="all"
+                                               name="orderStatus" value="-1" checked>
                                         <label class="form-check-label" for="all">전체</label>
                                     </div>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" id="payment_complete"
-                                               name="orderStatus">
+                                               name="orderStatus" value="0">
                                         <label class="form-check-label" for="payment_complete">결제완료</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" id="delivery" name="orderStatus">
+                                        <input class="form-check-input" type="radio" id="delivery"
+                                               name="orderStatus" value="1">
                                         <label class="form-check-label" for="delivery">배송중</label>
                                     </div>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" id="delivery_complete"
-                                               name="orderStatus">
+                                               name="orderStatus" value="2">
                                         <label class="form-check-label" for="delivery_complete">배송완료</label>
                                     </div>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" id="order_cancel"
-                                               name="orderStatus">
+                                               name="orderStatus" value="3">
                                         <label class="form-check-label" for="order_cancel">주문취소</label>
                                     </div>
                                 </div>
@@ -112,7 +339,7 @@
                             <div class="row">
                                 <div class="col-12 text-center">
                                     <button class="btn btn-outline-primary" type="reset">초기화</button>
-                                    <button class="btn btn-primary" type="submit">검색</button>
+                                    <button id="searchBtn" class="btn btn-primary" type="button">검색</button>
                                 </div>
                             </div>
                         </form>
@@ -125,75 +352,29 @@
                             <table class="table table-hover table-bordered">
                                 <thead>
                                 <tr>
-                                    <th scope="col" class="text-center">
+                                    <th scope="col" class="text-center" style="width:5%">
                                         <input class="form-check-input" id="checkAll" type="checkbox">
                                     </th>
-                                    <th scope="col" class="text-center">#</th>
-                                    <th scope="col" class="text-center">주문일</th>
-                                    <th scope="col" class="text-center">주문번호</th>
-                                    <th scope="col" class="text-center">주문자</th>
-                                    <th scope="col" class="text-center">상품명</th>
-                                    <th scope="col" class="text-center">결제수단</th>
-                                    <th scope="col" class="text-center">결제금액</th>
-                                    <th scope="col" class="text-center">배송상태</th>
-                                    <th scope="col" class="text-center">취소</th>
-                                    <th scope="col" class="text-center">비고</th>
+                                    <th scope="col" class="text-center" style="width:5%">#</th>
+                                    <th scope="col" class="text-center" style="width:9%">주문일</th>
+                                    <th scope="col" class="text-center" style="width:13%">주문번호</th>
+                                    <th scope="col" class="text-center" style="width:9%">주문자</th>
+                                    <th scope="col" class="text-center" style="width:20%">상품명</th>
+                                    <th scope="col" class="text-center" style="width:10%">결제수단</th>
+                                    <th scope="col" class="text-center" style="width:10%">결제금액</th>
+                                    <th scope="col" class="text-center" style="width:7%">배송상태</th>
+                                    <th scope="col" class="text-center" style="width:5%">취소</th>
+                                    <th scope="col" class="text-center" style="width:7%">비고</th>
                                 </tr>
                                 </thead>
-                                <tbody>
-                                <tr>
-                                    <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-                                    <th class="text-center" scope="row">1</th>
-                                    <td class="text-center"
-                                        th:text="${#dates.format(#calendars.createNow(), 'yyyy-MM-dd')}"></td>
-                                    <td class="text-center">20220703-000001</td>
-                                    <td class="text-center">이제석
-                                    </td>
-                                    <td>샘플상품1(색상, 사이즈, 개수)<br>샘플상품2(색상, 사이즈, 개수)<br></td>
-                                    <td class="text-center" th:text="'카드'"></td>
-                                    <td class="text-right text-xl-end"
-                                        th:text="'80000원'"></td>
-                                    <td class="text-center" th:text="'배송완료'"></td>
-                                    <td class="text-center">
-                                        <button class="btn btn-outline-danger">취소</button>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-                                    <th class="text-center" scope="row"
-                                        th:text="${2}"></th>
-                                    <td class="text-center"
-                                        th:text="${#dates.format(#calendars.createNow(), 'yyyy-MM-dd')}"></td>
-                                    <td class="text-center"
-                                        th:text="'20220703-000002'"></td>
-                                    <td class="text-center"
-                                        th:text="'이제석'"></td>
-                                    <td th:utext="'샘플상품1(색상, 사이즈, 개수)<br>샘플상품2(색상, 사이즈, 개수)<br>'"></td>
-                                    <td class="text-center" th:text="'카드'"></td>
-                                    <td class="text-right text-xl-end"
-                                        th:text="'80000원'"></td>
-                                    <td class="text-center" th:text="'배송완료'"></td>
-                                    <td class="text-center">
-                                        <button class="btn btn-outline-danger">취소</button>
-                                    </td>
-                                    <td></td>
-                                </tr>
+                                <tbody class="tbody">
+
                                 </tbody>
                             </table>
                         </div>
-                        <!-- TODO pagination 페이징 -->
                         <nav aria-label="Page navigation example">
                             <ul class="pagination justify-content-center">
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">이전</a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">다음</a>
-                                </li>
+
                             </ul>
                         </nav>
                     </div>
