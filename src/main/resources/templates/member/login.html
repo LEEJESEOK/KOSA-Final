@@ -1,74 +1,57 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" >
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/logo}">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>LoginPage</title>
-    <th:block th:replace="~{/head :: head}"></th:block>
-
-<!--    <script>-->
-<!--        function check_form(){-->
-<!--            if(document.getElementById("email").value==''){-->
-<!--                alert("아이디 /이메일을 입력해주십시오.");-->
-<!--                return false;-->
-<!--            }-->
-<!--            if(document.getElementById("password").value=='') {-->
-<!--                alert("비밀번호를 입력해주십시오.");-->
-<!--                return false;-->
-<!--            }-->
-<!--            document.getElementById('loginForm').submit();-->
-<!--        }-->
-
-<!--    </script>-->
+    <title>로그인 | 더한섬닷컴</title>
 </head>
-<body>
-<th:block th:replace="/header_logo.html::header_logo"></th:block>
-<div id="bodyWrap" class="login">
-    <h3 class="cnts_title"><span>로그인</span></h3>
-    <div class="sub_container">
-        <div id="handsomeCust" class="login_wrap box_type_1 renewal1904" style="display: flex; justify-content: center;">
-            <div class="border_box1">
-                <div class="inner_box">
-                    <div class="title_wrap">
-                        <h4>회원</h4>
-                    </div>
-                    <div id="hpIPLogin">
-                        <form  id="loginForm"  name="loginForm" action="/login" method="post">
-                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                            <input type="hidden" name="inputId" id="inputId" value = "" />
-                            <fieldset>
-                                <legend>로그인 입력항목</legend>
-                                <div class="login_section">
-
-                                    <p class="login_err_txt" id="hpErrMsg" style="margin-left:0px;"> </p>
-                                    <div>
-                                        <div>
-                                            <input type="text" id="email" name="email" placeholder="아이디 / 이메일을 입력하세요." title="아이디" value=""/>
-                                        </div>
-                                        <div>
-                                            <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요." title="비밀번호" />
-                                        </div>
-                                    </div>
-                                    <button class="btn_login" id="login_btn" style="cursor:pointer">로그인</button>
-                                    <a href="/member/signUp" class="btn_login" id="login_btn" >회원가입</a>
-                                </div>
-                            </fieldset>
-                        </form>
-
-
-                        <div class="section_bottom1">
-
-                                <a href="/oauth2/authorization/google" class="otp"><img src="/images/google.png"  width="300px" style="align-items:center; display: flex; justify-content:center;"  alt="구글"/></a>
-                                <a href="#"><img src="/images/naver.PNG"  width="300px" style="align-items:center; display: flex; justify-content:center;" alt="네이버"/></a>
-
+<th:block layout:fragment="bodyWrap">
+    <div id="bodyWrap" class="login">
+        <h3 class="cnts_title"><span>로그인</span></h3>
+        <div class="sub_container">
+            <div id="handsomeCust" class="login_wrap box_type_1 renewal1904"
+                 style="display: flex; justify-content: center;">
+                <div class="border_box1">
+                    <div class="inner_box">
+                        <div class="title_wrap">
+                            <h4>회원</h4>
                         </div>
+                        <div id="hpIPLogin">
+                            <form id="loginForm" name="loginForm" action="/login" method="post">
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                <input type="hidden" name="inputId" id="inputId" value="" autofocus/>
+                                <fieldset>
+                                    <legend>로그인 입력항목</legend>
+                                    <div class="login_section">
+
+                                        <p class="login_err_txt" id="hpErrMsg" style="margin-left:0px;"></p>
+                                        <div>
+                                            <div>
+                                                <input type="text" id="email" name="email"
+                                                       placeholder="아이디 / 이메일을 입력하세요." title="아이디" value=""/>
+                                            </div>
+                                            <div>
+                                                <input type="password" id="password" name="password"
+                                                       placeholder="비밀번호를 입력하세요." title="비밀번호"/>
+                                            </div>
+                                        </div>
+                                        <button class="btn_login" id="login_btn">로그인</button>
+                                        <button class="btn_join wt" id="join_btn" type="button" href="#" onclick="location.href='/member/signUp'">회원가입</button>
+                                    </div>
+                                </fieldset>
+                            </form>
+
+                            <div class="section_bottom mt20">
+                                <a href="/oauth2/authorization/google" class="otp">
+                                    <img src="/images/google.png" alt="구글"/></a>
+<!--                                <a href="#">-->
+<!--                                    <img src="/images/naver.PNG" alt="네이버"/>-->
+<!--                                </a>-->
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<th:block th:replace="/footer.html::footer"></th:block>
-</body>
+</th:block>
 </html>

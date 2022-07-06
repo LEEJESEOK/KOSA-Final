@@ -1,6 +1,6 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="header">
-    <th:block th:replace="~{/include/csrf::csrf}"></th:block>
+    <th:block th:replace="~{/fragment/csrf::csrf}"></th:block>
     <header class="header fixed-top d-flex align-items-center" id="header">
         <div class="d-flex align-items-center justify-content-between">
             <a class="logo d-flex align-items-center" th:href="@{/biz}">

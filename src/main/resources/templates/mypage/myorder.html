@@ -1,566 +1,554 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/logo}">
 <head>
-    <meta charset="UTF-8">
-    <title>
-        주문/배송/반품/취소 | 더한섬닷컴</title>
-    <!-- head -->
-    <th:block th:replace="~{/head :: head}"></th:block>
-    <!-- //head -->
+    <title>주문/배송/반품/취소 | 더한섬닷컴</title>
 </head>
-<body>
-<th:block th:replace="/header_logo.html::header_logo"></th:block>
-<th:block th:replace="/header_logo.html::header_logo"></th:block>
+<th:block layout:fragment="script">
+    <script type="text/javascript">
 
-<script>
-    // jQuery 충돌 방지
-    var arkQuery = $.noConflict(true);
-</script>
+        $(document).ready(function () {
 
-<script type="text/javascript">
-
-    $(document).ready(function () {
-
-        $(".btn_close").on("click", function () {//팝업 닫기
-            hideProductLayer();
-            $(".popwrap").hide();
-        });
+            $(".btn_close").on("click", function () {//팝업 닫기
+                hideProductLayer();
+                $(".popwrap").hide();
+            });
 
 
-        $('.btn_star_score li a').on('click', function () {
-            var idx = $(this).parent('li').index() + 1;
-            for (var i = 1; i < 6; i++) {
-                $('.write_star_score1807 .cmt_star .cmt_per').removeClass('star' + i);
-            }
-            $('.write_star_score1807 .cmt_star .cmt_per').addClass('star' + idx);
-            $("#rating").val($(this).attr('value'));
-        });
+            $('.btn_star_score li a').on('click', function () {
+                var idx = $(this).parent('li').index() + 1;
+                for (var i = 1; i < 6; i++) {
+                    $('.write_star_score1807 .cmt_star .cmt_per').removeClass('star' + i);
+                }
+                $('.write_star_score1807 .cmt_star .cmt_per').addClass('star' + idx);
+                $("#rating").val($(this).attr('value'));
+            });
 
-        $(".point_wrap .point.review .tlt").mouseover(function () {
-            $("#store_delbox").css("display", "block");
-        });
-        $(".point_wrap .point.review .tlt").mouseout(function () {
-            $("#store_delbox").css("display", "none");
-        });
+            $(".point_wrap .point.review .tlt").mouseover(function () {
+                $("#store_delbox").css("display", "block");
+            });
+            $(".point_wrap .point.review .tlt").mouseout(function () {
+                $("#store_delbox").css("display", "none");
+            });
 
-        $(document).on('click', '.evaluation_write1905 .select_group', function () {//옵션선택박스 열기
-            if (!$(this).hasClass('open')) {
-                $('.opt_box1905').stop().slideDown('fast');
-                $(this).addClass('open');
-                $(this).find('.transparent_mask1905').stop().show('fast');
-            } else {
-                $('.opt_box1905').stop().slideUp('fast');
-                $(this).removeClass('open');
-                $(this).find('.transparent_mask1905').stop().hide('fast');
-            }
-        });
-        $(document).on('mouseenter focus', '.opt_box1905 li', function () {
-            $(this).addClass('active');
-        });
-        $(document).on('mouseleave blur', '.opt_box1905 li', function () {
-            $(this).removeClass('active');
-        });
-
-
-        $("#menuTitle").text("주문/배송/반품/취소"); //주문/배송/반품/취소
-
-        // 동적으로 주문 상품들 추가
-        // 주문 목록 수만큼 for문 돌기
-        let cnt = $("#pcount").val();
-        for (var i = 1; i <= cnt; i++) {
-            let id = $("#orderId" + i).val();
-            console.log(i + ": " + id);
-            $.ajax({
-                url: "[(@{/order/getOrderItems/})]" + id,
-                method: "post",
-                success: function (data) {
-                    let rows = "";
-                    let tr = $("#listBody" + id);
-
-                    let len = data.length;
-
-                    $.each(data, function (idx, val) {
-                        setOrderItems(idx, val.orderedListId, val, len);
-                    });
-
-                },
-                error: function (request, status, error) {
-                    alert(error);
-                },
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader(csrf_header, csrf_token);
+            $(document).on('click', '.evaluation_write1905 .select_group', function () {//옵션선택박스 열기
+                if (!$(this).hasClass('open')) {
+                    $('.opt_box1905').stop().slideDown('fast');
+                    $(this).addClass('open');
+                    $(this).find('.transparent_mask1905').stop().show('fast');
+                } else {
+                    $('.opt_box1905').stop().slideUp('fast');
+                    $(this).removeClass('open');
+                    $(this).find('.transparent_mask1905').stop().hide('fast');
                 }
             });
-        }
+            $(document).on('mouseenter focus', '.opt_box1905 li', function () {
+                $(this).addClass('active');
+            });
+            $(document).on('mouseleave blur', '.opt_box1905 li', function () {
+                $(this).removeClass('active');
+            });
 
-    });
 
-    // 주문 상품 <tr>을 동적으로 추가
-    function setOrderItems(idx, id, item, len) {
-        let date = $("#listBody" + id).find("#orderDate").val();
-        let status = $("#listBody" + id).find("#orderStatus").val();
-        let rows = "";
-        let tr = $("#listBody" + id);
+            $("#menuTitle").text("주문/배송/반품/취소"); //주문/배송/반품/취소
 
-        rows += "<tr class='al_middle'>";
-        if (idx == 0) {
-            rows += "<td rowspan='" + len + "' class='frt'>";
-            let dates = date.split("-");
-            let strDate = dates[0] + dates[1] + dates[2];
-            rows += "<p class='num'>" + strDate + "H" + id + "</p>";
-            rows += "<span class='sum_date'>" + date + "</span>";
-            rows += "<a href='/mypage/myorderDetail?id=" + id + "' class='btn_view'>상세보기</a></td>";
-        }
-        rows += "<td>";
-        rows += "<div class='pt_list_all'><a href='/product/detail/" + item.pid + "'>";
-        rows += "<img src='" + item.image1Uri + "'></a>";
-        rows += "<div class='tlt_wrap'><a href='/product/detail/" + item.pid + "' class='basket_tlt'>";
-        rows += "<span class='tlt'>" + item.brand + "</span>";
-        rows += "<span class='sb_tlt'>" + item.name + "</span></a>";
-        rows += "<p class='color_op'>color : " + item.pcolor + " <span class='and_line'>/</span> ";
-        rows += "size : " + item.psize + "</p></div></td>";
-        rows += "<td>" + item.amount + "</td>";
-        rows += "<td>" + getExchangePrice(item.amount * item.price) + "</td>";
-        if (idx == 0) {
-            if (status == 0) {
-                rows += "<td rowspan='" + len + "'>결제완료</td>";
-            } else if (status == 1) {
-                rows += "<td rowspan='" + len + "'>배송중</td>";
-            } else if (status == 2) {
-                rows += "<td rowspan='" + len + "'>배송완료</td>";
-            } else if (status == 3) {
-                rows += "<td rowspan='" + len + "'>주문취소</td>";
-            }
+            // 동적으로 주문 상품들 추가
+            // 주문 목록 수만큼 for문 돌기
+            let cnt = $("#pcount").val();
+            for (var i = 1; i <= cnt; i++) {
+                let id = $("#orderId" + i).val();
+                console.log(i + ": " + id);
+                $.ajax({
+                    url: "[(@{/order/getOrderItems/})]" + id,
+                    method: "post",
+                    success: function (data) {
+                        let rows = "";
+                        let tr = $("#listBody" + id);
 
-            if (status == 3) {
-                rows += "<td rowspan='" + len + "' class='pd12_resize'>주문취소완료";
-                rows += "</td>";
-            } else if (status == 1 || status == 2) {
-                rows += "<td rowspan='" + len + "' class='pd12_resize'>";
-                rows += "</td>";
-            } else {
-                rows += "<td rowspan='" + len + "' class='pd12_resize'><div class='btn_wrap'><a class='btn wt_ss' onclick='cancelOrder(" + id + ")'>주문취소</a></div>";
-                rows += "</td>";
-            }
+                        let len = data.length;
 
-        }
-        rows += "</tr>";
+                        $.each(data, function (idx, val) {
+                            setOrderItems(idx, val.orderedListId, val, len);
+                        });
 
-        tr.append(rows);
-    }
-
-    function cancelOrder(id) {
-        let lc = new layerConfirm("주문을 취소하시겠습니까?", "예", "아니요");
-        lc.confirmAction = function () {
-            $.ajax({
-                url: "[(@{/order/cancel})]",
-                method: "post",
-                data: {
-                    id: id
-                },
-                success: function (data) {
-                    let la = new layerAlert("주문이 취소되었습니다.");
-                    la.confirmAction = function () {
-                        window.location.reload();
+                    },
+                    error: function (request, status, error) {
+                        alert(error);
+                    },
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(csrf_header, csrf_token);
                     }
-                },
-                error: function (request, status, error) {
-                    alert(error);
-                },
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader(csrf_header, csrf_token);
+                });
+            }
+
+        });
+
+        // 주문 상품 <tr>을 동적으로 추가
+        function setOrderItems(idx, id, item, len) {
+            let date = $("#listBody" + id).find("#orderDate").val();
+            let status = $("#listBody" + id).find("#orderStatus").val();
+            let rows = "";
+            let tr = $("#listBody" + id);
+
+            rows += "<tr class='al_middle'>";
+            if (idx == 0) {
+                rows += "<td rowspan='" + len + "' class='frt'>";
+                let dates = date.split("-");
+                let strDate = dates[0] + dates[1] + dates[2];
+                rows += "<p class='num'>" + strDate + "H" + id + "</p>";
+                rows += "<span class='sum_date'>" + date + "</span>";
+                rows += "<a href='/mypage/myorderDetail?id=" + id + "' class='btn_view'>상세보기</a></td>";
+            }
+            rows += "<td>";
+            rows += "<div class='pt_list_all'><a href='/product/detail/" + item.pid + "'>";
+            rows += "<img src='" + item.image1Uri + "'></a>";
+            rows += "<div class='tlt_wrap'><a href='/product/detail/" + item.pid + "' class='basket_tlt'>";
+            rows += "<span class='tlt'>" + item.brand + "</span>";
+            rows += "<span class='sb_tlt'>" + item.name + "</span></a>";
+            rows += "<p class='color_op'>color : " + item.pcolor + " <span class='and_line'>/</span> ";
+            rows += "size : " + item.psize + "</p></div></td>";
+            rows += "<td>" + item.amount + "</td>";
+            rows += "<td>" + getExchangePrice(item.amount * item.price) + "</td>";
+            if (idx == 0) {
+                if (status == 0) {
+                    rows += "<td rowspan='" + len + "'>결제완료</td>";
+                } else if (status == 1) {
+                    rows += "<td rowspan='" + len + "'>배송중</td>";
+                } else if (status == 2) {
+                    rows += "<td rowspan='" + len + "'>배송완료</td>";
+                } else if (status == 3) {
+                    rows += "<td rowspan='" + len + "'>주문취소</td>";
                 }
-            });
-        };
 
-    }
+                if (status == 3) {
+                    rows += "<td rowspan='" + len + "' class='pd12_resize'>주문취소완료";
+                    rows += "</td>";
+                } else if (status == 1 || status == 2) {
+                    rows += "<td rowspan='" + len + "' class='pd12_resize'>";
+                    rows += "</td>";
+                } else {
+                    rows += "<td rowspan='" + len + "' class='pd12_resize'><div class='btn_wrap'><a class='btn wt_ss' onclick='cancelOrder(" + id + ")'>주문취소</a></div>";
+                    rows += "</td>";
+                }
 
-    function getExchangePrice(price) {
-        var exchangePrice = "";
+            }
+            rows += "</tr>";
 
-        exchangePrice = "￦ " + addComma(price);
+            tr.append(rows);
+        }
 
-        return exchangePrice;
-    }
+        function cancelOrder(id) {
+            let lc = new layerConfirm("주문을 취소하시겠습니까?", "예", "아니요");
+            lc.confirmAction = function () {
+                $.ajax({
+                    url: "[(@{/order/cancel})]",
+                    method: "post",
+                    data: {
+                        id: id
+                    },
+                    success: function (data) {
+                        let la = new layerAlert("주문이 취소되었습니다.");
+                        la.confirmAction = function () {
+                            window.location.reload();
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert(error);
+                    },
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(csrf_header, csrf_token);
+                    }
+                });
+            };
 
-    //]]>
-</script>
+        }
 
-<!-- 주소 API Key(한섬) -->
-<input type="hidden" id="apiConfmKey" value="U01TX0FVVEgyMDE5MDYxNzE2NDczMzEwODgxNTI=">
+        function getExchangePrice(price) {
+            var exchangePrice = "";
 
-<div id="bodyWrap">
-    <h3 class="cnts_title">
-        <span id="menuTitle">주문/배송/반품/취소</span>
-    </h3>
-    <input type="hidden" id="pcount" th:value="${#lists.size(orderList)}">
-    <div class="" style="position:relative;width:834px;height:0;display:block;left:50%;margin-left:-338px;">
-        <div class="delch_box tooltip1907" id="store_delbox" style="display: none;">
-            <span class="arr">위치아이콘</span>
-            작성 가능한 상품평 확인하시고,<br/>
-            상품평 작성해서 추가 마일리지 적립하세요.
+            exchangePrice = "￦ " + addComma(price);
+
+            return exchangePrice;
+        }
+
+        //]]>
+    </script>
+</th:block>
+<th:block layout:fragment="bodyWrap">
+    <!-- 주소 API Key(한섬) -->
+    <input type="hidden" id="apiConfmKey" value="U01TX0FVVEgyMDE5MDYxNzE2NDczMzEwODgxNTI=">
+    <div id="bodyWrap">
+        <h3 class="cnts_title">
+            <span id="menuTitle">주문/배송/반품/취소</span>
+        </h3>
+        <input type="hidden" id="pcount" th:value="${#lists.size(orderList)}">
+        <div class="" style="position:relative;width:834px;height:0;display:block;left:50%;margin-left:-338px;">
+            <div class="delch_box tooltip1907" id="store_delbox" style="display: none;">
+                <span class="arr">위치아이콘</span>
+                작성 가능한 상품평 확인하시고,<br/>
+                상품평 작성해서 추가 마일리지 적립하세요.
+            </div>
         </div>
-    </div>
-    <div class="sub_container">
-        <!-- lnb -->
-        <th:block th:replace="~{/lnb :: lnb}"></th:block>
-        <!-- //lnb -->
-        <!-- cnts -->
-        <div class="sub_cnts">
-            <div class="title_wrap mt20">
-                <h4>상품 주문 목록<!-- 상품 주문목록 --></h4>
-            </div>
-            <!-- table -->
-            <div class="tblwrap lncl1812"><!-- 클래스추가 181204 -->
-                <table class="tbl_ltype review_betterment1905">
-                    <caption>상품 주문 목록</caption>
-                    <colgroup class="interval1812"><!-- 수정 181204 -->
-                        <col style="width:120px">
-                        <col>
-                        <col style="width:43px">
-                        <col style="width:112px">
-                        <col style="width:89px">
-                        <col style="width:111px">
-                    </colgroup>
-                    <thead>
-                    <tr>
-                        <th scope="col">주문번호<!-- 주문번호 --></th>
-                        <th scope="col">상품정보<!-- 상품정보 --></th>
-                        <th scope="col" style="padding:15px 0">수량<!-- 수량 --></th><!-- 스타일추가 181204 -->
-                        <th scope="col">판매가<!-- 판매가 --></th>
-                        <th scope="col">주문상태<!-- 주문상태 --></th>
-                        <th scope="col">구분<!-- 구분 --></th>
-                    </tr>
-                    </thead>
-
-                    <tbody th:if="${ orderList == null }">
-                    <tr>
-                        <td colspan="6" class="no_data">주문내역이 없습니다.</td>
-                    </tr>
-                    </tbody>
-
-                    <tbody th:id="'listBody'+${order.id}" th:each="order:${orderList}">
-                    <input type="hidden" th:id="'orderId'+${orderStat.count}" th:value="${order.id}">
-                    <input type="hidden" th:id="orderDate" th:value="${#dates.format(order.date, 'yyyy-MM-dd')}">
-                    <input type="hidden" th:id="orderStatus" th:value="${order.status}">
-                    </tbody>
-                </table>
-            </div>
-            <!-- //table -->
-<!--            &lt;!&ndash; paging &ndash;&gt;-->
-<!--            <div class="paging">-->
-<!--                <a class="prev2" href="javascript:void(0);">처음 페이지로 이동</a>-->
-<!--                <a href="javascript:void(0);" class="prev">이전 페이지로 이동</a>-->
-<!--                <span class="num"><a href="javascript:void(0);" class="pageBtn on" pagenum="1">1</a></span>-->
-<!--                <a href="javascript:void(0);" class="next">다음 페이지로 이동</a>-->
-<!--                <a href="javascript:void(0);" class="next2">마지막 페이지로 이동</a></div>-->
-<!--            &lt;!&ndash; //paging &ndash;&gt;-->
-
-            <!-- Guide Table -->
-            <div class="gd_wrap mt70">
-                <dl class="gd_list com pl0">
-                    <dt>주문 배송 조회 안내<!-- 주문 배송 조회 안내 --></dt>
-                    <dd>
-                        <ul class="bul_sty01_li">
-                            <li>한섬마일리지는 배송 완료 후 10일 후 지급 됩니다.<!-- 한섬마일리지는 배송 완료 후 10일 후 지급 됩니다. --></li>
-                            <li>반품신청은 배송완료 후 7일까지 가능 합니다.<!-- 반품신청은 배송완료 후 7일까지 가능 합니다. --></li>
-                            <li>배송준비중 상태에서는 주문의 취소/변경이나 주소의 변경이 불가능 합니다.
-                                <!-- 배송준비중 상태에서는 주문의 취소/변경이나 주소의 변경이 불가능 합니다. --></li>
-                            <li>주문 시 사용한 기프트 카드, 한섬마일리지는 모두 동일 수단으로 환불됩니다.
-                                <!-- 주문 시 사용한 기프트 카드 , 한섬마일리지는 모두 동일 수단으로 환불됩니다. --></li>
-                            <li>한섬마일리지는 정상 매장 기준 5%, 아울렛 1% 적립됩니다. (세일상품 제외)
-                                <!-- 한섬마일리지는 정상 매장 기준 5%, 아울렛 1% 적립됩니다. (세일상품 제외) --></li>
-                            <li>10%를 초과하여 할인하는 상품은 마일리지 적립 대상에서 제외됩니다.
-                                <!-- 10%를 초과하여 할인하는 상품은 마일리지 적립 대상에서 제외됩니다. --></li>
-                            <li>주문완료 상태까지는 배송지 수정이 가능 합니다.<!-- 주문완료 상태까지는 배송지 수정이 가능 합니다. --></li>
-                            <li>가상계좌 결제 시 입금대기 상태에서 4시간 내 입금하지 않으면 자동으로 주문이 취소 됩니다.
-                                <!-- 가상계좌 결제 시 입금대기 상태에서 24시간 내 입금하지 않으면 자동으로 주문이 취소 됩니다. --></li>
-                            <li>상세보기 화면에서 증빙서류의 출력이 가능 합니다.<!-- 상세보기 화면에서 증빙서류의 출력이 가능 합니다. --></li>
-                        </ul>
-                    </dd>
-                </dl>
-            </div>
-            <div class="gd_wrap">
-                <div class="delivery_step">
-                    <p class="title">주문/배송프로세스<!-- 주문 / 배송 프로세스 --></p>
-                    <ol>
-                        <li>
-                            <p class="step"><span>STEP 1</span> 1. 입금대기중<!-- 입금 대기중 --></p>
-                            <p class="txt">가상계좌를 선택 하셨다면 결제를 완료해 주세요.<!-- 가상계좌를 선택 하셨다면<br>결제를 완료해 주세요. --></p>
-                        </li>
-                        <li>
-                            <p class="step"><span>STEP 2</span> 2. 주문완료<!-- 주문완료 --></p>
-                            <p class="txt">주문정보를 확인하고 있습니다.<!-- 주문정보를 확인 하고<br>있습니다. --></p>
-                        </li>
-                        <li>
-                            <p class="step"><span>STEP 3</span> 3. 배송준비중<!-- 배송 준비중 --></p>
-                            <p class="txt">상품의 배송을 준비하고 있습니다.<!-- 상품의 배송을 준비하고<br>있습니다. --></p>
-                        </li>
-                        <li>
-                            <p class="step"><span>STEP 4</span> 4. 배송중<!-- 배송중 --></p>
-                            <p class="txt">물품이 발송되어 고객님께 배송 중 입니다.<!-- 물품이 발송되어 고객님께<br>배송 중 입니다. --></p>
-                        </li>
-                        <li>
-                            <p class="step"><span>STEP 5</span> 5. 배송완료<!-- 배송완료 --></p>
-                            <p class="txt">배송이 완료 되었습니다.<!-- 배송이 완료 되었습니다.--></p>
-                        </li>
-                    </ol>
+        <div class="sub_container">
+            <!-- lnb -->
+            <th:block th:replace="~{/fragment/lnb :: lnb}"></th:block>
+            <!-- //lnb -->
+            <!-- cnts -->
+            <div class="sub_cnts">
+                <div class="title_wrap mt20">
+                    <h4>상품 주문 목록<!-- 상품 주문목록 --></h4>
                 </div>
-            </div>
-            <!-- //Guide Table -->
+                <!-- table -->
+                <div class="tblwrap lncl1812"><!-- 클래스추가 181204 -->
+                    <table class="tbl_ltype review_betterment1905">
+                        <caption>상품 주문 목록</caption>
+                        <colgroup class="interval1812"><!-- 수정 181204 -->
+                            <col style="width:120px">
+                            <col>
+                            <col style="width:43px">
+                            <col style="width:112px">
+                            <col style="width:89px">
+                            <col style="width:111px">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th scope="col">주문번호<!-- 주문번호 --></th>
+                            <th scope="col">상품정보<!-- 상품정보 --></th>
+                            <th scope="col" style="padding:15px 0">수량<!-- 수량 --></th><!-- 스타일추가 181204 -->
+                            <th scope="col">판매가<!-- 판매가 --></th>
+                            <th scope="col">주문상태<!-- 주문상태 --></th>
+                            <th scope="col">구분<!-- 구분 --></th>
+                        </tr>
+                        </thead>
 
-        </div>
-        <!-- //cnts -->
-    </div>
-</div>
+                        <tbody th:if="${ orderList == null }">
+                        <tr>
+                            <td colspan="6" class="no_data">주문내역이 없습니다.</td>
+                        </tr>
+                        </tbody>
 
-<!--layer popup-->
-<div class="popwrap w_type_4" id="addrModPop" style="display:none;">
-    <!-- Title1 -->
-    <div class="title_wrap">
-        <h4 class="float_left">
-            <spring:theme code="global.delivery.modaddr"><!-- 배송지 수정 --></spring:theme>
-        </h4>
-        <p class="reqd_txt none"><strong class="reqd">*</strong> 표시는 필수항목입니다.<!-- 표시는 필수항목입니다. --></p>
-    </div>
-    <!-- //Title1 -->
-    <!-- Table -->
-    <div class="tblwrap">
-        <form id="addrModForm" action="/ko/mypage/order/myorders" method="post"><input type="hidden" name="code"
-                                                                                       id="code" value="">
-            <input type="hidden" name="cellphone" id="hp" value="">
-            <input type="hidden" name="phone1" id="ph" value="">
-            <input type="hidden" name="email" id="email" value="">
-            <table class="tbl_wtype1">
-                <caption>제목입력</caption>
-                <colgroup>
-                    <col style="width:150px">
-                    <col>
-                </colgroup>
-                <tbody>
-                <tr>
-                    <th scope="row"><strong class="reqd">*</strong><label for="adress">배송지 주소</label></th>
-                    <td>
-                        <!-- address -->
-                        <input type="text" name="postalcode" title="우편번호" id="zipCode" class="post" readonly="">
-                        <input type="button" value="우편번호 조회" class="btn add_s" id="findAddrBtn"><br>
-                        <input type="text" name="streetname" id="address1" title="주소1" class="post_wall top"
-                               readonly="">
-                        <input type="text" name="streetnumber" id="address2" value="나머지 주소를 입력해 주세요." title="주소2"
-                               class="post_wall" readonly="">
-                        <!-- //address -->
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row"><strong class="reqd">*</strong><label for="name">수령인</label></th>
-                    <td><input type="text" name="lastname" id="name" maxlength="13" title="수령인" value=""></td>
-                </tr>
-                <tr>
-                    <th scope="row"><strong class="reqd">*</strong><label for="hp1">휴대폰 번호</label></th>
-                    <td>
-                        <!-- hp -->
-                        <select id="hp1" title="휴대폰 번호 앞자리" class="hp_num1">
-                            <option value="010">010</option>
-                            <option value="011">011</option>
-                            <option value="016">016</option>
-                            <option value="017">017</option>
-                            <option value="018">018</option>
-                            <option value="019">019</option>
-                        </select>
-                        <div class="form_hyphen">-</div>
-                        <input type="text" id="hp2" title="휴대폰 번호 가운데자리" class="hp_num2" numberonly="true"
-                               maxlength="4">
-                        <div class="form_hyphen">-</div>
-                        <input type="text" id="hp3" title="휴대폰 번호 뒷자리" class="hp_num2" numberonly="true" maxlength="4">
-                        <!-- //hp -->
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row" class="th_space"><label for="ph1">연락처</label></th>
-                    <td>
-                        <!-- hp -->
-                        <select id="ph1" title="연락처 앞자리" class="hp_num1">
-                            <option value="">선택</option>
-                            <option value="02">02</option>
-                            <option value="031">031</option>
-                            <option value="032">032</option>
-                            <option value="033">033</option>
-                            <option value="041">041</option>
-                            <option value="042">042</option>
-                            <option value="043">043</option>
-                            <option value="044">044</option>
-                            <option value="051">051</option>
-                            <option value="052">052</option>
-                            <option value="053">053</option>
-                            <option value="054">054</option>
-                            <option value="055">055</option>
-                            <option value="061">061</option>
-                            <option value="062">062</option>
-                            <option value="063">063</option>
-                            <option value="064">064</option>
-                        </select>
-                        <div class="form_hyphen">-</div>
-                        <input type="text" id="ph2" title="연락처 가운데자리" class="hp_num2" numberonly="true" maxlength="4">
-                        <div class="form_hyphen">-</div>
-                        <input type="text" id="ph3" title="연락처 뒷자리" class="hp_num2" numberonly="true" maxlength="4">
-                        <!-- //hp -->
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row" class="th_space"><label for="orderr">배송 요청사항</label></th>
-                    <td id="orderrArea">
-                        <!-- input -->
-                        <div class="input_sumtxt">
-                            <input name="orderr" id="orderr" type="text" value="" autocomplete="off" title="배송요청사항"
-                                   readonly="">
-                            <div>
-                                <span id="textCnt">0</span>
-                                <span>/20자</span>
-                            </div>
-                        </div>
-                        <!-- //input -->
-                        <div class="delivery_comt" style="display:none;">
-                            <ul>
-                                <li class="deliveryMsg">
-                                    <a href="#;" data-readonly="readonly" deliveryrequestmessage="배송 전 연락 바랍니다">
-                                        배송 전 연락 바랍니다</a>
-                                </li>
-                                <li class="deliveryMsg" style="background: rgb(248, 248, 248);">
-                                    <a href="#;" data-readonly="readonly" deliveryrequestmessage="부재 시 문 앞에 놓아주세요">
-                                        부재 시 문 앞에 놓아주세요</a>
-                                </li>
-                                <li class="deliveryMsg">
-                                    <a href="#;" data-readonly="readonly" deliveryrequestmessage="부재 시 경비실에 맡겨주세요">
-                                        부재 시 경비실에 맡겨주세요</a>
-                                </li>
-                                <li class="deliveryMsg" style="background: rgb(248, 248, 248);">
-                                    <a href="#;" data-readonly="readonly" deliveryrequestmessage="빠른 배송 부탁드립니다">
-                                        빠른 배송 부탁드립니다</a>
-                                </li>
-                                <li class="deliveryMsg">
-                                    <a href="#;" data-readonly="readonly" deliveryrequestmessage="부재 시 핸드폰으로 연락바랍니다">
-                                        부재 시 핸드폰으로 연락바랍니다</a>
-                                </li>
-                                <li class="deliveryMsg" style="background: rgb(248, 248, 248);">
-                                    <a href="#;" data-readonly="write" deliveryrequestmessage="직접입력">
-                                        직접입력</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-                <!-- 211028 공동현관 출입방법 S -->
-                <tr class="enter-door211026">
-                    <th scope="row" class="tooltip191022 th_space tooltip211026-">
-                        <label for="enter_door" class="">공동현관<br>출입방법</label><span class="ico_question">icon</span>
-                        <div class="delch_box190816 ">
-                            <span class="arr">위치아이콘</span>
+                        <tbody th:id="'listBody'+${order.id}" th:each="order:${orderList}">
+                        <input type="hidden" th:id="'orderId'+${orderStat.count}" th:value="${order.id}">
+                        <input type="hidden" th:id="orderDate" th:value="${#dates.format(order.date, 'yyyy-MM-dd')}">
+                        <input type="hidden" th:id="orderStatus" th:value="${order.status}">
+                        </tbody>
+                    </table>
+                </div>
+                <!-- //table -->
+                <!--            &lt;!&ndash; paging &ndash;&gt;-->
+                <!--            <div class="paging">-->
+                <!--                <a class="prev2" href="javascript:void(0);">처음 페이지로 이동</a>-->
+                <!--                <a href="javascript:void(0);" class="prev">이전 페이지로 이동</a>-->
+                <!--                <span class="num"><a href="javascript:void(0);" class="pageBtn on" pagenum="1">1</a></span>-->
+                <!--                <a href="javascript:void(0);" class="next">다음 페이지로 이동</a>-->
+                <!--                <a href="javascript:void(0);" class="next2">마지막 페이지로 이동</a></div>-->
+                <!--            &lt;!&ndash; //paging &ndash;&gt;-->
+
+                <!-- Guide Table -->
+                <div class="gd_wrap mt70">
+                    <dl class="gd_list com pl0">
+                        <dt>주문 배송 조회 안내<!-- 주문 배송 조회 안내 --></dt>
+                        <dd>
                             <ul class="bul_sty01_li">
-                                <li>공동현관 출입번호가 정확하지 않을 경우, 배송 기사의 판단에 따라 1층 공동현관 앞 또는 경비실에 배송될 수 있습니다.</li>
-                                <li>새벽배송 시 배송 전 연락을 드리지 않습니다.</li>
+                                <li>한섬마일리지는 배송 완료 후 10일 후 지급 됩니다.<!-- 한섬마일리지는 배송 완료 후 10일 후 지급 됩니다. --></li>
+                                <li>반품신청은 배송완료 후 7일까지 가능 합니다.<!-- 반품신청은 배송완료 후 7일까지 가능 합니다. --></li>
+                                <li>배송준비중 상태에서는 주문의 취소/변경이나 주소의 변경이 불가능 합니다.
+                                    <!-- 배송준비중 상태에서는 주문의 취소/변경이나 주소의 변경이 불가능 합니다. --></li>
+                                <li>주문 시 사용한 기프트 카드, 한섬마일리지는 모두 동일 수단으로 환불됩니다.
+                                    <!-- 주문 시 사용한 기프트 카드 , 한섬마일리지는 모두 동일 수단으로 환불됩니다. --></li>
+                                <li>한섬마일리지는 정상 매장 기준 5%, 아울렛 1% 적립됩니다. (세일상품 제외)
+                                    <!-- 한섬마일리지는 정상 매장 기준 5%, 아울렛 1% 적립됩니다. (세일상품 제외) --></li>
+                                <li>10%를 초과하여 할인하는 상품은 마일리지 적립 대상에서 제외됩니다.
+                                    <!-- 10%를 초과하여 할인하는 상품은 마일리지 적립 대상에서 제외됩니다. --></li>
+                                <li>주문완료 상태까지는 배송지 수정이 가능 합니다.<!-- 주문완료 상태까지는 배송지 수정이 가능 합니다. --></li>
+                                <li>가상계좌 결제 시 입금대기 상태에서 4시간 내 입금하지 않으면 자동으로 주문이 취소 됩니다.
+                                    <!-- 가상계좌 결제 시 입금대기 상태에서 24시간 내 입금하지 않으면 자동으로 주문이 취소 됩니다. --></li>
+                                <li>상세보기 화면에서 증빙서류의 출력이 가능 합니다.<!-- 상세보기 화면에서 증빙서류의 출력이 가능 합니다. --></li>
                             </ul>
-                        </div>
-                    </th>
-                    <td>
-                        <div class="input_sumtxt_box">
+                        </dd>
+                    </dl>
+                </div>
+                <div class="gd_wrap">
+                    <div class="delivery_step">
+                        <p class="title">주문/배송프로세스<!-- 주문 / 배송 프로세스 --></p>
+                        <ol>
+                            <li>
+                                <p class="step"><span>STEP 1</span> 1. 입금대기중<!-- 입금 대기중 --></p>
+                                <p class="txt">가상계좌를 선택 하셨다면 결제를 완료해 주세요.<!-- 가상계좌를 선택 하셨다면<br>결제를 완료해 주세요. --></p>
+                            </li>
+                            <li>
+                                <p class="step"><span>STEP 2</span> 2. 주문완료<!-- 주문완료 --></p>
+                                <p class="txt">주문정보를 확인하고 있습니다.<!-- 주문정보를 확인 하고<br>있습니다. --></p>
+                            </li>
+                            <li>
+                                <p class="step"><span>STEP 3</span> 3. 배송준비중<!-- 배송 준비중 --></p>
+                                <p class="txt">상품의 배송을 준비하고 있습니다.<!-- 상품의 배송을 준비하고<br>있습니다. --></p>
+                            </li>
+                            <li>
+                                <p class="step"><span>STEP 4</span> 4. 배송중<!-- 배송중 --></p>
+                                <p class="txt">물품이 발송되어 고객님께 배송 중 입니다.<!-- 물품이 발송되어 고객님께<br>배송 중 입니다. --></p>
+                            </li>
+                            <li>
+                                <p class="step"><span>STEP 5</span> 5. 배송완료<!-- 배송완료 --></p>
+                                <p class="txt">배송이 완료 되었습니다.<!-- 배송이 완료 되었습니다.--></p>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- //Guide Table -->
+
+            </div>
+            <!-- //cnts -->
+        </div>
+    </div>
+
+    <!--layer popup-->
+    <div class="popwrap w_type_4" id="addrModPop" style="display:none;">
+        <!-- Title1 -->
+        <div class="title_wrap">
+            <h4 class="float_left">
+                <spring:theme code="global.delivery.modaddr"><!-- 배송지 수정 --></spring:theme>
+            </h4>
+            <p class="reqd_txt none"><strong class="reqd">*</strong> 표시는 필수항목입니다.<!-- 표시는 필수항목입니다. --></p>
+        </div>
+        <!-- //Title1 -->
+        <!-- Table -->
+        <div class="tblwrap">
+            <form id="addrModForm" action="/ko/mypage/order/myorders" method="post"><input type="hidden" name="code"
+                                                                                           id="code" value="">
+                <input type="hidden" name="cellphone" id="hp" value="">
+                <input type="hidden" name="phone1" id="ph" value="">
+                <input type="hidden" name="email" id="email" value="">
+                <table class="tbl_wtype1">
+                    <caption>제목입력</caption>
+                    <colgroup>
+                        <col style="width:150px">
+                        <col>
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <th scope="row"><strong class="reqd">*</strong><label for="adress">배송지 주소</label></th>
+                        <td>
+                            <!-- address -->
+                            <input type="text" name="postalcode" title="우편번호" id="zipCode" class="post" readonly="">
+                            <input type="button" value="우편번호 조회" class="btn add_s" id="findAddrBtn"><br>
+                            <input type="text" name="streetname" id="address1" title="주소1" class="post_wall top"
+                                   readonly="">
+                            <input type="text" name="streetnumber" id="address2" value="나머지 주소를 입력해 주세요." title="주소2"
+                                   class="post_wall" readonly="">
+                            <!-- //address -->
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><strong class="reqd">*</strong><label for="name">수령인</label></th>
+                        <td><input type="text" name="lastname" id="name" maxlength="13" title="수령인" value=""></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><strong class="reqd">*</strong><label for="hp1">휴대폰 번호</label></th>
+                        <td>
+                            <!-- hp -->
+                            <select id="hp1" title="휴대폰 번호 앞자리" class="hp_num1">
+                                <option value="010">010</option>
+                                <option value="011">011</option>
+                                <option value="016">016</option>
+                                <option value="017">017</option>
+                                <option value="018">018</option>
+                                <option value="019">019</option>
+                            </select>
+                            <div class="form_hyphen">-</div>
+                            <input type="text" id="hp2" title="휴대폰 번호 가운데자리" class="hp_num2" numberonly="true"
+                                   maxlength="4">
+                            <div class="form_hyphen">-</div>
+                            <input type="text" id="hp3" title="휴대폰 번호 뒷자리" class="hp_num2" numberonly="true"
+                                   maxlength="4">
+                            <!-- //hp -->
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="th_space"><label for="ph1">연락처</label></th>
+                        <td>
+                            <!-- hp -->
+                            <select id="ph1" title="연락처 앞자리" class="hp_num1">
+                                <option value="">선택</option>
+                                <option value="02">02</option>
+                                <option value="031">031</option>
+                                <option value="032">032</option>
+                                <option value="033">033</option>
+                                <option value="041">041</option>
+                                <option value="042">042</option>
+                                <option value="043">043</option>
+                                <option value="044">044</option>
+                                <option value="051">051</option>
+                                <option value="052">052</option>
+                                <option value="053">053</option>
+                                <option value="054">054</option>
+                                <option value="055">055</option>
+                                <option value="061">061</option>
+                                <option value="062">062</option>
+                                <option value="063">063</option>
+                                <option value="064">064</option>
+                            </select>
+                            <div class="form_hyphen">-</div>
+                            <input type="text" id="ph2" title="연락처 가운데자리" class="hp_num2" numberonly="true"
+                                   maxlength="4">
+                            <div class="form_hyphen">-</div>
+                            <input type="text" id="ph3" title="연락처 뒷자리" class="hp_num2" numberonly="true" maxlength="4">
+                            <!-- //hp -->
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="th_space"><label for="orderr">배송 요청사항</label></th>
+                        <td id="orderrArea">
+                            <!-- input -->
                             <div class="input_sumtxt">
-                                <!-- 211028 공동현관 출입방법 S -->
-                                <input name="frontDoorSelectMessage" id="enter_door" type="text"
-                                       value="공동현관 출입방법을 선택해주세요" title="공동현관 출입방법" autocomplete="off" readonly="">
-                                <!-- 211028 공동현관 출입방법 E -->
+                                <input name="orderr" id="orderr" type="text" value="" autocomplete="off" title="배송요청사항"
+                                       readonly="">
+                                <div>
+                                    <span id="textCnt">0</span>
+                                    <span>/20자</span>
+                                </div>
                             </div>
-                            <div class="delivery_comt" style="display: none;">
+                            <!-- //input -->
+                            <div class="delivery_comt" style="display:none;">
                                 <ul>
                                     <li class="deliveryMsg">
-                                        <a href="#;" data-input-display="none" data-default="자유 출입 가능"
-                                           data-recentry-message="자유 출입 가능">
-                                            (최근)&nbsp;자유 출입 가능
-                                        </a>
+                                        <a href="#;" data-readonly="readonly" deliveryrequestmessage="배송 전 연락 바랍니다">
+                                            배송 전 연락 바랍니다</a>
                                     </li>
                                     <li class="deliveryMsg" style="background: rgb(248, 248, 248);">
+                                        <a href="#;" data-readonly="readonly" deliveryrequestmessage="부재 시 문 앞에 놓아주세요">
+                                            부재 시 문 앞에 놓아주세요</a>
                                     </li>
                                     <li class="deliveryMsg">
+                                        <a href="#;" data-readonly="readonly" deliveryrequestmessage="부재 시 경비실에 맡겨주세요">
+                                            부재 시 경비실에 맡겨주세요</a>
                                     </li>
                                     <li class="deliveryMsg" style="background: rgb(248, 248, 248);">
+                                        <a href="#;" data-readonly="readonly" deliveryrequestmessage="빠른 배송 부탁드립니다">
+                                            빠른 배송 부탁드립니다</a>
                                     </li>
                                     <li class="deliveryMsg">
+                                        <a href="#;" data-readonly="readonly"
+                                           deliveryrequestmessage="부재 시 핸드폰으로 연락바랍니다">
+                                            부재 시 핸드폰으로 연락바랍니다</a>
                                     </li>
                                     <li class="deliveryMsg" style="background: rgb(248, 248, 248);">
+                                        <a href="#;" data-readonly="write" deliveryrequestmessage="직접입력">
+                                            직접입력</a>
                                     </li>
-                                    <li class="deliveryMsg"><a href="#;" data-default="공동현관 출입번호"
-                                                               data-input-display="block">공동현관 출입번호</a></li>
-                                    <li class="deliveryMsg" style="background: rgb(248, 248, 248);"><a href="#;"
-                                                                                                       data-default="자유 출입 가능"
-                                                                                                       data-input-display="none">자유
-                                        출입 가능</a></li>
-                                    <li class="deliveryMsg"><a href="#;" data-default="기타"
-                                                               data-input-display="block">기타</a></li>
                                 </ul>
                             </div>
-                        </div>
-                        <div class="input_sumtxt enter_front">
-                            <input id="frontDoorMessage" name="frontDoorMessage" type="text" placeholder="15자 이내로 입력하세요"
-                                   title="출입방법 예시" maxlength="15">
-                            <div>
-                                <span id="frontDoorMessageLength">0</span>
-                                <span>/15자</span>
+                        </td>
+                    </tr>
+                    <!-- 211028 공동현관 출입방법 S -->
+                    <tr class="enter-door211026">
+                        <th scope="row" class="tooltip191022 th_space tooltip211026-">
+                            <label for="enter_door" class="">공동현관<br>출입방법</label><span class="ico_question">icon</span>
+                            <div class="delch_box190816 ">
+                                <span class="arr">위치아이콘</span>
+                                <ul class="bul_sty01_li">
+                                    <li>공동현관 출입번호가 정확하지 않을 경우, 배송 기사의 판단에 따라 1층 공동현관 앞 또는 경비실에 배송될 수 있습니다.</li>
+                                    <li>새벽배송 시 배송 전 연락을 드리지 않습니다.</li>
+                                </ul>
                             </div>
-                        </div>
-                    </td>
-                </tr>
-                <!-- 211028 공동현관 출입방법 E -->
-                <tr>
-                    <th scope="row" class="th_space"><label for="emailId">수령자 E-MAIL</label></th>
-                    <td>
-                        <input name="emailId" id="emailId" type="text" value="" title="수령자 EMAIL">
-                        @
-                        <select id="emailDomainSel" style="width:120px" title="이메일 아이디 도메인">
-                            <option value="">직접입력</option>
-                            <option value="naver.com">naver.com</option>
-                            <option value="daum.net">daum.net</option>
-                            <option value="yahoo.co.kr">yahoo.co.kr</option>
-                            <option value="lycos.co.kr">lycos.co.kr</option>
-                            <option value="nate.com">nate.com</option>
-                            <option value="empas.com">empas.com</option>
-                            <option value="hotmail.com">hotmail.com</option>
-                            <option value="msn.com">msn.com</option>
-                            <option value="google.com">google.com</option>
-                            <option value="hanmir.com">hanmir.com</option>
-                            <option value="chol.net">chol.net</option>
-                            <option value="korea.com">korea.com</option>
-                            <option value="netsgo.com">netsgo.com</option>
-                            <option value="dreamwiz.com">dreamwiz.com</option>
-                            <option value="hanafos.com">hanafos.com</option>
-                            <option value="freechal.com">freechal.com</option>
-                            <option value="hitel.net">hitel.net</option>
-                        </select>
-                        <input name="emailDomain" id="emailDomain" type="text" value="" title="수령자 EMAIL 도메인">
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </form>
+                        </th>
+                        <td>
+                            <div class="input_sumtxt_box">
+                                <div class="input_sumtxt">
+                                    <!-- 211028 공동현관 출입방법 S -->
+                                    <input name="frontDoorSelectMessage" id="enter_door" type="text"
+                                           value="공동현관 출입방법을 선택해주세요" title="공동현관 출입방법" autocomplete="off" readonly="">
+                                    <!-- 211028 공동현관 출입방법 E -->
+                                </div>
+                                <div class="delivery_comt" style="display: none;">
+                                    <ul>
+                                        <li class="deliveryMsg">
+                                            <a href="#;" data-input-display="none" data-default="자유 출입 가능"
+                                               data-recentry-message="자유 출입 가능">
+                                                (최근)&nbsp;자유 출입 가능
+                                            </a>
+                                        </li>
+                                        <li class="deliveryMsg" style="background: rgb(248, 248, 248);">
+                                        </li>
+                                        <li class="deliveryMsg">
+                                        </li>
+                                        <li class="deliveryMsg" style="background: rgb(248, 248, 248);">
+                                        </li>
+                                        <li class="deliveryMsg">
+                                        </li>
+                                        <li class="deliveryMsg" style="background: rgb(248, 248, 248);">
+                                        </li>
+                                        <li class="deliveryMsg"><a href="#;" data-default="공동현관 출입번호"
+                                                                   data-input-display="block">공동현관 출입번호</a></li>
+                                        <li class="deliveryMsg" style="background: rgb(248, 248, 248);"><a href="#;"
+                                                                                                           data-default="자유 출입 가능"
+                                                                                                           data-input-display="none">자유
+                                            출입 가능</a></li>
+                                        <li class="deliveryMsg"><a href="#;" data-default="기타"
+                                                                   data-input-display="block">기타</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="input_sumtxt enter_front">
+                                <input id="frontDoorMessage" name="frontDoorMessage" type="text"
+                                       placeholder="15자 이내로 입력하세요"
+                                       title="출입방법 예시" maxlength="15">
+                                <div>
+                                    <span id="frontDoorMessageLength">0</span>
+                                    <span>/15자</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- 211028 공동현관 출입방법 E -->
+                    <tr>
+                        <th scope="row" class="th_space"><label for="emailId">수령자 E-MAIL</label></th>
+                        <td>
+                            <input name="emailId" id="emailId" type="text" value="" title="수령자 EMAIL">
+                            @
+                            <select id="emailDomainSel" style="width:120px" title="이메일 아이디 도메인">
+                                <option value="">직접입력</option>
+                                <option value="naver.com">naver.com</option>
+                                <option value="daum.net">daum.net</option>
+                                <option value="yahoo.co.kr">yahoo.co.kr</option>
+                                <option value="lycos.co.kr">lycos.co.kr</option>
+                                <option value="nate.com">nate.com</option>
+                                <option value="empas.com">empas.com</option>
+                                <option value="hotmail.com">hotmail.com</option>
+                                <option value="msn.com">msn.com</option>
+                                <option value="google.com">google.com</option>
+                                <option value="hanmir.com">hanmir.com</option>
+                                <option value="chol.net">chol.net</option>
+                                <option value="korea.com">korea.com</option>
+                                <option value="netsgo.com">netsgo.com</option>
+                                <option value="dreamwiz.com">dreamwiz.com</option>
+                                <option value="hanafos.com">hanafos.com</option>
+                                <option value="freechal.com">freechal.com</option>
+                                <option value="hitel.net">hitel.net</option>
+                            </select>
+                            <input name="emailDomain" id="emailDomain" type="text" value="" title="수령자 EMAIL 도메인">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+        <!-- //Table -->
+        <div class="btnwrap">
+            <input class="btn wt_s" value="취소" type="button" id="cancelBtn">
+            <input class="btn gray_s mr0" value="등록" type="button" id="applyBtn">
+        </div>
+
+        <!-- btn_close -->
+        <a href="#" class="btn_close"><img
+                src="http://cdn.thehandsome.com/_ui/desktop/common/images/popup/ico_close.png"
+                alt="닫기"></a>
+        <!-- //btn_close -->
     </div>
-    <!-- //Table -->
-    <div class="btnwrap">
-        <input class="btn wt_s" value="취소" type="button" id="cancelBtn">
-        <input class="btn gray_s mr0" value="등록" type="button" id="applyBtn">
+    <!--//layer popup-->
+
+    <div class="layerArea" id="productLayer" style="display: none;">
+        <div class="layerBg"></div>
     </div>
-
-    <!-- btn_close -->
-    <a href="#" class="btn_close"><img src="http://cdn.thehandsome.com/_ui/desktop/common/images/popup/ico_close.png"
-                                       alt="닫기"></a>
-    <!-- //btn_close -->
-</div>
-<!--//layer popup-->
-
-<div class="layerArea" id="productLayer" style="display: none;">
-    <div class="layerBg"></div>
-</div>
-
-<!-- footerWrap -->
-<th:block th:replace="~{/footer :: footer}"></th:block>
-<!-- //footerWrap -->
-
-</body>
+</th:block>
 </html>

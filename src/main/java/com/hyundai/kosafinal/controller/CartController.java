@@ -18,7 +18,7 @@ import java.util.List;
 @Log4j2
 @Controller
 @RequestMapping("/cart")
-@PreAuthorize("hasRole('USER')")
+@PreAuthorize("hasRole('ROLE_USER')")
 public class CartController {
 
     @Autowired
