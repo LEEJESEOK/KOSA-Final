@@ -7,6 +7,7 @@ import com.hyundai.kosafinal.domain.SizeDTO;
 import com.hyundai.kosafinal.entity.Criteria;
 
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author LEE JESEOK
@@ -94,4 +95,10 @@ public interface ProductService {
      * @return 조건에 해당하는 상품 개수
      */
     int getFilteredProductCount(String id, String size, String color, CategoryDTO categoryDTO, String brand, int minPrice, int maxPrice);
+
+    int saveProductInfo(ProductDTO productDTO, List<MultipartFile> files);
+
+    List<CategoryDTO> getCategoryList();
+
+    String getColorChip(String colorId);
 }

@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +24,9 @@ public class ProductReviewController {
 
   private ProductReviewService productReviewService;
 
+  @Value("${s3.bucket.address}")
+  private String S3_BUCKET_ADDRESS;
+
   public ProductReviewController(ProductReviewService productReviewService) {
     this.productReviewService = productReviewService;
   }
@@ -38,7 +42,7 @@ public class ProductReviewController {
       if (p.getImgURI() == null || p.getImgURI().equals("")) {
         continue;
       }
-      p.setImgURI("https://kosa-aws-bucket.s3.ap-northeast-2.amazonaws.com/" + p.getImgURI());
+      p.setImgURI(S3_BUCKET_ADDRESS + p.getImgURI());
     }
     return list;
   }
@@ -56,7 +60,7 @@ public class ProductReviewController {
       if (p.getImgURI() == null || p.getImgURI().equals("")) {
         continue;
       }
-      p.setImgURI("https://kosa-aws-bucket.s3.ap-northeast-2.amazonaws.com/" + p.getImgURI());
+      p.setImgURI(S3_BUCKET_ADDRESS + p.getImgURI());
       imageReviewList.add(p);
     }
     return imageReviewList;

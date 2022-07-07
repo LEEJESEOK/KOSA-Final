@@ -1,138 +1,174 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.hyundai.kosafinal.mapper.product.ProductMapper">
 
-    <resultMap id="ProductMap" type="ProductDTO">
-        <result property="id" column="ID"/>
-        <result property="size" column="SIZE"/>
-        <result property="colorId" column="COLOR_ID"/>
-        <result property="name" column="NAME"/>
-        <result property="brand" column="BRAND"/>
-        <result property="price" column="PRICE"/>
-        <result property="categoryLarge" column="CATEGORY_LARGE"/>
-        <result property="categoryMedium" column="CATEGORY_MEDIUM"/>
-        <result property="categorySmall" column="CATEGORY_SMALL"/>
-        <result property="image1Uri" column="IMAGE1_URI"/>
-        <result property="image2Uri" column="IMAGE2_URI"/>
-        <result property="image3Uri" column="IMAGE3_URI"/>
-        <result property="colorChipUri" column="COLOR_CHIP_URI"/>
-        <result property="stockAmount" column="STOCK_AMOUNT"/>
-    </resultMap>
+  <resultMap id="ProductMap" type="ProductDTO">
+    <result property="id" column="ID"/>
+    <result property="size" column="SIZE"/>
+    <result property="colorId" column="COLOR_ID"/>
+    <result property="name" column="NAME"/>
+    <result property="brand" column="BRAND"/>
+    <result property="price" column="PRICE"/>
+    <result property="categoryLarge" column="CATEGORY_LARGE"/>
+    <result property="categoryMedium" column="CATEGORY_MEDIUM"/>
+    <result property="categorySmall" column="CATEGORY_SMALL"/>
+    <result property="image1Uri" column="IMAGE1_URI"/>
+    <result property="image2Uri" column="IMAGE2_URI"/>
+    <result property="image3Uri" column="IMAGE3_URI"/>
+    <result property="colorChipUri" column="COLOR_CHIP_URI"/>
+    <result property="stockAmount" column="STOCK_AMOUNT"/>
+  </resultMap>
 
-    <!--상품 상세 정보-->
-    <select id="getProductDetailList" resultMap="ProductMap">
-        SELECT *
-        FROM PRODUCT
-        WHERE ID like NVL(#{id}, '%')
-          AND "SIZE" like NVL(#{size}, '%')
-          AND COLOR_ID like NVL(#{colorId}, '%')
-          AND CATEGORY_LARGE like NVL(#{category.large}, '%')
-          AND CATEGORY_MEDIUM like NVL(#{category.medium}, '%')
-          AND CATEGORY_SMALL like NVL(#{category.small}, '%')
-    </select>
 
-    <!--카테고리에 해당하는 제품 목록-->
-    <select id="selectProductListByCategory" resultMap="ProductMap">
-        SELECT *
-        FROM sf_display_product_list_by_category(#{large}, #{medium}, #{small})
-    </select>
+  <select id="getColorChipByPid" resultType="String">
+    SELECT p.COLOR_CHIP_URI
+    FROM PRODUCT p
+    where p.COLOR_CHIP_URI like '%'||#{colorId}||'%'
+      and ROWNUM = 1
+  </select>
 
-    <!--필터에 해당하는 제품 목록, 페이징 적용-->
-    <select id="selectFilteredProductListWithPaging" resultMap="ProductMap">
-        select *
-        from (select ROWNUM rn, p.*
-              from SF_DISPLAY_FILTERED_PRODUCT_LIST(#{id}, #{size}, #{colorId},
-                                                    #{category.large}, #{category.medium}, #{category.small},
-                                                    #{brand}, #{minPrice}, #{maxPrice}, #{sortType}) p)
-        where rn between ((#{criteria.pageNum} - 1) * #{criteria.amount} + 1) and (#{criteria.pageNum} * #{criteria.amount})
-    </select>
+  <!--상품 상세 정보-->
+  <select id="getProductDetailList" resultMap="ProductMap">
+    SELECT *
+    FROM PRODUCT
+    WHERE ID like NVL(#{id}, '%')
+      AND "SIZE" like NVL(#{size}, '%')
+      AND COLOR_ID like NVL(#{colorId}, '%')
+      AND CATEGORY_LARGE like NVL(#{category.large}, '%')
+      AND CATEGORY_MEDIUM like NVL(#{category.medium}, '%')
+      AND CATEGORY_SMALL like NVL(#{category.small}, '%')
+  </select>
 
-    <!--필터에 해당하는 제품의 색상 목록-->
-    <select id="selectFilteredColorListWithPaging" resultType="ColorDTO">
-        SELECt ID                                                 productId,
-               COLOR_ID                                           id,
-               (select COLOR_NAME FROM COLOR WHERE ID = COLOR_ID) colorName,
-               COLOR_CHIP_URI                                     colorChipUri
-        FROM VIEW_PRODUCT_LIST_COLOR_NO_DUPLICATES
-        WHERE ID IN (select ID
-                     from (select ROWNUM rn, p.*
-                           from SF_DISPLAY_FILTERED_PRODUCT_LIST(#{id}, #{size}, #{colorId},
-                                                                 #{category.large}, #{category.medium},
-                                                                 #{category.small},
-                                                                 #{brand}, #{minPrice}, #{maxPrice}, #{sortType}) p)
-                     )
-    </select>
-    <!--필터에 해당하는 제품의 사이즈 목록-->
-    <select id="selectFilteredSizeListWithPaging" resultType="SizeDTO">
-        SELECt ID     productId,
-               "SIZE" "size"
-        FROM VIEW_PRODUCT_LIST_SIZE_NO_DUPLICATES
-        WHERE ID IN (select ID
-                     from (select ROWNUM rn
-                                , p.*
-                           from SF_DISPLAY_FILTERED_PRODUCT_LIST(#{id}, #{size}, #{colorId}
-                                    , #{category.large}, #{category.medium}, #{category.small}
-                                    , #{brand}, #{minPrice}, #{maxPrice}
-                                    , #{sortType}) p)
-                     )
-    </select>
+  <!--카테고리에 해당하는 제품 목록-->
+  <select id="selectProductListByCategory" resultMap="ProductMap">
+    SELECT *
+    FROM sf_display_product_list_by_category(#{large}, #{medium}, #{small})
+  </select>
 
-    <select id="selectProductListByQuery">
+  <!--필터에 해당하는 제품 목록, 페이징 적용-->
+  <select id="selectFilteredProductListWithPaging" resultMap="ProductMap">
+    select *
+    from (select ROWNUM rn, p.*
+          from SF_DISPLAY_FILTERED_PRODUCT_LIST(#{id}, #{size}, #{colorId},
+                                                #{category.large}, #{category.medium},
+                                                #{category.small},
+                                                #{brand}, #{minPrice}, #{maxPrice}, #{sortType}) p)
+    where rn between ((#{criteria.pageNum} - 1) * #{criteria.amount} + 1) and (#{criteria.pageNum} * #{criteria.amount})
+  </select>
 
-    </select>
-    
-    <select id="selectProductDetailById" resultType="com.hyundai.kosafinal.domain.ProductDTO">
+  <!--필터에 해당하는 제품의 색상 목록-->
+  <select id="selectFilteredColorListWithPaging" resultType="ColorDTO">
+    SELECt ID                                                 productId,
+           COLOR_ID                                           id,
+           (select COLOR_NAME FROM COLOR WHERE ID = COLOR_ID) colorName,
+           COLOR_CHIP_URI                                     colorChipUri
+    FROM VIEW_PRODUCT_LIST_COLOR_NO_DUPLICATES
+    WHERE ID IN (select ID
+                 from (select ROWNUM rn, p.*
+                       from SF_DISPLAY_FILTERED_PRODUCT_LIST(#{id}, #{size}, #{colorId},
+                                                             #{category.large}, #{category.medium},
+                                                             #{category.small},
+                                                             #{brand}, #{minPrice}, #{maxPrice},
+                                                             #{sortType}) p)
+    )
+  </select>
+  <!--필터에 해당하는 제품의 사이즈 목록-->
+  <select id="selectFilteredSizeListWithPaging" resultType="SizeDTO">
+    SELECt ID     productId,
+           "SIZE" "size"
+    FROM VIEW_PRODUCT_LIST_SIZE_NO_DUPLICATES
+    WHERE ID IN (select ID
+                 from (select ROWNUM rn
+                            , p.*
+                       from SF_DISPLAY_FILTERED_PRODUCT_LIST(#{id}, #{size}, #{colorId}
+                              , #{category.large}, #{category.medium}, #{category.small}
+                              , #{brand}, #{minPrice}, #{maxPrice}
+                              , #{sortType}) p)
+    )
+  </select>
+
+  <select id="selectProductListByQuery">
+
+  </select>
+
+  <select id="selectProductDetailById" resultType="com.hyundai.kosafinal.domain.ProductDTO">
         <![CDATA[
-        SELECT * FROM TABLE(SF_PRODUCT_BY_ID(#{productId}))
-        ]]>
+    SELECT *
+    FROM TABLE(SF_PRODUCT_BY_ID(#{productId}))
+    ]]>
     </select>
 
-    <select id="selectCategory" resultType="CategoryDTO">
-        SELECT *
-        FROM CATEGORY
-        ORDER BY LARGE, MEDIUM, SMALL
-    </select>
+  <select id="selectCategory" resultType="com.hyundai.kosafinal.domain.CategoryDTO">
+    SELECT large, medium, small
+    FROM CATEGORY
+    ORDER BY LARGE, MEDIUM, SMALL
+  </select>
 
-    <!--전체 제품 수-->
-    <select id="getTotalCount" resultType="int">
-        SELECT COUNT(*)
-        FROM VIEW_PRODUCT_LIST_ID_NO_DUPLICATES
-    </select>
+  <!--전체 제품 수-->
+  <select id="getTotalCount" resultType="int">
+    SELECT COUNT(*)
+    FROM VIEW_PRODUCT_LIST_ID_NO_DUPLICATES
+  </select>
 
-    <!--카테고리에 해당하는 제품 수-->
-    <select id="getCategoryCount" resultType="int">
-        SELECT COUNT(*)
-        FROM sf_display_product_list_by_category(#{large}, #{medium}, #{small})
-    </select>
+  <!--카테고리에 해당하는 제품 수-->
+  <select id="getCategoryCount" resultType="int">
+    SELECT COUNT(*)
+    FROM sf_display_product_list_by_category(#{large}, #{medium}, #{small})
+  </select>
 
-    <!--필터에 해당하는 제품 수-->
-    <select id="getFilteredProductListCount" resultType="int">
-        select COUNT(*)
-        from (select ROWNUM rn, p.*
-              from SF_DISPLAY_FILTERED_PRODUCT_LIST(#{id}, #{size}, #{colorId},
-                                                    #{category.large}, #{category.medium}, #{category.small},
-                                                    #{brand}, #{minPrice}, #{maxPrice}, 0) p)
-    </select>
+  <!--필터에 해당하는 제품 수-->
+  <select id="getFilteredProductListCount" resultType="int">
+    select COUNT(*)
+    from (select ROWNUM rn, p.*
+          from SF_DISPLAY_FILTERED_PRODUCT_LIST(#{id}, #{size}, #{colorId},
+                                                #{category.large}, #{category.medium},
+                                                #{category.small},
+                                                #{brand}, #{minPrice}, #{maxPrice}, 0) p)
+  </select>
 
-    <select id="selectProductByIdAndColor" resultType="ProductDTO">
-      select *
-      FROM PRODUCT
-      where id = #{productId}
-      <if test='color != null || color != ""'>
-        and
-        color_id = #{color}
-      </if>
-    </select>
+  <select id="selectProductByIdAndColor" resultType="ProductDTO">
+    select *
+    FROM PRODUCT
+    where id = #{productId}
+    <if test='color != null || color != ""'>
+      and
+      color_id = #{color}
+    </if>
+  </select>
 
-    <select id="selectColors" resultType="ProductDTO">
-      SELECT * FROM view_product_list_color_no_duplicates
-      WHERE id = #{productId}
-    </select>
+  <select id="selectColors" resultType="ProductDTO">
+    SELECT *
+    FROM view_product_list_color_no_duplicates
+    WHERE id = #{productId}
+  </select>
 
-    <select id="selectSize" resultType="ProductDTO">
-      SELECT * from view_product_list_size_no_duplicates
-      where id = #{productId}
-    </select>
+  <select id="selectSize" resultType="ProductDTO">
+    SELECT *
+    from view_product_list_size_no_duplicates
+    where id = #{productId}
+  </select>
+
+  <insert id="insertProduct" parameterType="ProductDTO" statementType="CALLABLE">
+      <![CDATA[
+    {call SP_PRODUCT_INSERT(
+      #{id},
+      #{size},
+      #{colorId},
+      #{name},
+      #{brand},
+      #{categoryLarge},
+      #{categoryMedium},
+      #{categorySmall},
+      #{detail},
+      #{price},
+      #{image1Uri},
+      #{image2Uri},
+      #{image3Uri},
+      #{colorChipUri},
+      #{stockAmount})
+      }
+    ]]>
+    </insert>
 </mapper>
