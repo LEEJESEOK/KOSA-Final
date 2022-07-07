@@ -1,28 +1,33 @@
 package com.hyundai.kosafinal.controller;
 
-import com.hyundai.kosafinal.domain.VipDTO;
-import com.hyundai.kosafinal.service.MemberService;
+import com.hyundai.kosafinal.domain.LogDTO;
+import com.hyundai.kosafinal.domain.MemberDTO;
+import com.hyundai.kosafinal.service.MLService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.boot.configurationprocessor.json.JSONArray;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-@Controller
-@RequestMapping("/ml2")
+@RestController
+@RequestMapping("/analysis")
 public class MLRestController {
     @Autowired
-    MemberService service;
+    MLService service;
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public ModelAndView Test() {
@@ -62,22 +67,106 @@ public class MLRestController {
     }
 
 
-    @RequestMapping(value = "/vip", method = RequestMethod.POST)
-    public Map<String, Object> vip(@RequestBody Map<String, Object> params) {
-        VipDTO vip = new VipDTO();
-        Map<String, Object> result = new HashMap<String, Object>();
-        vip = service.findByEmail2((String) params.get("email"));
-        System.out.println("고생했다.");
-        int cnt_1 = vip.getCnt_1();
-        int period = vip.getPeriod();
-        int flag = vip.getFlag();
+    @RequestMapping(value = "/secession", method = RequestMethod.POST)
+    public boolean vip(@RequestBody Map<String, Object> params) throws JSONException, IOException {
+        MemberDTO member = new MemberDTO();
+        LogDTO log = new LogDTO();
 
-        result.put("cnt_1", cnt_1);
-        result.put("period", period);
-        result.put("flag", flag);
+        List<MemberDTO> ad = service.findbyMember((String) params.get("email"));
+        List<LogDTO> result = service.findbyLog((String) params.get("email"));
+        JSONArray jsonArray = new JSONArray();
 
-        return result;
-    }
+
+
+
+        for (LogDTO data : result) {
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+            JSONObject fjson = new JSONObject();
+            fjson.put("LOG_ID", data.getLog_id());
+            fjson.put("CUSTOMER_ID", data.getCustomer_id());
+            fjson.put("USEDATE", format.format(data.getUsedate().getTime()));
+            jsonArray.put(fjson);
+        }
+        JSONObject json = new JSONObject();
+        json.put("result", jsonArray);
+
+
+        jsonArray = new JSONArray();
+        for (MemberDTO data : ad) {
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            JSONObject fjson = new JSONObject();
+            fjson.put("email", data.getEmail());
+            fjson.put("sign_up_date", format.format(data.getSignUpDate().getTime()));
+            fjson.put("status", data.getStatus());
+            if (data.getStatus() == 1)
+                fjson.put("end_date", format.format(data.getEnd_date().getTime()));
+            jsonArray.put(fjson);
+        }
+
+        json.put("member", jsonArray);
+
+
+        System.out.println(json);
+
+
+        String inputLine = null;
+        StringBuffer stringBuffer = new StringBuffer();
+
+        URL url = new URL("http://localhost:5000/tospring"); //URL객체 생성
+
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection(); //url주소를 가지고 Http 커넥션 객체 생성
+
+        System.out.println(conn.toString());
+        conn.setDoOutput(true);
+        conn.setDoInput(true);
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setRequestProperty("Accept-Charset", "UTF-8");
+        conn.setConnectTimeout(10000);
+        conn.setReadTimeout(10000);
+
+
+        //데이터 전송
+        BufferedWriter bWriter = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
+//        for(Map.Entry<String, Object> entry : map.entrySet()){
+//            String key = entry.getKey();
+//            Object value = entry.getValue();
+//            System.out.println("key"+key);
+//            System.out.println("value"+value);
+//
+//
+//        }
+//        System.out.println(json);
+        bWriter.write(json.toString());
+        bWriter.flush();
+        System.out.println("Spring -> Flask 데이터 전송 성공!");
+
+
+        //전송된 결과를 읽어옴
+        BufferedReader bReader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+        System.out.println("114줄입니다.");
+        while ((inputLine = bReader.readLine()) != null) {
+            stringBuffer.append(inputLine);
+            System.out.println("while문" + stringBuffer); //stringBuffer에 데이터 담겨있음
+        }
+
+        System.out.println(stringBuffer);
+        System.out.println(stringBuffer.getClass().getName());
+        bWriter.close();
+        bReader.close();
+        conn.disconnect();
+
+        if(stringBuffer.toString().equals("[0]")){
+            return false;
+        }
+        else{
+            System.out.println(stringBuffer);
+            return true;
+        }
+
+    }//sendJSON()
+
 
 }
 

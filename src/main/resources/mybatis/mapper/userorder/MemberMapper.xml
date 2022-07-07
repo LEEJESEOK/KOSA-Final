@@ -23,6 +23,7 @@
         <result property="recentLoginDate" column="RECENT_LOGIN_DATE"/>
         <result property="signUpDate" column="SIGN_UP_DATE"/>
     </resultMap>
+
     <select id="findGrade" resultType="String">
         select grade_id
         from member
@@ -111,4 +112,164 @@
         values (#{id}, #{name}, #{min}, #{max})
 
     </insert>
+
+    <!-- 백오피스 관련 회원 검색 결과 수 -->
+    <select id="searchMemberCount" resultType="int">
+        <![CDATA[
+            SELECT count(*)
+            FROM member
+        ]]>
+            <where>
+                <!-- 검색어 필터링 -->
+                <if test="keyword != null">
+                    <if test="type=='id'.toString()">
+                        UPPER(email) LIKE '%'||UPPER(#{keyword})||'%'
+                    </if>
+                    <if test="type=='name'.toString()">
+                        UPPER(name) LIKE '%'||UPPER(#{keyword})||'%'
+                    </if>
+                    <if test="type=='tel'.toString()">
+                        tel LIKE '%'||#{keyword}||'%'
+                    </if>
+                </if>
+                <!-- 날짜 필터링 -->
+                <trim prefix = "and">
+                    <if test="start_date != null and end_date != null">
+                        <![CDATA[
+                                    TO_CHAR(sign_up_date, 'YYYYMMDD') >= TO_CHAR(#{start_date}, 'YYYYMMDD') AND TO_CHAR(sign_up_date, 'YYYYMMDD') <= TO_CHAR(#{end_date}, 'YYYYMMDD')
+                                ]]>
+                    </if>
+                </trim>
+                <!-- 활동상태 필터링 -->
+                <trim prefix = "and">
+                    <if test="selected != -1">
+                        status = #{selected}
+                    </if>
+                </trim>
+            </where>
+    </select>
+
+    <!-- 백오피스 관련 회원 검색 결과, 페이징 적용 -->
+    <select id="searchMember" resultType="MemberDTO">
+        <![CDATA[
+            SELECT *
+            FROM (
+                SELECT rownum as rn, email, name, gender, birth, tel, address1, address2, zipcode,
+                       height, weight, point, recent_login_date, sign_up_date, status, grade_id, login_type
+                FROM (SELECT * FROM member ORDER BY sign_up_date DESC)
+        ]]>
+                <where>
+                    <!-- 검색어 필터링 -->
+                    <if test="keyword != null">
+                        <if test="type=='id'.toString()">
+                            UPPER(email) LIKE '%'||UPPER(#{keyword})||'%'
+                        </if>
+                        <if test="type=='name'.toString()">
+                            UPPER(name) LIKE '%'||UPPER(#{keyword})||'%'
+                        </if>
+                        <if test="type=='tel'.toString()">
+                            tel LIKE '%'||#{keyword}||'%'
+                        </if>
+                    </if>
+                    <!-- 날짜 필터링 -->
+                    <trim prefix = "and">
+                        <if test="start_date != null and end_date != null">
+                            <![CDATA[
+                                TO_CHAR(sign_up_date, 'YYYYMMDD') >= TO_CHAR(#{start_date}, 'YYYYMMDD') AND TO_CHAR(sign_up_date, 'YYYYMMDD') <= TO_CHAR(#{end_date}, 'YYYYMMDD')
+                            ]]>
+                        </if>
+                    </trim>
+                    <!-- 활동상태 필터링 -->
+                    <trim prefix = "and">
+                        <if test="selected != -1">
+                            status = #{selected}
+                        </if>
+                    </trim>
+                </where>
+        <![CDATA[
+            )
+            WHERE rn BETWEEN ((#{pageNum} - 1) * #{amount} + 1) AND (#{pageNum} * #{amount})
+        ]]>
+    </select>
+
+    <!-- 백오피스 관련 VIP, VVIP 검색 수 -->
+    <select id="searchVIPCount" resultType="MemberDTO">
+        SELECT COUNT(*)
+        FROM member
+        <where>
+            <!-- 검색어 필터링 -->
+            <if test="keyword != null">
+                <if test="type=='id'.toString()">
+                    UPPER(email) LIKE '%'||UPPER(#{keyword})||'%'
+                </if>
+                <if test="type=='name'.toString()">
+                    UPPER(name) LIKE '%'||UPPER(#{keyword})||'%'
+                </if>
+                <if test="type=='tel'.toString()">
+                    tel LIKE '%'||#{keyword}||'%'
+                </if>
+            </if>
+            <!-- 날짜 필터링 -->
+            <trim prefix = "and">
+                <if test="start_date != null and end_date != null">
+                    <![CDATA[
+                                    TO_CHAR(sign_up_date, 'YYYYMMDD') >= TO_CHAR(#{start_date}, 'YYYYMMDD') AND TO_CHAR(sign_up_date, 'YYYYMMDD') <= TO_CHAR(#{end_date}, 'YYYYMMDD')
+                                ]]>
+                </if>
+            </trim>
+            <!-- 등급 필터링 -->
+            <trim prefix = "and">
+                <if test="selected == -1">
+                    grade IN (4,5)
+                </if>
+                <if test="selected != -1">
+                    grade = #{selected}
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <!-- 백오피스 관련 VIP, VVIP 회원 전부 조회, 페이징 적용 -->
+    <select id="searchVIP" resultType="MemberDTO">
+        SELECT *
+        FROM (
+            SELECT rownum as rn, email, name, gender, birth, tel, address1, address2, zipcode,
+                   height, weight, point, recent_login_date, sign_up_date, status, grade_id, login_type
+            FROM member
+            <where>
+                <!-- 검색어 필터링 -->
+                <if test="keyword != null">
+                    <if test="type=='id'.toString()">
+                        UPPER(email) LIKE '%'||UPPER(#{keyword})||'%'
+                    </if>
+                    <if test="type=='name'.toString()">
+                        UPPER(name) LIKE '%'||UPPER(#{keyword})||'%'
+                    </if>
+                    <if test="type=='tel'.toString()">
+                        tel LIKE '%'||#{keyword}||'%'
+                    </if>
+                </if>
+                <!-- 날짜 필터링 -->
+                <trim prefix = "and">
+                    <if test="start_date != null and end_date != null">
+                        <![CDATA[
+                                    TO_CHAR(sign_up_date, 'YYYYMMDD') >= TO_CHAR(#{start_date}, 'YYYYMMDD') AND TO_CHAR(sign_up_date, 'YYYYMMDD') <= TO_CHAR(#{end_date}, 'YYYYMMDD')
+                                ]]>
+                    </if>
+                </trim>
+                <!-- 등급 필터링 -->
+                <trim prefix = "and">
+                    <if test="selected == -1">
+                        grade IN (4,5)
+                    </if>
+                    <if test="selected != -1">
+                        grade = #{selected}
+                    </if>
+                </trim>
+            </where>
+        <![CDATA[
+            )
+            WHERE rn BETWEEN ((#{pageNum} - 1) * #{amount} + 1) AND (#{pageNum} * #{amount})
+        ]]>
+    </select>
 </mapper>

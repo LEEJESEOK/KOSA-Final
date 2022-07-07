@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <th:block th:replace="~{/fragment/head::head}"></th:block>
+</head>
+<body>
+<script>
+    var arkQuery = $.noConflict(true);
+</script>
+<th:block th:replace="~{/fragment/csrf::csrf}"></th:block>
+<!-- ======= headerWrap ======= -->
+<th:block th:replace="~{/fragment/header_category::header_category}"></th:block>
+<!-- End headerWrap -->
+
+<th:block layout:fragment="script"></th:block>
+<!-- ======= bodyWrap ======= -->
+<th:block layout:fragment="bodyWrap"></th:block>
+<!-- End bodyWrap -->
+
+<!-- ======= footerWrap ======= -->
+<th:block th:replace="~{/fragment/footer::footer}"></th:block>
+<!-- End footerWrap -->
+</body>
+</html>

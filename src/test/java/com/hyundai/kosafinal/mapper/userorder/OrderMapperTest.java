@@ -3,13 +3,16 @@ package com.hyundai.kosafinal.mapper.userorder;
 import com.hyundai.kosafinal.domain.MemberOrderConfirmDTO;
 import com.hyundai.kosafinal.domain.OrderItemDTO;
 import com.hyundai.kosafinal.domain.OrderedListDTO;
+import com.hyundai.kosafinal.entity.SearchOrderCriteria;
 import com.hyundai.kosafinal.service.OrderService;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Date;
+import java.util.Calendar;
+import java.sql.Date;
+import java.util.List;
 
 
 @Log4j2
@@ -36,13 +39,13 @@ public class OrderMapperTest {
 //        );
 //    }
 //
-    @Test
-    public void insertOrderedList() {
-        OrderedListDTO dto = new OrderedListDTO("1", "zip", "addr1", "addr2", "박",
-                "01012341234", 10, "TEST1", 45000, new Date(), 0, "배송 메시지", "신용카드", "");
-        log.info(mapper.insertOrderedList(dto));
-//        log.info(service.insertOrderedList(dto));
-    }
+//    @Test
+//    public void insertOrderedList() {
+//        OrderedListDTO dto = new OrderedListDTO("1", "zip", "addr1", "addr2", "박",
+//                "01012341234", 10, "TEST1", 45000, new Date(), 0, "배송 메시지", "신용카드", "");
+//        log.info(mapper.insertOrderedList(dto));
+////        log.info(service.insertOrderedList(dto));
+//    }
 //
 //    @Test
 //    public void insertOrderItem() {
@@ -74,4 +77,29 @@ public class OrderMapperTest {
         System.out.println(s1+s2);
     }
 
+    @Test
+    public void searchOrder() {
+        SearchOrderCriteria soc = new SearchOrderCriteria(1, 10);
+        soc.setOrderType("receiver");
+        soc.setOrderKeyword("박");
+
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -7);
+        Date start = Date.valueOf("2022-06-30");
+        Date end = Date.valueOf("2022-07-04");
+        soc.setStartDate(start);
+        soc.setEndDate(end);
+
+        soc.setProductType("name");
+        soc.setProductKeyword("백 그");
+        List<OrderedListDTO> list = mapper.searchOrder(soc);
+        log.info(list);
+
+        soc.setProductType("id");
+        soc.setProductKeyword("MM2B3WJS085M");
+        soc.setOrderStatus(0);
+        List<OrderedListDTO> list2 = mapper.searchOrder(soc);
+        log.info(list2);
+
+    }
 }

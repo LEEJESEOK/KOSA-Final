@@ -27,4 +27,5 @@ public class MemberDTO {
     private int status;
     private int gradeId;
     private int login_type;
+    private Date end_date;
 }

@@ -1,9 +1,9 @@
 package com.hyundai.kosafinal.controller;
 
 import com.hyundai.kosafinal.domain.MemberDTO;
-import com.hyundai.kosafinal.domain.RoleSetDTO;
-import com.nimbusds.oauth2.sdk.http.HTTPRequest;
-import org.springframework.expression.spel.ast.NullLiteral;
+import com.hyundai.kosafinal.domain.PageDTO;
+import com.hyundai.kosafinal.entity.SearchCriteria;
+import com.hyundai.kosafinal.entity.SearchMemberCriteria;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import lombok.extern.log4j.Log4j2;
@@ -13,15 +13,11 @@ import org.springframework.web.bind.annotation.*;
 import com.hyundai.kosafinal.service.MemberService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
+@Log4j2
 @RestController
 @RequestMapping("/member")
 public class MemberRestController {
@@ -32,7 +28,7 @@ public class MemberRestController {
     private PasswordEncoder passwordencoder;
 
     @RequestMapping(value = "/register", method = RequestMethod.POST) //회원가입
-    public void register(@RequestBody Map<String, Object> params) throws ParseException {
+    public Map<String, Object> register(@RequestBody Map<String, Object> params) throws ParseException {
         System.out.println("----------------------------");
         System.out.println("회원가입 컨트롤러 ");
         for (String key : params.keySet())
@@ -45,10 +41,9 @@ public class MemberRestController {
         member.setName((String) params.get("name"));
 
         System.out.println(params.get("gender"));
-        if(params.get("gender")!=null){ //
+        if (params.get("gender") != null) { //
             member.setGender((Integer) params.get("gender"));
         }
-
 
 
         member.setTel((String) params.get("tel"));
@@ -56,19 +51,16 @@ public class MemberRestController {
         member.setAddress2((String) params.get("address2"));
         member.setZipcode((String) params.get("zipcode"));
 
-        if(params.get("height")!=""){
+        if (params.get("height") != "") {
             member.setHeight(Integer.parseInt((String) params.get("height")));
-        }
-        else{
+        } else {
             member.setHeight(0);
         }
-        if(params.get("weight")!=""){
+        if (params.get("weight") != "") {
             member.setWeight(Integer.parseInt((String) params.get("weight")));
-        }
-        else{
+        } else {
             member.setWeight(0);
         }
-
 
 
         Date date = new Date();
@@ -81,7 +73,7 @@ public class MemberRestController {
         Map<String, Object> result = new HashMap<String, Object>();
         result.put("result", service.insertMember(member) ? "success" : "fail");
 
-
+        return result;
     }
 
     @RequestMapping(value = "/isDuplicate", method = RequestMethod.GET) // 이메일 중복확인
@@ -116,11 +108,45 @@ public class MemberRestController {
     }
 
 
-    @RequestMapping(value="/delete", method=RequestMethod.POST)
-    public boolean delete(@RequestBody Map<String,Object> params) {
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public boolean delete(@RequestBody Map<String, Object> params) {
         for (String key : params.keySet())
             System.out.println(key + " : " + params.get(key));
 
-        return service.deleteMember((String)params.get("email"));
+        return service.deleteMember((String) params.get("email"));
+    }
+
+    // 회원 검색
+    @RequestMapping(value="/searchMember", method = RequestMethod.POST)
+    public Map<String, Object> searchMember(@RequestBody SearchMemberCriteria criteria) {
+        Map<String, Object> map = new HashMap<>();
+
+        int count = service.searchMemberCount(criteria);
+        List<MemberDTO> list = service.searchMember(criteria);
+
+        PageDTO pageDTO = new PageDTO(criteria, count);
+        log.info("회원 검색: " + list);
+
+        map.put("list", list);
+        map.put("page", pageDTO);
+
+        return map;
+    }
+
+    // 회원 검색
+    @RequestMapping(value="/searchVIP", method = RequestMethod.POST)
+    public Map<String, Object> searchVIP(@RequestBody SearchMemberCriteria criteria) {
+        Map<String, Object> map = new HashMap<>();
+
+        int count = service.searchMemberCount(criteria);
+        List<MemberDTO> list = service.searchMember(criteria);
+
+        PageDTO pageDTO = new PageDTO(criteria, count);
+        log.info("VIP 회원 검색: " + list);
+
+        map.put("list", list);
+        map.put("page", pageDTO);
+
+        return map;
     }
 }

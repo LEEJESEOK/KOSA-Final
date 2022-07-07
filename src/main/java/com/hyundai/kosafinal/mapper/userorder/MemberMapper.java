@@ -1,7 +1,11 @@
 package com.hyundai.kosafinal.mapper.userorder;
 import com.hyundai.kosafinal.domain.*;
+import com.hyundai.kosafinal.entity.SearchCriteria;
+import com.hyundai.kosafinal.entity.SearchMemberCriteria;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface MemberMapper{
@@ -17,4 +21,11 @@ public interface MemberMapper{
     public boolean deleteMember(String email);
     public void insertGrade(GradeDTO grade);
     public String findGrade(String email);
+
+    public int searchMemberCount(SearchMemberCriteria criteria); // 회원 필터링 검색 수
+    public List<MemberDTO> searchMember(SearchMemberCriteria criteria); // 회원 필터링 검색
+
+    public int searchVIPCount(SearchMemberCriteria criteria); // vip 검색 수
+
+    public List<MemberDTO> searchVIP(SearchMemberCriteria criteria); // vip 검색
 }

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hyundai.kosafinal.mapper.userorder.MLMapper">
+    <resultMap id="LogMap" type="LogDTO">
+        <result property="log_id" column="LOG_ID"/>
+        <result property="customer_id" column="CUSTOMER_ID"/>
+        <result property="usedate" column="USEDATE"/>
+
+    </resultMap>
+
+    <resultMap id="MemberMap" type="MemberDTO">
+        <result property="email" column="EMAIL"/>
+        <result property="password" column="PASSWORD"/>
+        <result property="name" column="NAME"/>
+        <result property="gender" column="GENDER"/>
+        <result property="birth" column="BIRTH"/>
+        <result property="tel" column="TEL"/>
+        <result property="address1" column="ADDRESS1"/>
+        <result property="address2" column="ADDRESS2"/>
+        <result property="zipcode" column="ZIPCODE"/>
+        <result property="height" column="HEIGHT"/>
+        <result property="weight" column="WEIGHT"/>
+        <result property="gradeId" column="GRADE_ID"/>
+        <result property="point" column="POINT"/>
+        <result property="status" column="STATUS"/>
+        <result property="login_type" column="LOGIN_TYPE"/>
+        <result property="recentLoginDate" column="RECENT_LOGIN_DATE"/>
+        <result property="signUpDate" column="SIGN_UP_DATE"/>
+        <result property="end_date" column="end_date"/>
+    </resultMap>
+
+    <select id="findbyMember" resultMap="MemberMap">
+        select email,sign_up_date,status,end_date
+        from member
+        where email=#{email}
+
+    </select>
+    <select id="findbyLog" resultMap="LogMap">
+        select log_id,customer_id,usedate
+        from LOG
+        where customer_id=#{email}
+    </select>
+
+    <select id="getEmailLog" resultType="map">
+        select distinct(customer_id) from LOG
+    </select>
+</mapper>
