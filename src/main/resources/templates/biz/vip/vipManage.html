@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/biz/layout/default}">
-<th:block layout:fragment="content">
+<th:block layout:fragment="script">
     <script>
         // 주소, 팝업창 이름, 창크기(w, h, left, top)
 
         function showPopup() {
             let url = "/biz/vip/vipDetail"
             let windowName = "VIP Detail"
-            let windowOption = "width=1280, height=720, left=50, top=50"
+            // 듀얼모니터 고려 - parent document 위치 기준으로 생성
+
+            let windowOption = "width=1280, height=720, left=100, top=50"
             window.open(url, windowName, windowOption);
         }
     </script>
+</th:block>
+<th:block layout:fragment="content">
     <section>
         <div class="row">
             <div class="col-12">
@@ -97,7 +101,7 @@
                                 <td class="text-center">01046623126</td>
                                 <td class="text-center">남</td>
                                 <td class="text-center">1994-12-03</td>
-                                <td class="text-center">CREW</td>
+                                <td class="text-center">STAR</td>
                                 <td class="text-center">2018-07-01</td>
                                 <td class="text-center">2022-07-01</td>
                                 <td class="text-center">-</td>
