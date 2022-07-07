@@ -626,7 +626,7 @@ var layerAlert = function(msg, refresh, fixedYn){
     alertTag +='<input type="button" class="btn gray_s mr0" value="'+$('#deliveryOkMsg').val()+'">';
     alertTag +='</div>';
     alertTag +='</div>';
-    alertTag +='<a href="javascript:void(0);" class="btn_close"><img src="/_ui/desktop/common/images/popup/ico_close.png" alt="닫기"></a>';
+    alertTag +='<a href="javascript:void(0);" class="btn_close"><img src="http://www.thehandsome.com/_ui/desktop/common/images/popup/ico_close.png" alt="닫기"></a>';
     alertTag +='</div>';
     alertTag +='</div>';
 
@@ -694,7 +694,7 @@ var closeNotConfirmLayerAlert = function(msg, refresh, fixedYn, isFreeGift){
     alertTag +='<input type="button" class="btn gray_s mr0" value="'+$('#deliveryOkMsg').val()+'">';
     alertTag +='</div>';
     alertTag +='</div>';
-    alertTag +='<a href="javascript:void(0);" class="btn_close"><img src="/_ui/desktop/common/images/popup/ico_close.png" alt="닫기"></a>';
+    alertTag +='<a href="javascript:void(0);" class="btn_close"><img src="https://www.thehandsome.com/_ui/desktop/common/images/popup/ico_close.png" alt="닫기"></a>';
     alertTag +='</div>';
     alertTag +='</div>';
 
@@ -744,7 +744,7 @@ var customLayerAlert = function(msg, refresh, fixedYn){
     alertTag +='<input type="button" class="btn gray_s mr0" value="'+$('#deliveryOkMsg').val()+'">';
     alertTag +='</div>';
     alertTag +='</div>';
-    alertTag +='<a href="javascript:void(0);" class="btn_close"><img src="/_ui/desktop/common/images/popup/ico_close.png" alt="닫기"></a>';
+    alertTag +='<a href="javascript:void(0);" class="btn_close"><img src="https://www.thehandsome.com/_ui/desktop/common/images/popup/ico_close.png" alt="닫기"></a>';
     alertTag +='</div>';
     alertTag +='</div>';
 
@@ -783,7 +783,7 @@ var layerStorePickupInfo = function(msg, refresh, fixedYn){
     alertTag +='    <div class="layerBg"></div> ';
     alertTag +='    <div class="popwrap w_type_1 '+addClsNm+'" style="z-index:150;"> ';
     alertTag +=         msg;
-    alertTag +='        <a href="javascript:void(0);" class="btn_close"><img src="/_ui/desktop/common/images/popup/ico_close.png" alt="닫기"></a>';
+    alertTag +='        <a href="javascript:void(0);" class="btn_close"><img src="https://www.thehandsome.com/_ui/desktop/common/images/popup/ico_close.png" alt="닫기"></a>';
     alertTag +='    </div>';
     alertTag +='</div>';
 
@@ -849,7 +849,7 @@ var layerConfirm = function(msg, confirmMsg, cancleMsg){
     alertTag +='<input type="button" id="cfBtn" class="btn gray_s mr0" value="'+cfMsg+'">';
     alertTag +='</div>';
     alertTag +='</div>';
-    alertTag +='<a href="javascript:void(0);" class="btn_close"><img src="/_ui/desktop/common/images/popup/ico_close.png" alt="닫기" /></a>';
+    alertTag +='<a href="javascript:void(0);" class="btn_close"><img src="https://www.thehandsome.com/_ui/desktop/common/images/popup/ico_close.png" alt="닫기" /></a>';
     alertTag +='</div>';
     alertTag +='</div>';
     
@@ -899,7 +899,7 @@ var customLayerConfirm = function(msg, confirmMsg, cancleMsg){
     alertTag +='<input type="button" id="cfBtn" class="btn gray_s mr0" value="'+cfMsg+'">';
     alertTag +='</div>';
     alertTag +='</div>';
-    alertTag +='<a href="javascript:void(0);" class="btn_close"><img src="/_ui/desktop/common/images/popup/ico_close.png" alt="닫기" /></a>';
+    alertTag +='<a href="javascript:void(0);" class="btn_close"><img src="https://www.thehandsome.com/_ui/desktop/common/images/popup/ico_close.png" alt="닫기" /></a>';
     alertTag +='</div>';
     alertTag +='</div>';
     
@@ -952,7 +952,7 @@ var layerConfirm2 = function(msg, confirmMsg, cancleMsg){
     alertTag +='<input type="button" id="clsBtn" class="btn wt_s mr5" value="'+cnMsg+'">';
     alertTag +='</div>';
     alertTag +='</div>';
-    alertTag +='<a href="javascript:void(0);" class="btn_close"><img src="/_ui/desktop/common/images/popup/ico_close.png" alt="닫기" /></a>';
+    alertTag +='<a href="javascript:void(0);" class="btn_close"><img src="https://www.thehandsome.com/_ui/desktop/common/images/popup/ico_close.png" alt="닫기" /></a>';
     alertTag +='</div>';
     alertTag +='</div>';
     
@@ -1483,7 +1483,7 @@ var searchAddrLayer = function(addr1, addr2, zipcode){
         addressLayerTag += '                                                                                                          ' ;
         addressLayerTag += '    </div>                                                                                                ' ;
         addressLayerTag += '    <!--//contents-->                                                                                     ' ;
-        addressLayerTag += '    <a href="javascript:void(0);" class="btn_close"><img src="/_ui/desktop/common/images/popup/ico_close.png" alt="닫기"></a>';
+        addressLayerTag += '    <a href="javascript:void(0);" class="btn_close"><img src="https://www.thehandsome.com/_ui/desktop/common/images/popup/ico_close.png" alt="닫기"></a>';
         addressLayerTag += '</div>';
         
     var $thisLayer = null;
@@ -1839,7 +1839,7 @@ var searchAddressLayer = function(addr1, addr2, zipcode){
         addressLayerTag += '            </div>                                                                                        ' ;
         addressLayerTag += '        </div>                                                                                            ' ;
         addressLayerTag += '    </div>                                                                                                ' ;
-        addressLayerTag += '    <a href="#;" class="btn_close"><img src="/_ui/desktop/common/images/popup/ico_close.png" alt="닫기"></a>';
+        addressLayerTag += '    <a href="#;" class="btn_close"><img src="https://www.thehandsome.com/_ui/desktop/common/images/popup/ico_close.png" alt="닫기"></a>';
         addressLayerTag += '</div>';
         
     var $thisLayer = null;

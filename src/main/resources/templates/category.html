@@ -1,128 +1,220 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" layout:decorate="~{/layout/default}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>카테고리</title>
-    <th:block th:replace="~{/head::head}"></th:block>
+    <title>더한섬닷컴</title>
 </head>
-<body>
-<th:block th:replace="~{/header_category::header_category}"></th:block>
-<script>
-    const rowMax = 3;
-    const colMax = 4;
+<th:block layout:fragment="script">
+    <script>
+        const colMax = 4;
+        const rowMax = 3;
 
+        let large = "[[${category.large}]]";
+        let medium = "[[${category.medium}]]";
+        let small = "[[${category.small}]]";
+        let pageNum = "[[${pageNum}]]";
+        let brand = "[[${brand}]]";
+        let color = "[[${color}]]";
+        let size = "[[${size}]]";
+        let minPrice = 0, maxPrice = Number.MAX_SAFE_INTEGER;
+        // let minPrice = Math.max("[[${minPrice}]]", 0), maxPrice = Math.min("[[${maxPrice}]]", Number.MAX_SAFE_INTEGER);
+        let sortType = 0;
 
-    let large = "[[${category.large}]]";
-    let medium = "[[${category.medium}]]";
-    let small = "[[${category.small}]]";
-    let pageNum = "[[${pageNum}]]";
-    let brand = "[[${brand}]]";
-    let color = "[[${color}]]";
-    let size = "[[${size}]]";
-    let minPrice = 0, maxPrice = Number.MAX_SAFE_INTEGER;
-    // let minPrice = Math.max("[[${minPrice}]]", 0), maxPrice = Math.min("[[${maxPrice}]]", Number.MAX_SAFE_INTEGER);
-    let sortType = 0;
+        $().ready(function () {
+            // product count
+            let count;
+            // pageGroup
+            let page;
+            // productList
+            let productList;
+            // colorList
+            let colorList;
+            // sizeList
+            let sizeList;
 
+            $.ajax({
+                type: "GET",
+                url: "/api/category/" + getFilterUri(large, medium, small, pageNum, brand, color, size, minPrice, maxPrice, sortType),
+                contentType: "application/json",
+                success: function (data) {
+                    // product count
+                    count = data.count;
+                    // pageGroup
+                    page = data.page;
 
-    $().ready(function () {
-        $.ajax({
-            type: "GET",
-            url: "/api/category/" + getFilterUri(large, medium, small, pageNum, brand, color, size, minPrice, maxPrice, sortType),
-            contentType: "application/json",
-            success: function (data) {
-                let count = data.count;
-                // pageGroup
-                let page = data.page;
+                    // productList
+                    productList = data.productList;
+                    // colorList
+                    colorList = data.colorList;
+                    // sizeList
+                    sizeList = data.sizeList;
 
-                // productList
-                let productList = data.productList;
-                // colorList
-                let colorList = data.colorList;
-                // sizeList
-                let sizeList = data.sizeList;
+                },
+                error: function (request, status, error) {
+                    ajaxError(request, status, error);
+                },
+                complete: function (jqXHR, textStatus) {
+                    if (textStatus === "success") {
+                        resultLayout_Exist();
 
-                // count
-                $("#count").text(count);
+                        // result count
+                        $("#count").text(count);
 
-                // listItem
-                productList.forEach((product, idx) => {
-                    let listItemHTML = "";
-                    listItemHTML += "<li" + ((idx + 1) % colMax == 0 ? " class=\"mr1m\"" : "") + "> ";
-                    listItemHTML += "<div class=\"item_box\">";
-                    // item_info1 상품 이미지
-                    listItemHTML += "<a href=\"/product/detail/" + product.id + "\" class=\"item_info1\" \"> ";
-                    listItemHTML += "<span class=\"item_img\">";
-                    // TODO 썸네일 URI
-                    listItemHTML += "<img src=\"" + product.image1Uri + "\" id=\"T01_IMG_0\" alt=\"" + product.name + "\" targetcode=\"" + product.id + "\" class=\"respon_image\" onerror=\"this.src='http://cdn.thehandsome.com/_ui/desktop/common/images/products/no_img3.jpg'\">";
-                    listItemHTML += "<img src=\"" + product.image2Uri + "\" id=\"T02_IMG_0\" alt=\"" + product.name + "\" targetcode=\"" + product.id + "\" class=\"respon_image on\" onerror=\"this.src='http://cdn.thehandsome.com/_ui/desktop/common/images/products/no_img3.jpg'\" style=\"display: none; opacity: 1;\">";
-                    listItemHTML += "</span>";
-                    listItemHTML += "<span class=\"item_size\" id=\"itemsize_0\"\n" +
-                        "        style=\"display: none; height: 20px; padding-top: 15px; margin-top: 0px; padding-bottom: 15px; margin-bottom: 0px;\">";
-                    listItemHTML += "</span>";
-                    listItemHTML += "</a>";
-                    // item_info2 상품 간략한 설명
-                    listItemHTML += "<a class=\"item_info2\" href=\"/ko/p/IL2C5WJC385WP_OT?categoryCode=we051\" \">";
-                    listItemHTML += "<span class=\"brand\">" + product.brand + "</span>";
-                    listItemHTML += "<span class=\"title\">" + product.name + "</span>";
-                    listItemHTML += "<span class=\"price\"><span id=\"price_IL2C5WJC385WP_OT\"><span>" + product.price + "</span></span></span>";
-                    listItemHTML += "</a>";
-                    listItemHTML += "<div class=\"color_more_wrap\">";
-                    colorList[idx].forEach(color => {
-                        listItemHTML += "<a class=\"cl wt\" href=\"\" onclick=\"\"\n" +
-                            "style=\"background:#e5dcd5 url('" + color.colorChipUri + "');\"></a>";
-                    });
-                    listItemHTML += "</div>";
+                        // listItem
+                        productList.forEach((product, idx) => {
+                            // 마진 조절
+                            let listItemHTML =
+                                `
+                                <li${((idx + 1) % colMax === 0) ? " class=\"mr1m\"" : ""}>
+                                    <div class="item_box">
+                                        <a href="/product/detail/${product.id}" class="item_info1">
+                                            <span class="item_img">
+                                                <img src="${product.image1Uri}" id="T01_IMG_0" alt="${product.name}" targetcode="${product.id}" class="respon_image" onerror="this.src='http://cdn.thehandsome.com/_ui/desktop/common/images/products/no_img3.jpg'">
+                                                <img src="${product.image2Uri}" id="T02_IMG_0" alt="${product.name}" targetcode="${product.id}" class="respon_image on" onerror="this.src='http://cdn.thehandsome.com/_ui/desktop/common/images/products/no_img3.jpg'" style="display: none; opacity: 1;">
+                                            </span>
+                                            <span class="item_size" id="itemsize_${idx}"
+                                                style="display: none; height: 20px; padding-top: 15px; margin-top: 0px; padding-bottom: 15px; margin-bottom: 0px;">
+                                               <div id="${product.id}">`;
+                            // 사이즈
+                            sizeList[idx].forEach(size => {
+                                listItemHTML +=
+                                    `
+                                <span>${size.size}</span>
+                                `;
+                            });
+                            listItemHTML +=
+                                `
+                                            </div>
+                                        </span>
+                                    </a>
+                                    <a href="/product/detail/${product.id}" class="item_info2">
+                                        <span class="brand">${product.brand}</span>
+                                        <span class="title">${product.name}</span>
+                                        <span class="price"><span id="price_${product.id}"><span>${addComma(product.price)}</span></span></span>
+                                        <span class="flag"></span>
+                                    </a>
+                                    <div class="color_more_wrap">
+                            `;
+                            // 컬러칩
+                            // 리사이즈 적용(13x14)
+                            colorList[idx].forEach(color => {
+                                listItemHTML +=
+                                    `
+                                <a class="cl wt" onclick=""
+                                style="background: url('${color.colorChipUri}/dims/resize/13x14');"></a>
+                                `;
+                            });
+                            listItemHTML +=
+                                `
+                                    </div>
+                                </div>
+                            </li>
+                            `;
 
-                    listItemHTML += "</div>";
-                    listItemHTML += "</li>";
+                            $("#listBody").append(listItemHTML);
+                        });
 
-                    $("#listBody").append(listItemHTML);
-                })
+                        let pageHTML =
+                            `
+                        <a class="prev2" href="/category/${getFilterUri(large, medium, small, 1, brand, color, size, minPrice, maxPrice, sortType)}">처음 페이지로 이동</a>
+                        <a class="prev" href="/category/${getFilterUri(large, medium, small, page.criteria.pageNum - 1, brand, color, size, minPrice, maxPrice, sortType)}">이전 페이지로 이동</a>
+                        <span class="num">\`;
+                        `;
+                        for (idx = page.startPage; idx <= page.endPage; idx++) {
+                            pageHTML += `<a href="/category/${getFilterUri(large, medium, small, idx, brand, color, size, minPrice, maxPrice, sortType)}" class="pageBtn ${(idx === page.criteria.pageNum) ? "on" : ""}" pageNum=${idx}">${idx}</a>`;
+                        }
+                        pageHTML += `</span>`;
+                        pageHTML +=
+                            `
+                        <a href="/category/${getFilterUri(large, medium, small, page.criteria.pageNum + 1, brand, color, size, minPrice, maxPrice, sortType)}" class="next">다음 페이지로 이동</a>
+                        <a href="/category/${getFilterUri(large, medium, small, page.realEnd, brand, color, size, minPrice, maxPrice, sortType)}" class="next2">마지막 페이지로 이동</a>
+                        `;
 
-                let pageHTML = "";
-                // 가장 첫 페이지
-                pageHTML += "<a class=\"prev2\" href=\"" + "/category/" + getFilterUri(large, medium, small, 1, brand, color, size, minPrice, maxPrice, sortType) + "\"> 처음 페이지로 이동</a>";
-                // 이전 페이지
-                pageHTML += "<a href=\"" + "/category/" + getFilterUri(large, medium, small, page.criteria.pageNum - 1, brand, color, size, minPrice, maxPrice, sortType) + "\" class=\"prev\"> 이전 페이지로 이동</a>";
-                // 페이지 번호
-                pageHTML += "<span class=\"num\">";
-                for (idx = page.startPage; idx <= page.endPage; idx++) {
-                    pageHTML += "<a href=\"" + "/category/" + getFilterUri(large, medium, small, idx, brand, color, size, minPrice, maxPrice, sortType) + "\" class=\"pageBtn ";
-                    if (idx == page.criteria.pageNum)
-                        pageHTML += "on";
-                    pageHTML += "\" pagenum=\"" + idx + "\">" + idx + "</a>";
+                        $("#pageGroup").append(pageHTML);
+
+                        // 이벤트 설정
+                        let $item_boxs = $(".items_list .item_box .item_info1");
+                        $(".items_list .item_info1 .item_size").hide();
+                        $item_boxs.on('mouseenter', function () {
+                            active(this);
+                        });
+                        $item_boxs.on('mouseleave', function () {
+                            deactive(this);
+                        });
+
+                        //이미지가 1px이라도 어긋나면 밀리는 현상 방지용
+                        $(".cate_item4 .mr1m").next("li").css("clear", "both");
+
+                        //에러 이미지 재 조정
+                        let checkImageUrl1 = "";
+                        let checkImageUrl2 = "";
+                        $(".item_box img").on("error", function () {
+                            let image = "http://media.thehandsome.com/" + $(this).attr("targetCode") + "_" + $(this).attr("id").split("_")[0] + ".jpg";
+                            if (checkImageUrl1 === $(this).attr("targetCode")) {
+                                if (checkImageUrl2 === $(this).attr("targetCode")) {
+                                    $(this).attr("src", "http://cdn.thehandsome.com/_ui/desktop/common/images/products/no_img3.jpg");
+                                    checkImageUrl1 = "";
+                                    checkImageUrl2 = "";
+                                } else {
+                                    $(this).attr("src", image);
+                                    checkImageUrl2 = $(this).attr("targetCode");
+                                }
+                            } else {
+                                $(this).attr("src", image);
+                                checkImageUrl1 = $(this).attr("targetCode");
+                            }
+                        });
+                    } else {
+                        resultLayout_none();
+                    }
                 }
-                pageHTML += "</span>";
+            })
 
-                // 다음 페이지
-                pageHTML += "<a href=\"" + "/category/" + getFilterUri(large, medium, small, page.criteria.pageNum + 1, brand, color, size, minPrice, maxPrice, sortType) + "\" class=\"next\"> 다음 페이지로 이동</a>";
-                // 마지막 페이지
-                pageHTML += "<a href=\"" + "/category/" + getFilterUri(large, medium, small, page.realEnd, brand, color, size, minPrice, maxPrice, sortType) + "\" class=\"next2\"> 마지막 페이지로 이동</a>";
-
-                $("#pageGroup").append(pageHTML);
-            },
-            error: function (request, status, error) {
-                ajaxError(request, status, error);
+            function active(item) {
+                let $item_box = $(item);
+                $item_box.find('.item_size').stop().slideDown('fast');
+                $item_box.find('.item_img .on').stop().fadeIn('fast');
             }
-        })
-    });
 
-    function getFilterUri(large, medium, small, pageNum = 1, brand = '', color = '', size = '', minPrice = '', maxPrice = '', sortType = 0) {
-        let uri = large + "_" + medium + "_" + small + "_" + pageNum + "_" + brand + "_" + color + "_" + size;
-        return uri;
-        // +"_" + minPrice + "_" + maxPrice + "_" + sortType;
-    }
+            function deactive(item) {
+                let $item_box = $(item);
+                $item_box.find('.item_size').stop().slideUp('fast');
+                $item_box.find('.item_img .on').stop().fadeOut('fast');
+            }
 
-    function ajaxError(request, status, error) {
-        let message = "code : " + request + "\n";
-        message += "message : " + request.responseText + "\n";
-        message += "error : " + error;
+            function resultLayout_none() {
+                $('#searchResult_None').css("display", "block");
+                $('.paging').css("display", "none");
+                $('#listContent').css("display", "none");
+            }
 
-        console.log(message);
-    }
+            function resultLayout_Exist() {
+                $('#searchResult_None').css("display", "none");
+                $('.paging').css("display", "block");
+                $('#listContent').css("display", "block");
+            }
 
-</script>
-<div class="products" id="bodyWrap">
-    <h3 class="cnts_title ou1804">
+        });
+
+        function getFilterUri(large, medium, small, pageNum = 1, brand = '', color = '', size = '', minPrice = '', maxPrice = '', sortType = 0) {
+            let uri = large + "_" + medium + "_" + small + "_" + pageNum + "_" + brand + "_" + color + "_" + size;
+            return uri;
+            // +"_" + minPrice + "_" + maxPrice + "_" + sortType;
+        }
+
+        function ajaxError(request, status, error) {
+            let message = "code : " + request + "\n";
+            message += "message : " + request.responseText + "\n";
+            message += "error : " + error;
+
+            console.log(message);
+        }
+
+    </script>
+</th:block>
+<th:block layout:fragment="bodyWrap">
+    <div class="products" id="bodyWrap">
+        <h3 class="cnts_title ou1804">
         <span>
             <a th:href="@{/category/{large}_{medium}_{small}_{pageNum}_{brand}_{color}_{size}
             (large=${category.large}, medium=${null}, small=${null}, pageNum=${1}, brand=${brand}, color=${color}, size=${size})}"
@@ -144,47 +236,51 @@
                th:if="${not #strings.isEmpty(category.small)}"
                th:text="${category.small}"></a>
         </span>
-    </h3>
-    <div class="adaptive_wrap">
-        <form action="" id="categoryListForm">
-            <!--TODO input hidden filter data-->
-            <div class="filterWrap hsDelivery1902">
-                <ul class="clearfix float_left">
-                    <li class="brand">
-                        <a class="select">브랜드<span class="ico_arr">arrow</span></a>
-                    </li>
-                    <li class="color">
-                        <a class="select">색상<span class="ico_arr">arrow</span></a>
-                    </li>
-                    <li class="size">
-                        <a class="select">사이즈<span class="ico_arr">arrow</span></a>
-                    </li>
-                    <li class="price">
-                        <a class="select">가격<span class="ico_arr">arrow</span></a>
-                    </li>
-                    <li class="sortby">
-                        <a class="select">정렬순<span class="ico_arr">arrow</span></a>
-                    </li>
-                    <li class="btn">
-                        <a href="">초기화</a><a href="">적용</a>
-                    </li>
-                </ul>
-                <div class="items_count float_right">
-                    <span class="num" id="count"></span>
-                    <span>전체</span>
+        </h3>
+        <div class="adaptive_wrap">
+            <form action="" id="categoryListForm">
+                <!--TODO input hidden filter data-->
+                <div class="filterWrap hsDelivery1902">
+                    <ul class="clearfix float_left">
+                        <li class="brand">
+                            <a class="select">브랜드<span class="ico_arr">arrow</span></a>
+                        </li>
+                        <li class="color">
+                            <a class="select">색상<span class="ico_arr">arrow</span></a>
+                        </li>
+                        <li class="size">
+                            <a class="select">사이즈<span class="ico_arr">arrow</span></a>
+                        </li>
+                        <li class="price">
+                            <a class="select">가격<span class="ico_arr">arrow</span></a>
+                        </li>
+                        <li class="sortby">
+                            <a class="select">정렬순<span class="ico_arr">arrow</span></a>
+                        </li>
+                        <li class="btn">
+                            <a href="">초기화</a><a href="">적용</a>
+                        </li>
+                    </ul>
+                    <div class="items_count float_right">
+                        <span class="num" id="count"></span>
+                        <span>전체</span>
+                    </div>
                 </div>
+            </form>
+            <!-- items list -->
+            <div class="items_list cate_item4" id="listContent" style="display: block">
+                <ul class="clearfix" id="listBody" style="display: block;">
+                </ul>
             </div>
-        </form>
-        <div class="items_list cate_item4" id="listContent" style="display: block">
-            <ul class="clearfix" id="listBody" style="display: block;">
-            </ul>
-        </div>
-        <div class="paging" id="pageGroup" style="display: block;"></div>
-        <div class="sh_result none" id="searchResult_None" style="display: none;">
-            조건에 맞는 상품 정보가 없습니다.
+            <!-- //items list -->
+            <!-- paging -->
+            <div class="paging" id="pageGroup" style="display: block;"></div>
+            <!-- //paging -->
+            <div class="sh_result none" id="searchResult_None" style="display: none;">
+                조건에 맞는 상품 정보가 없습니다.
+            </div>
         </div>
     </div>
-</div>
-<th:block th:replace="/footer::footer"></th:block>
+</th:block>
 </body>
 </html>
