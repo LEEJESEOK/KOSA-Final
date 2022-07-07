@@ -1,9 +1,10 @@
 package com.hyundai.kosafinal.service;
 
+import com.hyundai.kosafinal.domain.MemberOrderConfirmDTO;
 import com.hyundai.kosafinal.domain.OrderItemDTO;
 import com.hyundai.kosafinal.domain.OrderedListDTO;
-import com.hyundai.kosafinal.entity.Criteria;
 import com.hyundai.kosafinal.entity.OrderProduct;
+import com.hyundai.kosafinal.entity.SearchOrderCriteria;
 import com.hyundai.kosafinal.mapper.userorder.OrderMapper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,5 +90,22 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public int updatePoint(String userEmail, int point, int flag) {
         return mapper.updatePoint(userEmail, point, flag);
+    }
+
+    @Override
+    public MemberOrderConfirmDTO confirmOrderByEmail(String productId, String email) {
+        return mapper.getOrderConfirmByEmail(productId, email);
+    }
+
+    // 백오피스 관련 주문 검색 결과 수
+    @Override
+    public int searchOrderCount(SearchOrderCriteria criteria) {
+        return mapper.searchOrderCount(criteria);
+    }
+
+    // 백오피스 관련 주문 검색 및 페이징 조회
+    @Override
+    public List<OrderedListDTO> searchOrder(SearchOrderCriteria criteria) {
+        return mapper.searchOrder(criteria);
     }
 }

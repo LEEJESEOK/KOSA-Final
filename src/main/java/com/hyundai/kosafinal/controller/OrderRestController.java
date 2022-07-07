@@ -1,12 +1,17 @@
 package com.hyundai.kosafinal.controller;
 
 import com.hyundai.kosafinal.domain.AuthMemberDTO;
+import com.hyundai.kosafinal.domain.MemberOrderConfirmDTO;
 import com.hyundai.kosafinal.domain.OrderItemDTO;
 import com.hyundai.kosafinal.domain.OrderedListDTO;
+import com.hyundai.kosafinal.domain.PageDTO;
 import com.hyundai.kosafinal.entity.CartProduct;
+import com.hyundai.kosafinal.entity.Criteria;
 import com.hyundai.kosafinal.entity.OrderProduct;
+import com.hyundai.kosafinal.entity.SearchOrderCriteria;
 import com.hyundai.kosafinal.service.OrderService;
 import com.hyundai.kosafinal.service.ProductService;
+import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +20,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -159,6 +165,42 @@ public class OrderRestController {
         entry = new ResponseEntity<>(true, HttpStatus.OK);
 
         return entry;
+    }
+
+    @GetMapping("/confirm")
+    public ResponseEntity<MemberOrderConfirmDTO> getProductItem(@RequestParam String productId, @RequestParam String email){
+
+        ResponseEntity<MemberOrderConfirmDTO> entry = null;
+        MemberOrderConfirmDTO result = oService.confirmOrderByEmail(productId, email);
+
+
+        if(result == null || result.getConfirm() != 1){
+            MemberOrderConfirmDTO empty = MemberOrderConfirmDTO
+              .builder()
+              .confirm(0)
+              .build();
+            return new ResponseEntity<>(empty, HttpStatus.OK);
+        }
+        System.out.println(result.toString());
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+
+    @RequestMapping(value="/searchOrder", method = RequestMethod.POST)
+    public Map<String, Object> searchOrder(@RequestBody SearchOrderCriteria criteria) {
+        Map<String, Object> map = new HashMap<>();
+
+        int count = oService.searchOrderCount(criteria);
+        List<OrderedListDTO> list = oService.searchOrder(criteria);
+
+        PageDTO pageDTO = new PageDTO(criteria, count);
+        log.info("주문 검색: " + list);
+
+        map.put("list", list);
+        map.put("page", pageDTO);
+
+        return map;
     }
 
 }

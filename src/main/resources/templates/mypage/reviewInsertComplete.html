@@ -1,68 +1,55 @@
 <!-- 마이페이지 1:1 문의글 목록 조회 -->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>더한섬닷컴</title>
-
-    <!-- head -->
-    <th:block th:replace="~{/head :: head}"></th:block>
-    <!-- //head -->
-
-<body oncontextmenu="return false">
-
-<!-- headerWrap -->
-<th:block th:replace="~{/header_logo :: header_logo}"></th:block>
-<!-- //headerWrap -->
-
-<script>
-    // jQuery 충돌 방지
-    var arkQuery = $.noConflict(true);
-</script>
-<script type="text/javascript">
-    //<![CDATA[
-    $(document).ready(function(){
-        $("#goSubmain").click(function(){
-            $("#submainForm").attr("action", "/mypage");
-            $("#submainForm").submit();
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/logo}">
+<th:block layout:fragment="script">
+    <script>
+        //<![CDATA[
+        $(document).ready(function () {
+            $("#goSubmain").click(function () {
+                $("#submainForm").attr("action", "/mypage");
+                $("#submainForm").submit();
+            });
+            $("#goManToManInquiry").click(function () {
+                $("#submainForm").attr("action", "/mypage/reviewList");
+                $("#submainForm").submit();
+            });
         });
-        $("#goManToManInquiry").click(function(){
-            $("#submainForm").attr("action", "/mypage/reviewList");
-            $("#submainForm").submit();
-        });
-    });
 
-    //]]>
-</script>
-<div id="bodyWrap">
-    <h3 class="cnts_title">
-        <span id="menuTitle">1:1 문의</span>
-    </h3>
-    <div class="sub_container">
-        <div class="sub_cnts ml50">
-            <div class="box_type_1 mt70">
-                <div class="asking_complt">
-                    <p class="title">더한섬닷컴을 이용해 주셔서 감사합니다.</p>
-                    <p class="txt">빠른 시간 내에 고객님의 문의에 답변을 드릴 수 있도록 하겠습니다.<br>문의 하신 내용은 <em class="ft_point01">'입력하신 이메일'</em> 또는 <br><a href="/mypage/reviewList" class="ft_point01">마이페이지 &gt; 1:1 문의내역</a>에서 확인하실 수 있습니다.</p>
+        //]]>
+    </script>
+</th:block>
+<th:block layout:fragment="bodyWrap">
+    <div id="bodyWrap">
+        <h3 class="cnts_title">
+            <span id="menuTitle">1:1 문의</span>
+        </h3>
+        <div class="sub_container">
+            <div class="sub_cnts ml50">
+                <div class="box_type_1 mt70">
+                    <div class="asking_complt">
+                        <p class="title">더한섬닷컴을 이용해 주셔서 감사합니다.</p>
+                        <p class="txt">빠른 시간 내에 고객님의 문의에 답변을 드릴 수 있도록 하겠습니다.<br>문의 하신 내용은 <em class="ft_point01">'입력하신
+                            이메일'</em> 또는 <br><a href="/mypage/reviewList" class="ft_point01">마이페이지 &gt; 1:1 문의내역</a>에서
+                            확인하실 수 있습니다.</p>
+                    </div>
                 </div>
+                <form id="submainForm" method="GET">
+                    <!-- btn -->
+                    <div class="btnwrap svcenter">
+                        <input type="button" id="goSubmain" value="마이페이지 메인으로 이동" class="btn wt">
+                        <input type="button" id="goManToManInquiry" value="나의 문의내역 보기" class="btn gray mr0">
+                    </div>
+                    <!-- //btn -->
+                </form>
+                <ul class="bul_sty01_li mt60">
+                    <li>문의하신 내용에 대한 답변은 이메일 또는 <a href="/mypage/reviewList" class="ft_point01">마이페이지 &gt; 1:1 문의내역</a>에서
+                        확인하실 수 있습니다.
+                    </li>
+                    <li>SMS 문자와 이메일로 답변 완료 알림을 받아보실 수 있습니다.</li>
+                </ul>
             </div>
-            <form id="submainForm" method="GET">
-                <!-- btn -->
-                <div class="btnwrap svcenter">
-                    <input type="button" id="goSubmain" value="마이페이지 메인으로 이동" class="btn wt">
-                    <input type="button" id="goManToManInquiry" value="나의 문의내역 보기" class="btn gray mr0">
-                </div>
-                <!-- //btn -->
-            </form>
-            <ul class="bul_sty01_li mt60">
-                <li>문의하신 내용에 대한 답변은 이메일 또는 <a href="/mypage/reviewList" class="ft_point01">마이페이지 &gt; 1:1 문의내역</a>에서 확인하실 수 있습니다.</li>
-                <li>SMS 문자와 이메일로 답변 완료 알림을 받아보실 수 있습니다.</li>
-            </ul>
         </div>
     </div>
-</div>
-
-<!-- footerWrap -->
-<th:block th:replace="~{/footer :: footer}"></th:block>
-
-</body>
+</th:block>
 </html>

@@ -684,8 +684,8 @@
 /* 상품평쓰기 UI개선 181121 */
 .pop_cnt.options .radio_btn_1807 td input[type=radio]+label{padding:5px 15px}
 .evaluation_list1807.options .member_info_bottom ul{height:20px;position:relative;}
-.evaluation_list1807.options .member_info_bottom ul .must{position:absolute;top:0}
-/*.evaluation_list1807.options .member_info_bottom ul .must{position:absolute;bottom:0}*/
+.evaluation_list1807.options .member_info_bottom ul .choice{position:absolute;top:0}
+.evaluation_list1807.options .member_info_bottom ul .must{position:absolute;bottom:0}
 /* egift 판매상품 리스트 */
 .egift_top_img_banner a{display:block;}
 .egift_top_img_banner a img{display:block;}

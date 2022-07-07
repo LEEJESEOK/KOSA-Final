@@ -159,4 +159,32 @@ public class BizController {
 
         return "biz/member/reviewManage";
     }
+
+    /**
+     * VIP > VIP 목록
+     *
+     * @param model
+     * @return
+     */
+    @RequestMapping("/vip/vipManage")
+    public String vipManage(Model model) {
+        List<String> breadCrumbs = toBreadCrumbs(new String[]{
+                "VIP", "VIP 목록"
+        });
+        model.addAttribute("breadCrumbs", breadCrumbs);
+        model.addAttribute("pageTitle", breadCrumbs.get(breadCrumbs.size() - 1));
+
+        return "biz/vip/vipManage";
+    }
+
+    @RequestMapping("/vip/vipDetail")
+    public String vipDetail(Model model) {
+        List<String> breadCrumbs = toBreadCrumbs(new String[]{
+                "VIP", "VIP 정보"
+        });
+        model.addAttribute("breadCrumbs", breadCrumbs);
+        model.addAttribute("pageTitle", breadCrumbs.get(breadCrumbs.size() - 1));
+
+        return "biz/vip/vipDetail";
+    }
 }
