@@ -1,5 +1,8 @@
 package com.hyundai.kosafinal.controller;
 
+import com.hyundai.kosafinal.domain.CategoryDTO;
+import com.hyundai.kosafinal.service.ProductService;
+import java.util.HashMap;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +13,12 @@ import java.util.List;
 @Controller
 @RequestMapping("/biz")
 public class BizController {
+
+    private ProductService productService;
+
+    public BizController(ProductService productService) {
+        this.productService = productService;
+    }
 
     static List<String> toBreadCrumbs(String[] routes) {
         List<String> breadCrumbs = new ArrayList<>();
@@ -47,6 +56,29 @@ public class BizController {
         });
         model.addAttribute("breadCrumbs", breadCrumbs);
         model.addAttribute("pageTitle", breadCrumbs.get(breadCrumbs.size() - 1));
+
+        //대분류, 중분류, 소분류 뿌리기
+        List<CategoryDTO> ctyList = productService.getCategoryList();
+
+        List<String> largeCtry = new ArrayList<>();
+        List<String> mediumCtry = new ArrayList<>();
+        List<String> smallCtry = new ArrayList<>();
+
+        ctyList.stream().forEach( c -> {
+            if(!largeCtry.contains(c.getLarge())){
+                largeCtry.add(c.getLarge());
+            }
+            if(!mediumCtry.contains(c.getMedium())){
+                mediumCtry.add(c.getMedium());
+            }
+            if(!smallCtry.contains(c.getSmall())){
+                smallCtry.add(c.getSmall());
+            }
+        });
+
+        model.addAttribute("largeCtry", largeCtry);
+        model.addAttribute("mediumCtry", mediumCtry);
+        model.addAttribute("smallCtry", smallCtry);
 
         return "biz/product/productRegister";
     }

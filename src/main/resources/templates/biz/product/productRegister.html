@@ -8,14 +8,14 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">기본정보</h5>
-                        <form class="row g-3">
+                        <form class="row g-3" id="productInsertForm">
                             <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
                             <div class="row mb-3">
                                 <div class="col-2">
                                     <label class="form-label" for="name">상품명</label>
                                 </div>
                                 <div class="col-9">
-                                    <input autofocus class="form-control" id="name" type="text">
+                                    <input autofocus class="form-control" name="name" id="name" type="text">
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -23,7 +23,7 @@
                                     <label class="form-label" for="id">상품코드</label>
                                 </div>
                                 <div class="col-9">
-                                    <input class="form-control" id="id" type="text">
+                                    <input class="form-control" name="pid" id="id" type="text">
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -33,7 +33,7 @@
                                 <div class="col-3">
                                     <div class="input-group">
                                         <span class="input-group-text">₩</span>
-                                        <input aria-label="Price" class="form-control" id="price" min="0"
+                                        <input aria-label="Price" class="form-control" name="price" id="price" min="0"
                                                type="number">
                                     </div>
                                 </div>
@@ -43,7 +43,7 @@
                                     <label class="form-label" for="color">색상</label>
                                 </div>
                                 <div class="col-3">
-                                    <input class="form-control" id="color" type="text">
+                                    <input class="form-control" name="colorId" id="color" type="text">
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -51,7 +51,7 @@
                                     <label class="form-label" for="size">사이즈</label>
                                 </div>
                                 <div class="col-3">
-                                    <input class="form-control" id="size" type="text">
+                                    <input class="form-control" name="size" id="size" type="text">
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -59,7 +59,7 @@
                                     <label class="form-label" for="brand">브랜드</label>
                                 </div>
                                 <div class="col-3">
-                                    <input class="form-control" id="brand" type="text">
+                                    <input class="form-control" name="brand" id="brand" type="text">
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -67,21 +67,21 @@
                                     <label class="form-label">분류</label>
                                 </div>
                                 <div class="col-3">
-                                    <select class="form-select" id="large">
+                                    <select onchange='setMediumCtry(this.value)' class="form-select" id="large">
                                         <option selected="">대분류</option>
-                                        <option th:value="${null}">미설정</option>
+<!--                                        <option th:each="large : ${largeCtry}" th:value="${large}" th:text="${large}"></option>-->
                                     </select>
                                 </div>
                                 <div class="col-3">
-                                    <select class="form-select" id="medium">
+                                    <select onchange='setSmallCtry(this.value)' class="form-select" id="medium">
                                         <option selected="">중분류</option>
-                                        <option th:value="${null}">미설정</option>
+<!--                                        <option th:each="medium : ${mediumCtry}" th:value="${medium}" th:text="${medium}"></option>-->
                                     </select>
                                 </div>
                                 <div class="col-3">
                                     <select class="form-select" id="small">
                                         <option selected="">소분류</option>
-                                        <option th:value="${null}">미설정</option>
+                                        <option th:each="small : ${smallCtry}" th:value="${small}" th:text="${small}"></option>
                                     </select>
                                 </div>
                             </div>
@@ -90,7 +90,7 @@
                                     <label class="form-label" for="detail">상품 설명</label>
                                 </div>
                                 <div class="col-9">
-                                <textarea class="form-control" id="detail"
+                                <textarea class="form-control" name="detail" id="detail"
                                           style="height: 100px;"></textarea>
                                 </div>
                             </div>
@@ -99,9 +99,9 @@
                                     <label class="col-form-label" for="image1">이미지</label>
                                 </div>
                                 <div class="col-6">
-                                    <input accept="image/*" class="form-control mb-1" id="image1" type="file">
-                                    <input accept="image/*" class="form-control mb-1" id="image2" type="file">
-                                    <input accept="image/*" class="form-control mb-1" id="image3" type="file">
+                                    <input accept="image/*" class="form-control mb-1" name="image1" id="image1" type="file">
+                                    <input accept="image/*" class="form-control mb-1" name="image2" id="image2" type="file">
+                                    <input accept="image/*" class="form-control mb-1" name="image3" id="image3" type="file">
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -109,11 +109,11 @@
                                     <label class="form-label" for="stockAmount">초기재고</label>
                                 </div>
                                 <div class="col-3">
-                                    <input class="form-control" id="stockAmount" min="0" type="number">
+                                    <input class="form-control" name="stockAmount" id="stockAmount" min="0" type="number">
                                 </div>
                             </div>
                             <div class="text-center">
-                                <button class="btn btn-primary" type="submit">상품등록</button>
+                                <button class="btn btn-primary" type="button" onclick="registerProduct()">상품등록</button>
                             </div>
                         </form>
                     </div>
@@ -130,5 +130,128 @@
             </div>
         </div>
     </section>
+
+    <script>
+        var ctryList;
+        $(document).ready(function () {
+
+            $.ajax({
+                type: "GET",
+                url: "/api/category/list",
+                success: function (data) {
+                    ctryList = data;
+                    console.log(ctryList);
+
+                    //large category 설정
+                    var largeOptionList;
+                    var largeTag = $('#large');
+                    var mediumTag = $('#medium');
+                    var smallTag = $('#small');
+                    largeTag.empty();
+                    largeOptionList += "<option selected=''>대분류</option>";
+                    for(largeKey in ctryList){
+                        largeOptionList += "<option value='"+largeKey+"'>"+largeKey+"</option>";
+                    }
+                    largeTag.html(largeOptionList);
+                    mediumTag.empty();
+                    smallTag.empty();
+                    smallTag.html("<option selected=''>소분류</option>");
+                    mediumTag.html("<option selected=''>중분류</option>");
+                },
+                error: function (request, status, error) {
+                    alert("Ajax 통신 에러 발생");
+                    alert(error);
+                }
+            });
+        });
+
+        function setMediumCtry(value) {
+            var mediumOptionList="";
+            $('#small').empty();
+            $('#small').html("<option selected=''>소분류</option>");
+
+            mediumOptionList += "<option selected=''>중분류</option>";
+            for(mediumKey in ctryList[value]){
+                console.log(mediumKey);
+                mediumOptionList += "<option value='"+mediumKey+"'>"+mediumKey+"</option>";
+            }
+            $('#medium').html(mediumOptionList);
+        }
+
+        function setSmallCtry(value) {
+            var smallOptionList="";
+            var largeTag = document.getElementById('large');
+            const largeCtry = largeTag.options[largeTag.selectedIndex].value;
+
+            smallOptionList += "<option selected=''>소분류</option>";
+            for(smallKey of ctryList[largeCtry][value]){
+                smallOptionList += "<option value='"+smallKey+"'>"+smallKey+"</option>";
+            }
+            $('#small').html(smallOptionList);
+        }
+
+        function registerProduct(){
+            var largeTag = document.getElementById('large');
+            var mediumTag = document.getElementById('medium');
+            var smallTag = document.getElementById('small');
+            const name = $("#productInsertForm [name=name]").val();
+            const pid = $("#productInsertForm [name=pid]").val();
+            const price = $("#productInsertForm [name=price]").val();
+            const colorId = $("#productInsertForm [name=colorId]").val();
+            const size = $("#productInsertForm [name=size]").val();
+            const detail = $("#productInsertForm [name=detail]").val();
+            const brand = $("#productInsertForm [name=brand]").val();
+            const largeCtry = largeTag.options[largeTag.selectedIndex].value;
+            const mediumCtry = mediumTag.options[mediumTag.selectedIndex].value;
+            const smallCtry = smallTag.options[smallTag.selectedIndex].value;
+            const image1 = document.querySelector("#productInsertForm [name=image1]").files[0];
+            const image2 = document.querySelector("#productInsertForm [name=image2]").files[0];
+            const image3 = document.querySelector("#productInsertForm [name=image3]").files[0];
+            const stockAmount = $("#productInsertForm [name=stockAmount]").val();
+
+            console.log(largeCtry);
+            console.log(mediumCtry);
+            console.log(smallCtry);
+
+            var formData = new FormData();
+            formData.append("id", pid);
+            formData.append("size", size);
+            formData.append("colorId", colorId);
+            formData.append("name", name);
+            formData.append("brand", brand);
+            formData.append("categoryLarge", largeCtry);
+            formData.append("categoryMedium", mediumCtry);
+            formData.append("categorySmall", smallCtry);
+            formData.append("detail", detail);
+            formData.append("price", price);
+            formData.append("stockAmount", stockAmount);
+            if (image1) {
+                formData.append("image1Uri", image1);
+            }
+            if (image2) {
+                formData.append("image2Uri", image2);
+            }
+            if (image3) {
+                formData.append("image3Uri", image3);
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/api/biz/product/register",
+                processData: false,
+                contentType: false,
+                cache: false,
+                data: formData,
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (request, status, error) {
+                    alert("Ajax 통신 에러 발생");
+                    alert(error);
+                }
+            });
+        }
+
+    </script>
 </th:block>
 </html>
