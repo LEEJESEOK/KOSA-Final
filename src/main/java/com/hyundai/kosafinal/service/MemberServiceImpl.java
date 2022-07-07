@@ -4,12 +4,15 @@ import com.hyundai.kosafinal.domain.Member2DTO;
 import com.hyundai.kosafinal.domain.MemberDTO;
 import com.hyundai.kosafinal.domain.RoleSetDTO;
 import com.hyundai.kosafinal.domain.VipDTO;
+import com.hyundai.kosafinal.entity.SearchCriteria;
+import com.hyundai.kosafinal.entity.SearchMemberCriteria;
 import com.hyundai.kosafinal.mapper.userorder.MemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.management.relation.Role;
+import java.util.List;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -85,5 +88,28 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member2DTO findByEmail(String email){
         return mapper.findByEmail(email);
+    }
+
+    // 회원 검색 개수
+    @Override
+    public int searchMemberCount(SearchMemberCriteria criteria) {
+        return mapper.searchMemberCount(criteria);
+    }
+    // 회원 검색
+    @Override
+    public List<MemberDTO> searchMember(SearchMemberCriteria criteria) {
+        return mapper.searchMember(criteria);
+    }
+
+    // vip 검색 개수
+    @Override
+    public int searchVIPCount(SearchMemberCriteria criteria) {
+        return mapper.searchVIPCount(criteria);
+    }
+
+    // vip 검색
+    @Override
+    public List<MemberDTO> searchVIP(SearchMemberCriteria criteria) {
+        return mapper.searchVIP(criteria);
     }
 }

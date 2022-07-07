@@ -19,7 +19,7 @@
 
     <!-- 주문 상품 목록 조회 -->
     <select id="getOrderItem" resultType="com.hyundai.kosafinal.entity.OrderProduct">
-        SELECT oi.id, oi.pid, oi.pcolor, oi.psize, oi.amount, oi.ordered_list_id, p.name, p.price, p.brand, p.image1_uri
+        SELECT DISTINCT oi.id, oi.pid, oi.pcolor, oi.psize, oi.amount, oi.ordered_list_id, p.name, p.price, p.brand, p.image1_uri
         FROM order_item oi, product.product p
         WHERE oi.ordered_list_id = #{orderedListId}
         AND oi.pid = p.id
@@ -97,6 +97,141 @@
                  AND l.STATUS = 2
             ) ol
         where ROWNUM = 1
+    </select>
+
+    <!-- 백오피스 관련 주문 검색 결과 수 -->
+    <select id="searchOrderCount" resultType="int">
+        <![CDATA[
+            SELECT count(*)
+            FROM ordered_list
+        ]]>
+        <where>
+            <!-- 주문 필터링 -->
+            <if test="order_keyword != null">
+                <if test="order_type=='id'.toString()">
+                    id LIKE '%'||#{order_keyword}||'%'
+                </if>
+                <if test="order_type=='receiver'.toString()">
+                    UPPER(receiver) LIKE '%'||UPPER(#{order_keyword})||'%'
+                </if>
+                <if test="order_type=='email'.toString()">
+                    UPPER(user_email) LIKE '%'||UPPER(#{order_keyword})||'%'
+                </if>
+                <if test="order_type=='tel'.toString()">
+                    tel LIKE '%'||#{order_keyword}||'%'
+                </if>
+            </if>
+            <!-- 날짜 필터링 -->
+            <trim prefix = "and">
+                <if test="start_date != null and end_date != null">
+                    <![CDATA[
+                    TO_CHAR("DATE", 'YYYYMMDD') >= TO_CHAR(#{start_date}, 'YYYYMMDD') AND TO_CHAR("DATE", 'YYYYMMDD') <= TO_CHAR(#{end_date}, 'YYYYMMDD')
+                ]]>
+                </if>
+            </trim>
+            <!-- 상품 필터링 -->
+            <trim prefix = "and">
+                <if test="product_keyword != null">
+                    <if test="product_type=='id'.toString()">
+                        id IN (SELECT ordered_list_id FROM order_item WHERE pid LIKE '%'||#{product_keyword}||'%')
+                    </if>
+                    <if test="product_type=='name'.toString()">
+                        id IN (
+                        SELECT oi.ordered_list_id
+                        FROM order_item oi, product.product p
+                        WHERE oi.pid = p.id
+                        AND p.name LIKE '%'||#{product_keyword}||'%'
+                        )
+                    </if>
+                    <if test="product_type=='brand'.toString()">
+                        id IN (
+                        SELECT oi.ordered_list_id
+                        FROM order_item oi, product.product p
+                        WHERE oi.pid = p.id
+                        AND p.brand LIKE '%'||#{product_keyword}||'%'
+                        )
+                    </if>
+                </if>
+            </trim>
+            <!-- 배송 필터링 -->
+            <trim prefix = "and">
+                <if test="order_status != -1">
+                    status = #{order_status}
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <!-- 백오피스 관련 주문 검색 결과, 페이징 적용 -->
+    <select id="searchOrder" resultType="OrderedListDTO">
+        SELECT *
+        FROM (
+            SELECT rownum as rn, id, zipcode, address1, address2, receiver, tel, used_point, user_email,
+                   total_price, "DATE", status, delivery_msg, pay_type, order_id
+            FROM (SELECT * FROM ordered_list ORDER BY id DESC)
+        <where>
+            <!-- 주문 필터링 -->
+            <if test="order_keyword != null">
+                <if test="order_type=='id'.toString()">
+                    id LIKE '%'||#{order_keyword}||'%'
+                </if>
+                <if test="order_type=='receiver'.toString()">
+                    UPPER(receiver) LIKE '%'||UPPER(#{order_keyword})||'%'
+                </if>
+                <if test="order_type=='email'.toString()">
+                    UPPER(user_email) LIKE '%'||UPPER(#{order_keyword})||'%'
+                </if>
+                <if test="order_type=='tel'.toString()">
+                    tel LIKE '%'||#{order_keyword}||'%'
+                </if>
+            </if>
+            <!-- 날짜 필터링 -->
+            <trim prefix = "and">
+                <if test="start_date != null and end_date != null">
+                <![CDATA[
+                    TO_CHAR("DATE", 'YYYYMMDD') >= TO_CHAR(#{start_date}, 'YYYYMMDD') AND TO_CHAR("DATE", 'YYYYMMDD') <= TO_CHAR(#{end_date}, 'YYYYMMDD')
+                ]]>
+                </if>
+            </trim>
+            <!-- 상품 필터링 -->
+            <trim prefix = "and">
+                <if test="product_keyword != null">
+                    <if test="product_type=='id'.toString()">
+                        id IN (
+                            SELECT ordered_list_id
+                            FROM order_item
+                            WHERE UPPER(pid) LIKE '%'||UPPER(#{product_keyword})||'%'
+                            )
+                    </if>
+                    <if test="product_type=='name'.toString()">
+                        id IN (
+                                SELECT oi.ordered_list_id
+                                FROM order_item oi, product.product p
+                                WHERE oi.pid = p.id
+                                AND UPPER(p.name) LIKE '%'||UPPER(#{product_keyword})||'%'
+                            )
+                    </if>
+                    <if test="product_type=='brand'.toString()">
+                        id IN (
+                                SELECT oi.ordered_list_id
+                                FROM order_item oi, product.product p
+                                WHERE oi.pid = p.id
+                                AND UPPER(p.brand) LIKE '%'||UPPER(#{product_keyword})||'%'
+                            )
+                    </if>
+                </if>
+            </trim>
+            <!-- 배송 필터링 -->
+            <trim prefix = "and">
+                <if test="order_status != -1">
+                    status = #{order_status}
+                </if>
+            </trim>
+        </where>
+        <![CDATA[
+            )
+            WHERE rn BETWEEN ((#{pageNum} - 1) * #{amount} + 1) AND (#{pageNum} * #{amount})
+        ]]>
     </select>
 
 </mapper>

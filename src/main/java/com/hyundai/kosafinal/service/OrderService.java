@@ -3,8 +3,8 @@ package com.hyundai.kosafinal.service;
 import com.hyundai.kosafinal.domain.MemberOrderConfirmDTO;
 import com.hyundai.kosafinal.domain.OrderItemDTO;
 import com.hyundai.kosafinal.domain.OrderedListDTO;
-import com.hyundai.kosafinal.entity.Criteria;
 import com.hyundai.kosafinal.entity.OrderProduct;
+import com.hyundai.kosafinal.entity.SearchOrderCriteria;
 
 import java.util.List;
 
@@ -45,4 +45,9 @@ public interface OrderService {
 
     public MemberOrderConfirmDTO confirmOrderByEmail(String productId, String email);
 
+    // 백오피스 관련 주문 검색 결과 수
+    public int searchOrderCount(SearchOrderCriteria criteria);
+
+    // 백오피스 관련 주문 검색 및 페이징 조회
+    public List<OrderedListDTO> searchOrder(SearchOrderCriteria criteria);
 }

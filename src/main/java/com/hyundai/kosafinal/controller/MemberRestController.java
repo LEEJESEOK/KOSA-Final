@@ -1,9 +1,9 @@
 package com.hyundai.kosafinal.controller;
 
 import com.hyundai.kosafinal.domain.MemberDTO;
-import com.hyundai.kosafinal.domain.RoleSetDTO;
-import com.nimbusds.oauth2.sdk.http.HTTPRequest;
-import org.springframework.expression.spel.ast.NullLiteral;
+import com.hyundai.kosafinal.domain.PageDTO;
+import com.hyundai.kosafinal.entity.SearchCriteria;
+import com.hyundai.kosafinal.entity.SearchMemberCriteria;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import lombok.extern.log4j.Log4j2;
@@ -13,15 +13,11 @@ import org.springframework.web.bind.annotation.*;
 import com.hyundai.kosafinal.service.MemberService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
+@Log4j2
 @RestController
 @RequestMapping("/member")
 public class MemberRestController {
@@ -118,5 +114,39 @@ public class MemberRestController {
             System.out.println(key + " : " + params.get(key));
 
         return service.deleteMember((String) params.get("email"));
+    }
+
+    // 회원 검색
+    @RequestMapping(value="/searchMember", method = RequestMethod.POST)
+    public Map<String, Object> searchMember(@RequestBody SearchMemberCriteria criteria) {
+        Map<String, Object> map = new HashMap<>();
+
+        int count = service.searchMemberCount(criteria);
+        List<MemberDTO> list = service.searchMember(criteria);
+
+        PageDTO pageDTO = new PageDTO(criteria, count);
+        log.info("회원 검색: " + list);
+
+        map.put("list", list);
+        map.put("page", pageDTO);
+
+        return map;
+    }
+
+    // 회원 검색
+    @RequestMapping(value="/searchVIP", method = RequestMethod.POST)
+    public Map<String, Object> searchVIP(@RequestBody SearchMemberCriteria criteria) {
+        Map<String, Object> map = new HashMap<>();
+
+        int count = service.searchMemberCount(criteria);
+        List<MemberDTO> list = service.searchMember(criteria);
+
+        PageDTO pageDTO = new PageDTO(criteria, count);
+        log.info("VIP 회원 검색: " + list);
+
+        map.put("list", list);
+        map.put("page", pageDTO);
+
+        return map;
     }
 }

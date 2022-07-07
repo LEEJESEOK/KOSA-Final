@@ -1,9 +1,8 @@
 package com.hyundai.kosafinal.controller;
 
-import com.hyundai.kosafinal.domain.AuthMemberDTO;
-import com.hyundai.kosafinal.domain.MemberDTO;
-import com.hyundai.kosafinal.domain.MypageReviewDTO;
-import com.hyundai.kosafinal.domain.ReplyDTO;
+import com.hyundai.kosafinal.domain.*;
+import com.hyundai.kosafinal.entity.Criteria;
+import com.hyundai.kosafinal.entity.SearchMypageReviewCriteria;
 import com.hyundai.kosafinal.service.MemberService;
 import com.hyundai.kosafinal.service.MypageReviewService;
 import lombok.extern.log4j.Log4j2;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +43,16 @@ public class MypageRestController {
         return entry;
     }
 
+    // 1:1 문의 게시글 상세 조회
+    @GetMapping("/review/{id}")
+    public ResponseEntity<MypageReviewDTO> getMypageReview(@PathVariable int id) {
+        ResponseEntity<MypageReviewDTO> entry = null;
+        entry = new ResponseEntity<MypageReviewDTO>(service.getDetail(id), HttpStatus.OK);
+        log.info("문의글 : " + entry);
+
+        return entry;
+    }
+
     // 1:1 문의 작성
     @PostMapping("/review/register")
     public boolean insert(@RequestBody MypageReviewDTO dto, @AuthenticationPrincipal AuthMemberDTO authentication) {
@@ -65,6 +75,42 @@ public class MypageRestController {
         return entry;
     }
 
+    // 1:1 문의 답글 추가
+    @PostMapping("/review/reply/register")
+    public boolean insert(@RequestBody ReplyDTO dto, @AuthenticationPrincipal AuthMemberDTO authentication) {
+        // 회원 정보 찾기
+        String userEmail = authentication.getEmail();
+        dto.setUserEmail(userEmail);
+
+        log.info("문의 답글 작성 : " + dto);
+
+        // reply에 insert
+        service.insertReply(dto);
+
+        // 게시글 상태정보 변경
+        int origin_id = dto.getOriginId();
+        service.updateStatus(origin_id);
+
+        return true;
+    }
+
+    @RequestMapping(value = "/searchMypageReview", method = RequestMethod.POST)
+    public Map<String, Object> searchMypageReview(@RequestBody SearchMypageReviewCriteria criteria) {
+        Map<String, Object> map = new HashMap<>();
+
+        int count = service.searchMypageReviewCount(criteria);
+        List<MypageReviewDTO> list = service.searchMypageReview(criteria);
+
+        PageDTO pageDTO = new PageDTO(criteria, count);
+        log.info("문의 검색: " + list);
+
+        map.put("list", list);
+        map.put("page", pageDTO);
+
+        return map;
+    }
+
+
     @RequestMapping(value = "/update", method = RequestMethod.POST) //업데이트
     public boolean update(@RequestBody Map<String, Object> params) throws ParseException {
         System.out.println("----------------------------");
@@ -74,24 +120,22 @@ public class MypageRestController {
         MemberDTO member = new MemberDTO();
         member.setEmail((String) params.get("email"));
         member.setName((String) params.get("name"));
-        member.setTel((String)params.get("tel"));
+        member.setTel((String) params.get("tel"));
         member.setPassword((String) params.get("password"));
-        member.setAddress1((String)params.get("address1"));
-        member.setAddress2((String)params.get("address2"));
-        if(params.get("gender")!=null){ //
+        member.setAddress1((String) params.get("address1"));
+        member.setAddress2((String) params.get("address2"));
+        if (params.get("gender") != null) { //
             member.setGender((Integer) params.get("gender"));
         }
 
-        if(params.get("height")!=""){
+        if (params.get("height") != "") {
             member.setHeight(Integer.parseInt((String) params.get("height")));
-        }
-        else{
+        } else {
             member.setHeight(0);
         }
-        if(params.get("weight")!=""){
+        if (params.get("weight") != "") {
             member.setWeight(Integer.parseInt((String) params.get("weight")));
-        }
-        else{
+        } else {
             member.setWeight(0);
         }
         System.out.println("레스트" + member);
