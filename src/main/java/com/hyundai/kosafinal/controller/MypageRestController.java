@@ -43,6 +43,16 @@ public class MypageRestController {
         return entry;
     }
 
+    // 1:1 문의 게시글 상세 조회
+    @GetMapping("/review/{id}")
+    public ResponseEntity<MypageReviewDTO> getMypageReview(@PathVariable int id) {
+        ResponseEntity<MypageReviewDTO> entry = null;
+        entry = new ResponseEntity<MypageReviewDTO>(service.getDetail(id), HttpStatus.OK);
+        log.info("문의글 : " + entry);
+
+        return entry;
+    }
+
     // 1:1 문의 작성
     @PostMapping("/review/register")
     public boolean insert(@RequestBody MypageReviewDTO dto, @AuthenticationPrincipal AuthMemberDTO authentication) {
@@ -72,14 +82,14 @@ public class MypageRestController {
         String userEmail = authentication.getEmail();
         dto.setUserEmail(userEmail);
 
+        log.info("문의 답글 작성 : " + dto);
+
         // reply에 insert
         service.insertReply(dto);
 
         // 게시글 상태정보 변경
         int origin_id = dto.getOriginId();
         service.updateStatus(origin_id);
-
-        log.info("문의 답글 작성 : " + dto);
 
         return true;
     }
@@ -110,24 +120,22 @@ public class MypageRestController {
         MemberDTO member = new MemberDTO();
         member.setEmail((String) params.get("email"));
         member.setName((String) params.get("name"));
-        member.setTel((String)params.get("tel"));
+        member.setTel((String) params.get("tel"));
         member.setPassword((String) params.get("password"));
-        member.setAddress1((String)params.get("address1"));
-        member.setAddress2((String)params.get("address2"));
-        if(params.get("gender")!=null){ //
+        member.setAddress1((String) params.get("address1"));
+        member.setAddress2((String) params.get("address2"));
+        if (params.get("gender") != null) { //
             member.setGender((Integer) params.get("gender"));
         }
 
-        if(params.get("height")!=""){
+        if (params.get("height") != "") {
             member.setHeight(Integer.parseInt((String) params.get("height")));
-        }
-        else{
+        } else {
             member.setHeight(0);
         }
-        if(params.get("weight")!=""){
+        if (params.get("weight") != "") {
             member.setWeight(Integer.parseInt((String) params.get("weight")));
-        }
-        else{
+        } else {
             member.setWeight(0);
         }
         System.out.println("레스트" + member);

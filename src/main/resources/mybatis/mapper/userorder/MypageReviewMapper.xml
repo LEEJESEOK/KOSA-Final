@@ -35,7 +35,7 @@
         <selectKey resultType="int" keyProperty="id" order="BEFORE">
             SELECT SQ_REPLY.nextval FROM dual
         </selectKey>
-        { CALL SP_REPLY_INSERT(#{id}, #{content}, #{user_email}, #{origin_id}) }
+        { CALL SP_REPLY_INSERT(#{id}, #{content}, #{userEmail}, #{originId}) }
     </insert>
 
     <!-- 게시글 상태 변경 -->
@@ -52,11 +52,8 @@
         <where>
             <!-- 키워드 필터링 -->
             <if test="keyword != null">
-                <if test="type=='name'.toString()">
-                    UPPER(name) LIKE '%'||UPPER(#{keyword})||'%'
-                </if>
                 <if test="type=='id'.toString()">
-                    UPPER(id) LIKE '%'||UPPER(#{keyword})||'%'
+                    UPPER(user_email) LIKE '%'||UPPER(#{keyword})||'%'
                 </if>
             </if>
             <!-- 날짜 필터링 -->
@@ -69,7 +66,7 @@
             </trim>
             <!-- 문의종류 필터링 -->
             <trim prefix = "and">
-                <if test="category != null or category != ''">
+                <if test="category != null and category != ''">
                     category = #{category}
                 </if>
             </trim>
@@ -91,11 +88,8 @@
         <where>
             <!-- 키워드 필터링 -->
             <if test="keyword != null">
-                <if test="type=='name'.toString()">
-                    UPPER(name) LIKE '%'||UPPER(#{keyword})||'%'
-                </if>
                 <if test="type=='id'.toString()">
-                    UPPER(id) LIKE '%'||UPPER(#{keyword})||'%'
+                    UPPER(user_email) LIKE '%'||UPPER(#{keyword})||'%'
                 </if>
             </if>
             <!-- 날짜 필터링 -->
@@ -108,7 +102,7 @@
             </trim>
             <!-- 문의종류 필터링 -->
             <trim prefix = "and">
-                <if test="category != null or category != ''">
+                <if test="category != null and category != ''">
                     category = #{category}
                 </if>
             </trim>

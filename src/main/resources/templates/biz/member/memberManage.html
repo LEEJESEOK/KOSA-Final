@@ -102,8 +102,8 @@
             row += "<td class=\"text-center\"><input class=\"form-check-input\" type=\"checkbox\"></td>";
             let index = (param.pageNum-1) * (param.amount) + idx + 1;
             row += "<th class=\"text-center\" scope=\"row\">" + index + "</th>";
-            row += "<td class=\"text-center\">" + data.name + "</td>";
             row += "<td class=\"text-center\">" + data.email + "</td>";
+            row += "<td class=\"text-center\">" + data.name + "</td>";
             if(data.tel == null) {
                 row += "<td class=\"text-center\">/</td>";
             } else {
@@ -299,8 +299,8 @@
                                     <th scope="col" class="text-center" style="width:5%"><input class="form-check-input" id="checkAll"
                                                                                type="checkbox"></th>
                                     <th scope="col" class="text-center" style="width:5%">#</th>
-                                    <th scope="col" class="text-center" style="width:14%">이름</th>
                                     <th scope="col" class="text-center" style="width:14%">아이디</th>
+                                    <th scope="col" class="text-center" style="width:14%">이름</th>
                                     <th scope="col" class="text-center" style="width:10%">연락처</th>
                                     <th scope="col" class="text-center" style="width:5%">성별</th>
                                     <th scope="col" class="text-center" style="width:10%">생년월일</th>
