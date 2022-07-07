@@ -368,7 +368,8 @@
                         dataType: "json",
                         contentType: "application/json; charset=UTF-8",
                         success: function () {
-                             location.href = "/member/signUpComplete"
+                            console.log("회원가입성공");
+                             // location.href = "/member/signUpComplete"
                         },
                         error: function (request, status, error) {
                             ajaxError(request, status, error)

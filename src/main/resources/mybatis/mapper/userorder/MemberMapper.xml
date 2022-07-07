@@ -23,6 +23,7 @@
         <result property="recentLoginDate" column="RECENT_LOGIN_DATE"/>
         <result property="signUpDate" column="SIGN_UP_DATE"/>
     </resultMap>
+
     <select id="findGrade" resultType="String">
         select grade_id
         from member
