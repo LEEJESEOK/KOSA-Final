@@ -10,30 +10,45 @@
 <script>
     $(document).ready(function () {
         $("#Btn").click(function () {
-            console.log("클릭");
+
             $.ajax({
                 type: "POST",
                 data: JSON.stringify({
                     email: $("#email").val()
 
                 }),
-                url: "/ml2/vip",
+                url: "/analysis/secession",
                 dataType: "json",
                 contentType: "application/json; charset=UTF-8",
-                success: function () {
-                    // location.href = "/member/signUpComplete"
+                success: function (data) {
+                    $("#isgetout").text(data)
                 },
                 error: function (request, status, error) {
                     ajaxError(request, status, error)
+                },
+                beforeSend:function(xhr){
+                    xhr.setRequestHeader(csrf_header,csrf_token)
                 }
             });
+
         });
     });
+
+
+    function ajaxError(request, status, error) {
+        let message = "code : " + request + "\n";
+        message += "message : " + request.responseText + "\n";
+        message += "error : " + error;
+
+        console.log(message);
+    }
 </script>
 
 <form>
     <input type="text" id="email" name="email">
     <input type="button" class="btn gray" value="변경사항 저장" id="Btn">
+
+    <span id="isgetout"></span>
 </form>
 </body>
 </html>
