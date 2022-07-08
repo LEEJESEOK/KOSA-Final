@@ -122,14 +122,15 @@ public class MemberRestController {
         Map<String, Object> map = new HashMap<>();
 
         int count = service.searchMemberCount(criteria);
+        System.out.println(count);
         List<MemberDTO> list = service.searchMember(criteria);
-
+        System.out.println(list.size());
         PageDTO pageDTO = new PageDTO(criteria, count);
         log.info("회원 검색: " + list);
 
         map.put("list", list);
         map.put("page", pageDTO);
-
+        log.info("pageDTO: " + pageDTO);
         return map;
     }
 
@@ -138,15 +139,14 @@ public class MemberRestController {
     public Map<String, Object> searchVIP(@RequestBody SearchMemberCriteria criteria) {
         Map<String, Object> map = new HashMap<>();
 
-        int count = service.searchMemberCount(criteria);
-        List<MemberDTO> list = service.searchMember(criteria);
+        int count = service.searchVIPCount(criteria);
+        List<MemberDTO> list = service.searchVIP(criteria);
 
         PageDTO pageDTO = new PageDTO(criteria, count);
         log.info("VIP 회원 검색: " + list);
 
         map.put("list", list);
         map.put("page", pageDTO);
-
         return map;
     }
 }
