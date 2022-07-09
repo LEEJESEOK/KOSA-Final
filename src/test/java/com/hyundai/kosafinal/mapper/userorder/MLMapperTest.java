@@ -1,7 +1,6 @@
 package com.hyundai.kosafinal.mapper.userorder;
 
-import com.hyundai.kosafinal.domain.LogDTO;
-import com.hyundai.kosafinal.mapper.userorder.MLMapper;
+import com.hyundai.kosafinal.domain.LoginLogDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,7 +18,7 @@ class MLMapperTest {
     @Test
     void getEmailLog() {
 
-        List<LogDTO> result=mapper.getEmailLog();
+        List<LoginLogDTO> result=mapper.getEmailLog();
         System.out.println(result);
     }
 

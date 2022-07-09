@@ -64,7 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureUrl("/member/login?error=true"); //로그인 실패시 URL
 
         //소셜 로그인 (구글)
-        http.oauth2Login().defaultSuccessUrl("/");
+        http.oauth2Login().loginPage("/member/login").defaultSuccessUrl("/");
 
         //소셜 로그인 (네이버)
 

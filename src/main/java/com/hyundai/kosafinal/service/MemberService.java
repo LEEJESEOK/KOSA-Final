@@ -1,10 +1,8 @@
 package com.hyundai.kosafinal.service;
 
-import com.hyundai.kosafinal.domain.LogDTO;
 import com.hyundai.kosafinal.domain.Member2DTO;
 import com.hyundai.kosafinal.domain.MemberDTO;
 import com.hyundai.kosafinal.domain.VipDTO;
-import com.hyundai.kosafinal.entity.SearchCriteria;
 import com.hyundai.kosafinal.entity.SearchMemberCriteria;
 
 import java.util.List;

@@ -1,8 +1,7 @@
 package com.hyundai.kosafinal.controller;
 
-import com.hyundai.kosafinal.domain.LogDTO;
+import com.hyundai.kosafinal.domain.LoginLogDTO;
 import com.hyundai.kosafinal.domain.MemberDTO;
-import com.hyundai.kosafinal.domain.ProductReviewDTO;
 import com.hyundai.kosafinal.service.MLService;
 import com.hyundai.kosafinal.service.ProductReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,22 +72,22 @@ public class MLRestController {
     @RequestMapping(value = "/secession", method = RequestMethod.POST)
     public boolean vip(@RequestBody Map<String, Object> params) throws JSONException, IOException {
         MemberDTO member = new MemberDTO();
-        LogDTO log = new LogDTO();
+        LoginLogDTO log = new LoginLogDTO();
 
         List<MemberDTO> ad = mservice.findbyMember((String) params.get("email"));
-        List<LogDTO> result = mservice.findbyLog((String) params.get("email"));
+        List<LoginLogDTO> result = mservice.findbyLog((String) params.get("email"));
         JSONArray jsonArray = new JSONArray();
 
 
 
 
-        for (LogDTO data : result) {
+        for (LoginLogDTO data : result) {
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
             JSONObject fjson = new JSONObject();
             fjson.put("LOG_ID", data.getLog_id());
             fjson.put("CUSTOMER_ID", data.getCustomer_id());
-            fjson.put("USEDATE", format.format(data.getUsedate().getTime()));
+            fjson.put("LOGIN_DATE", format.format(data.getLogin_date().getTime()));
             jsonArray.put(fjson);
         }
         JSONObject json = new JSONObject();
