@@ -4,39 +4,31 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hyundai.kosafinal.domain.ProductReviewDTO;
 import com.hyundai.kosafinal.service.ProductReviewService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
-import lombok.extern.slf4j.Slf4j;
-import net.minidev.json.JSONValue;
-import org.springframework.boot.configurationprocessor.json.JSONArray;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 @Slf4j
 @RestController
 public class ProductReviewController {
 
     private ProductReviewService productReviewService;
+
+    @Value("${s3.bucket.address}")
+    private String S3_BUCKET_ADDRESS;
 
     public ProductReviewController(ProductReviewService productReviewService) {
         this.productReviewService = productReviewService;
@@ -53,7 +45,7 @@ public class ProductReviewController {
             if (p.getImgURI() == null || p.getImgURI().equals("")) {
                 continue;
             }
-            p.setImgURI("https://kosa-aws-bucket.s3.ap-northeast-2.amazonaws.com/" + p.getImgURI());
+            p.setImgURI(S3_BUCKET_ADDRESS + p.getImgURI());
         }
         return list;
     }
@@ -254,23 +246,22 @@ public class ProductReviewController {
 
         double sentiment_percent = (double) resultMap.get("sentiment_percent");
 
-        System.out.println("제석이형"+sentiment_percent);
+        System.out.println("제석이형" + sentiment_percent);
         // TODO sentiment_percent int로 변경
-    if (sentiment_percent>0.5){
-      System.out.println("248");
-      productReviewDTO.setSentiment_percent(sentiment_percent*100);
-      productReviewDTO.setSentiment_type("긍정");
+        if (sentiment_percent > 0.5) {
+            System.out.println("248");
+            productReviewDTO.setSentiment_percent(sentiment_percent * 100);
+            productReviewDTO.setSentiment_type("긍정");
 
-        System.out.println(productReviewDTO);
-    }
-    else{
-      System.out.println("253");
-      productReviewDTO.setSentiment_percent((1-sentiment_percent)*100);
-      productReviewDTO.setSentiment_type("부정");
-        System.out.println(productReviewDTO);
-    }
+            System.out.println(productReviewDTO);
+        } else {
+            System.out.println("253");
+            productReviewDTO.setSentiment_percent((1 - sentiment_percent) * 100);
+            productReviewDTO.setSentiment_type("부정");
+            System.out.println(productReviewDTO);
+        }
 
-    // TODO sp_review insert
+        // TODO sp_review insert
         productReviewService.saveProductReview(productReviewDTO, null);
         bWriter.close();
         bReader.close();

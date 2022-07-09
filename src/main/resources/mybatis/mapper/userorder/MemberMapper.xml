@@ -194,7 +194,7 @@
     </select>
 
     <!-- 백오피스 관련 VIP, VVIP 검색 수 -->
-    <select id="searchVIPCount" resultType="MemberDTO">
+    <select id="searchVIPCount" resultType="int">
         SELECT COUNT(*)
         FROM member
         <where>
@@ -221,10 +221,10 @@
             <!-- 등급 필터링 -->
             <trim prefix="and">
                 <if test="selected == -1">
-                    grade IN (4,5)
+                    grade_id IN (4,5)
                 </if>
                 <if test="selected != -1">
-                    grade = #{selected}
+                    grade_id = #{selected}
                 </if>
             </trim>
         </where>

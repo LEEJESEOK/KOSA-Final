@@ -5,6 +5,9 @@ import com.hyundai.kosafinal.domain.ColorDTO;
 import com.hyundai.kosafinal.domain.ProductDTO;
 import com.hyundai.kosafinal.domain.SizeDTO;
 import com.hyundai.kosafinal.entity.Criteria;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -85,4 +88,34 @@ class ProductServiceTest {
         int minPrice = 100000, maxPrice = 600000;
         System.out.println(productService.getFilteredProductCount(id, size, color, categoryDTO, brand, minPrice, maxPrice));
     }
+
+    @Test
+    void getCategoryChangeList() {
+        List<CategoryDTO> ctyList = productService.getCategoryList();
+
+        Map<String, Map<String, List<String>>> mapList = new HashMap<>();
+
+        //large 카테고리 넣기
+        for(CategoryDTO large : ctyList){
+            if(!mapList.containsKey(large.getLarge())){
+                mapList.put(large.getLarge(), new HashMap<>());
+            }
+        }
+
+        //medium 카테고리 넣기
+        for (CategoryDTO medium : ctyList){
+            if(!mapList.get(medium.getLarge()).containsKey(medium.getMedium())){
+                mapList.get(medium.getLarge()).put(medium.getMedium(), new ArrayList<>());
+            }
+        }
+
+        //small 카테고리 넣기
+        for (CategoryDTO small : ctyList){
+            if(!mapList.get(small.getLarge()).get(small.getMedium()).contains(small.getSmall())){
+                mapList.get(small.getLarge()).get(small.getMedium()).add(small.getSmall());
+            }
+        }
+        System.out.println(mapList);
+    }
+
 }
