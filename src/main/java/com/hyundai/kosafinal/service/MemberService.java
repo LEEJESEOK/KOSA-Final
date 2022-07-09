@@ -1,5 +1,6 @@
 package com.hyundai.kosafinal.service;
 
+import com.hyundai.kosafinal.domain.LogDTO;
 import com.hyundai.kosafinal.domain.Member2DTO;
 import com.hyundai.kosafinal.domain.MemberDTO;
 import com.hyundai.kosafinal.domain.VipDTO;
@@ -24,4 +25,6 @@ public interface MemberService {
     public int searchVIPCount(SearchMemberCriteria criteria); // vip 검색 수
 
     public List<MemberDTO> searchVIP(SearchMemberCriteria criteria); // vip 검색
+
+    public void insertLog(String customer_id);
 }

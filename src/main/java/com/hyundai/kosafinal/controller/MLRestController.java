@@ -2,7 +2,9 @@ package com.hyundai.kosafinal.controller;
 
 import com.hyundai.kosafinal.domain.LogDTO;
 import com.hyundai.kosafinal.domain.MemberDTO;
+import com.hyundai.kosafinal.domain.ProductReviewDTO;
 import com.hyundai.kosafinal.service.MLService;
+import com.hyundai.kosafinal.service.ProductReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONException;
@@ -19,7 +21,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,8 +28,10 @@ import java.util.Map;
 @RequestMapping("/analysis")
 public class MLRestController {
     @Autowired
-    MLService service;
+    MLService mservice;
 
+    @Autowired
+    ProductReviewService rservice;
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public ModelAndView Test() {
         ModelAndView mav = new ModelAndView();
@@ -72,8 +75,8 @@ public class MLRestController {
         MemberDTO member = new MemberDTO();
         LogDTO log = new LogDTO();
 
-        List<MemberDTO> ad = service.findbyMember((String) params.get("email"));
-        List<LogDTO> result = service.findbyLog((String) params.get("email"));
+        List<MemberDTO> ad = mservice.findbyMember((String) params.get("email"));
+        List<LogDTO> result = mservice.findbyLog((String) params.get("email"));
         JSONArray jsonArray = new JSONArray();
 
 
@@ -113,7 +116,7 @@ public class MLRestController {
         String inputLine = null;
         StringBuffer stringBuffer = new StringBuffer();
 
-        URL url = new URL("http://localhost:5000/tospring"); //URL객체 생성
+        URL url = new URL("http://localhost:5000/vip"); //URL객체 생성
 
         HttpURLConnection conn = (HttpURLConnection) url.openConnection(); //url주소를 가지고 Http 커넥션 객체 생성
 
@@ -129,15 +132,7 @@ public class MLRestController {
 
         //데이터 전송
         BufferedWriter bWriter = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
-//        for(Map.Entry<String, Object> entry : map.entrySet()){
-//            String key = entry.getKey();
-//            Object value = entry.getValue();
-//            System.out.println("key"+key);
-//            System.out.println("value"+value);
-//
-//
-//        }
-//        System.out.println(json);
+
         bWriter.write(json.toString());
         bWriter.flush();
         System.out.println("Spring -> Flask 데이터 전송 성공!");
@@ -160,6 +155,7 @@ public class MLRestController {
         if(stringBuffer.toString().equals("[0]")){
             return false;
         }
+
         else{
             System.out.println(stringBuffer);
             return true;
@@ -167,6 +163,66 @@ public class MLRestController {
 
     }//sendJSON()
 
+//    @RequestMapping(value = "/review", method = RequestMethod.POST)
+//    public String review(@RequestBody Map<String, Object> params) throws JSONException, IOException {
+//        ProductReviewDTO reviewDTO=new ProductReviewDTO();
+//        List<ProductReviewDTO> re = rservice.getProductReviewByProductId((String) params.get("product_id"));
+//        System.out.println("re"+re);
+//
+//
+//        JSONObject json = new JSONObject();
+//        for (ProductReviewDTO data : re) {
+//            json.put("content", data.getContent());
+//            System.out.println("json"+json);
+//
+//        }
+//
+//
+//
+//        System.out.println(json);
+//
+//        String inputLine = null;
+//        StringBuffer stringBuffer = new StringBuffer();
+//
+//        URL url = new URL("http://localhost:5000/review"); //URL객체 생성
+//
+//        HttpURLConnection conn = (HttpURLConnection) url.openConnection(); //url주소를 가지고 Http 커넥션 객체 생성
+//
+//        System.out.println(conn.toString());
+//        conn.setDoOutput(true);
+//        conn.setDoInput(true);
+//        conn.setRequestMethod("POST");
+//        conn.setRequestProperty("Content-Type", "application/json");
+//        conn.setRequestProperty("Accept-Charset", "UTF-8");
+//        conn.setConnectTimeout(10000);
+//        conn.setReadTimeout(10000);
+//
+//
+//        //데이터 전송
+//        BufferedWriter bWriter = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
+//
+//        bWriter.write(json.toString());
+//        bWriter.flush();
+//        System.out.println("Spring -> Flask 데이터 전송 성공!");
+//        System.out.println("데이터 값" +json.toString());
+//
+//        //전송된 결과를 읽어옴
+//        BufferedReader bReader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+//        System.out.println("114줄입니다.");
+//        while ((inputLine = bReader.readLine()) != null) {
+//            stringBuffer.append(inputLine);
+//            System.out.println("while문" + stringBuffer); //stringBuffer에 데이터 담겨있음
+//        }
+//
+//        System.out.println(stringBuffer);
+//        System.out.println(stringBuffer.getClass().getName());
+//        bWriter.close();
+//        bReader.close();
+//        conn.disconnect();
+//
+//
+//        return "1";
+//    }
 
 }
 

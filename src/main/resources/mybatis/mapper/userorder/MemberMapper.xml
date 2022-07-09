@@ -272,4 +272,9 @@
             WHERE rn BETWEEN ((#{pageNum} - 1) * #{amount} + 1) AND (#{pageNum} * #{amount})
         ]]>
     </select>
+
+    <insert id="insertLog" parameterType="String">
+        insert into LOGIN_LOG(LOG_ID,CUSTOMER_ID,LOGIN_DATE) values(sq_log.nextval, #{customer_id}, sysdate)
+
+    </insert>
 </mapper>

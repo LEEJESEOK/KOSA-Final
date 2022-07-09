@@ -5,7 +5,7 @@
     <resultMap id="LogMap" type="LogDTO">
         <result property="log_id" column="LOG_ID"/>
         <result property="customer_id" column="CUSTOMER_ID"/>
-        <result property="usedate" column="USEDATE"/>
+        <result property="usedate" column="LOGIN_DATE"/>
 
     </resultMap>
 
