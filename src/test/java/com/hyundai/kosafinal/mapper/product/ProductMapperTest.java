@@ -122,6 +122,11 @@ class ProductMapperTest {
         productDTOList.forEach(dto -> {log.info(dto.toString());});
     }
 
+    @Test
+    void getColorChipUriByid(){
+        String s = productMapper.getColorChipByPid("DN");
+        System.out.println(s);
+    }
 
     @Test
     public void testGetColors() {

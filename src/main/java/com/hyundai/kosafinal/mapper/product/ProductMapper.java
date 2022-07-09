@@ -67,4 +67,7 @@ public interface ProductMapper {
 
     //해당 ID 사이즈 중복 제거
     List<ProductDTO> selectSize(@Param("productId")String productId);
+
+    String getColorChipByPid(@Param("colorId")String colorId);
+
 }

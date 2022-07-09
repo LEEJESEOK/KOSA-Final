@@ -140,7 +140,13 @@
                     break;
             }
             row += "<td class=\"text-center\">" + data.signUpDate.toString().substring(0,10) + "</td>";
-            row += "<td class=\"text-center\">" + data.recentLoginDate.toString().substring(0,10) + "</td>";
+
+            if(data.recentLoginDate == null) {
+                row += "<td class=\"text-center\"></td>";
+            } else {
+                row += "<td class=\"text-center\">" + data.recentLoginDate.toString().substring(0,10) + "</td>";
+            }
+
 
             // 비고 (0 : 이용중, 1 : 탈퇴, 2 : 휴면)
             switch(data.status) {

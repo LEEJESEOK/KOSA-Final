@@ -3,8 +3,190 @@
       layout:decorate="~{/biz/layout/default}">
 <th:block layout:fragment="script">
     <script>
-        // 주소, 팝업창 이름, 창크기(w, h, left, top)
+        // 한 페이지에 띄울 개수
+        let amount = 5;
 
+        $().ready(function () {
+
+            // 테이블 선택한 행 table-active 적용
+            $("input[type=checkbox]:not(#checkAll)").change(function () {
+                if ($(this).is(":checked")) {
+                    $(this).closest('tr').addClass("table-active");
+                } else {
+                    $(this).closest('tr').removeClass("table-active");
+                }
+            });
+
+            // 체크박스 전체선택/해제
+            $("#checkAll").click(function () {
+                $("input[type=checkbox]").prop("checked", this.checked).trigger("change");
+            });
+
+            // 체크된 체크박스 개수에 따라 checkAll 변경
+            $("input[type=checkbox]:not(#checkAll)").click(function () {
+                let total = $("input[type=checkbox]:not(#checkAll)").length;
+                let checked = $("input[type=checkbox]:checked:not(#checkAll)").length;
+
+                $("#checkAll").prop("checked", total == checked);
+            });
+
+            // 기본적으로 1페이지 불러옴
+            let param = {"pageNum": 1, "amount": amount};
+            getPage(param);
+        });
+
+        // 검색버튼 클릭 시
+        $(document).on("click", '#searchBtn', function () {
+            let param = {
+                "pageNum": 1, "amount": amount
+            };
+
+            // 주문 키워드 검색
+            let type = $("#type option:selected").val();
+            let keyword = $("#keyword").val();
+            if (keyword != "") {
+                param.type = type;
+                param.keyword = keyword;
+            }
+            // 주문 키워드 검색
+            let grade = $(":input:radio[name=grade]:checked").val();
+            if (grade != -1) {
+                param.selected = grade;
+            }
+
+            getPage(param);
+        });
+
+        // 서버에 데이터를 요청해 받아와 페이지를 만드는 함수
+        function getPage(param) {
+            $.ajax({
+                url: "[(@{/member/searchVIP})]",
+                method: "post",
+                data: JSON.stringify(param),
+                dataType: 'json',
+                contentType: "application/json; charset=UTF-8",
+                success: function (data) {
+                    let list = data.list;
+                    let page = data.page;
+
+                    $(".tbody").empty();
+                    $.each(list, function (idx, val) {
+                        addRow(param, idx, val);
+                    });
+
+                    addPagination(param.pageNum, page);
+
+                },
+                error: function (request, status, error) {
+                    alert(request + ", " + status + ", " + error);
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(csrf_header, csrf_token);
+                }
+            });
+        }
+
+        // 테이블에 동적으로 row 추가하는 함수
+        function addRow(param, idx, data) {
+            let tbody = $(".tbody");
+            let row = "<tr>";
+            row += "<td class=\"text-center\"><input class=\"form-check-input\" type=\"checkbox\"></td>";
+            let index = (param.pageNum - 1) * (param.amount) + idx + 1;
+            row += "<th class=\"text-center\" scope=\"row\">" + index + "</th>";
+            row += "<td className=\"text-center\" href=\"#\" onClick=\"showPopup()\">" + data.name + "</td>";
+            row += "<td className=\"text-center\" href=\"#\" onClick=\"showPopup()\">" + data.email + "</td>";
+            if(data.tel == null) {
+                row += "<td class=\"text-center\">/</td>";
+            } else {
+                row += "<td class=\"text-center\">" + data.tel + "</td>";
+            }
+            if(data.gender == null) {
+                row += "<td class=\"text-center\">/</td>";
+            } else if(data.gender == 0){
+                row += "<td class=\"text-center\">남</td>";
+            } else {
+                row += "<td class=\"text-center\">여</td>";
+            }
+            if(data.birth == null) {
+                row += "<td class=\"text-center\">/</td>";
+            } else {
+                row += "<td class=\"text-center\">" + data.birth.toString().substring(0,10) + "</td>";
+            }
+
+            switch(data.gradeId) {
+                case 4:
+                    row += "<td class=\"text-center\">Star</td>";
+                    break;
+                case 5:
+                    row += "<td class=\"text-center\">The Star</td>";
+                    break;
+            }
+            row += "<td class=\"text-center\">" + data.signUpDate.toString().substring(0,10) + "</td>";
+            if(data.recentLoginDate == null) {
+                row += "<td className=\"text-center\"></td>";
+            } else {
+                row += "<td class=\"text-center\">" + data.recentLoginDate.toString().substring(0,10) + "</td>";
+            }
+            row += "<td className=\"text-center\"></td>";
+            row += "<td className=\"text-center\"></td>";
+
+            tbody.append(row);
+        }
+
+        // 페이지 버튼 동적으로 추가하는 함수
+        function addPagination(pageNum, page) {
+            let pagination = $(".pagination");
+            pagination.empty();
+
+            let row = "";
+            if (page.prev) {
+                row += "<li class=\"page-item\">\n" +
+                    "                <a class=\"page-link\" href=\"#\" onClick=\"paging(" + (page.startPage - 1) + ")\">이전</a>\n" +
+                    "            </li>";
+            }
+            for (var i = page.startPage; i <= page.endPage; i++) {
+                if (i == pageNum) {
+                    row += "<li class=\"page-item\"><a class=\"page-link on\" href=\"#\" onClick=\"paging(" + i + ")\">" + i + "</a></li>";
+                } else {
+                    row += "<li class=\"page-item\"><a class=\"page-link\" href=\"#\" onClick=\"paging(" + i + ")\">" + i + "</a></li>";
+                }
+
+            }
+            if (page.next) {
+                row += "<li class=\"page-item\">\n" +
+                    "                <a class=\"page-link\" href=\"#\" onClick=\"paging(" + (page.endPage + 1) + ")\">다음</a>\n" +
+                    "            </li>";
+            }
+
+            pagination.append(row);
+
+        }
+
+        // 페이지를 눌렀을 때
+        function paging(page) {
+            let pageNum = parseInt(page);
+
+            let param = {
+                "pageNum": pageNum, "amount": amount
+            };
+
+            // 주문 키워드 검색
+            let type = $("#type option:selected").val();
+            let keyword = $("#keyword").val();
+            if (keyword != "") {
+                param.type = type;
+                param.keyword = keyword;
+            }
+            // 주문 키워드 검색
+            let grade = $(":input:radio[name=grade]:checked").val();
+            if (grade != -1) {
+                param.selected = grade;
+            }
+
+            getPage(param);
+        }
+
+        // 주소, 팝업창 이름, 창크기(w, h, left, top)
         function showPopup() {
             let url = "/biz/vip/vipDetail"
             let windowName = "VIP Detail"
@@ -13,6 +195,7 @@
             let windowOption = "width=1280, height=720, left=100, top=50"
             window.open(url, windowName, windowOption);
         }
+
     </script>
 </th:block>
 <th:block layout:fragment="content">
@@ -27,7 +210,7 @@
                                     <label class="form-label" for="keyword">검색어</label>
                                 </div>
                                 <div class="col-2">
-                                    <select class="form-select">
+                                    <select class="form-select" id="type">
                                         <option th:value="id">아이디</option>
                                         <option th:value="name">이름</option>
                                         <option th:value="tel">연락처</option>
@@ -43,18 +226,18 @@
                                 </div>
                                 <div class="col-10">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" id="all" name="vipStatus"
+                                        <input class="form-check-input" type="radio" id="all" name="grade" value="-1"
                                                checked>
                                         <label class="form-check-label" for="all">전체</label>
                                     </div>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" id="vip_the_star"
-                                               name="vipStatus">
+                                               name="grade" value="5">
                                         <label class="form-check-label" for="vip_the_star">THE STAR</label>
                                     </div>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" id="vip_star"
-                                               name="vipStatus">
+                                               name="grade" value="4">
                                         <label class="form-check-label" for="vip_star">STAR</label>
                                     </div>
                                 </div>
@@ -62,7 +245,7 @@
                             <div class="row">
                                 <div class="col-12 text-center">
                                     <button class="btn btn-outline-primary" type="reset">초기화</button>
-                                    <button class="btn btn-primary" type="submit">검색</button>
+                                    <button id="searchBtn" class="btn btn-primary" type="button">검색</button>
                                 </div>
                             </div>
                         </form>
@@ -72,91 +255,34 @@
                     <div class="card-body">
                         <h5 class="card-title">VIP 목록</h5>
                         <table class="table table-hover table-bordered">
-                            <thead>
+                            <thead class="table-light">
                             <tr>
-                                <th scope="col" class="text-center">
+                                <th scope="col" class="text-center" style="width:5%">
                                     <input class="form-check-input" id="checkAll" type="checkbox">
                                 </th>
-                                <th scope="col" class="text-center">#</th>
-                                <th scope="col" class="text-center">이름</th>
-                                <th scope="col" class="text-center">아이디</th>
-                                <th scope="col" class="text-center">연락처</th>
-                                <th scope="col" class="text-center">성별</th>
-                                <th scope="col" class="text-center">생년월일</th>
-                                <th scope="col" class="text-center">등급</th>
-                                <th scope="col" class="text-center">가입일</th>
-                                <th scope="col" class="text-center">최근 로그인</th>
-                                <th scope="col" class="text-center">탈퇴분석</th>
-                                <th scope="col" class="text-center">비고</th>
+                                <th scope="col" class="text-center" style="width:5%">#</th>
+                                <th scope="col" class="text-center" style="width:10%">이름</th>
+                                <th scope="col" class="text-center" style="width:14%">아이디</th>
+                                <th scope="col" class="text-center" style="width:10%">연락처</th>
+                                <th scope="col" class="text-center" style="width:5%">성별</th>
+                                <th scope="col" class="text-center" style="width:10%">생년월일</th>
+                                <th scope="col" class="text-center" style="width:7%">등급</th>
+                                <th scope="col" class="text-center" style="width:10%">가입일</th>
+                                <th scope="col" class="text-center" style="width:10%">최근 로그인</th>
+                                <th scope="col" class="text-center" style="width:10%">탈퇴분석</th>
+                                <th scope="col" class="text-center" style="width:5%">비고</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr>
-                                <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-                                <th scope="row" class="text-center">1</th>
-                                <td class="text-center" href="#" onclick="showPopup()">이제석</td>
-                                <td class="text-center" href="#" onclick="showPopup()">jadyn03</td>
-                                <!-- <td class="text-center" data-bs-toggle="modal" data-bs-target="#vipModal">이제석</td>-->
-                                <!-- <td class="text-center" data-bs-toggle="modal" data-bs-target="#vipModal">jadyn03</td>-->
-                                <td class="text-center">01046623126</td>
-                                <td class="text-center">남</td>
-                                <td class="text-center">1994-12-03</td>
-                                <td class="text-center">STAR</td>
-                                <td class="text-center">2018-07-01</td>
-                                <td class="text-center">2022-07-01</td>
-                                <td class="text-center">-</td>
-                                <td class="text-center">-</td>
-                            </tr>
+                            <tbody class="tbody">
+
                             </tbody>
                         </table>
-                        <!--                        <div class="modal fade" id="vipModal" tabindex="-1" style="display: none;"-->
-                        <!--                             aria-hidden="true">-->
-                        <!--                            <div class="modal-dialog modal-xl">-->
-                        <!--                                <div class="modal-content">-->
-                        <!--                                    <div class="modal-header">-->
-                        <!--                                        <h5 class="modal-title">제목</h5>-->
-                        <!--                                        <button type="button" class="btn-close" data-bs-dismiss="modal"-->
-                        <!--                                                aria-label="Close"></button>-->
-                        <!--                                    </div>-->
-                        <!--                                    <div class="modal-body">-->
-                        <!--                                        <form class="row">-->
-                        <!--                                            <input type="hidden" th:name="${_csrf.parameterName}"-->
-                        <!--                                                   th:value="${_csrf.token}"/>-->
-                        <!--                                            <div class="row mb-3">-->
-                        <!--                                                <div class="col-2">-->
-                        <!--                                                    <label class="form-label" for="name">이름</label>-->
-                        <!--                                                </div>-->
-                        <!--                                                <div class="col-9">-->
-                        <!--                                                    <p id="name">이제석</p>-->
-                        <!--                                                </div>-->
-                        <!--                                            </div>-->
-                        <!--                                            <div class="row mb-3">-->
-                        <!--                                                <div class="col-2">-->
-                        <!--                                                    <label class="form-label" for="id">아이디</label>-->
-                        <!--                                                </div>-->
-                        <!--                                                <div class="col-10">-->
-                        <!--                                                    <p id="id">jadyn03</p>-->
-                        <!--                                                </div>-->
-                        <!--                                            </div>-->
-                        <!--                                            <div class="row mb-3">-->
-                        <!--                                                <div class="col-2">-->
-                        <!--                                                    <label class="form-label" for="tel">연락처</label>-->
-                        <!--                                                </div>-->
-                        <!--                                                <div class="col-10">-->
-                        <!--                                                    <p id="tel">01046623126</p>-->
-                        <!--                                                </div>-->
-                        <!--                                            </div>-->
-                        <!--                                        </form>-->
+                        <!-- TODO pagination 페이징 -->
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
 
-                        <!--                                    </div>-->
-                        <!--                                    <div class="modal-footer">-->
-                        <!--                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">-->
-                        <!--                                            닫기-->
-                        <!--                                        </button>-->
-                        <!--                                    </div>-->
-                        <!--                                </div>-->
-                        <!--                            </div>-->
-                        <!--                        </div>-->
+                            </ul>
+                        </nav>
                     </div>
                 </div>
             </div>

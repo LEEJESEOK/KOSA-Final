@@ -74,4 +74,35 @@ public class ProductRestController {
         System.out.println(categoryDTO);
         return map;
     }
+
+    @GetMapping("/list")
+    public Map<String, Map<String, List<String>>> getCategoryList(){
+
+        List<CategoryDTO> ctyList = productService.getCategoryList();
+        Map<String, Map<String, List<String>>> mapList = new HashMap<>();
+
+        //large 카테고리 넣기
+        for(CategoryDTO large : ctyList){
+            if(!mapList.containsKey(large.getLarge())){
+                mapList.put(large.getLarge(), new HashMap<>());
+            }
+        }
+
+        //medium 카테고리 넣기
+        for (CategoryDTO medium : ctyList){
+            if(!mapList.get(medium.getLarge()).containsKey(medium.getMedium())){
+                mapList.get(medium.getLarge()).put(medium.getMedium(), new ArrayList<>());
+            }
+        }
+
+        //small 카테고리 넣기
+        for (CategoryDTO small : ctyList){
+            if(!mapList.get(small.getLarge()).get(small.getMedium()).contains(small.getSmall())){
+                mapList.get(small.getLarge()).get(small.getMedium()).add(small.getSmall());
+            }
+        }
+        System.out.println(mapList);
+        return mapList;
+    }
+
 }

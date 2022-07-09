@@ -23,6 +23,7 @@
         <result property="recentLoginDate" column="RECENT_LOGIN_DATE"/>
         <result property="signUpDate" column="SIGN_UP_DATE"/>
     </resultMap>
+
     <select id="findGrade" resultType="String">
         select grade_id
         from member
@@ -192,7 +193,7 @@
     </select>
 
     <!-- 백오피스 관련 VIP, VVIP 검색 수 -->
-    <select id="searchVIPCount" resultType="MemberDTO">
+    <select id="searchVIPCount" resultType="int">
         SELECT COUNT(*)
         FROM member
         <where>
@@ -208,21 +209,13 @@
                     tel LIKE '%'||#{keyword}||'%'
                 </if>
             </if>
-            <!-- 날짜 필터링 -->
-            <trim prefix = "and">
-                <if test="start_date != null and end_date != null">
-                    <![CDATA[
-                                    TO_CHAR(sign_up_date, 'YYYYMMDD') >= TO_CHAR(#{start_date}, 'YYYYMMDD') AND TO_CHAR(sign_up_date, 'YYYYMMDD') <= TO_CHAR(#{end_date}, 'YYYYMMDD')
-                                ]]>
-                </if>
-            </trim>
             <!-- 등급 필터링 -->
             <trim prefix = "and">
                 <if test="selected == -1">
-                    grade IN (4,5)
+                    grade_id IN (4,5)
                 </if>
                 <if test="selected != -1">
-                    grade = #{selected}
+                    grade_id = #{selected}
                 </if>
             </trim>
         </where>
@@ -248,21 +241,13 @@
                         tel LIKE '%'||#{keyword}||'%'
                     </if>
                 </if>
-                <!-- 날짜 필터링 -->
-                <trim prefix = "and">
-                    <if test="start_date != null and end_date != null">
-                        <![CDATA[
-                                    TO_CHAR(sign_up_date, 'YYYYMMDD') >= TO_CHAR(#{start_date}, 'YYYYMMDD') AND TO_CHAR(sign_up_date, 'YYYYMMDD') <= TO_CHAR(#{end_date}, 'YYYYMMDD')
-                                ]]>
-                    </if>
-                </trim>
                 <!-- 등급 필터링 -->
                 <trim prefix = "and">
                     <if test="selected == -1">
-                        grade IN (4,5)
+                        grade_id IN (4,5)
                     </if>
                     <if test="selected != -1">
-                        grade = #{selected}
+                        grade_id = #{selected}
                     </if>
                 </trim>
             </where>

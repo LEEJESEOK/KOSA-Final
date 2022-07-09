@@ -191,7 +191,7 @@
             row += "<td class=\"text-center\">" + data.category + "</td>";
             row += "<td class=\"text-center\" data-bs-toggle=\"modal\" data-bs-target=\"#reviewModal\" data-id='" + data.id + "'>" + data.title + "</td>";
             if (data.status == 0) { // 0이면 답변대기, 1이면 답변완료
-                row += "<td class=\"text-center\">답변대기</td>";
+                row += "<td class=\"text-center\" style=\"color: #DA9529; font-weight: bold;\">답변대기</td>";
             } else {
                 row += "<td class=\"text-center\">답변완료</td>";
             }
@@ -363,7 +363,7 @@
                     <div class="card-body">
                         <h5 class="card-title"></h5>
                         <table class="table table-hover table-bordered">
-                            <thead>
+                            <thead class="table-light">
                             <tr>
                                 <th scope="col" class="text-center" style="width:5%">
                                     <input class="form-check-input" id="checkAll" type="checkbox">
@@ -389,14 +389,14 @@
                         <!-- 답글 모달창 -->
                         <div class="modal fade" id="reviewModal" tabindex="-1" style="display: none;"
                              aria-hidden="true">
-                            <div class="modal-dialog modal-xl">
+                            <div class="modal-dialog modal-xl modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title fw-bold">문의 답변 작성</h5>
+                                        <h5 class="modal-title fw-bold">문의 답변</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                     </div>
-                                    <div class="modal-body border">
+                                    <div class="modal-body">
                                         <form class="row" id="reviewReplyForm">
                                             <input type="hidden" th:name="${_csrf.parameterName}"
                                                    th:value="${_csrf.token}"/>
@@ -408,7 +408,7 @@
                                                     <p id="title"></p>
                                                 </div>
                                             </div>
-                                            <div class="row mb-3 border-bottom">
+                                            <div class="row mb-3">
                                                 <div class="col-2">
                                                     <label class="form-label fw-bold" for="content">문의내용</label>
                                                 </div>
@@ -418,11 +418,12 @@
                                                     </p>
                                                 </div>
                                             </div>
+                                            <hr />
                                             <div class="row mt-1 mb-3">
                                                 <div class="col-2">
                                                     <label class="form-label fw-bold" for="replyContent">답변</label>
                                                 </div>
-                                                <div class="col-9">
+                                                <div class="col-10">
                                                     <textarea class="form-control" rows="10" id="replyForm"
                                                               style="display:none"
                                                               autofocus></textarea>
