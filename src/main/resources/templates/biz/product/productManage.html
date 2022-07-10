@@ -1,9 +1,29 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/biz/layout/default}">
+<style>
+    .input-file-button{
+        padding: 6px 25px;
+        background-color:#FF6600;
+        border-radius: 4px;
+        color: white;
+        cursor: pointer;
+    }
+</style>
 <th:block layout:fragment="content">
     <script>
-        $().ready(function () {
+        //한 화면에 뿌릴 상품 수
+        let amount = 10;
+
+        //카테고리 리스트
+        var ctryList;
+
+        //검색어 조건 설정
+        var selectKeyword = 'pname';
+        var selectStatus = "";
+        var modalStatus = "";
+
+        $(document).ready(function () {
 
             // 테이블 선택한 행 table-active 적용
             $("input[type=checkbox]:not(#checkAll)").change(function () {
@@ -26,11 +46,444 @@
 
                 $("#checkAll").prop("checked", total == checked);
             });
+
+            $.ajax({
+                type: "GET",
+                url: "/api/category/list",
+                success: function (data) {
+                    ctryList = data;
+
+                    //large category 설정
+                    var largeOptionList;
+                    var largeTag = $('#large');
+                    var mediumTag = $('#medium');
+                    var smallTag = $('#small');
+                    largeTag.empty();
+                    largeOptionList += "<option selected=''>대분류</option>";
+                    for(largeKey in ctryList){
+                        largeOptionList += "<option value='"+largeKey+"'>"+largeKey+"</option>";
+                    }
+                    largeTag.html(largeOptionList);
+                    mediumTag.empty();
+                    smallTag.empty();
+                    smallTag.html("<option selected=''>소분류</option>");
+                    mediumTag.html("<option selected=''>중분류</option>");
+                },
+                error: function (request, status, error) {
+                    alert("Ajax 통신 에러 발생");
+                    alert(error);
+                }
+            });
+
+            let param = { "pageNum": 1, "amount": amount };
+            searchProudct(param);
+
+            // 모달 열릴 때 이벤트
+            $('#productModal').on('show.bs.modal', function (event) {
+
+                //모달 카테고리 초기화
+                console.log("모달 카테고리 : "+ctryList);
+                var largeOptionList;
+                var largeTag = $('#modalLarge');
+                var mediumTag = $('#modalMedium');
+                var smallTag = $('#modalSmall');
+                largeTag.empty();
+                largeOptionList += "<option selected=''>대분류</option>";
+                for(largeKey in ctryList){
+                    largeOptionList += "<option value='"+largeKey+"'>"+largeKey+"</option>";
+                }
+                largeTag.html(largeOptionList);
+                mediumTag.empty();
+                smallTag.empty();
+                smallTag.html("<option selected=''>소분류</option>");
+                mediumTag.html("<option selected=''>중분류</option>");
+
+                //초기화
+                $('#productModal').find("#modalName").text("");
+                $('#productModal').find("#modalId").text("");
+                $('#productModal').find("#modalPrice").text("");
+                $('#productModal').find("#modalColor").val("");
+                $('#productModal').find("#modalSize").val("");
+                $('#productModal').find("#modalBrand").val("");
+                $('#productModal').find("#modalDetail").val("");
+                $('#productModal').find("#modalStockAmount").val("");
+                $('#productModal').find("#modalProductStatus").val("");
+                modalStatus = "";
+
+                let tag = $(event.relatedTarget);
+                let id = tag.data('id');
+
+                const size = tag.data('size');
+                const categoryLarge = tag.data('large');
+                const categoryMedium = tag.data('medium');
+                const categorySmall = tag.data('small');
+                const colorId = tag.data('color');
+
+                $.ajax({
+                    url: "[(@{/api/product/})]" + id,
+                    data: {
+                        size : size,
+                        categoryLarge : categoryLarge,
+                        categoryMedium : categoryMedium,
+                        categorySmall : categorySmall,
+                        colorId : colorId
+                    },
+                    method: "get",
+                    success: function (result) {
+                        console.log("성공성공성공 ")
+                        console.log("result : " + result);
+
+                        //data 넣어주기!
+                        $('#productModal').find("#modalName").val(result.name);
+                        $('#productModal').find("#modalId").val(result.id);
+                        $('#productModal').find("#modalPrice").val(result.price);
+                        $('#productModal').find("#modalColor").val(result.colorId);
+                        $('#productModal').find("#modalSize").val(result.size);
+                        $('#productModal').find("#modalBrand").val(result.brand);
+                        $('#productModal').find("#modalLarge").val(result.categoryLarge).prop("selected", true).trigger('change');
+                        $('#productModal').find("#modalMedium").val(result.categoryMedium).prop("selected", true).trigger('change');
+                        $('#productModal').find("#modalSmall").val(result.categorySmall).prop("selected", true);
+                        $('#productModal').find("#modalDetail").val(result.detail);
+                        $('#productModal').find("#modalStockAmount").val(result.stockAmount);
+                        $('#productModal').find("#modalProductStatus").val(result.status);
+                        $('#productModal').find("#image1").val(result.image1Uri);
+                        $('#productModal').find("#image2").val(result.image2Uri);
+                        $('#productModal').find("#image3").val(result.image3Uri);
+                        // const image1 = document.querySelector("#productInsertForm [name=image1]").files[0];
+                        // const image2 = document.querySelector("#productInsertForm [name=image2]").files[0];
+                        // const image3 = document.querySelector("#productInsertForm [name=image3]").files[0];
+
+                    },
+                    error: function (request, status, error) {
+                        alert(request + ", " + status + ", " + error);
+                    },
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(csrf_header, csrf_token);
+                    }
+                });
+            })
         });
+
+        function setMediumCtry(value) {
+            var mediumOptionList="";
+            $('#small').empty();
+            $('#small').html("<option selected=''>소분류</option>");
+
+            mediumOptionList += "<option selected=''>중분류</option>";
+            for(mediumKey in ctryList[value]){
+                console.log(mediumKey);
+                mediumOptionList += "<option value='"+mediumKey+"'>"+mediumKey+"</option>";
+            }
+            $('#medium').html(mediumOptionList);
+        }
+
+       function setModalMediumCtry(value) {
+            var mediumOptionList="";
+            $('#modalSmall').empty();
+            $('#modalSmall').html("<option selected=''>소분류</option>");
+
+            mediumOptionList += "<option selected=''>중분류</option>";
+            for(mediumKey in ctryList[value]){
+                console.log(mediumKey);
+                mediumOptionList += "<option value='"+mediumKey+"'>"+mediumKey+"</option>";
+            }
+            $('#modalMedium').html(mediumOptionList);
+        }
+
+        function setSmallCtry(value) {
+            var smallOptionList="";
+            var largeTag = document.getElementById('large');
+            const largeCtry = largeTag.options[largeTag.selectedIndex].value;
+
+            smallOptionList += "<option selected=''>소분류</option>";
+            for(smallKey of ctryList[largeCtry][value]){
+                smallOptionList += "<option value='"+smallKey+"'>"+smallKey+"</option>";
+            }
+            $('#small').html(smallOptionList);
+        }
+
+        function setModalSmallCtry(value) {
+            var smallOptionList="";
+            var largeTag = document.getElementById('modalLarge');
+            const largeCtry = largeTag.options[largeTag.selectedIndex].value;
+
+            smallOptionList += "<option selected=''>소분류</option>";
+            for(smallKey of ctryList[largeCtry][value]){
+                smallOptionList += "<option value='"+smallKey+"'>"+smallKey+"</option>";
+            }
+            $('#modalSmall').html(smallOptionList);
+        }
+
+        function setKeyword(value){
+            selectKeyword = value;
+        }
+
+        function setProductStatus(value){
+            selectStatus = value;
+        }
+
+        function setModalProductStatus(value){
+            modalStatus = value;
+        }
+
+        //검색 버튼 클릭
+        $(document).on("click", '#search', function () {
+            let param = {
+                "pageNum": 1, "amount": amount
+            };
+
+            var largeTag = document.getElementById('large');
+            var mediumTag = document.getElementById('medium');
+            var smallTag = document.getElementById('small');
+            var keyType = selectKeyword;
+            var keyword = $('#keyword').val();
+            const largeCtry = largeTag.options[largeTag.selectedIndex].value;
+            const mediumCtry = mediumTag.options[mediumTag.selectedIndex].value;
+            const smallCtry = smallTag.options[smallTag.selectedIndex].value;
+            const brand = $('#brand').val();
+
+            param.keyType = selectKeyword;
+            if(keyword != ""){
+                param.keyType = keyType;
+                param.keyContent = keyword;
+            }
+            if(largeCtry != "대분류"){
+                param.categoryLarge = largeCtry;
+            }
+            if(mediumCtry != "중분류"){
+                param.categoryMedium = mediumCtry;
+            }
+            if(smallCtry != "소분류"){
+                param.categorySmall = smallCtry;
+            }
+            if(brand != "" && brand != null){
+                param.brand = brand;
+            }
+            if(selectStatus != ""){
+                param.status = selectStatus;
+            }
+            searchProudct(param);
+        });
+
+        function searchProudct(param){
+            $.ajax({
+                type: "POST",
+                url: "/api/biz/product/select",
+                data: JSON.stringify(param),
+                dataType: 'json',
+                contentType: "application/json; charset=UTF-8",
+                success: function (data) {
+                    let list = data.list;
+                    let page = data.page;
+
+                    //데이터 하드 코딩 하기
+                    $("#searchResult").empty();
+                    $.each(list, function (idx, val) {
+                        addProdutRow(param, idx, val);
+                    });
+
+                    addPagination(param.pageNum, page);
+                },
+                error: function (request, status, error) {
+                    alert("Ajax 통신 에러 발생");
+                    alert(error);
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(csrf_header, csrf_token);
+                }
+            });
+        }
+
+        function paging(page){
+            let pageNum = parseInt(page);
+            let param = {
+                "pageNum": pageNum, "amount": amount
+            };
+
+            var largeTag = document.getElementById('large');
+            var mediumTag = document.getElementById('medium');
+            var smallTag = document.getElementById('small');
+            var keyType = selectKeyword;
+            var keyword = $('#keyword').val();
+            const largeCtry = largeTag.options[largeTag.selectedIndex].value;
+            const mediumCtry = mediumTag.options[mediumTag.selectedIndex].value;
+            const smallCtry = smallTag.options[smallTag.selectedIndex].value;
+            const brand = $('#brand').val();
+
+            param.keyType = selectKeyword;
+            if(keyword != ""){
+                param.keyType = keyType;
+                param.keyContent = keyword;
+            }
+            if(largeCtry != "대분류"){
+                param.categoryLarge = largeCtry;
+            }
+            if(mediumCtry != "중분류"){
+                param.categoryMedium = mediumCtry;
+            }
+            if(smallCtry != "소분류"){
+                param.categorySmall = smallCtry;
+            }
+            if(brand != "" && brand != null){
+                param.brand = brand;
+            }
+            if(selectStatus != ""){
+                param.status = selectStatus;
+            }
+
+            searchProudct(param);
+        }
+
+        function addProdutRow(param, idx, value) {
+            let tbody = $("#searchResult");
+            var row = "<tr>";
+            row += "    <td><input class='form-check-input' type='checkbox'></td>";
+            let index = (param.pageNum - 1) * (param.amount) + idx + 1;
+            row += "    <th class='text-center' scope='row'>"+index+"</th>";
+            row += "    <td data-bs-toggle='modal' data-id='"+value.id+"' data-size='"+value.size+"' data-color='"+value.colorId+"' data-large='"+value.categoryLarge+"' data-medium='"+value.categoryMedium+"' data-small='"+value.categorySmall+"' data-bs-target='#productModal'>"+value.name+"</td>";
+            row += "    <td data-bs-toggle='modal' data-id='"+value.id+"' data-size='"+value.size+"' data-color='"+value.colorId+"' data-large='"+value.categoryLarge+"' data-medium='"+value.categoryMedium+"' data-small='"+value.categorySmall+"' data-bs-target='#productModal'>"+value.id+"</td>";
+            row += "    <td>"+value.price+"</td>";
+            row += "    <td>"+value.colorId+"</td>";
+            row += "    <td>"+value.size+"</td>";
+            row += "    <td>"+value.categoryLarge +" > "+ value.categoryMedium +" > "+ value.categorySmall+"</td>";
+            row += "    <td>"+value.brand+"</td>";
+            row += "    <td>"+value.stockAmount+"</td>";
+            var createdStr = value.createdAt.toString().substring(0, 10);
+            row += "    <td>"+createdStr+"</td>";
+            var statusName = '판매중';
+            if(value.status === 0) statusName = '판매중단';
+            row += "    <td>"+statusName+"</td>";
+            row += "</tr>";
+            tbody.append(row);
+        }
+
+        // 페이지 버튼 동적으로 추가하는 함수
+        function addPagination(pageNum, page) {
+            let pagination = $(".pagination");
+            pagination.empty();
+
+            let row = "";
+            if (page.prev) {
+                row += "<li class=\"page-item\">\n" +
+                    "                <a class=\"page-link\" href=\"#\" onClick=\"paging(" + (page.startPage - 1) + ")\">이전</a>\n" +
+                    "            </li>";
+            }
+            for (var i = page.startPage; i <= page.endPage; i++) {
+                if (i == pageNum) {
+                    row += "<li class=\"page-item\"><a class=\"page-link on\" href=\"#\" onClick=\"paging(" + i + ")\">" + i + "</a></li>";
+                } else {
+                    row += "<li class=\"page-item\"><a class=\"page-link\" href=\"#\" onClick=\"paging(" + i + ")\">" + i + "</a></li>";
+                }
+            }
+            if (page.next) {
+                row += "<li class=\"page-item\">\n" +
+                    "                <a class=\"page-link\" href=\"#\" onClick=\"paging(" + (page.endPage + 1) + ")\">다음</a>\n" +
+                    "            </li>";
+            }
+            pagination.append(row);
+        }
+
+        function handleFiles(value) {
+            console.log(value.files);
+            // 이미지 파일인지 확인
+            confirmFileExtension(value);
+        }
+
+        //이미지 파일인지 확인하는 로직
+        function confirmFileExtension(value) {
+            var reg = /(.*?)\.(jpg|jpeg|png|gif|bmp)$/;
+
+            var files = value.files;
+            var imageTag = 'image'+value.id.toString().substring(9,10);
+
+            console.log('imageTag : '+imageTag);
+
+            $.each(files, function (idx, val) {
+                if ((val.name).match(reg)) {
+                    // alert("해당 파일은 이미지 파일입니다.");
+                    console.log("파일 이름 : " + val.name);
+                    document.getElementById(imageTag).value = val.name;
+                } else {
+                    alert("해당 파일은 이미지 파일이 아닙니다.");
+                    //파일 초기화
+                    $("#reviewFile").val("");
+                }
+            });
+        }
+
+        function updateProduct(){
+
+            var largeTag = document.getElementById('modalLarge');
+            var mediumTag = document.getElementById('modalMedium');
+            var smallTag = document.getElementById('modalSmall');
+            var statusTag = document.getElementById('modalProductStatus');
+            const name = $('#productModal').find("#modalName").val();
+            const id = $('#productModal').find("#modalId").val();
+            const price = $('#productModal').find("#modalPrice").val();
+            const colorId = $('#productModal').find("#modalColor").val();
+            const size = $('#productModal').find("#modalSize").val();
+            const brand = $('#productModal').find("#modalBrand").val();
+
+            const largeCtry = largeTag.options[largeTag.selectedIndex].value;
+            const mediumCtry = mediumTag.options[mediumTag.selectedIndex].value;
+            const smallCtry = smallTag.options[smallTag.selectedIndex].value;
+            const status = statusTag.options[statusTag.selectedIndex].value;
+
+            const detail = $('#productModal').find("#modalDetail").val();
+            const stockAmount = $('#productModal').find("#modalStockAmount").val();
+            const image1 = document.querySelector("#showImage1").files[0];
+            const image2 = document.querySelector("#showImage2").files[0];
+            const image3 = document.querySelector("#showImage3").files[0];
+            const savedImage1 = $('#productModal').find("#image1").val();
+            const savedImage2 = $('#productModal').find("#image2").val();
+            const savedImage3 = $('#productModal').find("#image3").val();
+
+            var formData = new FormData();
+            formData.append("id", id);
+            formData.append("size", size);
+            formData.append("colorId", colorId);
+            formData.append("name", name);
+            formData.append("brand", brand);
+            formData.append("categoryLarge", largeCtry);
+            formData.append("categoryMedium", mediumCtry);
+            formData.append("categorySmall", smallCtry);
+            formData.append("detail", detail);
+            formData.append("price", price);
+            formData.append("stockAmount", stockAmount);
+            formData.append("status", status);
+            formData.append("savedImage1", savedImage1);
+            formData.append("savedImage2", savedImage2);
+            formData.append("savedImage3", savedImage3);
+            if (image1) {
+                formData.append("image1Uri", image1);
+            }
+            if (image2) {
+                formData.append("image2Uri", image2);
+            }
+            if (image3) {
+                formData.append("image3Uri", image3);
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/api/biz/product/update/"+id,
+                processData: false,
+                contentType: false,
+                cache: false,
+                data: formData,
+                success: function (data) {
+                    console.log('update 성공!!!!')
+                    location.reload();
+                },
+                error: function (request, status, error) {
+                    alert("Ajax 통신 에러 발생");
+                    alert(error);
+                }
+            });
+
+        }
+
     </script>
-    <button type="button" class="btn btn-primary">
-        Basic Modal
-    </button>
     <section class="section">
         <div class="row">
             <div class="col-12">
@@ -43,9 +496,9 @@
                                     <label class="form-label" for="keyword">검색어</label>
                                 </div>
                                 <div class="col-2">
-                                    <select class="form-select">
-                                        <option>상품명</option>
-                                        <option>상품코드</option>
+                                    <select onchange="setKeyword(this.value)" class="form-select" id="keySelect">
+                                        <option value="pname">상품명</option>
+                                        <option value="id">상품코드</option>
                                     </select>
                                 </div>
                                 <div class="col-6">
@@ -57,21 +510,18 @@
                                     <label class="form-label">상품분류</label>
                                 </div>
                                 <div class="col-2">
-                                    <select class="form-select" id="large">
-                                        <option selected="">Choose...</option>
-                                        <option th:value="${null}">미설정</option>
+                                    <select onchange='setMediumCtry(this.value)' class="form-select" id="large">
+                                        <option selected="">대분류</option>
                                     </select>
                                 </div>
                                 <div class="col-2">
-                                    <select class="form-select" id="medium">
-                                        <option selected="">Choose...</option>
-                                        <option th:value="${null}">미설정</option>
+                                    <select onchange='setSmallCtry(this.value)' class="form-select" id="medium">
+                                        <option selected="">중분류</option>
                                     </select>
                                 </div>
                                 <div class="col-2">
                                     <select class="form-select" id="small">
-                                        <option selected="">Choose...</option>
-                                        <option th:value="${null}">미설정</option>
+                                        <option selected="">소분류</option>
                                     </select>
                                 </div>
                             </div>
@@ -83,10 +533,22 @@
                                     <input class="form-control" id="brand" type="text">
                                 </div>
                             </div>
+                            <div class="row mb-3">
+                                <div class="col-2">
+                                    <label class="form-label" for="productStatus">상품 상태</label>
+                                </div>
+                                <div class="col-2">
+                                    <select onchange='setProductStatus(this.value)' class="form-select" id="productStatus">
+                                        <option value="" selected="">상품 상태</option>
+                                        <option value="1">판매중</option>
+                                        <option value="0">판매중단</option>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-12 text-center">
                                     <button class="btn btn-outline-primary" type="reset">초기화</button>
-                                    <button class="btn btn-primary" type="submit">검색</button>
+                                    <button class="btn btn-primary" id="search" type="button">검색</button>
                                 </div>
                             </div>
                         </form>
@@ -114,74 +576,23 @@
                                     <th scope="col" class="text-center">브랜드</th>
                                     <th scope="col" class="text-center">재고</th>
                                     <th scope="col" class="text-center">상품 등록일</th>
-                                    <th scope="col" class="text-center">비고</th>
+                                    <th scope="col" class="text-center">상품 상태</th>
                                 </tr>
                                 </thead>
                                 <tbody id="searchResult">
-                                <tr>
-                                    <td><input class="form-check-input" type="checkbox"></td>
-                                    <th class="text-center" scope="row">1</th>
-                                    <td data-bs-toggle="modal" data-bs-target="#productModal">샘플상품1</td>
-                                    <td data-bs-toggle="modal" data-bs-target="#productModal">MM2B3WJS085M</td>
-                                    <td>10000</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>대분류 &gt; 중분류 &gt; 소분류</td>
-                                    <td></td>
-                                    <td>0</td>
-                                    <td>2022-07-03</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><input class="form-check-input" type="checkbox"></td>
-                                    <th class="text-center" scope="row">2</th>
-                                    <td data-bs-toggle="modal" data-bs-target="#productModal">샘플상품2</td>
-                                    <td data-bs-toggle="modal" data-bs-target="#productModal">MM2B3WJS085M</td>
-                                    <td>10000</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>대분류 &gt; 중분류 &gt; 소분류</td>
-                                    <td></td>
-                                    <td>0</td>
-                                    <td>2022-07-03</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><input class="form-check-input" type="checkbox"></td>
-                                    <th class="text-center" scope="row">3</th>
-                                    <td data-bs-toggle="modal" data-bs-target="#productModal">샘플상품3</td>
-                                    <td data-bs-toggle="modal" data-bs-target="#productModal">MM2B3WJS085M</td>
-                                    <td>250000</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>대분류 &gt; 중분류 &gt; 소분류</td>
-                                    <td></td>
-                                    <td>0</td>
-                                    <td>2022-07-03</td>
-                                    <td></td>
-                                </tr>
                                 </tbody>
                             </table>
-                            <!-- TODO pagination 페이징 -->
                             <nav aria-label="Page navigation example">
                                 <ul class="pagination justify-content-center">
-                                    <li class="page-item disabled">
-                                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">이전</a>
-                                    </li>
-                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">다음</a>
-                                    </li>
                                 </ul>
                             </nav>
+                            <!--  상품 수정/삭제 모달  -->
                             <div class="modal fade" id="productModal" tabindex="-1" style="display: none;"
                                  aria-hidden="true">
                                 <div class="modal-dialog modal-xl">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title">상품명</h5>
+                                            <h5 class="modal-title">상품 정보</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                         </div>
@@ -191,56 +602,56 @@
                                                        th:value="${_csrf.token}"/>
                                                 <div class="row mb-3">
                                                     <div class="col-2">
-                                                        <label class="form-label" for="name">상품명</label>
+                                                        <label class="form-label" for="modalName">상품명</label>
                                                     </div>
                                                     <div class="col-9">
-                                                        <input autofocus class="form-control" id="name" type="text"
+                                                        <input autofocus class="form-control" id="modalName" type="text"
                                                                disabled>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <div class="col-2">
-                                                        <label class="form-label" for="id">상품코드</label>
+                                                        <label class="form-label" for="modalId">상품코드</label>
                                                     </div>
                                                     <div class="col-9">
-                                                        <input class="form-control" id="id" type="text" disabled>
+                                                        <input class="form-control" id="modalId" type="text" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <div class="col-2">
-                                                        <label class="form-label" for="price">가격</label>
+                                                        <label class="form-label" for="modalPrice">가격</label>
                                                     </div>
                                                     <div class="col-3">
                                                         <div class="input-group">
                                                             <span class="input-group-text">₩</span>
                                                             <input aria-label="Price" class="form-control"
-                                                                   id="price" min="0"
+                                                                   id="modalPrice" min="0"
                                                                    type="number">
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <div class="col-2">
-                                                        <label class="form-label" for="color">색상</label>
+                                                        <label class="form-label" for="modalColor">색상</label>
                                                     </div>
                                                     <div class="col-3">
-                                                        <input class="form-control" id="color" type="text">
+                                                        <input autofocus class="form-control" id="modalColor" type="text" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <div class="col-2">
-                                                        <label class="form-label" for="size">사이즈</label>
+                                                        <label class="form-label" for="modalSize">사이즈</label>
                                                     </div>
                                                     <div class="col-3">
-                                                        <input class="form-control" id="size" type="text">
+                                                        <input autofocus class="form-control" id="modalSize" type="text" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <div class="col-2">
-                                                        <label class="form-label" for="brand">브랜드</label>
+                                                        <label class="form-label" for="modalBrand">브랜드</label>
                                                     </div>
                                                     <div class="col-3">
-                                                        <input class="form-control" id="brand" type="text">
+                                                        <input class="form-control" id="modalBrand" type="text">
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
@@ -248,66 +659,123 @@
                                                         <label class="form-label">분류</label>
                                                     </div>
                                                     <div class="col-3">
-                                                        <select class="form-select" id="large">
+                                                        <select autofocus onchange='setModalMediumCtry(this.value)' class="form-select" id="modalLarge" disabled>
                                                             <option selected="">대분류</option>
-                                                            <option th:value="${null}">미설정</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-3">
-                                                        <select class="form-select" id="medium">
+                                                        <select autofocus onchange='setModalSmallCtry(this.value)' class="form-select" id="modalMedium" disabled>
                                                             <option selected="">중분류</option>
-                                                            <option th:value="${null}">미설정</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-3">
-                                                        <select class="form-select" id="small">
+                                                        <select autofocus class="form-select" id="modalSmall" disabled>
                                                             <option selected="">소분류</option>
-                                                            <option th:value="${null}">미설정</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <div class="col-2">
-                                                        <label class="form-label" for="detail">상품 설명</label>
+                                                        <label class="form-label" for="modalDetail">상품 설명</label>
                                                     </div>
                                                     <div class="col-9">
-                                                            <textarea class="form-control" id="detail"
+                                                            <textarea class="form-control" id="modalDetail"
                                                                       style="height: 100px;"></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <div class="col-2">
-                                                        <label class="col-form-label" for="image1">이미지</label>
+                                                        <label>이미지</label>
                                                     </div>
-                                                    <div class="col-6">
-                                                        <input accept="image/*" class="form-control mb-1"
-                                                               id="image1" type="file">
-                                                        <input accept="image/*" class="form-control mb-1"
-                                                               id="image2" type="file">
-                                                        <input accept="image/*" class="form-control mb-1"
-                                                               id="image3" type="file">
+                                                    <div class="col-10">
+                                                        <div class="row mb-1">
+                                                            <div class="col-2">
+                                                                <label class="input-file-button" for="showImage1"
+                                                                       style="padding: 5px 24px;
+                                                                        background-color:#f6f9ff;
+                                                                        border-radius: 4px;
+                                                                        color: #444444;
+                                                                        cursor: pointer;
+                                                                    ">
+                                                                    파일선택
+                                                                </label>
+                                                                <input onchange="handleFiles(this)" type="file" id="showImage1" style="display:none;">
+                                                            </div>
+                                                            <div class="col-7">
+                                                                <input autofocus class="form-control" id="image1" type="text"
+                                                                   disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mb-1">
+                                                            <div class="col-2">
+                                                                <label class="input-file-button" for="showImage2"
+                                                                       style="padding: 5px 24px;
+                                                                    background-color:#f6f9ff;
+                                                                    border-radius: 4px;
+                                                                    color: #444444;
+                                                                    cursor: pointer;
+                                                                ">
+                                                                    파일선택
+                                                                </label>
+                                                                <input onchange="handleFiles(this)" type="file" id="showImage2" style="display:none;">
+                                                            </div>
+                                                            <div class="col-7">
+                                                                <input autofocus class="form-control" id="image2" type="text"
+                                                                       disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mb-1">
+                                                            <div class="col-2">
+                                                                <label class="input-file-button" for="showImage3"
+                                                                       style="padding: 5px 24px;
+                                                                    background-color:#f6f9ff;
+                                                                    border-radius: 4px;
+                                                                    color: #444444;
+                                                                    cursor: pointer;
+                                                                ">
+                                                                    파일선택
+                                                                </label>
+                                                                <input onchange="handleFiles(this)" type="file" id="showImage3" style="display:none;">
+                                                            </div>
+                                                            <div class="col-7">
+                                                                <input autofocus class="form-control" id="image3" type="text"
+                                                                       disabled>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-3">
                                                     <div class="col-2">
-                                                        <label class="form-label" for="stockAmount">재고</label>
+                                                        <label class="form-label" for="modalStockAmount">재고</label>
                                                     </div>
                                                     <div class="col-3">
-                                                        <input class="form-control" id="stockAmount" min="0"
+                                                        <input class="form-control" id="modalStockAmount" min="0"
                                                                type="number">
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-2">
+                                                        <label class="form-label" for="productStatus">상품 상태</label>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <select onchange='setModalProductStatus(this.value)' class="form-select" id="modalProductStatus">
+                                                            <option value="" selected="">상품 상태</option>
+                                                            <option value="1">판매중</option>
+                                                            <option value="0">판매중단</option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                             </form>
 
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-danger me-xl-auto">
-                                                삭제
-                                            </button>
+<!--                                            <button type="button" class="btn btn-danger me-auto">-->
+<!--                                                삭제-->
+<!--                                            </button>-->
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                                 취소
                                             </button>
-                                            <button type="button" class="btn btn-primary">
+                                            <button type="button" onclick="updateProduct()" class="btn btn-primary">
                                                 변경
                                             </button>
                                         </div>

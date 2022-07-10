@@ -3,6 +3,7 @@ package com.hyundai.kosafinal.service;
 import com.hyundai.kosafinal.domain.CategoryDTO;
 import com.hyundai.kosafinal.domain.ColorDTO;
 import com.hyundai.kosafinal.domain.ProductDTO;
+import com.hyundai.kosafinal.domain.SelectProductCriteria;
 import com.hyundai.kosafinal.domain.SizeDTO;
 import com.hyundai.kosafinal.entity.Criteria;
 
@@ -101,4 +102,10 @@ public interface ProductService {
     List<CategoryDTO> getCategoryList();
 
     String getColorChip(String colorId);
+
+    List<ProductDTO> getProductSearchList(SelectProductCriteria selectProductCriteria);
+
+    int searchProductCount(SelectProductCriteria selectProductCriteria);
+
+    int updateProductInfo(ProductDTO productDTO, List<MultipartFile> files);
 }
