@@ -63,11 +63,13 @@ public class MypageController {
         System.out.println(member.getBirth());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String birth = simpleDateFormat.format(member.getBirth());
-        System.out.println(birth);
+        System.out.println("BBBB"+birth);
 
         model.addAttribute("selYear",birth.substring(0,4));
+
         model.addAttribute("selMonth",birth.substring(5,7));
         model.addAttribute("selDay",birth.substring(8,10));
+        System.out.println(birth.substring(8,10));
     }
 
     @GetMapping(value = {"", "/"}) //마이페이지 첫화면

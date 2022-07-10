@@ -1,9 +1,6 @@
 package com.hyundai.kosafinal.service;
 
-import com.hyundai.kosafinal.domain.Member2DTO;
-import com.hyundai.kosafinal.domain.MemberDTO;
-import com.hyundai.kosafinal.domain.RoleSetDTO;
-import com.hyundai.kosafinal.domain.VipDTO;
+import com.hyundai.kosafinal.domain.*;
 import com.hyundai.kosafinal.entity.SearchCriteria;
 import com.hyundai.kosafinal.entity.SearchMemberCriteria;
 import com.hyundai.kosafinal.mapper.userorder.MemberMapper;
@@ -23,6 +20,10 @@ public class MemberServiceImpl implements MemberService {
     private PasswordEncoder passwordencoder;
 
     @Override
+    public void insertLog(String customer_id)
+    {
+        mapper.insertLog(customer_id);
+    }    @Override
     public boolean deleteMember(String email) { //회원삭제
         System.out.println("MemberServviceImpl deleteMember");
         System.out.println(email);

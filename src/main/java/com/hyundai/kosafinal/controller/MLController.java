@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MLController {
     @GetMapping("/test1")
     public void test1() {
-        log.info("usual_login......");
+        log.info("test1......");
+    }
+
+    @GetMapping("/test2")
+    public void test2() {
+        log.info("test2......");
     }
 }
