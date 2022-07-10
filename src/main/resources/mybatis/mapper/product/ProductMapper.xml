@@ -76,6 +76,7 @@
                                                              #{sortType}) p)
     )
   </select>
+
   <!--필터에 해당하는 제품의 사이즈 목록-->
   <select id="selectFilteredSizeListWithPaging" resultType="SizeDTO">
     SELECt ID     productId,

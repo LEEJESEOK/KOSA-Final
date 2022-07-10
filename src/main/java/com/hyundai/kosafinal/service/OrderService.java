@@ -3,10 +3,12 @@ package com.hyundai.kosafinal.service;
 import com.hyundai.kosafinal.domain.MemberOrderConfirmDTO;
 import com.hyundai.kosafinal.domain.OrderItemDTO;
 import com.hyundai.kosafinal.domain.OrderedListDTO;
+import com.hyundai.kosafinal.domain.CategoryCountDTO;
 import com.hyundai.kosafinal.entity.OrderProduct;
 import com.hyundai.kosafinal.entity.SearchOrderCriteria;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OrderService {
 
@@ -50,4 +52,10 @@ public interface OrderService {
 
     // 백오피스 관련 주문 검색 및 페이징 조회
     public List<OrderedListDTO> searchOrder(SearchOrderCriteria criteria);
+
+    // 사용자 구매기록의 브랜드별 횟수
+    Map<String, Integer> getOrderedBrandCountByMemberId(String memberId);
+
+    // 사용자 구매기록의 카테고리별 횟수
+    Map<String, CategoryCountDTO> getOrderedCategoryCountByMemberId(String memberId);
 }

@@ -49,7 +49,7 @@ public class OrderRestController {
         ol.setAddress2(orderInfo.get("address2").toString());
         ol.setReceiver(orderInfo.get("receiver").toString());
         ol.setTel(orderInfo.get("tel").toString());
-        if(orderInfo.get("usedPoint") != null) {
+        if(!orderInfo.get("usedPoint").equals("")) {
             ol.setUsedPoint(Integer.parseInt(orderInfo.get("usedPoint").toString()));
         } else {
             ol.setUsedPoint(0);
@@ -77,9 +77,11 @@ public class OrderRestController {
         }
 
         // 포인트 변경 (사용한 포인트만큼 회원의 포인트 차감)
-        oService.updatePoint(orderInfo.get("userEmail").toString(),
-                Integer.parseInt(orderInfo.get("usedPoint").toString()),
-                1);
+        if(!orderInfo.get("usedPoint").equals("")) {
+            oService.updatePoint(orderInfo.get("userEmail").toString(),
+                    Integer.parseInt(orderInfo.get("usedPoint").toString()),
+                    1);
+        }
 
         entry = new ResponseEntity<String>(oid, HttpStatus.OK);
 

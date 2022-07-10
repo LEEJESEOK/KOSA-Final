@@ -3,23 +3,22 @@ package com.hyundai.kosafinal.controller;
 import com.hyundai.kosafinal.domain.PageDTO;
 import com.hyundai.kosafinal.domain.ProductDTO;
 import com.hyundai.kosafinal.domain.SelectProductCriteria;
+import com.hyundai.kosafinal.entity.DateType;
+import com.hyundai.kosafinal.service.MemberService;
+import com.hyundai.kosafinal.service.OrderService;
 import com.hyundai.kosafinal.service.ProductService;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javassist.NotFoundException;
+import org.apache.ibatis.executor.ExecutionPlaceholder;
+import org.apache.ibatis.executor.ExecutorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import java.text.DateFormat;
+import java.util.*;
 
 /**
  * @author LEE JESEOK
@@ -31,33 +30,37 @@ public class BizRestController {
 
     @Autowired
     ProductService productService;
+    @Autowired
+    MemberService memberService;
+    @Autowired
+    OrderService orderService;
 
     @PostMapping("/product/register")
     public ResponseEntity<Integer> productRegister(
-      MultipartHttpServletRequest request
+            MultipartHttpServletRequest request
     ) {
         ProductDTO productDTO = ProductDTO.builder()
-          .id(request.getParameter("id"))
-          .size(request.getParameter("size"))
-          .colorId(request.getParameter("colorId"))
-          .name(request.getParameter("name"))
-          .brand(request.getParameter("brand"))
-          .categoryLarge(request.getParameter("categoryLarge"))
-          .categoryMedium(request.getParameter("categoryMedium"))
-          .categorySmall(request.getParameter("categorySmall"))
-          .detail(request.getParameter("detail"))
-          .price(Integer.parseInt(request.getParameter("price")))
-          .stockAmount(request.getParameter("stockAmount"))
-          .build();
+                .id(request.getParameter("id"))
+                .size(request.getParameter("size"))
+                .colorId(request.getParameter("colorId"))
+                .name(request.getParameter("name"))
+                .brand(request.getParameter("brand"))
+                .categoryLarge(request.getParameter("categoryLarge"))
+                .categoryMedium(request.getParameter("categoryMedium"))
+                .categorySmall(request.getParameter("categorySmall"))
+                .detail(request.getParameter("detail"))
+                .price(Integer.parseInt(request.getParameter("price")))
+                .stockAmount(request.getParameter("stockAmount"))
+                .build();
 
         List<MultipartFile> files = new ArrayList<>();
-        if(!request.getFiles("image1Uri").isEmpty() && request.getFiles("image1Uri").get(0).getSize() != 0){
+        if (!request.getFiles("image1Uri").isEmpty() && request.getFiles("image1Uri").get(0).getSize() != 0) {
             files.add(request.getFile("image1Uri"));
         }
-        if(!request.getFiles("image2Uri").isEmpty() && request.getFiles("image2Uri").get(0).getSize() != 0){
+        if (!request.getFiles("image2Uri").isEmpty() && request.getFiles("image2Uri").get(0).getSize() != 0) {
             files.add(request.getFile("image2Uri"));
         }
-        if(!request.getFiles("image3Uri").isEmpty() && request.getFiles("image3Uri").get(0).getSize() != 0){
+        if (!request.getFiles("image3Uri").isEmpty() && request.getFiles("image3Uri").get(0).getSize() != 0) {
             files.add(request.getFile("image3Uri"));
         }
 
@@ -65,40 +68,41 @@ public class BizRestController {
         productDTO.setColorChipUri(colorChip);
 
         int result = productService.saveProductInfo(productDTO, files);
-        System.out.println("insert result : "+ result);
+        System.out.println("result : " + result);
+        System.out.println("insert result : " + result);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PostMapping("/product/update/{id}")
     public ResponseEntity<Integer> productUpdate(
-      @PathVariable("id")String id,
-      MultipartHttpServletRequest request
+            @PathVariable("id") String id,
+            MultipartHttpServletRequest request
     ) {
         ProductDTO productDTO = ProductDTO.builder()
-          .id(id)
-          .size(request.getParameter("size"))
-          .colorId(request.getParameter("colorId"))
-          .name(request.getParameter("name"))
-          .brand(request.getParameter("brand"))
-          .categoryLarge(request.getParameter("categoryLarge"))
-          .categoryMedium(request.getParameter("categoryMedium"))
-          .categorySmall(request.getParameter("categorySmall"))
-          .detail(request.getParameter("detail"))
-          .price(Integer.parseInt(request.getParameter("price")))
-          .stockAmount(request.getParameter("stockAmount"))
-          .image1Uri(request.getParameter("savedImage1")) //사전에 저장되어있던 값들
-          .image2Uri(request.getParameter("savedImage2"))
-          .image3Uri(request.getParameter("savedImage3"))
-          .build();
+                .id(id)
+                .size(request.getParameter("size"))
+                .colorId(request.getParameter("colorId"))
+                .name(request.getParameter("name"))
+                .brand(request.getParameter("brand"))
+                .categoryLarge(request.getParameter("categoryLarge"))
+                .categoryMedium(request.getParameter("categoryMedium"))
+                .categorySmall(request.getParameter("categorySmall"))
+                .detail(request.getParameter("detail"))
+                .price(Integer.parseInt(request.getParameter("price")))
+                .stockAmount(request.getParameter("stockAmount"))
+                .image1Uri(request.getParameter("savedImage1")) //사전에 저장되어있던 값들
+                .image2Uri(request.getParameter("savedImage2"))
+                .image3Uri(request.getParameter("savedImage3"))
+                .build();
 
         List<MultipartFile> files = new ArrayList<>();
-        if(!request.getFiles("image1Uri").isEmpty() && request.getFiles("image1Uri").get(0).getSize() != 0){
+        if (!request.getFiles("image1Uri").isEmpty() && request.getFiles("image1Uri").get(0).getSize() != 0) {
             files.add(request.getFile("image1Uri"));
         }
-        if(!request.getFiles("image2Uri").isEmpty() && request.getFiles("image2Uri").get(0).getSize() != 0){
+        if (!request.getFiles("image2Uri").isEmpty() && request.getFiles("image2Uri").get(0).getSize() != 0) {
             files.add(request.getFile("image2Uri"));
         }
-        if(!request.getFiles("image3Uri").isEmpty() && request.getFiles("image3Uri").get(0).getSize() != 0){
+        if (!request.getFiles("image3Uri").isEmpty() && request.getFiles("image3Uri").get(0).getSize() != 0) {
             files.add(request.getFile("image3Uri"));
         }
 
@@ -108,14 +112,14 @@ public class BizRestController {
         //수정 부분
         int result = productService.updateProductInfo(productDTO, files);
 
-        System.out.println("update result : "+ result);
+        System.out.println("update result : " + result);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-      @PostMapping("product/select")
+    @PostMapping("product/select")
     public Map<String, Object> getProductInfoList(
-      @RequestBody SelectProductCriteria selectProductCriteria
-    ){
+            @RequestBody SelectProductCriteria selectProductCriteria
+    ) {
         Map<String, Object> map = new HashMap<>();
 
         //전체 상품수 count
@@ -128,6 +132,42 @@ public class BizRestController {
         map.put("list", productList);
 
         return map;
+    }
+
+    @GetMapping("/vip/{id}/statistics/login/{dateTypeStr}")
+    public ResponseEntity<Map<String, Object>> getLoginStatistics(@PathVariable("id") String id, @PathVariable("dateTypeStr") String dateTypeStr) {
+
+        // 예외 처리
+        // DateType 검사
+        DateType dateType;
+        try {
+            dateType = DateType.valueOf(dateTypeStr.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("data", memberService.getLoginCountByMemberId(id, dateType));
+
+        return new ResponseEntity<>(responseMap, HttpStatus.OK);
+    }
+
+    @GetMapping("/vip/{id}/statistics/order/brand")
+    public ResponseEntity<Map<String, Object>> getOrderedBrandCount(@PathVariable("id") String id) {
+        Map<String, Object> responseMap = new HashMap<>();
+
+        responseMap.put("data", orderService.getOrderedBrandCountByMemberId(id));
+
+        return new ResponseEntity<>(responseMap, HttpStatus.OK);
+    }
+
+    @GetMapping("/vip/{id}/statistics/order/category")
+    public ResponseEntity<Map<String, Object>> getOrderedCategoryCount(@PathVariable("id") String id) {
+        Map<String, Object> responseMap = new HashMap<>();
+
+        responseMap.put("data", orderService.getOrderedCategoryCountByMemberId(id));
+
+        return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
 
 }

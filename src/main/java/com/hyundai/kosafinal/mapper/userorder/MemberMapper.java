@@ -42,4 +42,6 @@ public interface MemberMapper {
     public List<MemberDTO> searchVIP(SearchMemberCriteria criteria); // vip 검색
 
     public void insertLog(String customer_id);
+
+    List<LoginLogDTO> selectLoginLogByMemberId(String memberId);
 }
