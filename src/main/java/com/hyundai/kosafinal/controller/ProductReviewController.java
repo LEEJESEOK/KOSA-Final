@@ -2,8 +2,13 @@ package com.hyundai.kosafinal.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hyundai.kosafinal.domain.PageDTO;
+import com.hyundai.kosafinal.domain.ProductDTO;
 import com.hyundai.kosafinal.domain.ProductReviewDTO;
+import com.hyundai.kosafinal.domain.SelectProductReviewCriteria;
+import com.hyundai.kosafinal.service.MemberService;
 import com.hyundai.kosafinal.service.ProductReviewService;
+import java.util.HashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.configurationprocessor.json.JSONException;
@@ -27,18 +32,36 @@ public class ProductReviewController {
 
     private ProductReviewService productReviewService;
 
+    private MemberService memberService;
+
     @Value("${s3.bucket.address}")
     private String S3_BUCKET_ADDRESS;
 
-    public ProductReviewController(ProductReviewService productReviewService) {
+    public ProductReviewController(
+      ProductReviewService productReviewService,
+      MemberService memberService
+    ) {
         this.productReviewService = productReviewService;
+        this.memberService = memberService;
     }
 
-    @GetMapping("/product_review/{productId}")
+    @PostMapping("/product_review/{productId}")
     @ResponseBody
-    public List<ProductReviewDTO> getProductReviewByProductId(@PathVariable("productId") String productId) {
-        List<ProductReviewDTO> list = productReviewService.getProductReviewByProductId(productId);
+    public Map<String, Object> getProductReviewByProductId(
+      @PathVariable("productId") String productId,
+      @RequestBody SelectProductReviewCriteria selectProductReviewCriteria
+      ) {
+        Map<String, Object> map = new HashMap<>();
+        selectProductReviewCriteria.setProductId(productId);
+        int reviewCnt = productReviewService.getProductReviewCountById(selectProductReviewCriteria);
+
+        List<ProductReviewDTO> list = productReviewService.getProductReviewByProductId(selectProductReviewCriteria);
         for (ProductReviewDTO p : list) {
+
+            //사용자 등급 조회
+            String grade = memberService.findGrade(productId);
+            p.setGrade(grade);
+
             String s1 = p.getEmail().substring(0, 3);
             String s2 = p.getEmail().substring(3).replaceAll("[a-z/A-Z/0-9]", "*");
             p.setEmail(s1 + s2);
@@ -47,15 +70,33 @@ public class ProductReviewController {
             }
             p.setImgURI(S3_BUCKET_ADDRESS + p.getImgURI());
         }
-        return list;
+
+        System.out.println(list);
+
+        PageDTO pageDTO = new PageDTO(selectProductReviewCriteria, reviewCnt);
+        map.put("page", pageDTO);
+        map.put("list", list);
+        return map;
     }
 
-    @GetMapping("/product_review/{productId}/image")
+    @PostMapping("/product_review/{productId}/image")
     @ResponseBody
-    public List<ProductReviewDTO> getProductReviewByProductIdAndImage(@PathVariable("productId") String productId) {
-        List<ProductReviewDTO> list = productReviewService.getProductReviewByProductId(productId);
+    public Map<String, Object> getProductReviewByProductIdAndImage(
+      @PathVariable("productId") String productId,
+      @RequestBody SelectProductReviewCriteria selectProductReviewCriteria
+    ) {
+        Map<String, Object> map = new HashMap<>();
+        selectProductReviewCriteria.setProductId(productId);
+        int reviewCnt = productReviewService.getProductReviewCountById(selectProductReviewCriteria);
+
+        List<ProductReviewDTO> list = productReviewService.getProductReviewByProductId(selectProductReviewCriteria);
         List<ProductReviewDTO> imageReviewList = new ArrayList<>();
         for (ProductReviewDTO p : list) {
+
+            //사용자 등급 조회
+            String grade = memberService.findGrade(productId);
+            p.setGrade(grade);
+
             String s1 = p.getEmail().substring(0, 3);
             String s2 = p.getEmail().substring(3).replaceAll("[a-z/A-Z/0-9]", "*");
             p.setEmail(s1 + s2);
@@ -66,15 +107,30 @@ public class ProductReviewController {
             p.setImgURI("https://kosa-aws-bucket.s3.ap-northeast-2.amazonaws.com/" + p.getImgURI());
             imageReviewList.add(p);
         }
-        return imageReviewList;
+        PageDTO pageDTO = new PageDTO(selectProductReviewCriteria, reviewCnt);
+        map.put("page", pageDTO);
+        map.put("list", imageReviewList);
+        return map;
     }
 
-    @GetMapping("/product_review/{productId}/text")
+    @PostMapping("/product_review/{productId}/text")
     @ResponseBody
-    public List<ProductReviewDTO> getProductReviewByProductIdAndText(@PathVariable("productId") String productId) {
-        List<ProductReviewDTO> list = productReviewService.getProductReviewByProductId(productId);
+    public Map<String, Object> getProductReviewByProductIdAndText(
+      @PathVariable("productId") String productId,
+      @RequestBody SelectProductReviewCriteria selectProductReviewCriteria
+    ) {
+        Map<String, Object> map = new HashMap<>();
+        selectProductReviewCriteria.setProductId(productId);
+        int reviewCnt = productReviewService.getProductReviewCountById(selectProductReviewCriteria);
+
+        List<ProductReviewDTO> list = productReviewService.getProductReviewByProductId(selectProductReviewCriteria);
         List<ProductReviewDTO> textReviewList = new ArrayList<>();
         for (ProductReviewDTO p : list) {
+
+            //사용자 등급 조회
+            String grade = memberService.findGrade(productId);
+            p.setGrade(grade);
+
             String s1 = p.getEmail().substring(0, 3);
             String s2 = p.getEmail().substring(3).replaceAll("[a-z/A-Z/0-9]", "*");
             p.setEmail(s1 + s2);
@@ -83,7 +139,11 @@ public class ProductReviewController {
                 System.out.println(p.toString());
             }
         }
-        return textReviewList;
+
+        PageDTO pageDTO = new PageDTO(selectProductReviewCriteria, reviewCnt);
+        map.put("page", pageDTO);
+        map.put("list", textReviewList);
+        return map;
     }
 
     @PostMapping("/product_review")
@@ -134,7 +194,7 @@ public class ProductReviewController {
             productReviewService.saveProductReview(productReviewDTO, fileList.get(0));
             log.info("감성 분석을 진행합니다(파일없을 때) ===================");
 
-            List<ProductReviewDTO> re = productReviewService.getProductReviewByProductId(productReviewDTO.getProductId());
+            List<ProductReviewDTO> re = productReviewService.getProductReviewAllList(productReviewDTO.getProductId());
             System.out.println("re" + re);
             JSONObject json = new JSONObject();
 
@@ -197,7 +257,7 @@ public class ProductReviewController {
         productReviewService.saveProductReview(productReviewDTO, null);
         log.info("감성 분석을 진행합니다(파일 있을 때) ===================");
 
-        List<ProductReviewDTO> re = productReviewService.getProductReviewByProductId(productReviewDTO.getProductId());
+        List<ProductReviewDTO> re = productReviewService.getProductReviewAllList(productReviewDTO.getProductId());
         System.out.println("re" + re);
         JSONObject json = new JSONObject();
 

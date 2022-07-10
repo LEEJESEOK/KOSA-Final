@@ -21,6 +21,7 @@
                     </div>
 
                     <script type="text/javascript">
+                        var amount = 7;
                         var imageList = {};
                         var productInfo = document.location.href.split("/");
                         var productId = productInfo[5];
@@ -46,7 +47,9 @@
                             imageDivTag.hide();
                             var firstImageTag = $('#imageDiv').children('ul:eq(0)').show();
 
-                            getProductReview();
+
+                            let param = { "pageNum": 1, "amount": amount };
+                            getProductReview(param);
 
                             //상품평 평균 별점 뿌리기
                             var starscore = 0;
@@ -58,6 +61,22 @@
                                 $("#prodTotalStarScore").css("width", starWidth + "%");
                                 $("#totalStarScore").css("width", starWidth + "%");
                             }
+
+                            //상품평 클릭시
+                            $(document).on("click", '#all', function () {
+                                let param = { "pageNum": 1, "amount": amount };
+                                getProductReview(param);
+                            });
+
+                            $(document).on("click", '#photo', function () {
+                                let param = { "pageNum": 1, "amount": amount };
+                                getProductReviewOnlyImg(param);
+                            });
+
+                            $(document).on("click", '#text', function () {
+                                let param = { "pageNum": 1, "amount": amount };
+                                getProductReviewOnlyText(param);
+                            });
                         });
 
                         //상품평 입력시 별점 활성화
@@ -707,28 +726,25 @@
                     <input type="hidden" id="review_tab_active" value="ALL">
 
                     <ul id="review_tab">
-                        <li id="ALL" onclick="getProductReview()"><a class="active"
-                                                                     th:text="|전체 (${reviewCnt})|"></a></li>
-                        <li id="PHOTO" onclick="getProductReviewOnlyImg()"><a class=""
-                                                                              th:text="|포토 상품평 (${imgCnt})|"></a>
-                        </li>
-                        <li id="TEXT" onclick="getProductReviewOnlyText()"><a class=""
-                                                                              th:text="|일반 상품평 (${textCnt})|"></a>
-                        </li>
+                        <li id="all"><a class="active" th:text="|전체 (${reviewCnt})|"></a></li>
+                        <li id="photo"><a class="" th:text="|포토 상품평 (${imgCnt})|"></a></li>
+                        <li id="text"><a class="" th:text="|일반 상품평 (${textCnt})|"></a></li>
                     </ul>
 
                 </div>
                 <div class="clearfix review_tab1_1807" id="review_table">
                     <!--  여기에 ajax를 요청하고 값을 불러온뒤 innerHtml로 넣어준다.       -->
-
                 </div>
 
                 <!-- paging -->
-                <div class="paging mt30" id="reviewPagingDiv"><a class="prev2" href="javascript:void(0);">처음
-                    페이지로 이동</a><a href="javascript:void(0);" class="prev">이전 페이지로 이동</a><span class="num"><a
-                        href="javascript:void(0);" class="pageBtn  on  " pagenum="1">1</a></span><a
-                        href="javascript:void(0);" class="next">다음 페이지로 이동</a><a href="javascript:void(0);"
-                                                                                 class="next2">마지막 페이지로 이동</a>
+                <div class="paging mt30" id="reviewPagingDiv">
+                    <a class="prev2" href="javascript:void(0);">처음 페이지로 이동</a>
+                    <a href="javascript:void(0);" onclick="paging()" class="prev">이전 페이지로 이동</a>
+                    <span class="num" id="pagingSpan">
+<!--                        <a href="javascript:void(0);" class="pageBtn  on  " pagenum="1">1</a>-->
+                    </span>
+                    <a href="javascript:void(0);" class="next">다음 페이지로 이동</a>
+                    <a href="javascript:void(0);" class="next2">마지막 페이지로 이동</a>
                 </div>
                 <!-- //paging -->
 
@@ -1202,12 +1218,16 @@
                 return changeDate[0];
             }
 
-            function getProductReviewOnlyImg() {
+            function getProductReviewOnlyImg(param) {
                 $.ajax({
-                    type: "GET",
+                    type: "POST",
                     url: "/product_review/" + productId + "/image",
+                    data: JSON.stringify(param),
                     contentType: "application/json; charset=utf-8",
-                    success: function (results) {
+                    success: function (data) {
+                        let results = data.list;
+                        let page = data.page;
+
                         var divBody = $("#review_table");
                         divBody.empty();
                         var reviewListTag = "";
@@ -1233,7 +1253,7 @@
                                 reviewListTag += "<div class=" + "'member_info_top'" + ">";
                                 reviewListTag += "<ul>";
                                 reviewListTag += "<li class='name'>" + review.email + "</li>";
-                                reviewListTag += "<li class='grade'>" + review.userGrade + "</li>";
+                                reviewListTag += "<li class='grade'>" + review.grade + "</li>";
                                 reviewListTag += "<li class='date'>" + changeDate + "</li>";
                                 reviewListTag += "<li class='stars'>";
                                 // 별점은 추후 수정하기
@@ -1284,6 +1304,8 @@
                         }
                         reviewListTag += "</ul>";
                         divBody.html(reviewListTag);
+
+                        addPaginationImg(param.pageNum, page);
                     },
                     error: function (request, status, error) {
                         alert("Ajax 통신 에러 발생");
@@ -1291,12 +1313,16 @@
                 });
             }
 
-            function getProductReviewOnlyText() {
+            function getProductReviewOnlyText(param) {
                 $.ajax({
-                    type: "GET",
+                    type: "POST",
                     url: "/product_review/" + productId + "/text",
+                    data: JSON.stringify(param),
                     contentType: "application/json; charset=utf-8",
-                    success: function (results) {
+                    success: function (data) {
+                        let results = data.list;
+                        let page = data.page;
+
                         var divBody = $("#review_table");
                         divBody.empty();
                         var reviewListTag = "";
@@ -1322,7 +1348,7 @@
                                 reviewListTag += "<div class=" + "'member_info_top'" + ">";
                                 reviewListTag += "<ul>";
                                 reviewListTag += "<li class='name'>" + review.email + "</li>";
-                                reviewListTag += "<li class='grade'>" + review.userGrade + "</li>";
+                                reviewListTag += "<li class='grade'>" + review.grade + "</li>";
                                 reviewListTag += "<li class='date'>" + changeDate + "</li>";
                                 reviewListTag += "<li class='stars'>";
                                 // 별점은 추후 수정하기
@@ -1367,6 +1393,8 @@
                         }
                         reviewListTag += "</ul>";
                         divBody.html(reviewListTag);
+
+                        addPaginationText(param.pageNum, page);
                     },
                     error: function (request, status, error) {
                         alert("Ajax 통신 에러 발생");
@@ -1374,12 +1402,16 @@
                 });
             }
 
-            function getProductReview() {
+            function getProductReview(param) {
                 $.ajax({
-                    type: "GET",
+                    type: "POST",
                     url: "/product_review/" + productId,
+                    data: JSON.stringify(param),
                     contentType: "application/json; charset=utf-8",
-                    success: function (results) {
+                    success: function (data) {
+                        let results = data.list;
+                        let page = data.page;
+
                         var divBody = $("#review_table");
                         divBody.empty();
                         var reviewListTag = "";
@@ -1405,7 +1437,7 @@
                                 reviewListTag += "<div class=" + "'member_info_top'" + ">";
                                 reviewListTag += "<ul>";
                                 reviewListTag += "<li class='name'>" + review.email + "</li>";
-                                reviewListTag += "<li class='grade'>" + review.userGrade + "</li>";
+                                reviewListTag += "<li class='grade'>" + review.grade + "</li>";
                                 reviewListTag += "<li class='date'>" + changeDate + "</li>";
                                 reviewListTag += "<li class='stars'>";
                                 // 별점은 추후 수정하기
@@ -1456,11 +1488,118 @@
                         }
                         reviewListTag += "</ul>";
                         divBody.html(reviewListTag);
+
+                        addPagination(param.pageNum, page);
                     },
                     error: function (request, status, error) {
                         alert("Ajax 통신 에러 발생");
                     }
                 });
+            }
+
+            function paging(page){
+                let pageNum = parseInt(page);
+                let param = {
+                    "pageNum": pageNum, "amount": amount
+                };
+
+                //누르면 해당 리뷰페이지 다시 불러오기!!
+                getProductReview(param);
+            }
+
+            function pagingImg(page){
+                let pageNum = parseInt(page);
+                let param = {
+                    "pageNum": pageNum, "amount": amount
+                };
+
+                //누르면 해당 리뷰페이지 다시 불러오기!!
+                getProductReviewOnlyImg(param);
+            }
+
+            function pagingText(page){
+                let pageNum = parseInt(page);
+                let param = {
+                    "pageNum": pageNum, "amount": amount
+                };
+
+                //누르면 해당 리뷰페이지 다시 불러오기!!
+                getProductReviewOnlyText(param);
+            }
+
+            function addPagination(pageNum, page) {
+                var pagingTag = $('#reviewPagingDiv');
+                pagingTag.empty();
+                let row = "";
+                row += "<a class='prev2' onclick='paging(1)'>처음 페이지로 이동</a>";
+                if(page.prev) {
+                    row += "<a onclick='paging("+ (page.startPage - 1) +")' class='prev'>이전 페이지로 이동</a>";
+                }
+                row +=  "<span class='num' id='pagingSpan'>";
+                for(var i = page.startPage; i <= page.endPage; i++) {
+                    if(i == pageNum) {
+                        row += "<a onclick='paging("+ i +")' class='pageBtn  on  ' pagenum='"+i+"'>"+i+"</a>";
+                    }
+                    else{
+                        row += "<a onclick='paging("+ i +")' class='pageBtn  ' pagenum='"+i+"'>"+i+"</a>";
+                    }
+                }
+                row +=  "</span>";
+                if (page.next) {
+                    row += "<a onclick='paging("+ (page.endPage + 1) +")' class='next'>다음 페이지로 이동</a>";
+                }
+                row += "<a class='next2' onclick='paging("+ page.realEnd +")'>마지막 페이지로 이동</a>";
+                pagingTag.append(row);
+            }
+
+            function addPaginationImg(pageNum, page) {
+                var pagingTag = $('#reviewPagingDiv');
+                pagingTag.empty();
+                let row = "";
+                row += "<a class='prev2' onclick='pagingImg(1)'>처음 페이지로 이동</a>";
+                if(page.prev) {
+                    row += "<a onclick='pagingImg("+ (page.startPage - 1) +")' class='prev'>이전 페이지로 이동</a>";
+                }
+                row +=  "<span class='num' id='pagingSpan'>";
+                for(var i = page.startPage; i <= page.endPage; i++) {
+                    if(i == pageNum) {
+                        row += "<a onclick='pagingImg("+ i +")' class='pageBtn  on  ' pagenum='"+i+"'>"+i+"</a>";
+                    }
+                    else{
+                        row += "<a onclick='pagingImg("+ i +")' class='pageBtn  ' pagenum='"+i+"'>"+i+"</a>";
+                    }
+                }
+                row +=  "</span>";
+                if (page.next) {
+                    row += "<a onclick='pagingImg("+ (page.endPage + 1) +")' class='next'>다음 페이지로 이동</a>";
+                }
+                row += "<a class='next2' onclick='pagingImg("+ page.realEnd +")'>마지막 페이지로 이동</a>";
+                pagingTag.append(row);
+            }
+
+            function addPaginationText(pageNum, page) {
+                var pagingTag = $('#reviewPagingDiv');
+                pagingTag.empty();
+                let row = "";
+                row += "<a class='prev2' onclick='pagingText(1)'>처음 페이지로 이동</a>";
+                if(page.prev) {
+                    row += "<a onclick='pagingText("+ (page.startPage - 1) +")' class='prev'>이전 페이지로 이동</a>";
+                }
+                row +=  "<span class='num' id='pagingSpan'>";
+                for(var i = page.startPage; i <= page.endPage; i++) {
+                    if(i == pageNum) {
+                        row += "<a onclick='pagingText("+ i +")' class='pageBtn  on  ' pagenum='"+i+"'>"+i+"</a>";
+                    }
+                    else{
+                        row += "<a onclick='pagingText("+ i +")' class='pageBtn  ' pagenum='"+i+"'>"+i+"</a>";
+                    }
+                }
+                row +=  "</span>";
+                if (page.next) {
+                    row += "<a onclick='pagingText("+ (page.endPage + 1) +")' class='next'>다음 페이지로 이동</a>";
+                }
+                row += "<a class='next2' onclick='pagingText("+ page.realEnd +")'>마지막 페이지로 이동</a>";
+                pagingTag.append(row);
             }
         </script>
 
