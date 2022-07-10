@@ -48,7 +48,9 @@
       #{age},
       #{height},
       #{bodyType},
-      #{avgSize})
+      #{avgSize},
+      #{sentiment_percent},
+      #{sentiment_type})
       }
     ]]>
   </insert>

@@ -3,6 +3,7 @@ package com.hyundai.kosafinal.mapper.product;
 import com.hyundai.kosafinal.domain.CategoryDTO;
 import com.hyundai.kosafinal.domain.ColorDTO;
 import com.hyundai.kosafinal.domain.ProductDTO;
+import com.hyundai.kosafinal.domain.SelectProductCriteria;
 import com.hyundai.kosafinal.domain.SizeDTO;
 import com.hyundai.kosafinal.entity.Criteria;
 import org.apache.ibatis.annotations.Mapper;
@@ -69,5 +70,9 @@ public interface ProductMapper {
     List<ProductDTO> selectSize(@Param("productId")String productId);
 
     String getColorChipByPid(@Param("colorId")String colorId);
+
+    List<ProductDTO> selectProductListBySearch(SelectProductCriteria selectProductCriteria);
+
+    int searchProductCount(SelectProductCriteria selectProductCriteria);
 
 }

@@ -9,6 +9,7 @@ package com.hyundai.kosafinal.config;
  ***********************************************************/
 
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
@@ -26,18 +27,22 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 @Log4j2
 //Security 설정
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    CustomAuthenticationSuccessHandler customSuccessHandler;
+
+    // Bean 등록
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     @Bean
     public RoleHierarchyImpl roleHierarchyImpl() {
         log.info("실행");
         RoleHierarchyImpl roleHierarchyImpl = new RoleHierarchyImpl();
         roleHierarchyImpl.setHierarchy("ROLE_ADMIN > ROLE_MANAGER > ROLE_USER");
         return roleHierarchyImpl;
-    }
-
-    @Bean
-        // Bean 등록
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
 
@@ -55,10 +60,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("email") //DB의 Member 테이블과 연동하기 위해 username을 email로 설정한다.
                 .passwordParameter("password")//DB의 Member 테이블과 연동하기 위해 password를 password 로 설정한다.
                 .defaultSuccessUrl("/")//로그인 성공 후 이동할 URL
+                .successHandler(customSuccessHandler)
                 .failureUrl("/member/login?error=true"); //로그인 실패시 URL
 
         //소셜 로그인 (구글)
-        http.oauth2Login().defaultSuccessUrl("/");
+        http.oauth2Login().loginPage("/member/login").defaultSuccessUrl("/");
 
         //소셜 로그인 (네이버)
 

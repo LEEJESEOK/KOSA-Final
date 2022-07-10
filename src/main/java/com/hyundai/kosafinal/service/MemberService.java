@@ -31,4 +31,6 @@ public interface MemberService {
     public int searchVIPCount(SearchMemberCriteria criteria); // vip 검색 수
 
     public List<MemberDTO> searchVIP(SearchMemberCriteria criteria); // vip 검색
+
+    public void insertLog(String customer_id);
 }

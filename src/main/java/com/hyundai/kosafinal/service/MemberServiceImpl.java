@@ -21,6 +21,11 @@ public class MemberServiceImpl implements MemberService {
     private PasswordEncoder passwordencoder;
 
     @Override
+    public void insertLog(String customer_id) {
+        mapper.insertLog(customer_id);
+    }
+
+    @Override
     public boolean deleteMember(String email) { //회원삭제
         System.out.println("MemberServiceImpl deleteMember");
         System.out.println(email);
@@ -58,10 +63,10 @@ public class MemberServiceImpl implements MemberService {
         System.out.println(member);
         mapper.insertMember(member); //mapper 연동
 
-        RoleSetDTO roleset = new RoleSetDTO();
-        roleset.setUser_email(member.getEmail());
-        roleset.setRole_set("USER");
-        mapper.insertRoleSet(roleset);
+        RoleSetDTO roleSet = new RoleSetDTO();
+        roleSet.setUser_email(member.getEmail());
+        roleSet.setRole_set("USER");
+        mapper.insertRoleSet(roleSet);
 
         return true;
     }
@@ -95,7 +100,6 @@ public class MemberServiceImpl implements MemberService {
     public int searchMemberCount(SearchMemberCriteria criteria) {
         return mapper.searchMemberCount(criteria);
     }
-
     // 회원 검색
     @Override
     public List<MemberDTO> searchMember(SearchMemberCriteria criteria) {
