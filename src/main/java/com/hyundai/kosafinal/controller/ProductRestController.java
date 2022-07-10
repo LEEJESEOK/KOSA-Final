@@ -4,6 +4,8 @@ import com.hyundai.kosafinal.domain.*;
 import com.hyundai.kosafinal.entity.Criteria;
 import com.hyundai.kosafinal.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -15,12 +17,12 @@ import java.util.Map;
  * @author LEE JESEOK
  */
 @RestController
-@RequestMapping("/api/category")
+@RequestMapping("/api")
 public class ProductRestController {
     @Autowired
     ProductService productService;
 
-    @GetMapping(value = "/{large}_{medium}_{small}_{pageNum}_{brand}_{color}_{size}")
+    @GetMapping(value = "/category/{large}_{medium}_{small}_{pageNum}_{brand}_{color}_{size}")
     public Map<String, Object> productList(@PathVariable("large") String large, @PathVariable("medium") String medium, @PathVariable("small") String small,
                                            @PathVariable(value = "pageNum", required = false) Integer pageNum, @PathVariable("brand") String brand,
                                            @PathVariable("color") String color, @PathVariable("size") String size,
@@ -75,7 +77,7 @@ public class ProductRestController {
         return map;
     }
 
-    @GetMapping("/list")
+    @GetMapping("/category/list")
     public Map<String, Map<String, List<String>>> getCategoryList(){
 
         List<CategoryDTO> ctyList = productService.getCategoryList();
@@ -105,4 +107,15 @@ public class ProductRestController {
         return mapList;
     }
 
+    @GetMapping("/product/{id}")
+    public ResponseEntity<ProductDTO> getProductInfo(@PathVariable("id") String id,
+      @RequestParam(value = "size") String size,
+      @RequestParam(value = "categoryLarge") String categoryLarge,
+      @RequestParam(value = "categoryMedium") String categoryMedium,
+      @RequestParam(value = "categorySmall") String categorySmall,
+      @RequestParam(value = "colorId") String colorId){
+        CategoryDTO categoryDTO = new CategoryDTO(categoryLarge, categoryMedium, categorySmall);
+        List<ProductDTO> productDTOS = productService.getProductDetailList(id, size, colorId, categoryDTO);
+        return new ResponseEntity<>(productDTOS.get(0), HttpStatus.OK);
+    }
 }

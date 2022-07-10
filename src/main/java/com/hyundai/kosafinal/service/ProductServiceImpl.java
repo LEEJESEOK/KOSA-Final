@@ -3,7 +3,7 @@ package com.hyundai.kosafinal.service;
 import com.hyundai.kosafinal.domain.CategoryDTO;
 import com.hyundai.kosafinal.domain.ColorDTO;
 import com.hyundai.kosafinal.domain.ProductDTO;
-import com.hyundai.kosafinal.domain.ProductReviewDTO;
+import com.hyundai.kosafinal.domain.SelectProductCriteria;
 import com.hyundai.kosafinal.domain.SizeDTO;
 import com.hyundai.kosafinal.entity.Criteria;
 import com.hyundai.kosafinal.mapper.product.ProductMapper;
@@ -82,6 +82,30 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public String getColorChip(String colorId) {
         return productMapper.getColorChipByPid(colorId);
+    }
+
+    @Override
+    public List<ProductDTO> getProductSearchList(SelectProductCriteria selectProductCriteria) {
+        return productMapper.selectProductListBySearch(selectProductCriteria);
+    }
+
+    @Override
+    public int searchProductCount(SelectProductCriteria selectProductCriteria) {
+        return productMapper.searchProductCount(selectProductCriteria);
+    }
+
+    @Override
+    public int updateProductInfo(
+      ProductDTO productDTO,
+      List<MultipartFile> files
+    ) {
+        //파일이 있다면 S3 이미지 생성후 url 저장하기
+        if(files != null && !files.isEmpty()){
+            for(int i=0;i<files.size();i++){
+                this.uploadProfileImage(files.get(i), productDTO, i);
+            }
+        }
+        return productMapper.updateProduct(productDTO);
     }
 
     // 업로드 이미지 -> 키 값을 가져오기(product의경우 full Path)
