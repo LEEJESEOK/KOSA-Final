@@ -1,19 +1,134 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{/biz/layout/popup}">
+<html lang="ko" layout:decorate="~{/biz/layout/popup}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <th:block layout:fragment="script">
     <script>
-        console.log($(opener.document).find("#popupData :input[name=id]").val());
+        // 예외 처리
+        // if (opener == undefined)
+        //     location.href = window.location.origin;
+
+        let id = "[[${id}]]";
+
+        // 예외 처리
+        // if (id == '' || id == undefined)
+        //     location.href = window.location.origin;
+
+        let dateType = "day";
+
+        let loginCount = {};
+        let brandCount = {};
+        let categoryCount = {};
+
+        $().ready(function () {
+
+            // 기본 정보
+            $.ajax({
+                type: ""
+            })
+
+
+            // 로그인 기록
+            $.ajax({
+                type: "GET",
+                url: `/api/biz/vip/[[${id}]]/statistics/login/${dateType}`,
+                contentType: "application/json",
+                success: function (data) {
+                    Object.keys(data["data"]).sort().forEach(function (key) {
+                        loginCount[key] = data["data"][key];
+                    });
+
+                    new Chart(document.querySelector('#loginLogChart'), {
+                        type: 'line',
+                        data: {
+                            labels: Object.keys(loginCount),
+                            datasets: [{
+                                label: name,
+                                data: Object.values(loginCount),
+                                fill: false,
+                                borderColor: 'rgb(75, 192, 192)',
+                                tension: 0.1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                },
+                error: function (request, status, error) {
+                    ajaxError(request, status, error);
+                },
+                complete: function (jqXHR, textStatus) {
+                }
+            });
+
+            // 브랜드별 구매기록
+            $.ajax({
+                type: "GET",
+                url: `/api/biz/vip/[[${id}]]/statistics/order/brand`,
+                contentType: "application/json",
+                success: function (data) {
+                    brandCount = Object.entries(data["data"])
+                        .sort(([, a], [, b]) => b - a)
+                        .reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
+
+                },
+                error: function (request, status, error) {
+                    ajaxError(request, status, error);
+                },
+                complete: function (jqXHR, textStatus) {
+                }
+            });
+
+            // 카테고리별 구매기록
+            $.ajax({
+                type: "GET",
+                url: `/api/biz/vip/[[${id}]]/statistics/order/category`,
+                contentType: "application/json",
+                success: function (data) {
+                    categoryCount = Object.entries(data["data"])
+                        .sort(([, a], [, b]) => b - a)
+                        .reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
+                },
+                error: function (request, status, error) {
+                    ajaxError(request, status, error);
+                },
+                complete: function (jqXHR, textStatus) {
+                }
+            });
+        });
+
+        function receiveGetData(param) {
+        }
+
+        function ajaxError(request, status, error) {
+            let message = "code : " + request + "\n";
+            message += "message : " + request.responseText + "\n";
+            message += "error : " + error;
+
+            console.log(message);
+        }
     </script>
 </th:block>
 <th:block layout:fragment="content">
     <section>
         <div class="content">
+            <div class="row mb-2 text-end">
+                <div class="col-12">
+                    <button class="btn btn-primary m-auto">인쇄하기</button>
+                </div>
+            </div>
             <div class="col-12">
-                <div class="card p-3">
+                <div class="card p-3 mb-3">
                     <div class="card-header text-center">제목을 입력해주세요</div>
                     <div class="card-body p-3">
                         <div class="row justify-content-end">
+                            <th:block th:if="false">
+                                <!-- TODO 본인 등급 강조 -->
+                            </th:block>
                             <div class="col-1">
                                 <span>THE STAR</span>
                             </div>
@@ -23,7 +138,7 @@
                         </div>
                         <div class="row">
                             <div class="col-3 text-center">
-                                <span>이미지or사진</span>
+                                <span>이미지 or 사진</span>
                             </div>
                             <div class="col-9">
                                 <div class="row mb-3">
@@ -31,7 +146,7 @@
                                         이름
                                     </div>
                                     <div class="col-4">
-                                        이제석
+                                        ㅇㅇㅇ
                                     </div>
                                     <div class="col-2 col">
                                         아이디
@@ -74,7 +189,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-12">
-                                                서울특별시 오현로 4길 12
+                                                서울특별시 ㅇㅇ구 ㅇㅇ로 000
                                             </div>
                                         </div>
                                         <div class="row">
@@ -123,9 +238,14 @@
                             </div>
                         </div>
                         <h5>로그인</h5>
-                        <div class="col-12 mb-3">
-                            통계 그래프
+                        <div class="col-12 mb-3 text-center">
+                            <canvas id="loginLogChart" style="max-height: 400px;"></canvas>
                         </div>
+                    </div>
+                </div>
+                <div class="row mb-3 text-center">
+                    <div class="col-12">
+                        <button class="btn btn-primary m-auto">인쇄하기</button>
                     </div>
                 </div>
             </div>
