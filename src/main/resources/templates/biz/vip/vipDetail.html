@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/biz/layout/popup}">
+<th:block layout:fragment="script">
+    <script>
+        console.log($(opener.document).find("#popupData :input[name=id]").val());
+    </script>
+</th:block>
 <th:block layout:fragment="content">
     <section>
         <div class="content">

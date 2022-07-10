@@ -93,27 +93,27 @@
             row += "<td class=\"text-center\"><input class=\"form-check-input\" type=\"checkbox\"></td>";
             let index = (param.pageNum - 1) * (param.amount) + idx + 1;
             row += "<th class=\"text-center\" scope=\"row\">" + index + "</th>";
-            row += "<td className=\"text-center\" href=\"#\" onClick=\"showPopup()\">" + data.name + "</td>";
-            row += "<td className=\"text-center\" href=\"#\" onClick=\"showPopup()\">" + data.email + "</td>";
-            if(data.tel == null) {
+            row += "<td class=\"text-center\" href=\"#\">" + data.name + "</td>";
+            row += "<td class=\"text-center\" href=\"#\" onClick=\"showPopup(this)\" data-id=\"" + data.email + "\">" + data.email + "</td>";
+            if (data.tel == null) {
                 row += "<td class=\"text-center\">/</td>";
             } else {
                 row += "<td class=\"text-center\">" + data.tel + "</td>";
             }
-            if(data.gender == null) {
+            if (data.gender == null) {
                 row += "<td class=\"text-center\">/</td>";
-            } else if(data.gender == 0){
+            } else if (data.gender == 0) {
                 row += "<td class=\"text-center\">남</td>";
             } else {
                 row += "<td class=\"text-center\">여</td>";
             }
-            if(data.birth == null) {
+            if (data.birth == null) {
                 row += "<td class=\"text-center\">/</td>";
             } else {
-                row += "<td class=\"text-center\">" + data.birth.toString().substring(0,10) + "</td>";
+                row += "<td class=\"text-center\">" + data.birth.toString().substring(0, 10) + "</td>";
             }
 
-            switch(data.gradeId) {
+            switch (data.gradeId) {
                 case 4:
                     row += "<td class=\"text-center\">Star</td>";
                     break;
@@ -121,11 +121,11 @@
                     row += "<td class=\"text-center\">The Star</td>";
                     break;
             }
-            row += "<td class=\"text-center\">" + data.signUpDate.toString().substring(0,10) + "</td>";
-            if(data.recentLoginDate == null) {
+            row += "<td class=\"text-center\">" + data.signUpDate.toString().substring(0, 10) + "</td>";
+            if (data.recentLoginDate == null) {
                 row += "<td className=\"text-center\"></td>";
             } else {
-                row += "<td class=\"text-center\">" + data.recentLoginDate.toString().substring(0,10) + "</td>";
+                row += "<td class=\"text-center\">" + data.recentLoginDate.toString().substring(0, 10) + "</td>";
             }
             row += "<td className=\"text-center\"></td>";
             row += "<td className=\"text-center\"></td>";
@@ -186,14 +186,44 @@
             getPage(param);
         }
 
+        // 선택한 고객 정보
+        let _target;
+
         // 주소, 팝업창 이름, 창크기(w, h, left, top)
-        function showPopup() {
-            let url = "/biz/vip/vipDetail"
-            let windowName = "VIP Detail"
+        function showPopup(target) {
+            _target = target;
+            const TARGET_ID = target.getAttribute("data-id");
+
+            let url = "[(@{/biz/vip/vipDetail})]";
+            const POPUP_NAME = "VIP Detail"
+
+            $("#popupData :input").val(TARGET_ID);
+
+
+            // let form = document.createElement("form");
+            // form.setAttribute("method", "post");
+            // form.setAttribute("action", url);
+            // form.setAttribute("target", POPUP_NAME);
+            //
+            // form.appendChild(createInput(csrf_header, csrf_token, "hidden"))
+            // form.appendChild(createInput("id", TARGET_ID, "hidden"))
+
+
             // 듀얼모니터 고려 - parent document 위치 기준으로 생성
 
             let windowOption = "width=1280, height=720, left=100, top=50"
-            window.open(url, windowName, windowOption);
+
+            window.open(url, POPUP_NAME, windowOption);
+        }
+
+        function createInput(name, value, type) {
+            let inputTAG = document.createElement("input");
+            inputTAG.name = name;
+            inputTAG.id = name;
+            inputTAG.value = value;
+            inputTAG.type = type;
+
+            return inputTAG;
         }
 
     </script>
@@ -254,6 +284,9 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">VIP 목록</h5>
+                        <form id="popupData" th:action="@{/#}" method="post">
+                            <input type="hidden" name="id">
+                        </form>
                         <table class="table table-hover table-bordered">
                             <thead class="table-light">
                             <tr>

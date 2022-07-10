@@ -256,4 +256,11 @@
             WHERE rn BETWEEN ((#{pageNum} - 1) * #{amount} + 1) AND (#{pageNum} * #{amount})
         ]]>
     </select>
+
+    <select id="selectLoginLogByMemberId">
+        select *
+        from LOGIN_LOG
+        where customer_id=#{id}
+    </select>
+
 </mapper>

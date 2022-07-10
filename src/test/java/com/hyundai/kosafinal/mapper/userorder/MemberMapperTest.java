@@ -5,7 +5,6 @@ import com.hyundai.kosafinal.domain.Member2DTO;
 import com.hyundai.kosafinal.domain.MemberDTO;
 import com.hyundai.kosafinal.domain.RoleSetDTO;
 import com.hyundai.kosafinal.entity.MemberRole;
-import com.hyundai.kosafinal.entity.SearchCriteria;
 import com.hyundai.kosafinal.entity.SearchMemberCriteria;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +18,7 @@ import java.util.List;
 class MemberMapperTest {
     @Autowired
     private MemberMapper mapper;
+
     @Autowired
     private PasswordEncoder passwordencoder;
 
@@ -65,6 +65,7 @@ class MemberMapperTest {
         roleset.setRole_set(MemberRole.USER.toString());
         mapper.insertRoleSet(roleset);
     }
+
     void searchMember() {
         SearchMemberCriteria sc = new SearchMemberCriteria(1, 10);
 
