@@ -1,4 +1,4 @@
-package com.hyundai.kosafinal.entity;
+package com.hyundai.kosafinal.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,9 +7,9 @@ import java.util.Map;
 
 @Data
 @AllArgsConstructor
-public class CategoryCount {
+public class CategoryCountDTO {
     int count;
-    Map<String, CategoryCount> children;
+    Map<String, CategoryCountDTO> children;
 
     public void addCount() {
         ++this.count;

@@ -4,7 +4,7 @@ import com.hyundai.kosafinal.domain.MemberOrderConfirmDTO;
 import com.hyundai.kosafinal.domain.OrderItemDTO;
 import com.hyundai.kosafinal.domain.OrderedListDTO;
 import com.hyundai.kosafinal.domain.ProductDTO;
-import com.hyundai.kosafinal.entity.CategoryCount;
+import com.hyundai.kosafinal.domain.CategoryCountDTO;
 import com.hyundai.kosafinal.entity.OrderProduct;
 import com.hyundai.kosafinal.entity.SearchOrderCriteria;
 import com.hyundai.kosafinal.mapper.product.ProductMapper;
@@ -145,7 +145,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Map<String, CategoryCount> getOrderedCategoryCountByMemberId(String memberId) {
+    public Map<String, CategoryCountDTO> getOrderedCategoryCountByMemberId(String memberId) {
         List<OrderedListDTO> orderedList = mapper.getOrderedList(memberId);
 
         // 회원의 구매 목록 리스트
@@ -161,7 +161,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         // 상품 리스트의 카테고리 개수
-        Map<String, CategoryCount> categoryCountMap = new HashMap<>();
+        Map<String, CategoryCountDTO> categoryCountMap = new HashMap<>();
 
         for (OrderProduct orderProduct : orderedProductList) {
             System.out.println(orderProduct);
@@ -173,16 +173,16 @@ public class OrderServiceImpl implements OrderService {
             String small = productDTOList.get(0).getCategorySmall();
 
             // 카테고리 수준별 횟수 계산
-            CategoryCount largeCount = categoryCountMap.getOrDefault(large,
-                    new CategoryCount(0, new HashMap<>()));
+            CategoryCountDTO largeCount = categoryCountMap.getOrDefault(large,
+                    new CategoryCountDTO(0, new HashMap<>()));
             largeCount.addCount();
 
-            CategoryCount mediumCount = largeCount.getChildren().getOrDefault(medium,
-                    new CategoryCount(0, new HashMap<>()));
+            CategoryCountDTO mediumCount = largeCount.getChildren().getOrDefault(medium,
+                    new CategoryCountDTO(0, new HashMap<>()));
             mediumCount.addCount();
 
-            CategoryCount smallCount = mediumCount.getChildren().getOrDefault(small,
-                    new CategoryCount(0, null));
+            CategoryCountDTO smallCount = mediumCount.getChildren().getOrDefault(small,
+                    new CategoryCountDTO(0, null));
             smallCount.addCount();
 
             mediumCount.getChildren().put(small, smallCount);

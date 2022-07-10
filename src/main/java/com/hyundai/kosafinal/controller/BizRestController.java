@@ -3,9 +3,13 @@ package com.hyundai.kosafinal.controller;
 import com.hyundai.kosafinal.domain.PageDTO;
 import com.hyundai.kosafinal.domain.ProductDTO;
 import com.hyundai.kosafinal.domain.SelectProductCriteria;
+import com.hyundai.kosafinal.entity.DateType;
 import com.hyundai.kosafinal.service.MemberService;
 import com.hyundai.kosafinal.service.OrderService;
 import com.hyundai.kosafinal.service.ProductService;
+import javassist.NotFoundException;
+import org.apache.ibatis.executor.ExecutionPlaceholder;
+import org.apache.ibatis.executor.ExecutorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.DateFormat;
+import java.util.*;
 
 /**
  * @author LEE JESEOK
@@ -132,30 +134,40 @@ public class BizRestController {
         return map;
     }
 
+    @GetMapping("/vip/{id}/statistics/login/{dateTypeStr}")
+    public ResponseEntity<Map<String, Object>> getLoginStatistics(@PathVariable("id") String id, @PathVariable("dateTypeStr") String dateTypeStr) {
 
-    @GetMapping("/vip/{id}/statistics/login")
-    public Map<String, Object> getLoginStatistics(@PathVariable("id") String id) {
+        // 예외 처리
+        // DateType 검사
+        DateType dateType;
+        try {
+            dateType = DateType.valueOf(dateTypeStr.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("data", memberService.getLoginCountByMemberId(id, dateType));
 
-        return responseMap;
+        return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
 
     @GetMapping("/vip/{id}/statistics/order/brand")
-    public Map<String, Object> getOrderedBrandCount(@PathVariable("id") String id) {
+    public ResponseEntity<Map<String, Object>> getOrderedBrandCount(@PathVariable("id") String id) {
         Map<String, Object> responseMap = new HashMap<>();
 
         responseMap.put("data", orderService.getOrderedBrandCountByMemberId(id));
 
-        return responseMap;
+        return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
 
     @GetMapping("/vip/{id}/statistics/order/category")
-    public Map<String, Object> getOrderedCategoryCount(@PathVariable("id") String id) {
+    public ResponseEntity<Map<String, Object>> getOrderedCategoryCount(@PathVariable("id") String id) {
         Map<String, Object> responseMap = new HashMap<>();
 
         responseMap.put("data", orderService.getOrderedCategoryCountByMemberId(id));
 
-        return responseMap;
+        return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
 
 }

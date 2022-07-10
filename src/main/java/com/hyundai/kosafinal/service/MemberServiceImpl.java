@@ -1,16 +1,18 @@
 package com.hyundai.kosafinal.service;
 
-import com.hyundai.kosafinal.domain.Member2DTO;
-import com.hyundai.kosafinal.domain.MemberDTO;
-import com.hyundai.kosafinal.domain.RoleSetDTO;
-import com.hyundai.kosafinal.domain.VipDTO;
+import com.hyundai.kosafinal.domain.*;
+import com.hyundai.kosafinal.entity.DateType;
 import com.hyundai.kosafinal.entity.SearchMemberCriteria;
 import com.hyundai.kosafinal.mapper.userorder.MemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -100,6 +102,7 @@ public class MemberServiceImpl implements MemberService {
     public int searchMemberCount(SearchMemberCriteria criteria) {
         return mapper.searchMemberCount(criteria);
     }
+
     // 회원 검색
     @Override
     public List<MemberDTO> searchMember(SearchMemberCriteria criteria) {
@@ -116,5 +119,20 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<MemberDTO> searchVIP(SearchMemberCriteria criteria) {
         return mapper.searchVIP(criteria);
+    }
+
+    @Override
+    public Map<String, Integer> getLoginCountByMemberId(String id, DateType dateType) {
+        List<LoginLogDTO> loginLogList = mapper.selectLoginLogByMemberId(id);
+
+        Map<String, Integer> loginCountMap = new HashMap<>();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateType.toString());
+        for (LoginLogDTO loginLog : loginLogList) {
+            Date loginDate = loginLog.getLogin_date();
+            loginCountMap.put(simpleDateFormat.format(loginDate),
+                    loginCountMap.getOrDefault(simpleDateFormat.format(loginDate), 0) + 1);
+        }
+
+        return loginCountMap;
     }
 }

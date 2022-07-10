@@ -3,9 +3,11 @@ package com.hyundai.kosafinal.service;
 import com.hyundai.kosafinal.domain.Member2DTO;
 import com.hyundai.kosafinal.domain.MemberDTO;
 import com.hyundai.kosafinal.domain.VipDTO;
+import com.hyundai.kosafinal.entity.DateType;
 import com.hyundai.kosafinal.entity.SearchMemberCriteria;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MemberService {
     public boolean insertMember(MemberDTO MemberDTO);//회원가입
@@ -33,4 +35,6 @@ public interface MemberService {
     public List<MemberDTO> searchVIP(SearchMemberCriteria criteria); // vip 검색
 
     public void insertLog(String customer_id);
+
+    Map<String, Integer> getLoginCountByMemberId(String id, DateType dateType);
 }

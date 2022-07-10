@@ -3,7 +3,7 @@ package com.hyundai.kosafinal.service;
 import com.hyundai.kosafinal.domain.MemberOrderConfirmDTO;
 import com.hyundai.kosafinal.domain.OrderItemDTO;
 import com.hyundai.kosafinal.domain.OrderedListDTO;
-import com.hyundai.kosafinal.entity.CategoryCount;
+import com.hyundai.kosafinal.domain.CategoryCountDTO;
 import com.hyundai.kosafinal.entity.OrderProduct;
 import com.hyundai.kosafinal.entity.SearchOrderCriteria;
 
@@ -57,5 +57,5 @@ public interface OrderService {
     Map<String, Integer> getOrderedBrandCountByMemberId(String memberId);
 
     // 사용자 구매기록의 카테고리별 횟수
-    Map<String, CategoryCount> getOrderedCategoryCountByMemberId(String memberId);
+    Map<String, CategoryCountDTO> getOrderedCategoryCountByMemberId(String memberId);
 }

@@ -280,8 +280,13 @@
 
     </insert>
 
-    <select id="selectLoginLogByMemberId">
-        select *
+    <resultMap id="LoginLogMap" type="LoginLogDTO">
+        <result property="log_id" column="LOG_ID"/>
+        <result property="customer_id" column="CUSTOMER_ID"/>
+        <result property="login_date" column="LOGIN_DATE"/>
+    </resultMap>
+    <select id="selectLoginLogByMemberId" resultMap="LoginLogMap">
+        select LOG_ID, CUSTOMER_ID, LOGIN_DATE
         from LOGIN_LOG
         where customer_id=#{id}
     </select>
