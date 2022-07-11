@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title>더한섬닷컴 | VIP Lounge</title>
+
+    <th:block th:replace="~{/fragment/head::head}"></th:block>
+
+    <!-- Google Fonts -->
+    <link th:href="@{https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i}"
+          rel="stylesheet">
+
+    <!-- 카카오 지도 API 사용 -->
+    <!-- services와 clusterer, drawing 라이브러리 불러오기 -->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0d474e579195e2512cb8dcd1b8267df7&libraries=services,clusterer,drawing"></script>
+
+    <!-- Vendor CSS Files -->
+    <link th:href="@{/css/vip.css}" rel="stylesheet">
+    <link th:href="@{/vip/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/vip/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+    <link th:href="@{/vip/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+    <link th:href="@{/vip/vendor/glightbox/css/glightbox.min.css}" rel="stylesheet">
+    <link th:href="@{/vip/vendor/remixicon/remixicon.css}" rel="stylesheet">
+    <link th:href="@{/vip/vendor/swiper/swiper-bundle.min.css}" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link th:href="@{/vip/css/style.css}" rel="stylesheet">
+
+    <!-- =======================================================
+    * Template Name: Valera - v4.7.0
+    * Template URL: https://bootstrapmade.com/valera-free-bootstrap-theme/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</head>
+<body>
+<script>
+    var arkQuery = $.noConflict(true);
+</script>
+
+
+<th:block th:replace="~{/fragment/csrf::csrf}"></th:block>
+<!-- ======= headerWrap ======= -->
+<th:block th:replace="~{/fragment/header_vip::header_vip}"></th:block>
+<!-- End headerWrap -->
+
+<th:block layout:fragment="script"></th:block>
+
+<script>
+    $(document).ready(function () {
+        // 타임세일 상품 띄우기
+        setTimesale();
+
+        // 한정상품 띄우기
+        setLimitedProduct();
+
+    });
+
+    // 타이머에 사용할 변수
+    let endTime = null;
+
+    function setTimesale() {
+        $.ajax({
+            type: "POST",
+            url: "/vip/sale",
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+                if (result.length != 0) {
+                    let sale = result.sale;
+                    let product = result.product;
+                    document.getElementById("timesale-img").src = product.image1Uri;
+                    $("#timesale-brand").text(product.brand);
+                    $("#timesale-name").text(product.name);
+                    $("#origin-price").text("₩" + sale.originPrice.toLocaleString());
+                    $("#sale-price").text("₩" + sale.salePrice.toLocaleString());
+                    $("#timesale-link").attr("href", "/product/detail/" + sale.pid);
+
+                    let start = new Date(sale.startDate).format("MM월 dd일 HH시 MM분");
+                    $("#timesale-start").text(start);
+                    let end = new Date(sale.endDate).format("MM월 dd일 HH시 MM분");
+                    $("#timesale-end").text(end);
+
+                    endTime = new Date(sale.endDate);
+                    setInterval("getTimes()", 1000);
+
+                } else {
+                    $("#arrow-price").hide();
+                    $("#timesale-name").text("현재 세일 중인 상품이 없습니다.");
+                }
+            },
+            error: function (request, status, error) {
+                alert("Ajax 통신 에러 발생");
+            },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(csrf_header, csrf_token);
+            }
+        });
+    }
+
+    // 타임 세일 남은 시간 계산 함수
+    function getTimes() {
+        let current = new Date();
+        let diff = endTime - current;
+        let time = endTime.getTime() - current.getTime();
+
+        let day = Math.floor(time / (1000 * 60 * 60 * 24));
+        diff -= day * (1000 * 60 * 60 * 24);
+        let hour = Math.floor(diff / (1000 * 60 * 60));
+        diff -= hour * (1000 * 60 * 60);
+        let min = Math.floor(diff / (1000 * 60));
+        diff -= min * (1000 * 60);
+        let sec = Math.floor(diff / 1000);
+
+        let str = day + '일 ' + hour + '시간 ' + min + '분 ' + sec + "초";
+
+        $("#timesale-timer").text(str);
+    }
+
+    function setLimitedProduct() {
+        $.ajax({
+            type: "POST",
+            url: "/vip/limited",
+            contentType: "application/json; charset=utf-8",
+            success: function (list) {
+                $.each(list, function (idx, val) {
+                    let str = "special-img" + (idx + 1);
+                    let tag = document.getElementById(str);
+                    tag.src = val.image1Uri;
+
+                    $("#special-image-big" + (idx + 1)).attr("href", val.image1Uri);
+                    $("#special-image-big" + (idx + 1)).attr("title", val.name);
+                    $("#special-link" + (idx + 1)).attr("href", "/product/detail/" + val.id);
+
+                    $("#special-info" + (idx + 1)).find(".special-brand").text(val.brand);
+                    $("#special-info" + (idx + 1)).find(".special-name").text(val.name);
+                    $("#special-info" + (idx + 1)).find(".special-price").text("₩" + val.price.toLocaleString());
+
+                });
+            },
+            error: function (request, status, error) {
+                alert("Ajax 통신 에러 발생");
+            },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(csrf_header, csrf_token);
+            }
+        });
+    }
+</script>
+
+<!-- ======= bodyWrap ======= -->
+<div id="bodyWrap" class="item_detail">
+
+    <!-- ======= Hero Section ======= -->
+    <section id="hero">
+        <div class="hero-container">
+            <h1>Welcome to VIP Lounge</h1>
+            <h2><span style="margin-right: 5px">[[${#authentication.principal.name}]]</span>님 환영합니다.</h2>
+            <a href="#timesale" class="btn-get-started scrollto">입장</a>
+        </div>
+    </section><!-- Hero Section -->
+
+    <!-- ======= Header ======= -->
+    <header id="header" class="d-flex align-items-center">
+        <div class="container-fluid d-flex align-items-center justify-content-lg-center">
+            <nav id="navbar" class="navbar order-last order-lg-0">
+                <ul>
+                    <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+                    <li><a class="nav-link scrollto" href="#timesale">Time Sale</a></li>
+                    <li><a class="nav-link scrollto" href="#special">Limited Edition</a></li>
+                    <li><a class="nav-link scrollto" href="#services">Event</a></li>
+                    <li><a class="nav-link scrollto" href="#team">VIP Lounge</a></li>
+                </ul>
+                <i class="bi bi-list mobile-nav-toggle"></i>
+            </nav><!-- .navbar -->
+        </div>
+    </header><!-- End Header -->
+
+    <main id="main">
+
+        <!-- ======= About Section ======= -->
+        <section id="timesale" class="timesale">
+            <div class="container">
+
+                <div class="section-title">
+                    <h2>Time Sale</h2>
+                    <p>일정한 시간에만 판매되는 상품입니다.</p>
+                </div>
+                <div class="row content" id="timesale-time">
+                    <h3><span id="timesale-start"></span> ~ <span id="timesale-end"></span></h3>
+                    <h5>(남은 시간 : <span id="timesale-timer"></span>)</h5>
+                </div>
+                <div class="row content">
+                    <a id="timesale-link">
+                        <div class="timesale-product">
+                            <div><img id="timesale-img" src=""></div>
+                            <div>
+                                <p id="timesale-brand"></p>
+                                <p id="timesale-name"></p>
+                                <p id="timesale-price">
+                                    <span id="origin-price"></span>
+                                    <i id="arrow-price" class="bi bi-arrow-right"></i>
+                                    <span id="sale-price"></span>
+                                </p>
+                                <p><a href="" class="btn-get-started">Buy Now</a></p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+        </section><!-- End About Section -->
+
+
+        <!-- ======= Special Section ======= -->
+        <section id="special" class="special">
+            <div class="container">
+
+                <div class="section-title">
+                    <h2>Limited Edition</h2>
+                    <p>VIP 회원에게만 판매되는 한정상품입니다.</p>
+                </div>
+
+                <ul id="special-flters" class="d-flex justify-content-center">
+                    <li data-filter="*" class="filter-active">All</li>
+                    <li data-filter=".filter-app">Women</li>
+                    <li data-filter=".filter-card">Men</li>
+                    <li data-filter=".filter-web">ACC</li>
+                </ul>
+
+                <div class="row special-container justify-content-center"
+                     style="position: relative; height: 1281.56px;">
+                    <div class="col-lg-4 col-md-6 special-item filter-app">
+                        <a id="special-link1">
+                            <div class="special-img">
+                                <img id="special-img1" src="" class="img-fluid" alt="">
+                            </div>
+                            <div class="special-info" id="special-info1">
+                                <h6 class="special-brand"></h6>
+                                <h4 class="special-name"></h4><br/>
+                                <h6 class="special-price"></h6>
+                                <a id="special-image-big1" href="" data-gallery="specialGallery"
+                                   class="special-lightbox preview-link" title="">
+                                    <i class="bx bx-plus" style="margin-top: 3px"></i>
+                                </a>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 special-item filter-web">
+                        <a id="special-link2">
+                            <div class="special-img">
+                                <img id="special-img2" src="" class="img-fluid" alt="">
+                            </div>
+                            <div class="special-info" id="special-info2">
+                                <h6 class="special-brand"></h6>
+                                <h4 class="special-name"></h4><br/>
+                                <h6 class="special-price"></h6>
+                                <a id="special-image-big2" href="" data-gallery="specialGallery"
+                                   class="special-lightbox preview-link" title="">
+                                    <i class="bx bx-plus" style="margin-top: 3px"></i>
+                                </a>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 special-item filter-app">
+                        <a id="special-link3">
+                            <div class="special-img">
+                                <img id="special-img3" src="" class="img-fluid" alt="">
+                            </div>
+                            <div class="special-info" id="special-info3">
+                                <h6 class="special-brand"></h6>
+                                <h4 class="special-name"></h4><br/>
+                                <h6 class="special-price"></h6>
+                                <a id="special-image-big3" href="" data-gallery="specialGallery"
+                                   class="special-lightbox preview-link" title="">
+                                    <i class="bx bx-plus" style="margin-top: 3px"></i>
+                                </a>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 special-item filter-card">
+                        <a id="special-link4">
+                            <div class="special-img">
+                                <img id="special-img4" src="" class="img-fluid" alt="">
+                            </div>
+                            <div class="special-info" id="special-info4">
+                                <h6 class="special-brand"></h6>
+                                <h4 class="special-name"></h4><br/>
+                                <h6 class="special-price"></h6>
+                                <a id="special-image-big4" href="" data-gallery="specialGallery"
+                                   class="special-lightbox preview-link" title="">
+                                    <i class="bx bx-plus" style="margin-top: 3px"></i>
+                                </a>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 special-item filter-web">
+                        <a id="special-link5">
+                            <div class="special-img">
+                                <img id="special-img5" src="" class="img-fluid" alt="">
+                            </div>
+                            <div class="special-info" id="special-info5">
+                                <h6 class="special-brand"></h6>
+                                <h4 class="special-name"></h4><br/>
+                                <h6 class="special-price"></h6>
+                                <a id="special-image-big5" href="" data-gallery="specialGallery"
+                                   class="special-lightbox preview-link" title="">
+                                    <i class="bx bx-plus" style="margin-top: 3px"></i>
+                                </a>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 special-item filter-app">
+                        <a id="special-link6">
+                            <div class="special-img">
+                                <img id="special-img6" src="" class="img-fluid" alt="">
+                            </div>
+                            <div class="special-info" id="special-info6">
+                                <h6 class="special-brand"></h6>
+                                <h4 class="special-name"></h4><br/>
+                                <h6 class="special-price"></h6>
+                                <a id="special-image-big6" href="" data-gallery="specialGallery"
+                                   class="special-lightbox preview-link" title="">
+                                    <i class="bx bx-plus" style="margin-top: 3px"></i>
+                                </a>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 special-item filter-card">
+                        <a id="special-link7">
+                            <div class="special-img">
+                                <img id="special-img7" src="" class="img-fluid" alt="">
+                            </div>
+                            <div class="special-info" id="special-info7">
+                                <h6 class="special-brand"></h6>
+                                <h4 class="special-name"></h4><br/>
+                                <h6 class="special-price"></h6>
+                                <a id="special-image-big7" href="" data-gallery="specialGallery"
+                                   class="special-lightbox preview-link" title="">
+                                    <i class="bx bx-plus" style="margin-top: 3px"></i>
+                                </a>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 special-item filter-card">
+                        <a id="special-link8">
+                            <div class="special-img">
+                                <img id="special-img8" src="" class="img-fluid" alt="">
+                            </div>
+                            <div class="special-info" id="special-info8">
+                                <h6 class="special-brand"></h6>
+                                <h4 class="special-name"></h4><br/>
+                                <h6 class="special-price"></h6>
+                                <a id="special-image-big8" href="" data-gallery="specialGallery"
+                                   class="special-lightbox preview-link" title="">
+                                    <i class="bx bx-plus" style="margin-top: 3px"></i>
+                                </a>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 special-item filter-web">
+                        <a id="special-link9">
+                            <div class="special-img">
+                                <img id="special-img9" src="" class="img-fluid" alt="">
+                            </div>
+                            <div class="special-info" id="special-info9">
+                                <h6 class="special-brand"></h6>
+                                <h4 class="special-name"></h4><br/>
+                                <h6 class="special-price"></h6>
+                                <a id="special-image-big9" href="" data-gallery="specialGallery"
+                                   class="special-lightbox preview-link" title="">
+                                    <i class="bx bx-plus" style="margin-top: 3px"></i>
+                                </a>
+                            </div>
+                        </a>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </section><!-- End Special Section -->
+
+        <!-- ======= Services Section ======= -->
+        <section id="services" class="services">
+            <div class="container">
+
+                <div class="section-title">
+                    <h2>Event</h2>
+                    <p>VIP 회원만을 위한 Event입니다.</p>
+                </div>
+
+                <div class="row container">
+                    <div class="event_list" id="contentsInPast">
+                        <div class="event_box col2" style="" data-last="342">
+                            <a href="#" onclick="GA_EventList($(this));goDetail('/ko/magazine/events/8804154005376');">
+                                <div class="pic">
+                                    <img src="http://cdn.thehandsome.com/pc/event/list/banner/20220616_41933671002120645_ko.jpg"
+                                         data-full="http://cdn.thehandsome.com/pc/event/list/banner/20220616_41933670892940659_ko.jpg"
+                                         data-half="http://cdn.thehandsome.com/pc/event/list/banner/20220616_41933671002120645_ko.jpg">
+                                </div>
+                                <div class="evt_txt_box">
+                                    <p class="title">TIME SUMMER SPECIAL GIFT</p>
+                                    <p class="date">
+                                        2022.07.01 ~
+                                        2022.07.26</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="event_box col2" style="" data-last="342">
+                            <a href="#" onclick="GA_EventList($(this));goDetail('/ko/magazine/events/8804186937216');">
+                                <div class="pic">
+                                    <img src="http://cdn.thehandsome.com/pc/event/list/banner/20220629_43051777390376947_ko.jpg"
+                                         data-full="http://cdn.thehandsome.com/pc/event/list/banner/20220629_43051777322633387_ko.jpg"
+                                         data-half="http://cdn.thehandsome.com/pc/event/list/banner/20220629_43051777390376947_ko.jpg">
+                                </div>
+                                <div class="evt_txt_box">
+                                    <p class="title">EVERYDAY SUMMER (7/8)</p>
+                                    <p class="date">
+                                        2022.07.01 ~
+                                        2022.08.31</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="event_box col2" style="" data-last="342">
+                            <a href="#" onclick="GA_EventList($(this));goDetail('/ko/magazine/events/8804088502144');">
+                                <div class="pic">
+                                    <img src="http://cdn.thehandsome.com/pc/event/list/banner/20220525_40053988251158371_ko.jpg"
+                                         data-full="http://cdn.thehandsome.com/pc/event/list/banner/20220525_40053988187939937_ko.jpg"
+                                         data-half="http://cdn.thehandsome.com/pc/event/list/banner/20220525_40053988251158371_ko.jpg">
+                                </div>
+                                <div class="evt_txt_box">
+                                    <p class="title">7월 뷰티 릴레이 체험단 : 리퀴드퍼퓸바</p>
+                                    <p class="date">
+                                        2022.07.02 ~
+                                        2022.07.21</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="event_box col2" style="" data-last="342">
+                            <a href="#" onclick="GA_EventList($(this));goDetail('/ko/magazine/events/8804121302912');">
+                                <div class="pic">
+                                    <img src="http://cdn.thehandsome.com/pc/event/list/banner/20220609_41347452010870859_ko.jpg"
+                                         data-full="http://cdn.thehandsome.com/pc/event/list/banner/20220609_41347451891924664_ko.jpg"
+                                         data-half="http://cdn.thehandsome.com/pc/event/list/banner/20220609_41347452010870859_ko.jpg">
+                                </div>
+                                <div class="evt_txt_box">
+                                    <p class="title">Summer Benefit</p>
+                                    <p class="date">
+                                        2022.07.13 ~
+                                        2022.07.19</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="event_box col2" style="" data-last="342">
+                            <a href="#" onclick="GA_EventList($(this));goDetail('/ko/magazine/events/8804088534912');">
+                                <div class="pic">
+                                    <img src="http://cdn.thehandsome.com/pc/event/list/banner/20220530_40482078059599044_ko.jpg"
+                                         data-full="http://cdn.thehandsome.com/pc/event/list/banner/20220530_40482077948646373_ko.jpg"
+                                         data-half="http://cdn.thehandsome.com/pc/event/list/banner/20220530_40482078059599044_ko.jpg">
+                                </div>
+                                <div class="evt_txt_box">
+                                    <p class="title">더한섬닷컴 BEAUTY WEEK</p>
+                                    <p class="date">
+                                        2022.07.10 ~
+                                        2022.07.17</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section><!-- End Services Section -->
+
+        <!-- ======= Team Section ======= -->
+        <section id="team" class="team section-bg">
+            <div class="container">
+
+                <div class="section-title">
+                    <h2>VIP Lounge</h2>
+                    <p>VIP Lounge가 위치한 '더한섬하우스' 위치입니다.</p>
+                </div>
+
+                <div class="map_wrap">
+                    <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
+
+                    <div id="menu_wrap" class="bg_white">
+                        <div class="option">
+                            <div>
+                                <form onsubmit="searchPlaces(); return false;">
+                                    키워드 : <input type="text" value="더한섬하우스" id="keyword" size="15" readonly>
+                                </form>
+                            </div>
+                        </div>
+                        <hr>
+                        <ul id="placesList"></ul>
+                        <div id="pagination"></div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </section>
+        <!-- End Team Section -->
+
+    </main><!-- End #main -->
+
+    <!-- VIP Lounge Map 관련 스크립트 -->
+    <script>
+        // 마커를 담을 배열입니다
+        var markers = [];
+
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+            mapOption = {
+                center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
+                level: 3 // 지도의 확대 레벨
+            };
+
+        // 지도를 생성합니다
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+
+        // 장소 검색 객체를 생성합니다
+        var ps = new kakao.maps.services.Places();
+
+        // 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성합니다
+        var infowindow = new kakao.maps.InfoWindow({zIndex:1});
+
+        // 키워드로 장소를 검색합니다
+        searchPlaces();
+
+        // 키워드 검색을 요청하는 함수입니다
+        function searchPlaces() {
+
+            var keyword = document.getElementById('keyword').value;
+
+            if (!keyword.replace(/^\s+|\s+$/g, '')) {
+                alert('키워드를 입력해주세요!');
+                return false;
+            }
+
+            // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
+            ps.keywordSearch( keyword, placesSearchCB);
+        }
+
+        // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
+        function placesSearchCB(data, status, pagination) {
+            if (status === kakao.maps.services.Status.OK) {
+
+                // 정상적으로 검색이 완료됐으면
+                // 검색 목록과 마커를 표출합니다
+                displayPlaces(data);
+
+                // 페이지 번호를 표출합니다
+                displayPagination(pagination);
+
+            } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+
+                alert('검색 결과가 존재하지 않습니다.');
+                return;
+
+            } else if (status === kakao.maps.services.Status.ERROR) {
+
+                alert('검색 결과 중 오류가 발생했습니다.');
+                return;
+
+            }
+        }
+
+        // 검색 결과 목록과 마커를 표출하는 함수입니다
+        function displayPlaces(places) {
+
+            var listEl = document.getElementById('placesList'),
+                menuEl = document.getElementById('menu_wrap'),
+                fragment = document.createDocumentFragment(),
+                bounds = new kakao.maps.LatLngBounds(),
+                listStr = '';
+
+            // 검색 결과 목록에 추가된 항목들을 제거합니다
+            removeAllChildNods(listEl);
+
+            // 지도에 표시되고 있는 마커를 제거합니다
+            removeMarker();
+
+            for ( var i=0; i<places.length; i++ ) {
+
+                // 마커를 생성하고 지도에 표시합니다
+                var placePosition = new kakao.maps.LatLng(places[i].y, places[i].x),
+                    marker = addMarker(placePosition, i),
+                    itemEl = getListItem(i, places[i]); // 검색 결과 항목 Element를 생성합니다
+
+                // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+                // LatLngBounds 객체에 좌표를 추가합니다
+                bounds.extend(placePosition);
+
+                // 마커와 검색결과 항목에 mouseover 했을때
+                // 해당 장소에 인포윈도우에 장소명을 표시합니다
+                // mouseout 했을 때는 인포윈도우를 닫습니다
+                (function(marker, title) {
+                    kakao.maps.event.addListener(marker, 'mouseover', function() {
+                        displayInfowindow(marker, title);
+                    });
+
+                    kakao.maps.event.addListener(marker, 'mouseout', function() {
+                        infowindow.close();
+                    });
+
+                    itemEl.onmouseover =  function () {
+                        displayInfowindow(marker, title);
+                    };
+
+                    itemEl.onmouseout =  function () {
+                        infowindow.close();
+                    };
+                })(marker, places[i].place_name);
+
+                fragment.appendChild(itemEl);
+            }
+
+            // 검색결과 항목들을 검색결과 목록 Element에 추가합니다
+            listEl.appendChild(fragment);
+            menuEl.scrollTop = 0;
+
+            // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
+            map.setBounds(bounds);
+
+            // 지도의 확대 레벨 설정
+            map.setLevel(13);
+        }
+
+        // 검색결과 항목을 Element로 반환하는 함수입니다
+        function getListItem(index, places) {
+
+            var el = document.createElement('li'),
+                itemStr = '<span class="markerbg marker_' + (index+1) + '"></span>' +
+                    '<div class="info">' +
+                    '   <h5>' + places.place_name + '</h5>';
+
+            if (places.road_address_name) {
+                itemStr += '    <span>' + places.road_address_name + '</span>' +
+                    '   <span class="jibun gray">' +  places.address_name  + '</span>';
+            } else {
+                itemStr += '    <span>' +  places.address_name  + '</span>';
+            }
+
+            itemStr += '  <span class="tel">' + places.phone  + '</span>' +
+                '</div>';
+
+            el.innerHTML = itemStr;
+            el.className = 'item';
+
+            return el;
+        }
+
+        // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
+        function addMarker(position, idx, title) {
+            var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
+                imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
+                imgOptions =  {
+                    spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
+                    spriteOrigin : new kakao.maps.Point(0, (idx*46)+10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
+                    offset: new kakao.maps.Point(13, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
+                },
+                markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
+                marker = new kakao.maps.Marker({
+                    position: position, // 마커의 위치
+                    image: markerImage
+                });
+
+            marker.setMap(map); // 지도 위에 마커를 표출합니다
+            markers.push(marker);  // 배열에 생성된 마커를 추가합니다
+
+            return marker;
+        }
+
+        // 지도 위에 표시되고 있는 마커를 모두 제거합니다
+        function removeMarker() {
+            for ( var i = 0; i < markers.length; i++ ) {
+                markers[i].setMap(null);
+            }
+            markers = [];
+        }
+
+        // 검색결과 목록 하단에 페이지번호를 표시는 함수입니다
+        function displayPagination(pagination) {
+            var paginationEl = document.getElementById('pagination'),
+                fragment = document.createDocumentFragment(),
+                i;
+
+            // 기존에 추가된 페이지번호를 삭제합니다
+            while (paginationEl.hasChildNodes()) {
+                paginationEl.removeChild (paginationEl.lastChild);
+            }
+
+            for (i=1; i<=pagination.last; i++) {
+                var el = document.createElement('a');
+                el.href = "#";
+                el.innerHTML = i;
+
+                if (i===pagination.current) {
+                    el.className = 'on';
+                } else {
+                    el.onclick = (function(i) {
+                        return function() {
+                            pagination.gotoPage(i);
+                        }
+                    })(i);
+                }
+
+                fragment.appendChild(el);
+            }
+            paginationEl.appendChild(fragment);
+        }
+
+        // 검색결과 목록 또는 마커를 클릭했을 때 호출되는 함수입니다
+        // 인포윈도우에 장소명을 표시합니다
+        function displayInfowindow(marker, title) {
+            var content = '<div style="padding:5px;z-index:1;">' + title + '</div>';
+
+            infowindow.setContent(content);
+            infowindow.open(map, marker);
+        }
+
+        // 검색결과 목록의 자식 Element를 제거하는 함수입니다
+        function removeAllChildNods(el) {
+            while (el.hasChildNodes()) {
+                el.removeChild (el.lastChild);
+            }
+        }
+
+    </script>
+
+    <!-- Vendor JS Files -->
+    <script th:src="@{/vip/vendor/purecounter/purecounter.js}"></script>
+    <script th:src="@{/vip/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/vip/vendor/glightbox/js/glightbox.min.js}"></script>
+    <script th:src="@{/vip/vendor/isotope-layout/isotope.pkgd.min.js}"></script>
+    <script th:src="@{/vip/vendor/swiper/swiper-bundle.min.js}"></script>
+    <script th:src="@{/vip/vendor/php-email-form/validate.js}"></script>
+
+    <!-- Template Main JS File -->
+    <script th:src="@{/vip/js/main.js}"></script>
+</div>
+<!-- End bodyWrap -->
+
+<!-- ======= footerWrap ======= -->
+<th:block th:replace="~{/fragment/footer::footer}"></th:block>
+<!-- End footerWrap -->
+</body>
+</html>

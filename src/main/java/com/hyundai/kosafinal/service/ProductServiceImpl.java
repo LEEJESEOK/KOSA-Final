@@ -1,10 +1,6 @@
 package com.hyundai.kosafinal.service;
 
-import com.hyundai.kosafinal.domain.CategoryDTO;
-import com.hyundai.kosafinal.domain.ColorDTO;
-import com.hyundai.kosafinal.domain.ProductDTO;
-import com.hyundai.kosafinal.domain.ProductReviewDTO;
-import com.hyundai.kosafinal.domain.SizeDTO;
+import com.hyundai.kosafinal.domain.*;
 import com.hyundai.kosafinal.entity.Criteria;
 import com.hyundai.kosafinal.mapper.product.ProductMapper;
 import com.hyundai.kosafinal.util.s3.S3Client;
@@ -112,6 +108,18 @@ public class ProductServiceImpl implements ProductService {
         if(index == 2) productDTO.setImage3Uri(S3_BUCKET_ADDRESS+profileKey);
 
         return key;
+    }
+
+    // 타임세일 상품 가져오기
+    @Override
+    public List<SaleDTO> getSaleProduct() {
+        return productMapper.selectSaleProduct();
+    }
+
+    // 한정상품 가져오기
+    @Override
+    public List<LimitedProductDTO> getLimitedProduct() {
+        return productMapper.selectLimitedProduct();
     }
 
 }

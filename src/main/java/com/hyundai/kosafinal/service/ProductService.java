@@ -1,9 +1,6 @@
 package com.hyundai.kosafinal.service;
 
-import com.hyundai.kosafinal.domain.CategoryDTO;
-import com.hyundai.kosafinal.domain.ColorDTO;
-import com.hyundai.kosafinal.domain.ProductDTO;
-import com.hyundai.kosafinal.domain.SizeDTO;
+import com.hyundai.kosafinal.domain.*;
 import com.hyundai.kosafinal.entity.Criteria;
 
 import java.util.List;
@@ -101,4 +98,10 @@ public interface ProductService {
     List<CategoryDTO> getCategoryList();
 
     String getColorChip(String colorId);
+
+    // 타임세일 상품 가져오기
+    List<SaleDTO> getSaleProduct();
+
+    // 한정상품 가져오기
+    List<LimitedProductDTO> getLimitedProduct();
 }
