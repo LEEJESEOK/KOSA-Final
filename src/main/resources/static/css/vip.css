@@ -1,0 +1,460 @@
+@charset "utf-8";
+
+
+/* 기존 한섬 페이지와 색 반전 */
+@font-face {
+    font-family: 'SourceHanSerifKR-M';
+    src: url("../vip/fonts/SourceHanSerifKR-Medium_subset.otf");
+}
+
+
+body {
+    width: 100%;
+    background-color: #363636 !important;
+    color: #e5e5e5 !important;
+}
+
+.header {
+    border: none;
+}
+
+.header.header_main1903 {
+    background-color: #363636 !important;
+    /*border-bottom: 1px solid #CCCCCC;*/
+}
+
+#headerWrap .top_nav.topnav1903 {
+    background-color: #363636 !important;
+    border-bottom: 1px solid #CCCCCC;
+}
+
+#bodyWrap {
+    background-color: #363636 !important;
+    font-family : 'SourceHanSerifKR-M' !important;
+    vertical-align: center !important;
+}
+
+#headerWrap .top_nav topnav1903 {
+    border: none;
+}
+
+/*#headerWrap .top_nav .top_nav_wrap {*/
+/*    background-color: #363636 !important;*/
+/*}*/
+
+#headerWrap .top_nav.topnav1903 {
+    color: #e5e5e5 !important;
+}
+
+#headerWrap .gnbwarp .gnb_nav1903 > ul > li > a {
+    color: #e5e5e5 !important;
+}
+
+.top_nav_wrap .brand_menu1903 > ul > li > span a {
+    color: #e5e5e5 !important;
+}
+
+.util_menu > ul > li > a {
+    color: #e5e5e5 !important;
+}
+
+#footerWrap {
+    background-color: #363636 !important;
+    color: #e5e5e5 !important;
+    margin-top: 0px;
+}
+
+#footerWrap .footer_cnts2 {
+    background-color: #363636 !important;
+    color: #e5e5e5 !important;
+}
+
+#footerWrap .footer .footer_cnts1 .footer_menu .footer_link li {
+    color: #e5e5e5 !important;
+}
+
+.btn {
+    display: inline-block !important;
+    color: #e5e5e5 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    cursor: pointer !important;
+    border: none !important;
+    padding: 0px !important;
+}
+
+.header_dropmemu .btn {
+    /*padding-left: 8px !important;*/
+}
+
+#noticeWrap .list .tlt {
+    color: #e5e5e5 !important;
+}
+
+a {
+    color: #e5e5e5 !important;
+    outline: none !important;
+}
+
+.event_box a {
+    color: #363636 !important;
+}
+
+.event_box .evt_txt_box .title {
+    font-size: 18px;
+    margin: 0px !important;
+}
+
+.event_box .evt_txt_box .date {
+    margin: 0px !important;
+    text-align: left;
+}
+
+span {
+    vertical-align: center;
+}
+
+/* 로고 변경 */
+#headerWrap .gnbwarp.new201608 .logo {
+    position: absolute;
+    width: 300px;
+    left: 50%;
+    line-height: normal;
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+#headerWrap .gnbwarp .logo a {
+    background: url("../images/common/handsome-vip-logo.png") center center no-repeat !important;
+    margin-bottom: 50px !important;
+}
+
+.clearfix {
+    height: 100%;
+    text-align: center;
+}
+
+/* 로고 애니메이션 */
+.fadein{
+    font-size: medium;
+    position: relative;
+    overflow: hidden;
+    animation: fadein 5s;
+}
+
+.fadein2{
+    font-size: medium;
+    position: relative;
+    overflow: hidden;
+    animation: fadein 7s;
+}
+
+.fadein3{
+    font-size: medium;
+    position: relative;
+    overflow: hidden;
+    animation: fadein 9s;
+}
+
+@keyframes fadein{
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 100%, 0);
+    }
+
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+        transform: translateZ(0);
+    }
+
+}
+
+
+
+/* Timesale 관련 */
+
+.container {
+    margin: 0 auto;
+}
+
+.timesale-product {
+    width: 70% !important;
+    margin-left: 200px;
+    margin-top: 40px !important;
+    text-align: center;
+}
+
+.timesale-product p {
+    padding: 5px;
+    margin: 15px;
+}
+
+#timesale-img {
+    /*position: absolute;*/
+    width: 400px;
+    height: 600px;
+    margin: 20px;
+    box-shadow: 8px 8px 8px #1c1c1c;
+}
+
+#timesale-brand {
+    font-size: 18px;
+    font-weight: 400;
+    padding: 10px;
+}
+
+#timesale-name {
+    font-size: 28px;
+    font-weight: 400;
+    padding: 10px;
+}
+
+#timesale-price {
+    margin-top: 50px;
+}
+
+#timesale-price #origin-price {
+    text-decoration: line-through;
+    font-size: 30px;
+}
+
+#timesale-price #sale-price {
+    font-size: 45px;
+    font-weight: 600;
+    color: #FFC400;
+}
+
+#timesale-price #arrow-price {
+    font-size: 20px;
+    margin: 20px !important;
+    /*margin-bottom: 20px !important;*/
+}
+#timesale-time {
+    padding: 3px;
+}
+#timesale-time h5 {
+    color: #ed1d1d;
+}
+
+#imgDiv {
+    float: left;
+}
+
+#infoDiv {
+    display: inline-block;
+    text-align: center;
+    margin: 0 auto;
+    position: relative;
+    top: 130px;
+    left: 40px;
+}
+.color_more_wrap a{display:inline-block;width:40px;height:40px;text-indent: -999em;border:2px solid #363636;}
+.color_more_wrap a:hover,
+.color_more_wrap .on{width:35px;height:35px;border:1px solid #e3e3e3;}
+
+/* Limited Edition 관련 */
+.special-container {
+    margin-left: 100px !important;
+    margin-right: 100px !important;
+}
+
+.img-fluid {
+    width: 190px;
+    height: 270px !important;
+
+}
+
+.bx.bx-plus {
+    padding-top: 3px;
+}
+
+
+/* VIP Lounge Map */
+.map_wrap, .map_wrap * {
+    margin: 0 !important;
+    padding: 0  !important;
+    font-size: 12px  !important;
+    text-align: left;
+    color: #1a1a1a;
+}
+
+.map_wrap a, .map_wrap a:hover, .map_wrap a:active {
+    color: #000  !important;
+    text-decoration: none  !important;
+}
+
+.map_wrap {
+    position: relative !important;
+    width: 100% !important;
+    height: 500px !important;
+}
+
+#menu_wrap {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    width: 250px !important;
+    margin: 10px 0 30px 10px !important;
+    padding: 5px !important;
+    overflow-y: auto !important;
+    background: rgba(255, 255, 255, 0.7) !important;
+    z-index: 1 !important;
+    font-size: 12px !important;
+    border-radius: 10px !important;
+}
+
+.bg_white {
+    background: #fff !important;
+}
+
+#menu_wrap hr {
+    display: block !important;
+    height: 1px !important;
+    border: 0 !important;
+    border-top: 2px solid #5F5F5F !important;
+    margin: 3px 0 !important;
+}
+
+#menu_wrap .option {
+    text-align: center !important;
+}
+
+#menu_wrap .option p {
+    margin: 10px 0 !important;
+}
+
+#menu_wrap .option button {
+    margin-left: 5px !important;
+}
+
+#placesList li {
+    list-style: none !important;
+}
+
+#placesList .item {
+    position: relative !important;
+    border-bottom: 1px solid #888 !important;
+    overflow: hidden !important;
+    cursor: pointer !important;
+    min-height: 65px !important;
+}
+
+#placesList .item span {
+    display: block !important;
+    margin-top: 4px !important;
+}
+
+#placesList .item h5, #placesList .item .info {
+    text-overflow: ellipsis !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+}
+
+#placesList .item .info {
+    padding: 10px 0 10px 55px !important;
+}
+
+#placesList .info .gray {
+    color: #8a8a8a !important;
+}
+
+#placesList .info .jibun {
+    padding-left: 26px !important;
+    background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png) no-repeat !important;
+}
+
+#placesList .info .tel {
+    color: #009900 !important;
+}
+
+#placesList .item .markerbg {
+    float: left !important;
+    position: absolute !important;
+    width: 36px !important;
+    height: 37px !important;
+    margin: 10px 0 0 10px !important;
+    background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png) no-repeat !important;
+}
+
+#placesList .item .marker_1 {
+    background-position: 0 -10px !important;
+}
+
+#placesList .item .marker_2 {
+    background-position: 0 -56px !important;
+}
+
+#placesList .item .marker_3 {
+    background-position: 0 -102px !important;
+}
+
+#placesList .item .marker_4 {
+    background-position: 0 -148px !important;
+}
+
+#placesList .item .marker_5 {
+    background-position: 0 -194px !important;
+}
+
+#placesList .item .marker_6 {
+    background-position: 0 -240px !important;
+}
+
+#placesList .item .marker_7 {
+    background-position: 0 -286px !important;
+}
+
+#placesList .item .marker_8 {
+    background-position: 0 -332px !important;
+}
+
+#placesList .item .marker_9 {
+    background-position: 0 -378px !important;
+}
+
+#placesList .item .marker_10 {
+    background-position: 0 -423px !important;
+}
+
+#placesList .item .marker_11 {
+    background-position: 0 -470px !important;
+}
+
+#placesList .item .marker_12 {
+    background-position: 0 -516px !important;
+}
+
+#placesList .item .marker_13 {
+    background-position: 0 -562px !important;
+}
+
+#placesList .item .marker_14 {
+    background-position: 0 -608px !important;
+}
+
+#placesList .item .marker_15 {
+    background-position: 0 -654px !important;
+}
+
+#pagination {
+    margin: 10px auto !important;
+    text-align: center !important;
+}
+
+#pagination a {
+    display: inline-block !important;
+    margin-right: 10px !important;
+}
+
+#pagination .on {
+    font-weight: bold !important;
+    cursor: default !important;
+    color: #777 !important;
+}
+
+
+

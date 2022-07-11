@@ -236,4 +236,17 @@
       }
     ]]>
     </insert>
+
+    <select id="selectSaleProduct" resultType="SaleDTO">
+        SELECT * FROM sale
+        WHERE sysdate BETWEEN start_date AND end_date
+    </select>
+
+    <select id="selectLimitedProduct" resultType="LimitedProductDTO">
+        <![CDATA[
+            SELECT * FROM limited_product
+            WHERE rownum < 10
+        ]]>
+    </select>
+
 </mapper>

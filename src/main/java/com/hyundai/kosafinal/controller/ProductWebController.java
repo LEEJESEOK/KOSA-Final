@@ -20,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ProductWebController {
@@ -41,7 +42,8 @@ public class ProductWebController {
   }
 
   @RequestMapping("/product/detail/{productId}")
-  public String getSignupPage(Model model, @PathVariable("productId") String productId, Authentication authentication)
+  public String getSignupPage(Model model, @PathVariable("productId") String productId, Authentication authentication,
+                              @RequestParam(value = "status", required = false, defaultValue = "0") String status)
   {
     //컬러칩 ID + URI
     List<ProductDTO> colorList = productDetailService.getColorsChip(productId);
@@ -53,7 +55,13 @@ public class ProductWebController {
 
     //기본 디폴트 정보 삽입
     List<ProductDTO> productDTOList = productDetailService.getProductDetailList(productId);
-    model.addAttribute("productDetail", productDTOList.get(0));
+    ProductDTO dto = productDTOList.get(0);
+    if(status.equals("1")) {
+      dto.setPrice((int)(dto.getPrice() * 0.8));
+    }
+    model.addAttribute("productDetail", dto);
+
+
 
     //컬러마다 3개의 이미지씩 등록
     List<ProductDTO> colorImageList = new ArrayList<>();
