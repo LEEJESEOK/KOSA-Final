@@ -2,8 +2,13 @@
 
 
 /* 기존 한섬 페이지와 색 반전 */
+@font-face {
+    font-family: 'SourceHanSerifKR-M';
+    src: url("../vip/fonts/SourceHanSerifKR-Medium_subset.otf");
+}
+
+
 body {
-    font-family : 'Cormorant','SourceHanSerifKR','Apple SD Gothic Neo', 'Malgun Gothic','Nanum Gothic', 'Noto Sans','sans-serif' !important;
     width: 100%;
     background-color: #363636 !important;
     color: #e5e5e5 !important;
@@ -25,6 +30,8 @@ body {
 
 #bodyWrap {
     background-color: #363636 !important;
+    font-family : 'SourceHanSerifKR-M' !important;
+    vertical-align: center !important;
 }
 
 #headerWrap .top_nav topnav1903 {
@@ -103,6 +110,10 @@ a {
     text-align: left;
 }
 
+span {
+    vertical-align: center;
+}
+
 /* 로고 변경 */
 #headerWrap .gnbwarp.new201608 .logo {
     position: absolute;
@@ -123,9 +134,57 @@ a {
     text-align: center;
 }
 
+/* 로고 애니메이션 */
+.fadein{
+    font-size: medium;
+    position: relative;
+    overflow: hidden;
+    animation: fadein 5s;
+}
+
+.fadein2{
+    font-size: medium;
+    position: relative;
+    overflow: hidden;
+    animation: fadein 7s;
+}
+
+.fadein3{
+    font-size: medium;
+    position: relative;
+    overflow: hidden;
+    animation: fadein 9s;
+}
+
+@keyframes fadein{
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 100%, 0);
+    }
+
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+        transform: translateZ(0);
+    }
+
+}
+
+
+
 /* Timesale 관련 */
+
+.container {
+    margin: 0 auto;
+}
+
 .timesale-product {
-    display: inline-block;
+    width: 70% !important;
+    margin-left: 200px;
+    margin-top: 40px !important;
+    text-align: center;
 }
 
 .timesale-product p {
@@ -138,31 +197,33 @@ a {
     width: 400px;
     height: 600px;
     margin: 20px;
+    box-shadow: 8px 8px 8px #1c1c1c;
 }
 
 #timesale-brand {
     font-size: 18px;
-    font-weight: bold;
+    font-weight: 400;
+    padding: 10px;
 }
 
 #timesale-name {
-    font-size: 24px;
-    font-weight: bold;
+    font-size: 28px;
+    font-weight: 400;
+    padding: 10px;
 }
 
 #timesale-price {
-    margin-top: 30px;
+    margin-top: 50px;
 }
 
 #timesale-price #origin-price {
     text-decoration: line-through;
     font-size: 30px;
-    font-weight: bold;
 }
 
 #timesale-price #sale-price {
     font-size: 45px;
-    font-weight: bold;
+    font-weight: 600;
     color: #FFC400;
 }
 
@@ -177,6 +238,22 @@ a {
 #timesale-time h5 {
     color: #ed1d1d;
 }
+
+#imgDiv {
+    float: left;
+}
+
+#infoDiv {
+    display: inline-block;
+    text-align: center;
+    margin: 0 auto;
+    position: relative;
+    top: 130px;
+    left: 40px;
+}
+.color_more_wrap a{display:inline-block;width:40px;height:40px;text-indent: -999em;border:2px solid #363636;}
+.color_more_wrap a:hover,
+.color_more_wrap .on{width:35px;height:35px;border:1px solid #e3e3e3;}
 
 /* Limited Edition 관련 */
 .special-container {

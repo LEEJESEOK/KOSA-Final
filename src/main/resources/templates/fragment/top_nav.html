@@ -21,6 +21,26 @@
                     }
                 });
 
+                // STAR, THE STAR 일 때만 VIP 라운지 버튼 보이게
+                $.ajax({
+                    type: "POST",
+                    url: "/member/checkVIP",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (result) {
+                        let btn = document.getElementById("vipBtn");
+                        if (result == true) {
+                            btn.style.display = 'block';
+                        } else {
+                            btn.style.display = 'none';
+                        }
+                    },
+                    error: function (request, status, error) {
+                    },
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(csrf_header, csrf_token);
+                    }
+                });
+
             });
 
             function logout() {
@@ -267,6 +287,13 @@
             <div class="util_menu" style="display:block;">
                 <ul class="clearfix">
                     <!-- 로그인/로그아웃에 따라 다르게 보이게 처리 -->
+                    <!-- VIP Lounge -->
+                    <li>
+                        <a href="/vip/lounge" id="vipBtn" style="display: none;">
+                            <img src="/images/common/icon_vip.png" style="width:33px; height:33px; padding: 4px 9px;">
+                        </a>
+                    </li>
+                    <!-- 로그인/로그아웃 -->
                     <li sec:authorize="!isAuthenticated()"><a href="/member/login">로그인</a></li>
                     <li sec:authorize="isAuthenticated()">
                         <form id="logoutForm" th:action="@{/logout}" method="post">

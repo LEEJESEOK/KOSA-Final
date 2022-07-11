@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,9 +49,13 @@ public class VipRestController {
             String pid  = saleDTO.get(0).getPid();
             List<ProductDTO> productDTO = productMapper.selectProductDetailById(pid);
 
+            // 해당 상품 컬러 가져오기
+            List<ProductDTO> colorList = productMapper.selectColors(pid);
+
             Map<String, Object> map = new HashMap<>();
             map.put("sale", saleDTO.get(0));
             map.put("product", productDTO.get(0));
+            map.put("colors", colorList);
 
             return map;
         }

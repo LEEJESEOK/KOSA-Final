@@ -5,10 +5,6 @@
 
     <th:block th:replace="~{/fragment/head::head}"></th:block>
 
-    <!-- Google Fonts -->
-    <link th:href="@{https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i}"
-          rel="stylesheet">
-
     <!-- 카카오 지도 API 사용 -->
     <!-- services와 clusterer, drawing 라이브러리 불러오기 -->
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0d474e579195e2512cb8dcd1b8267df7&libraries=services,clusterer,drawing"></script>
@@ -67,28 +63,41 @@
                 if (result.length != 0) {
                     let sale = result.sale;
                     let product = result.product;
+                    let colors = result.colors;
+
+                    // 타임세일 시간 셋팅
+                    let start = new Date(sale.startDate).format("MM월 dd일 HH시 mm분");
+                    $("#timesale-start").text(start);
+                    let end = new Date(sale.endDate).format("MM월 dd일 HH시 mm분");
+                    $("#timesale-end").text(end);
+
+                    // 남은 시간 타이머 셋팅
+                    endTime = new Date(sale.endDate);
+                    setInterval("getTimes()", 1000);
+
+                    // 타임세일 상품 정보 셋팅
                     document.getElementById("timesale-img").src = product.image1Uri;
                     $("#timesale-brand").text(product.brand);
                     $("#timesale-name").text(product.name);
                     $("#origin-price").text("₩" + sale.originPrice.toLocaleString());
                     $("#sale-price").text("₩" + sale.salePrice.toLocaleString());
-                    $("#timesale-link").attr("href", "/product/detail/" + sale.pid);
+                    $("#timesale-link").attr("href", "/product/detail/" + sale.pid + "?status=1");
 
-                    let start = new Date(sale.startDate).format("MM월 dd일 HH시 MM분");
-                    $("#timesale-start").text(start);
-                    let end = new Date(sale.endDate).format("MM월 dd일 HH시 MM분");
-                    $("#timesale-end").text(end);
-
-                    endTime = new Date(sale.endDate);
-                    setInterval("getTimes()", 1000);
+                    // 컬러칩 셋팅
+                    let colorHtml = '';
+                    colors.forEach(color => {
+                        colorHtml += `<a class="cl wt" onclick="" style="background: url('${color.colorChipUri}/dims/resize/13x14');"></a>`;
+                    })
+                    $(".color_more_wrap").append(colorHtml);
 
                 } else {
+                    $("#timesale-img").hide();
                     $("#arrow-price").hide();
+                    $("#timesale-link").hide();
                     $("#timesale-name").text("현재 세일 중인 상품이 없습니다.");
                 }
             },
             error: function (request, status, error) {
-                alert("Ajax 통신 에러 발생");
             },
             beforeSend: function (xhr) {
                 xhr.setRequestHeader(csrf_header, csrf_token);
@@ -137,7 +146,6 @@
                 });
             },
             error: function (request, status, error) {
-                alert("Ajax 통신 에러 발생");
             },
             beforeSend: function (xhr) {
                 xhr.setRequestHeader(csrf_header, csrf_token);
@@ -152,9 +160,9 @@
     <!-- ======= Hero Section ======= -->
     <section id="hero">
         <div class="hero-container">
-            <h1>Welcome to VIP Lounge</h1>
-            <h2><span style="margin-right: 5px">[[${#authentication.principal.name}]]</span>님 환영합니다.</h2>
-            <a href="#timesale" class="btn-get-started scrollto">입장</a>
+            <h1 class="fadein">VIP Lounge</h1>
+            <h2 class="fadein2"><span style="margin-right: 5px">[[${#authentication.principal.name}]]</span>님 환영합니다.</h2>
+            <a href="#timesale" class="btn-get-started scrollto fadein3">입장</a>
         </div>
     </section><!-- Hero Section -->
 
@@ -182,28 +190,31 @@
 
                 <div class="section-title">
                     <h2>Time Sale</h2>
-                    <p>일정한 시간에만 판매되는 상품입니다.</p>
+                    <p>일정한 시간에만 할인된 가격으로 판매되는 상품입니다.</p>
                 </div>
                 <div class="row content" id="timesale-time">
                     <h3><span id="timesale-start"></span> ~ <span id="timesale-end"></span></h3>
                     <h5>(남은 시간 : <span id="timesale-timer"></span>)</h5>
                 </div>
                 <div class="row content">
-                    <a id="timesale-link">
-                        <div class="timesale-product">
-                            <div><img id="timesale-img" src=""></div>
-                            <div>
-                                <p id="timesale-brand"></p>
-                                <p id="timesale-name"></p>
-                                <p id="timesale-price">
-                                    <span id="origin-price"></span>
-                                    <i id="arrow-price" class="bi bi-arrow-right"></i>
-                                    <span id="sale-price"></span>
-                                </p>
-                                <p><a href="" class="btn-get-started">Buy Now</a></p>
-                            </div>
+                    <div class="timesale-product">
+                        <div id="imgDiv">
+                            <img id="timesale-img" src="">
                         </div>
-                    </a>
+                        <div id="infoDiv">
+                            <p id="timesale-brand"></p>
+                            <p id="timesale-name"></p>
+                            <div class="color_more_wrap">
+
+                            </div>
+                            <p id="timesale-price">
+                                <span id="origin-price"></span>
+                                <i id="arrow-price" class="bi bi-arrow-right"></i>
+                                <span id="sale-price"></span>
+                            </p>
+                            <p><a href="" id="timesale-link" class="btn-get-started">Buy Now</a></p>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -749,8 +760,5 @@
 </div>
 <!-- End bodyWrap -->
 
-<!-- ======= footerWrap ======= -->
-<th:block th:replace="~{/fragment/footer::footer}"></th:block>
-<!-- End footerWrap -->
 </body>
 </html>
