@@ -85,6 +85,7 @@ public class ProductWebController {
     double negativeTotal = 0;
     double positiveTotal = 0;
     for(ProductReviewDTO p : reviewDTOList){
+      System.out.println("리뷰 : "+ p);
       if(p.getSentiment_type().equals("부정")) {
         negativeCnt++;
         negativeTotal += p.getSentiment_percent();
