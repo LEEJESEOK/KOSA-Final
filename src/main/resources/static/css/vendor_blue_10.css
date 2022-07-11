@@ -1384,6 +1384,12 @@ th {
     box-sizing: border-box
 }
 
+li, img {
+    -webkit-box-sizing: content-box !important;
+    -moz-box-sizing: content-box !important;
+    box-sizing: content-box !important;
+}
+
 html {
     font-size: 10px;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
