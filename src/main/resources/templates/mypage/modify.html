@@ -181,11 +181,13 @@
                                     }
                                 }
                                 if ($("#selDay option:last").val() < maxDay) {
-                                    if ($('#selMonth').val() == 02) {
+                                    console.log($('#selMonth').val())
+                                    if ($('#selMonth').val() ==  02) {
                                         if ((selYear1 % 4 == 0 && selYear1 % 100 != 0) || selYear1 % 400 == 0) {
                                             maxDay = 29;
                                         }
                                     }
+
                                     for (let i = parseInt($("#selDay option:last").val()) + 1; i <= maxDay; i++) {
                                         if (i < 10) {
                                             $("#selDay").append("<option value='0" + i + "'>0" + i + "</option>");
@@ -224,6 +226,7 @@
                                     $("#selDay option[value='31']").remove();
                                 }
                             }
+
                         else
                             {
                                 if (lastDay == 28) {
@@ -261,16 +264,17 @@
                             }
                         });
 
-                        $("#selDay").change(function () {
-                            if ($("#selDay option:eq(0)").val() == "default") {
-                                $("#selDay option:eq(0)").remove();
-                            }
-                        });
+                        // $("#selDay").change(function () {
+                        //     if ($("#selDay option:eq(0)").val() == "default") {
+                        //         $("#selDay option:eq(0)").remove();
+                        //     }
+                        // });
 
                         $("#selYear").trigger('change');
                         $("#selMonth").trigger('change');
 
-                        $('input[name="emailReceiveYN"]:radio:input[value="false"]').attr('checked', 'checked');
+
+
 
                         //이메일 중복 확인
                         $('#emailDubChkBtn').click(function () {
@@ -336,9 +340,7 @@
                                 let vc = new ValidationCheck();
                                 vc.checkIdList = ['password'];
 
-                                if ($("#emailDuplChk").val() == 'N') {
-                                    return;
-                                }
+
 
                                 if ($("#emailAddress").val().length > 50) {
                                     layerAlert("E-mail은 최대 50자입니다.");
@@ -348,7 +350,7 @@
                                 let month = $("#selMonth").val();
                                 let day = $("#selDay").val();
                                 console.log("vc.isValid() : " + vc.isValid());
-                                if (vc.isValid()) {
+                                if (vc.isValid()==true ) {
                                     let gender_check;
                                     if ($("#gender option:selected").text() === "남") {
                                         gender_check = 1;
@@ -441,16 +443,6 @@
                         */
                         let $t = null;
 
-
-                        $("#hpPwChangeBtn").click(function () {
-                            $t = layerChangPopup('hpPwSearchPop');
-                            $t.find('#hpConfirmBtn').click(function () {
-                                $t.find('.btn_close').click();
-                                let newWindow = window.open("about:blank");
-                                newWindow.location.href = "https://www.h-point.co.kr/cu/mem/showCustInfo.shd";
-                            });
-                        });
-
                         $('#PwCheck1').click(function () {
                             let vc = new ValidationCheck();
                             vc.checkIdList = ['password'];
@@ -483,202 +475,7 @@
                         });
 
 
-                        // $("#pwChangeBtn").click(function() {
-                        //     $t = layerChangPopup('pwSearchPop');
-                        //     $t.find("#newPasswordDubMsg, #newPasswordConfirmDubMsg").text("비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요.");	//다국어 : 비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요.
-                        //     $t.find("#oldPassword").focus();
-                        //     passwordDataValidationCheck('newPassword', 'newPasswordDubMsg');
-                        //     passwordDataValidationCheck('newPasswordConfirm', 'newPasswordConfirmDubMsg');
-                        //
-                        //     //기존 비밀번호 확인
-                        //     $t.find('#oldPassword').blur(function(){
-                        //         if($t.find("#oldPassword").val() == "")
-                        //         {
-                        //             $t.find("#oldPasswordCheckMsg").text("필수항목을 입력하시길 바랍니다.");	//다국어 : 필수항목을 입력하시길 바랍니다.
-                        //             $t.find("#oldPassword").focus();
-                        //         }
-                        //         else
-                        //         {
-                        //             let pwc = new passwordControll("compare", $t.find("#oldPassword").val(), "8929460453380");
-                        //             pwc.trueAction = function()
-                        //             {
-                        //                 $t.find("#oldPasswordCheckMsg").text("기존 비밀번호와 일치합니다.");	//다국어 : 기존 비밀번호와 일치합니다.
-                        //             };
-                        //             pwc.falseAction = function()
-                        //             {
-                        //                 $t.find("#oldPasswordCheckMsg").text("기존 비밀번호와 일치하지 않습니다.");	//다국어 : 기존 비밀번호와 일치하지 않습니다.
-                        //                 $t.find("#oldPassword").val("");
-                        //                 $t.find("#oldPassword").focus();
-                        //             };
-                        //         }
-                        //
-                        //     });
-                        //
-                        //     $t.find('#newPassword').change(function(){
-                        //         if($t.find("#newPassword").val() == "")
-                        //         {
-                        //             $t.find("#newPasswordDubMsg").text("필수항목을 입력하시길 바랍니다.");	//다국어 : 필수항목을 입력하시길 바랍니다.
-                        //             $t.find("#newPassword").focus();
-                        //         }
-                        //         else if(!pwRegExp.test($(this).val()))
-                        //         {
-                        //             $t.find('#newPasswordDubMsg').text("비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요.");	//다국어 : 비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요.
-                        //             $t.find('#newPassword').focus();
-                        //         }
-                        //     });
-                        //
-                        //     $t.find('#newPasswordConfirm').keyup(function(){
-                        //         let newPwVal = $t.find('#newPassword').val();
-                        //         let newPwConfVal = $t.find('#newPasswordConfirm').val();
-                        //
-                        //         if(newPwConfVal.length >= newPwVal.length){
-                        //             if(newPwVal == newPwConfVal && newPwVal != "")
-                        //             {
-                        //                 $t.find("#passWordConfirmCheck").val("Y");
-                        //                 $t.find("#newPasswordConfirmDubMsg").text("비밀번호가 확인되었습니다.");	//다국어 : 비밀번호가 확인되었습니다.
-                        //                 $t.find('#newPasswordConfirm').blur();
-                        //             }else
-                        //             {
-                        //                 $t.find("#passWordConfirmCheck").val("N");
-                        //                 if(newPwVal == "")
-                        //                 {
-                        //                     $t.find("#newPasswordDubMsg").text("필수항목을 입력하시길 바랍니다.");	//다국어 : 필수항목을 입력하시길 바랍니다.
-                        //                     $t.find('#newPassword').focus();
-                        //                 }else if(newPwConfVal == "")
-                        //                 {
-                        //                     $t.find("#newPasswordConfirmDubMsg").text("필수항목을 입력하시길 바랍니다.");	//다국어 : 필수항목을 입력하시길 바랍니다.
-                        //                     $t.find('#newPasswordConfirm').focus();
-                        //                 }
-                        //                 else
-                        //                 {
-                        //                     $t.find("#newPasswordConfirmDubMsg").text("비밀번호가 일치하지 않습니다.");		//다국어 : 비밀번호가 일치하지 않습니다.
-                        //                     $t.find('#newPasswordConfirm').val("");
-                        //                     $t.find('#newPasswordConfirm').focus();
-                        //                 }
-                        //             }
-                        //         }
-                        //     });
-                        //
-                        //     $t.find('#cancelBtn').click(function(){
-                        //
-                        //         $t.find('.btn_close').click();
-                        //     });
-                        //
-                        //
-                        //     $t.find('#confirmBtn').click(function(){
-                        //
-                        //
-                        //         let newPassword = $t.find('#newPassword').val();
-                        //         let newPasswordLength = parseInt(newPassword.length);
-                        //
-                        //
-                        //         let newPasswordDubMsg = $t.find('#newPasswordDubMsg').text();
-                        //
-                        //
-                        //         if(newPasswordDubMsg != "비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요."){
-                        //             $t.find("#newPassword").focus();
-                        //             $t.find("#newPasswordConfirm").val("");
-                        //             return;
-                        //         }
-                        //
-                        //
-                        //         if($t.find("#newPasswordConfirm").val() == "")
-                        //         {
-                        //             $t.find("#newPasswordConfirmDubMsg").text("필수항목을 입력하시길 바랍니다.");	//다국어 : 필수항목을 입력하시길 바랍니다.
-                        //             $t.find("#newPasswordConfirm").focus();
-                        //         }
-                        //         else if($t.find("#passWordConfirmCheck").val() != "Y")
-                        //         {
-                        //             $t.find("#newPasswordConfirmDubMsg").text("비밀번호가 일치하지 않습니다."); //다국어 : 비밀번호가 일치하지 않습니다.
-                        //             $t.find('#newPasswordConfirm').val("");
-                        //             $t.find('#newPasswordConfirm').focus();
-                        //         }
-                        //         // 새비밀번호 길이체크 (TRUE: 8<=newPassword<=15) [2017.01.06 - 이현승]
-                        //         else if(newPasswordLength < 8 || newPasswordLength > 15){
-                        //             $t.find('#newPasswordDubMsg').text("비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요.");	//다국어 : 비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요.
-                        //             $t.find('#newPassword').focus();
-                        //             $t.find("#newPasswordConfirm").val("");
-                        //         }
-                        //         // 영문/숫자/특수문자 혼합문자열 확인. [2017.01.06 - 이현승]
-                        //         else if(!pwRegExp.test(newPassword)){
-                        //             $t.find('#newPasswordDubMsg').text("비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요.");	//다국어 : 비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요.
-                        //             $t.find('#newPassword').focus();
-                        //             $t.find("#newPasswordConfirm").val("");
-                        //         }
-                        //         else
-                        //         {
-                        //             // 새비밀번호 연속/동일 문자열 체크
-                        //             let concatechk = parseInt(newPasswordConcateCheck(newPassword));
-                        //
-                        //             if(concatechk == -1) {
-                        //                 $t.find('#newPasswordDubMsg').text("동일문자를 3번 이상 사용할 수 없습니다.");		//다국어 : 동일문자를 3번 이상 사용할 수 없습니다.
-                        //                 $t.find('#newPassword').focus();
-                        //                 $t.find("#newPasswordConfirm").val("");
-                        //                 return;
-                        //             }else if(concatechk == -2) {
-                        //                 $t.find('#newPasswordDubMsg').text("연속된 문자열(123 또는 321, abc, cba 등) 3자리이상 올 수 없습니다.");	//다국어 : 연속된 문자열(123 또는 321, abc, cba 등)을 3자리이상 올 수 없습니다.
-                        //                 $t.find('#newPassword').focus();
-                        //                 $t.find("#newPasswordConfirm").val("");
-                        //                 return;
-                        //             }
-                        //
-                        //             let pwc = new passwordControll("save", $t.find("#newPasswordConfirm").val(), "8929460453380");
-                        //             pwc.trueAction = function()
-                        //             {
-                        //                 let la = new layerAlert("비밀번호 변경이 완료 되었습니다. ");		//다국어 : 비밀번호 변경이 완료되었습니다.
-                        //                 la.confirmAction = function()
-                        //                 {
-                        //                     $t.find('.btn_close').click();
-                        //                 };
-                        //             };
-                        //             pwc.falseAction = function()
-                        //             {
-                        //                 layerAlert("비밀번호 변경에 실패하였습니다.");		//다국어 : 비밀번호 변경에 실패하였습니다.
-                        //             };
-                        //         }
-                        //     });
-                        // });
 
-                        let passwordDataValidationCheck = function (fid, msgid) {
-                            let t = this;
-
-                            this.notLockFn = function () {
-                                //default do nothing. but you can do something!
-                            };
-
-                            $t.find('#' + fid).keypress(function (event) {
-
-                                if (capsLock(event)) {
-                                    $t.find('#' + msgid).text("Caps Lock 이 켜져 있습니다.");		//다국어 : <Caps Lock>이 켜져 있습니다.
-                                    return false;
-                                }
-                                $t.find('#' + msgid).text("비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요.");	//다국어 : 비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요.
-
-                            });
-
-                            $t.find('#' + fid).keyup(function (event) {
-
-                                let inputdata = $t.find('#' + fid).val()
-
-                                if (inputdata > 0) {
-                                    $t.find('#' + msgid).text("비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요.");	//다국어 : 비밀번호는 8~15자리 이하로 영문/숫자/특수문자를 혼합해주세요.
-                                }
-
-                                let concatechk = parseInt(newPasswordConcateCheck(inputdata));
-
-                                if (concatechk == -1) {
-                                    $t.find('#' + msgid).text("동일문자를 3번 이상 사용할 수 없습니다.");	//다국어 : 동일문자를 3번 이상 사용할 수 없습니다.
-                                    return false;
-                                } else if (concatechk == -2) {
-                                    $t.find('#' + msgid).text("연속된 문자열(123 또는 321, abc, cba 등) 3자리이상 올 수 없습니다.");	//다국어 : 연속된 문자열(123 또는 321, abc, cba 등)을 3자리이상 올 수 없습니다.
-                                    return false;
-                                } else {
-                                    t.notLockFn();
-                                }
-                            });
-                        };
-
-                        $("#selDay option:eq(0)").prop("selected", true);
                     });
 
                     //회원변경시에만 사용되는 블라인드 영역을 클릭해도 팝업이 안닫히도록 수정
@@ -790,7 +587,11 @@
                         return returnVal;
                     }
 
+
                 </script>
+
+
+
                 <form id="updateProfileForm" action="/mypage/update" method="post"><input type="hidden" name="prk"
                                                                                           id="prk"
                                                                                           value="8929460453380">
@@ -830,8 +631,8 @@
                                         <td>
                                             <input type="password" id="password" name="password" style="width:150px"
                                                    title="비밀번호"/>
-                                            <input type="button" class="btn add_s" id="pwChangeBtn" value="비밀번호체크"
-                                                   onclick="pwCheck1()">
+<!--                                            <input type="button" class="btn add_s" id="pwChangeBtn" value="비밀번호체크"-->
+<!--                                                   onclick="pwCheck1()">-->
 
                                             <span class="guide_comment" id="emailMsg"></span>
                                         </td>
@@ -848,7 +649,7 @@
                                         <th scope="row" class="th_space">생년월일</th>
                                         <td>
                                             <select style="width:120px" id="selYear" title="년도">
-                                                <option th:value="${null}" selected>선택</option>
+                                                <option th:value="${null}" >선택</option>
                                                 <option th:each="year:${#numbers.sequence(2008, 1900, -1)}"
                                                         th:value="${year}"
                                                         th:text="${year}" th:selected="${selYear}==${year}"></option>
@@ -859,11 +660,9 @@
                                                         th:text="${month}" th:selected="${selMonth}==${month}"></option>
                                             </select>
                                             <select style="width:120px" id="selDay" title="일">
-                                                <option th:value="${null}" selected>선택</option>
+                                                <option th:value="${null}" >선택</option>
                                                 <option th:each="day:${#numbers.sequence(1,30,1)}" th:value="${day}"
                                                         th:text="${day}" th:selected="${selDay}==${day}"></option>
-
-
                                             </select>
                                         </td>
                                     </tr>

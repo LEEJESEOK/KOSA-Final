@@ -27,7 +27,7 @@ iframe.lnb{width:100%;height:100%}
 
 /* header_dropmemu */
 .header_dropmemu{position:relative}
-.header_dropmemu .btn{display:block;padding-left:8px;height:40px;line-height:40px;background: url("http://www.thehandsome.com/_ui/desktop/common/images/common/ico_utilmenu.png") right 19px no-repeat;font-size: 10px;text-align: left}
+.header_dropmemu .btn{display:block;padding-left:18px;height:40px;line-height:40px; font-size: 10px;text-align: left}
 .header_dropmemu .btn:hover,
 .header_dropmemu .btn.on{background-position: right -58px;background-color: #e2e2e2}
 .header_dropmemu .list{position:absolute;top:40px;left:0;z-index: 10;display: none}
