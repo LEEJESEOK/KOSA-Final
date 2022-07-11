@@ -5,6 +5,7 @@ import com.hyundai.kosafinal.domain.OrderItemDTO;
 import com.hyundai.kosafinal.domain.OrderedListDTO;
 import com.hyundai.kosafinal.domain.ProductDTO;
 import com.hyundai.kosafinal.domain.CategoryCountDTO;
+import com.hyundai.kosafinal.entity.DateType;
 import com.hyundai.kosafinal.entity.OrderProduct;
 import com.hyundai.kosafinal.entity.SearchOrderCriteria;
 import com.hyundai.kosafinal.mapper.product.ProductMapper;
@@ -13,10 +14,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 @Log4j2
@@ -118,6 +117,68 @@ public class OrderServiceImpl implements OrderService {
         return mapper.searchOrder(criteria);
     }
 
+    // 회원의 단위기간별 구매 금액
+    @Override
+    public Map<String, Integer> getOrderedDatePriceByMemberId(String memberId, DateType dateType) {
+        // 회원의 구매한 상품 리스트
+        List<OrderedListDTO> orderedList = mapper.getOrderedList(memberId);
+
+        System.out.println("count : " + orderedList.size());
+
+        Map<String, Integer> resultMap = new HashMap<>();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateType.toString());
+
+        // 구매한 상품의 날짜당 가격 합계
+        for (OrderedListDTO order : orderedList) {
+            System.out.println("order : " + order);
+
+            Date orderDate = order.getDate();
+            resultMap.put(simpleDateFormat.format(orderDate),
+                    resultMap.getOrDefault(simpleDateFormat.format(orderDate), 0) + order.getTotalPrice());
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        switch (dateType) {
+            // 최근 5년
+            case YEAR:
+                for (int i = 0; i < 5; ++i) {
+                    calendar.add(Calendar.YEAR, -1);
+                    String dateKey = simpleDateFormat.format(calendar.getTime());
+                    resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0));
+                }
+                break;
+            // 최근 12개월
+            case MONTH:
+                for (int i = 0; i < 12; ++i) {
+                    calendar.add(Calendar.MONTH, -1);
+                    String dateKey = simpleDateFormat.format(calendar.getTime());
+                    resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0));
+                }
+                break;
+            // 최근 7일
+            case DAY:
+                for (int i = 0; i <= 7; i++) {
+                    calendar.add(Calendar.DATE, -1);
+                    String dateKey = simpleDateFormat.format(calendar.getTime());
+                    resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0));
+                }
+                break;
+            // 최근 24시간
+            case HOUR:
+                for (int i = 0; i < 24; i++) {
+                    calendar.add(Calendar.HOUR, -1);
+                    String dateKey = simpleDateFormat.format(calendar.getTime());
+                    resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0));
+                }
+                break;
+        }
+
+
+        return resultMap;
+    }
+
+    // 회원의 브랜드별 구매 횟수
     @Override
     public Map<String, Integer> getOrderedBrandCountByMemberId(String memberId) {
         List<OrderedListDTO> orderedList = mapper.getOrderedList(memberId);
@@ -144,6 +205,7 @@ public class OrderServiceImpl implements OrderService {
         return brandCountMap;
     }
 
+    // 회원의 카테고리별 구매 횟수
     @Override
     public Map<String, CategoryCountDTO> getOrderedCategoryCountByMemberId(String memberId) {
         List<OrderedListDTO> orderedList = mapper.getOrderedList(memberId);

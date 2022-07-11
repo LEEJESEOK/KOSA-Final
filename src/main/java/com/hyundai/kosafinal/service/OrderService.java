@@ -4,6 +4,7 @@ import com.hyundai.kosafinal.domain.MemberOrderConfirmDTO;
 import com.hyundai.kosafinal.domain.OrderItemDTO;
 import com.hyundai.kosafinal.domain.OrderedListDTO;
 import com.hyundai.kosafinal.domain.CategoryCountDTO;
+import com.hyundai.kosafinal.entity.DateType;
 import com.hyundai.kosafinal.entity.OrderProduct;
 import com.hyundai.kosafinal.entity.SearchOrderCriteria;
 
@@ -52,6 +53,9 @@ public interface OrderService {
 
     // 백오피스 관련 주문 검색 및 페이징 조회
     public List<OrderedListDTO> searchOrder(SearchOrderCriteria criteria);
+
+    // 회원의 단위기간별 구매 금액
+    Map<String, Integer> getOrderedDatePriceByMemberId(String memberId, DateType dateType);
 
     // 사용자 구매기록의 브랜드별 횟수
     Map<String, Integer> getOrderedBrandCountByMemberId(String memberId);

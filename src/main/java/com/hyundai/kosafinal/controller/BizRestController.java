@@ -36,22 +36,8 @@ public class BizRestController {
     OrderService orderService;
 
     @PostMapping("/product/register")
-    public ResponseEntity<Integer> productRegister(
-            MultipartHttpServletRequest request
-    ) {
-        ProductDTO productDTO = ProductDTO.builder()
-                .id(request.getParameter("id"))
-                .size(request.getParameter("size"))
-                .colorId(request.getParameter("colorId"))
-                .name(request.getParameter("name"))
-                .brand(request.getParameter("brand"))
-                .categoryLarge(request.getParameter("categoryLarge"))
-                .categoryMedium(request.getParameter("categoryMedium"))
-                .categorySmall(request.getParameter("categorySmall"))
-                .detail(request.getParameter("detail"))
-                .price(Integer.parseInt(request.getParameter("price")))
-                .stockAmount(request.getParameter("stockAmount"))
-                .build();
+    public ResponseEntity<Integer> productRegister(MultipartHttpServletRequest request) {
+        ProductDTO productDTO = ProductDTO.builder().id(request.getParameter("id")).size(request.getParameter("size")).colorId(request.getParameter("colorId")).name(request.getParameter("name")).brand(request.getParameter("brand")).categoryLarge(request.getParameter("categoryLarge")).categoryMedium(request.getParameter("categoryMedium")).categorySmall(request.getParameter("categorySmall")).detail(request.getParameter("detail")).price(Integer.parseInt(request.getParameter("price"))).stockAmount(request.getParameter("stockAmount")).build();
 
         List<MultipartFile> files = new ArrayList<>();
         if (!request.getFiles("image1Uri").isEmpty() && request.getFiles("image1Uri").get(0).getSize() != 0) {
@@ -74,26 +60,9 @@ public class BizRestController {
     }
 
     @PostMapping("/product/update/{id}")
-    public ResponseEntity<Integer> productUpdate(
-            @PathVariable("id") String id,
-            MultipartHttpServletRequest request
-    ) {
-        ProductDTO productDTO = ProductDTO.builder()
-                .id(id)
-                .size(request.getParameter("size"))
-                .colorId(request.getParameter("colorId"))
-                .name(request.getParameter("name"))
-                .brand(request.getParameter("brand"))
-                .categoryLarge(request.getParameter("categoryLarge"))
-                .categoryMedium(request.getParameter("categoryMedium"))
-                .categorySmall(request.getParameter("categorySmall"))
-                .detail(request.getParameter("detail"))
-                .price(Integer.parseInt(request.getParameter("price")))
-                .stockAmount(request.getParameter("stockAmount"))
-                .image1Uri(request.getParameter("savedImage1")) //사전에 저장되어있던 값들
-                .image2Uri(request.getParameter("savedImage2"))
-                .image3Uri(request.getParameter("savedImage3"))
-                .build();
+    public ResponseEntity<Integer> productUpdate(@PathVariable("id") String id, MultipartHttpServletRequest request) {
+        ProductDTO productDTO = ProductDTO.builder().id(id).size(request.getParameter("size")).colorId(request.getParameter("colorId")).name(request.getParameter("name")).brand(request.getParameter("brand")).categoryLarge(request.getParameter("categoryLarge")).categoryMedium(request.getParameter("categoryMedium")).categorySmall(request.getParameter("categorySmall")).detail(request.getParameter("detail")).price(Integer.parseInt(request.getParameter("price"))).stockAmount(request.getParameter("stockAmount")).image1Uri(request.getParameter("savedImage1")) //사전에 저장되어있던 값들
+                .image2Uri(request.getParameter("savedImage2")).image3Uri(request.getParameter("savedImage3")).build();
 
         List<MultipartFile> files = new ArrayList<>();
         if (!request.getFiles("image1Uri").isEmpty() && request.getFiles("image1Uri").get(0).getSize() != 0) {
@@ -117,9 +86,7 @@ public class BizRestController {
     }
 
     @PostMapping("product/select")
-    public Map<String, Object> getProductInfoList(
-            @RequestBody SelectProductCriteria selectProductCriteria
-    ) {
+    public Map<String, Object> getProductInfoList(@RequestBody SelectProductCriteria selectProductCriteria) {
         Map<String, Object> map = new HashMap<>();
 
         //전체 상품수 count
@@ -139,8 +106,7 @@ public class BizRestController {
         Map<String, Object> responseMap = new HashMap<>();
 
         String id = (String) requestMap.get("id");
-        if (id == null)
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (id == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         Member2DTO member = memberService.findByEmail(id);
         member.setPassword("");
@@ -153,8 +119,7 @@ public class BizRestController {
     public ResponseEntity<Map<String, Object>> getLoginStatistics(@RequestBody Map<String, Object> requestMap) {
 
         String id = (String) requestMap.get("id");
-        if (id == null)
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (id == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         // 예외 처리
         // DateType 검사
@@ -172,14 +137,35 @@ public class BizRestController {
         return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
 
-    @PostMapping("/vip/statistics/order/brand")
-    public ResponseEntity<Map<String, Object>> getOrderedBrandCount(@RequestBody Map<String, Object> requestMap) {
-        Map<String, Object> responseMap = new HashMap<>();
+    @PostMapping("/vip/statistics/order/price")
+    public ResponseEntity<Map<String, Object>> getOrderedDateCount(@RequestBody Map<String, Object> requestMap) {
 
         String id = (String) requestMap.get("id");
-        if (id == null)
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (id == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
+        // 예외 처리
+        // DateType 검사
+        String dateTypeStr = (String) requestMap.get("dateType");
+        DateType dateType;
+        try {
+            dateType = DateType.valueOf(dateTypeStr.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("data", orderService.getOrderedDatePriceByMemberId(id, dateType));
+
+        return new ResponseEntity<>(responseMap, HttpStatus.OK);
+    }
+
+    @PostMapping("/vip/statistics/order/brand")
+    public ResponseEntity<Map<String, Object>> getOrderedBrandCount(@RequestBody Map<String, Object> requestMap) {
+
+        String id = (String) requestMap.get("id");
+        if (id == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("data", orderService.getOrderedBrandCountByMemberId(id));
 
         return new ResponseEntity<>(responseMap, HttpStatus.OK);
@@ -187,12 +173,11 @@ public class BizRestController {
 
     @PostMapping("/vip/statistics/order/category")
     public ResponseEntity<Map<String, Object>> getOrderedCategoryCount(@RequestBody Map<String, Object> requestMap) {
-        Map<String, Object> responseMap = new HashMap<>();
 
         String id = (String) requestMap.get("id");
-        if (id == null)
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (id == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
+        Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("data", orderService.getOrderedCategoryCountByMemberId(id));
 
         return new ResponseEntity<>(responseMap, HttpStatus.OK);
