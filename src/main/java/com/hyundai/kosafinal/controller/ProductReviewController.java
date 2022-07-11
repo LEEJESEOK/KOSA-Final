@@ -184,23 +184,16 @@ public class ProductReviewController {
 
         List<MultipartFile> fileList = new ArrayList<MultipartFile>();
 
-        // input file 에 아무것도 없을 경우 (파일을 업로드 하지 않았을 때 처리)
+        // input file이 있을때(파일을 업로드 했을때 처리)
         if (!request.getFiles("imgFIle").isEmpty() && request.getFiles("imgFIle").get(0).getSize() != 0) {
             fileList = request.getFiles("imgFIle");
             log.info("이미지 파일 정보 : " + fileList.get(0).getOriginalFilename());
-            productReviewService.saveProductReview(productReviewDTO, fileList.get(0));
             log.info("감성 분석을 진행합니다(파일없을 때) ===================");
 
-            List<ProductReviewDTO> re = productReviewService.getProductReviewAllList(productReviewDTO.getProductId());
-            System.out.println("re" + re);
+
             JSONObject json = new JSONObject();
 
-            for (ProductReviewDTO data : re) {
-                json.put("content", data.getContent());
-                System.out.println("json" + json);
-
-            }
-            System.out.println(json);
+            json.put("content", productReviewDTO.getContent());
 
             String inputLine = null;
             StringBuffer stringBuffer = new StringBuffer();
@@ -232,16 +225,21 @@ public class ProductReviewController {
                 stringBuffer.append(inputLine);
                 System.out.println("while문1" + stringBuffer); //stringBuffer에 데이터 담겨있음
             }
-
-
-            if (Integer.parseInt(stringBuffer.toString()) > 0.5) {
-                productReviewDTO.setSentiment_percent(Integer.parseInt(stringBuffer.toString()) * 100);
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(stringBuffer.toString());
+            System.out.println(stringBuffer.toString().getClass().getName());
+            Map<String, Object> resultMap = objectMapper.treeToValue(jsonNode, Map.class);
+            double sentiment_percent = (double) resultMap.get("sentiment_percent");
+            if (sentiment_percent > 0.5) {
+                productReviewDTO.setSentiment_percent(sentiment_percent * 100);
                 productReviewDTO.setSentiment_type("긍정");
             } else {
-                productReviewDTO.setSentiment_percent((1 - Integer.parseInt(stringBuffer.toString())) * 100);
+                productReviewDTO.setSentiment_percent((1 - sentiment_percent) * 100);
                 productReviewDTO.setSentiment_type("부정");
             }
 
+
+            productReviewService.saveProductReview(productReviewDTO, fileList.get(0));
 
             System.out.println(stringBuffer);
             System.out.println(stringBuffer.getClass().getName());
@@ -250,19 +248,13 @@ public class ProductReviewController {
             conn.disconnect();
             return productReviewDTO;
         }
+//else문
+        log.info("감성 분석을 진행합니다(파일 없을 때) ===================");
+        System.out.println("251");
 
-        productReviewService.saveProductReview(productReviewDTO, null);
-        log.info("감성 분석을 진행합니다(파일 있을 때) ===================");
-
-        List<ProductReviewDTO> re = productReviewService.getProductReviewAllList(productReviewDTO.getProductId());
-        System.out.println("re" + re);
         JSONObject json = new JSONObject();
 
-        for (ProductReviewDTO data : re) {
-            json.put("content", data.getContent());
-            System.out.println("json" + json);
-
-        }
+        json.put("content", productReviewDTO.getContent());
         System.out.println(json);
 
         String inputLine = null;
@@ -284,6 +276,7 @@ public class ProductReviewController {
         BufferedWriter bWriter = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
 
         bWriter.write(json.toString());
+        System.out.println("데이터 전송값 파이썬으로 전송 :" + bWriter);
         bWriter.flush();
         System.out.println("Spring -> Flask 데이터 전송 성공!");
         System.out.println("데이터 값" + json.toString());
@@ -293,12 +286,14 @@ public class ProductReviewController {
         System.out.println("114줄입니다.");
         while ((inputLine = bReader.readLine()) != null) {
             stringBuffer.append(inputLine);
-//      System.out.println("while문2   " + stringBuffer); //stringBuffer에 데이터 담겨있음
-//      System.out.println(stringBuffer.getClass().getName());
-//      System.out.println(stringBuffer);
+
         }
+        System.out.println("전송된 결과를 읽어옴" +stringBuffer.toString());
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(stringBuffer.toString());
+
+
+        System.out.println("좆됫다"+stringBuffer.toString());
         Map<String, Object> resultMap = objectMapper.treeToValue(jsonNode, Map.class);
 
         double sentiment_percent = (double) resultMap.get("sentiment_percent");
