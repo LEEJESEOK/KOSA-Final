@@ -2,6 +2,7 @@ package com.hyundai.kosafinal.service;
 
 import com.hyundai.kosafinal.domain.MemberDTO;
 import com.hyundai.kosafinal.domain.ProductReviewDTO;
+import com.hyundai.kosafinal.domain.SelectProductReviewCriteria;
 import com.hyundai.kosafinal.mapper.product.ProductReviewMapper;
 import com.hyundai.kosafinal.util.s3.S3Client;
 import com.hyundai.kosafinal.util.s3.config.S3.Bucket;
@@ -31,8 +32,13 @@ public class ProductReviewServiceImpl implements ProductReviewService {
   }
 
   @Override
-  public List<ProductReviewDTO> getProductReviewByProductId(String id) {
-    return productReviewMapper.getProductReviewByProductId(id);
+  public List<ProductReviewDTO> getProductReviewByProductId(SelectProductReviewCriteria selectProductReviewCriteria) {
+    return productReviewMapper.getProductReviewByProductId(selectProductReviewCriteria);
+  }
+
+  @Override
+  public List<ProductReviewDTO> getProductReviewAllList(String productId) {
+    return productReviewMapper.getProductReviewAll(productId);
   }
 
   @Override
@@ -41,6 +47,12 @@ public class ProductReviewServiceImpl implements ProductReviewService {
       this.uploadProfileImage(imgFile, productReviewDTO);
     }
     productReviewMapper.insertProductReview(productReviewDTO);
+  }
+
+  //상품 리뷰 갯수
+  @Override
+  public int getProductReviewCountById(SelectProductReviewCriteria selectProductReviewCriteria) {
+    return productReviewMapper.getProductReviewCount(selectProductReviewCriteria);
   }
 
   // 업로드 이미지 -> 키 값을 가져오기

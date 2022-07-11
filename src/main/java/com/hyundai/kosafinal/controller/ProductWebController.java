@@ -68,7 +68,7 @@ public class ProductWebController {
     model.addAttribute("colorImageList", colorImageList);
 
     //평균 상품평 계산
-    List<ProductReviewDTO> reviewDTOList = productReviewService.getProductReviewByProductId(productId);
+    List<ProductReviewDTO> reviewDTOList = productReviewService.getProductReviewAllList(productId);
     long total = 0;
     long imgCnt = 0;
     long textCnt = 0;
