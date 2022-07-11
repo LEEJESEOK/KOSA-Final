@@ -1,7 +1,136 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/biz/layout/popup}">
-<th:block layout:fragment="content">
-
+<th:block layout:fragment="script">
+    <script>
+        console.log($(opener.document).find("#popupData :input[name=id]").val());
+    </script>
 </th:block>
+<th:block layout:fragment="content">
+    <section>
+        <div class="content">
+            <div class="col-12">
+                <div class="card p-3">
+                    <div class="card-header text-center">제목을 입력해주세요</div>
+                    <div class="card-body p-3">
+                        <div class="row justify-content-end">
+                            <div class="col-1">
+                                <span>THE STAR</span>
+                            </div>
+                            <div class="col-1">
+                                <span>STAR</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 text-center">
+                                <span>이미지or사진</span>
+                            </div>
+                            <div class="col-9">
+                                <div class="row mb-3">
+                                    <div class="col-2 col">
+                                        이름
+                                    </div>
+                                    <div class="col-4">
+                                        이제석
+                                    </div>
+                                    <div class="col-2 col">
+                                        아이디
+                                    </div>
+                                    <div class="col-4">
+                                        sampleID
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-2 col">
+                                        성별
+                                    </div>
+                                    <div class="col-4">
+                                        남자
+                                    </div>
+                                    <div class="col-2 col">
+                                        생년월일(나이)
+                                    </div>
+                                    <div class="col-4">
+                                        0000-00-00(00)
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-2 col">
+                                        전화번호
+                                    </div>
+                                    <div class="col-4">
+                                        000-0000-00000
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-2 col">
+                                        주소
+                                    </div>
+                                    <div class="col-10">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                00000
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                서울특별시 오현로 4길 12
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                000
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-2 col">
+                                        가입일
+                                    </div>
+                                    <div class="col-4">
+                                        0000-00-00
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card p-3">
+                    <div class="card-header">
+                        통계
+                    </div>
+                    <div class="card-body p-3">
+                        <h5>탈퇴예측</h5>
+                        <div class="col-12 mb-3">
+                            통계 그래프
+                        </div>
+                        <h5>구매율</h5>
+                        <div class="col-12 mb-3">
+                            통계 그래프
+                        </div>
+                        <h5>구매선호도</h5>
+                        <div class="col-6">
+                            <h6>카테고리</h6>
+                            <div class="col-12 mb-3">
+                                통계 그래프
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <h6>브랜드</h6>
+                            <div class="col-12 mb-3">
+                                통계 그래프
+                            </div>
+                        </div>
+                        <h5>로그인</h5>
+                        <div class="col-12 mb-3">
+                            통계 그래프
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</th:block>
+
 </html>

@@ -31,4 +31,5 @@ public class ProductReviewDTO {
     private String avgSize;
     private double sentiment_percent;
     private String sentiment_type;
+    private String grade;
 }

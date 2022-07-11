@@ -19,8 +19,10 @@
     <result property="image3Uri" column="IMAGE3_URI"/>
     <result property="colorChipUri" column="COLOR_CHIP_URI"/>
     <result property="stockAmount" column="STOCK_AMOUNT"/>
+    <result property="createdAt" column="CREATED_AT"/>
+    <result property="updatedAt" column="UPDATED_AT"/>
+    <result property="status" column="STATUS"/>
   </resultMap>
-
 
   <select id="getColorChipByPid" resultType="String">
     SELECT p.COLOR_CHIP_URI
@@ -74,6 +76,7 @@
                                                              #{sortType}) p)
     )
   </select>
+
   <!--필터에 해당하는 제품의 사이즈 목록-->
   <select id="selectFilteredSizeListWithPaging" resultType="SizeDTO">
     SELECt ID     productId,
@@ -89,8 +92,59 @@
     )
   </select>
 
-  <select id="selectProductListByQuery">
+  <select id="searchProductCount" resultType="int">
+    <![CDATA[
+            SELECT count(*)
+            FROM PRODUCT
+        ]]>
+    <where>
+      <if test="keyType == 'id'.toString() and keyContent != null"> AND ID = #{keyContent}</if>
+      <if test="keyType != 'id'.toString() and keyContent != null"> AND NAME like '%'||#{keyContent}||'%'</if>
+      <if test="categoryLarge != null"> AND CATEGORY_LARGE = #{categoryLarge}</if>
+      <if test="categoryMedium != null"> AND CATEGORY_MEDIUM = #{categoryMedium}</if>
+      <if test="categorySmall != null"> AND CATEGORY_SMALL = #{categorySmall}</if>
+      <if test="brand != null"> AND BRAND like '%'||#{brand}||'%'</if>
+    </where>
+  </select>
 
+  <!-- 삼품 검색 로직 -->
+  <select id="selectProductListBySearch" resultType="ProductDTO">
+    SELECT *
+    FROM (
+      SELECT
+          ROWNUM as rn,
+          id,
+          "SIZE",
+          color_id,
+          name,
+          brand,
+          category_large,
+          category_medium,
+          category_small,
+          detail,
+          price,
+          image1_uri,
+          image2_uri,
+          image3_uri,
+          color_chip_uri,
+          stock_amount,
+          created_at,
+          updated_at,
+          status
+      FROM (select * from PRODUCT ORDER BY CREATED_AT DESC)
+      <where>
+        <if test="keyType == 'id'.toString() and keyContent != null"> AND ID = #{keyContent}</if>
+        <if test="keyType != 'id'.toString() and keyContent != null"> AND NAME like '%'||#{keyContent}||'%'</if>
+        <if test="categoryLarge != null"> AND CATEGORY_LARGE = #{categoryLarge}</if>
+        <if test="categoryMedium != null"> AND CATEGORY_MEDIUM = #{categoryMedium}</if>
+        <if test="categorySmall != null"> AND CATEGORY_SMALL = #{categorySmall}</if>
+        <if test="brand != null"> AND BRAND like '%'||#{brand}||'%'</if>
+        <if test="status != null"> AND STATUS = #{status}</if>
+      </where>
+    <![CDATA[
+          )
+          WHERE rn BETWEEN ((#{pageNum} - 1) * #{amount} + 1) AND (#{pageNum} * #{amount})
+    ]]>
   </select>
 
   <select id="selectProductDetailById" resultType="com.hyundai.kosafinal.domain.ProductDTO">
@@ -150,6 +204,15 @@
     where id = #{productId}
   </select>
 
+  <update id="updateProduct" parameterType="ProductDTO">
+    UPDATE PRODUCT SET
+      BRAND = #{brand}, DETAIL = #{detail},
+      IMAGE1_URI = #{image1Uri}, IMAGE2_URI = #{image2Uri}, IMAGE3_URI = #{image3Uri},
+      STOCK_AMOUNT = #{stockAmount}, PRICE = #{price}, UPDATED_AT = SYSDATE
+    WHERE ID = #{id} AND "SIZE" = #{size} AND COLOR_ID = #{colorId} AND CATEGORY_LARGE = #{categoryLarge}
+        AND CATEGORY_MEDIUM = #{categoryMedium} AND CATEGORY_SMALL = #{categorySmall}
+  </update>
+
   <insert id="insertProduct" parameterType="ProductDTO" statementType="CALLABLE">
       <![CDATA[
     {call SP_PRODUCT_INSERT(
@@ -167,8 +230,23 @@
       #{image2Uri},
       #{image3Uri},
       #{colorChipUri},
-      #{stockAmount})
+      #{stockAmount},
+      SYSDATE,
+      SYSDATE)
       }
     ]]>
     </insert>
+
+    <select id="selectSaleProduct" resultType="SaleDTO">
+        SELECT * FROM sale
+        WHERE sysdate BETWEEN start_date AND end_date
+    </select>
+
+    <select id="selectLimitedProduct" resultType="LimitedProductDTO">
+        <![CDATA[
+            SELECT * FROM limited_product
+            WHERE rownum < 10
+        ]]>
+    </select>
+
 </mapper>

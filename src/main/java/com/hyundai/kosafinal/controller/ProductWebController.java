@@ -20,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ProductWebController {
@@ -41,7 +42,8 @@ public class ProductWebController {
   }
 
   @RequestMapping("/product/detail/{productId}")
-  public String getSignupPage(Model model, @PathVariable("productId") String productId, Authentication authentication)
+  public String getSignupPage(Model model, @PathVariable("productId") String productId, Authentication authentication,
+                              @RequestParam(value = "status", required = false, defaultValue = "0") String status)
   {
     //컬러칩 ID + URI
     List<ProductDTO> colorList = productDetailService.getColorsChip(productId);
@@ -53,7 +55,13 @@ public class ProductWebController {
 
     //기본 디폴트 정보 삽입
     List<ProductDTO> productDTOList = productDetailService.getProductDetailList(productId);
-    model.addAttribute("productDetail", productDTOList.get(0));
+    ProductDTO dto = productDTOList.get(0);
+    if(status.equals("1")) {
+      dto.setPrice((int)(dto.getPrice() * 0.8));
+    }
+    model.addAttribute("productDetail", dto);
+
+
 
     //컬러마다 3개의 이미지씩 등록
     List<ProductDTO> colorImageList = new ArrayList<>();
@@ -67,12 +75,25 @@ public class ProductWebController {
     }
     model.addAttribute("colorImageList", colorImageList);
 
-    //평균 상품평 계산
-    List<ProductReviewDTO> reviewDTOList = productReviewService.getProductReviewByProductId(productId);
+    //평균 상품평 및 (긍정, 부정 평균) 계산
+    List<ProductReviewDTO> reviewDTOList = productReviewService.getProductReviewAllList(productId);
     long total = 0;
     long imgCnt = 0;
     long textCnt = 0;
+    long positiveCnt = 0;
+    long negativeCnt = 0;
+    double negativeTotal = 0;
+    double positiveTotal = 0;
     for(ProductReviewDTO p : reviewDTOList){
+      if(p.getSentiment_type().equals("부정")) {
+        negativeCnt++;
+        negativeTotal += p.getSentiment_percent();
+      }
+      else{
+        positiveCnt++;
+        positiveTotal += p.getSentiment_percent();
+      }
+
       total += p.getRate();
       if(p.getImgURI() == null || p.getImgURI().equals("")){
         textCnt++;
@@ -85,6 +106,8 @@ public class ProductWebController {
     model.addAttribute("reviewCnt", reviewDTOList.size());
     model.addAttribute("imgCnt", imgCnt);
     model.addAttribute("textCnt", textCnt);
+    model.addAttribute("positivePercent", Math.round(positiveTotal/positiveCnt));
+    model.addAttribute("negativePercent", Math.round(negativeTotal/negativeCnt));
 
     if(authentication != null){
       Member2DTO member = mService.findByEmail(authentication.getName());

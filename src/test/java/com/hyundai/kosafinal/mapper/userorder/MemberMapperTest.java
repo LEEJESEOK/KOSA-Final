@@ -1,24 +1,29 @@
 package com.hyundai.kosafinal.mapper.userorder;
 
 
+import com.hyundai.kosafinal.domain.LoginLogDTO;
 import com.hyundai.kosafinal.domain.Member2DTO;
 import com.hyundai.kosafinal.domain.MemberDTO;
 import com.hyundai.kosafinal.domain.RoleSetDTO;
+import com.hyundai.kosafinal.entity.DateType;
 import com.hyundai.kosafinal.entity.MemberRole;
-import com.hyundai.kosafinal.entity.SearchCriteria;
 import com.hyundai.kosafinal.entity.SearchMemberCriteria;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @SpringBootTest
 class MemberMapperTest {
     @Autowired
     private MemberMapper mapper;
+
     @Autowired
     private PasswordEncoder passwordencoder;
 
@@ -65,6 +70,7 @@ class MemberMapperTest {
         roleset.setRole_set(MemberRole.USER.toString());
         mapper.insertRoleSet(roleset);
     }
+
     void searchMember() {
         SearchMemberCriteria sc = new SearchMemberCriteria(1, 10);
 
@@ -100,5 +106,30 @@ class MemberMapperTest {
         int login_type = 0;
         Member2DTO result = mapper.findByEmail(email);
         System.out.println(result);
+    }
+
+    @Test
+    void selectLoginLogByMemberId() {
+        // 선택한 회원
+        // 기준별 횟수
+        // DateType : 연, 월, 일, 시, 분
+
+        String id = "HI047229";
+        List<LoginLogDTO> loginLogList = mapper.selectLoginLogByMemberId(id);
+        DateType dateType = DateType.MONTH;
+
+        Map<String, Integer> loginCountMap = new HashMap<>();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateType.toString());
+
+        for (LoginLogDTO loginLog : loginLogList) {
+            Date loginDate = loginLog.getLogin_date();
+            loginCountMap.put(simpleDateFormat.format(loginDate),
+                    loginCountMap.getOrDefault(simpleDateFormat.format(loginDate), 0) + 1);
+        }
+
+        for (String key : loginCountMap.keySet()) {
+            System.out.println(key + " : " + loginCountMap.get(key));
+        }
     }
 }

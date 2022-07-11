@@ -1,9 +1,14 @@
 package com.hyundai.kosafinal.controller;
 
+import com.hyundai.kosafinal.domain.AuthMemberDTO;
 import com.hyundai.kosafinal.domain.MemberDTO;
 import com.hyundai.kosafinal.domain.PageDTO;
+import com.hyundai.kosafinal.domain.ReplyDTO;
 import com.hyundai.kosafinal.entity.SearchCriteria;
 import com.hyundai.kosafinal.entity.SearchMemberCriteria;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import lombok.extern.log4j.Log4j2;
@@ -149,4 +154,23 @@ public class MemberRestController {
         map.put("page", pageDTO);
         return map;
     }
+
+    // 로그인한 유저가 VIP 인지 확인
+    @RequestMapping(value="/checkVIP", method = RequestMethod.POST)
+    public ResponseEntity<Boolean> isVIP(@AuthenticationPrincipal AuthMemberDTO authentication) {
+        ResponseEntity<Boolean> entry = null;
+        boolean result = false;
+        String userEmail = authentication.getEmail();
+        int grade_id = Integer.parseInt(service.findGrade(userEmail));
+
+        if( grade_id == 4 || grade_id == 5){
+            result = true;
+        } else {
+            result = false;
+        }
+        entry = new ResponseEntity<Boolean>(result, HttpStatus.OK);
+
+        return entry;
+    }
+
 }

@@ -2,13 +2,19 @@ package com.hyundai.kosafinal.controller;
 
 import com.hyundai.kosafinal.domain.CategoryDTO;
 import com.hyundai.kosafinal.service.ProductService;
+
 import java.util.HashMap;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/biz")
@@ -64,14 +70,14 @@ public class BizController {
         List<String> mediumCtry = new ArrayList<>();
         List<String> smallCtry = new ArrayList<>();
 
-        ctyList.stream().forEach( c -> {
-            if(!largeCtry.contains(c.getLarge())){
+        ctyList.stream().forEach(c -> {
+            if (!largeCtry.contains(c.getLarge())) {
                 largeCtry.add(c.getLarge());
             }
-            if(!mediumCtry.contains(c.getMedium())){
+            if (!mediumCtry.contains(c.getMedium())) {
                 mediumCtry.add(c.getMedium());
             }
-            if(!smallCtry.contains(c.getSmall())){
+            if (!smallCtry.contains(c.getSmall())) {
                 smallCtry.add(c.getSmall());
             }
         });
@@ -209,13 +215,16 @@ public class BizController {
         return "biz/vip/vipManage";
     }
 
-    @RequestMapping("/vip/vipDetail")
-    public String vipDetail(Model model) {
+    @RequestMapping(value = "/vip/vipDetail")
+    public String vipDetail(Model model, @RequestParam Map<String, Object> params) {
         List<String> breadCrumbs = toBreadCrumbs(new String[]{
                 "VIP", "VIP 정보"
         });
         model.addAttribute("breadCrumbs", breadCrumbs);
         model.addAttribute("pageTitle", breadCrumbs.get(breadCrumbs.size() - 1));
+
+
+        model.addAttribute("id", (String) params.get("id"));
 
         return "biz/vip/vipDetail";
     }
