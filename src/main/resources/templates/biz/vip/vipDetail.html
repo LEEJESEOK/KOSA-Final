@@ -13,7 +13,8 @@
         // if (id == '' || id == undefined)
         //     location.href = window.location.origin;
 
-        let dateType = "day";
+        let dateType = "hour";
+
 
         let loginCount = {};
         let brandCount = {};
@@ -23,26 +24,43 @@
 
             // 기본 정보
             $.ajax({
-                type: ""
-            })
+                type: "POST",
+                url: "/api/biz/vip/detail",
+                dataType: "json",
+                data: JSON.stringify({
+                    id: "[[${id}]]"
+                }),
+                contentType: "application/json",
+                success: function (response) {
+                    setMemberInfo(response["data"]);
 
+                },
+                error: function (request, status, error) {
+                    ajaxError(request, status, error);
+                }
+            })
 
             // 로그인 기록
             $.ajax({
-                type: "GET",
-                url: `/api/biz/vip/[[${id}]]/statistics/login/${dateType}`,
+                type: "POST",
+                url: "/api/biz/vip/statistics/login",
+                dataType: "json",
+                data: JSON.stringify({
+                    id: "[[${id}]]",
+                    dateType: dateType
+                }),
                 contentType: "application/json",
-                success: function (data) {
-                    Object.keys(data["data"]).sort().forEach(function (key) {
-                        loginCount[key] = data["data"][key];
+                success: function (response) {
+                    Object.keys(response["data"]).sort().forEach(function (key) {
+                        loginCount[key] = response["data"][key];
                     });
 
-                    new Chart(document.querySelector('#loginLogChart'), {
+                    const loginChartConfig = {
                         type: 'line',
                         data: {
                             labels: Object.keys(loginCount),
                             datasets: [{
-                                label: name,
+                                label: "로그인",
                                 data: Object.values(loginCount),
                                 fill: false,
                                 borderColor: 'rgb(75, 192, 192)',
@@ -52,57 +70,146 @@
                         options: {
                             scales: {
                                 y: {
-                                    beginAtZero: true
+                                    beginAtZero: true,
+                                    max: Object.values(loginCount).reduce((previous, current) => {
+                                        return previous > current ? previous : current;
+                                    }) + 1
                                 }
                             }
                         }
-                    });
+                    };
+
+                    new Chart($("#loginLogChart"), loginChartConfig);
                 },
                 error: function (request, status, error) {
                     ajaxError(request, status, error);
-                },
-                complete: function (jqXHR, textStatus) {
                 }
             });
 
             // 브랜드별 구매기록
             $.ajax({
-                type: "GET",
-                url: `/api/biz/vip/[[${id}]]/statistics/order/brand`,
+                type: "POST",
+                url: "/api/biz/vip/statistics/order/brand",
+                dataType: "json",
+                data: JSON.stringify({
+                    id: "[[${id}]]"
+                }),
                 contentType: "application/json",
-                success: function (data) {
-                    brandCount = Object.entries(data["data"])
-                        .sort(([, a], [, b]) => b - a)
-                        .reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
+                success: function (response) {
+                    brandCount = response["data"];
+                    // brandCount = Object.entries(data["data"])
+                    //     .sort(([, a], [, b]) => b - a)
+                    //     .reduce((r, [k, v]) => ({...r, [k]: v}), {});
 
+                    const DATA_COUNT = Object.keys(brandCount).length;
+                    // const NUMBER_CFG = {count:DATA_COUNT, min:0, max:Object.values(brandCount)[0]}
+
+                    // 데이터 개수만큼 랜덤 색상 지정
+                    // 배경색은 a : 0.2
+                    // 테두리색은 a 값 제거
+                    let backgroundColor = Array.from({length: DATA_COUNT}, () =>
+                        (`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.2)`));
+                    let borderColor = [];
+                    Object.values(backgroundColor).forEach((rgba) => {
+                        let rgb = []
+                        rgba.split('(')[1].split(')')[0].split(',')
+                            .forEach((color) => (rgb.push(color.trim())));
+                        borderColor.push(`rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`);
+                    });
+
+                    const orderedBrandChartConfig = {
+                        type: 'bar',
+                        data: {
+                            labels: Object.keys(brandCount),
+                            datasets: [{
+                                label: '브랜드별 구매',
+                                data: Object.values(brandCount),
+                                backgroundColor: backgroundColor,
+                                borderColor: borderColor,
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: Object.values(brandCount).reduce((previous, current) => {
+                                        return previous > current ? previous : current;
+                                    }) + 1
+                                }
+                            }
+                        }
+                    }
+
+                    new Chart($("#orderedBrandChart"), orderedBrandChartConfig)
                 },
                 error: function (request, status, error) {
                     ajaxError(request, status, error);
-                },
-                complete: function (jqXHR, textStatus) {
                 }
             });
 
             // 카테고리별 구매기록
             $.ajax({
-                type: "GET",
-                url: `/api/biz/vip/[[${id}]]/statistics/order/category`,
+                type: "POST",
+                url: "/api/biz/vip/statistics/order/category",
+                dataType: "json",
+                data: JSON.stringify({
+                    id: "[[${id}]]"
+                }),
                 contentType: "application/json",
-                success: function (data) {
-                    categoryCount = Object.entries(data["data"])
-                        .sort(([, a], [, b]) => b - a)
-                        .reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
+                success: function (response) {
+                    categoryCount = response["data"];
+
+                    let smallCategoryCount = getSmallCategoryCount(categoryCount);
+
+                    const DATA_COUNT = Object.keys(smallCategoryCount).length;
+                    // const NUMBER_CFG = {count:DATA_COUNT, min:0, max:Object.values(smallCategoryCount)[0]}
+
+                    // 데이터 개수만큼 랜덤 색상 지정
+                    // 배경색은 a : 0.2
+                    // 테두리색은 a 값 제거
+                    let backgroundColor = Array.from({length: DATA_COUNT}, () =>
+                        (`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.2)`));
+                    let borderColor = [];
+                    Object.values(backgroundColor).forEach((rgba) => {
+                        let rgb = []
+                        rgba.split('(')[1].split(')')[0].split(',')
+                            .forEach((color) => (rgb.push(color.trim())));
+                        borderColor.push(`rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`);
+                    });
+
+
+                    const orderedCategoryChartConfig = {
+                        type: 'bar',
+                        data: {
+                            labels: Object.keys(smallCategoryCount),
+                            datasets: [{
+                                label: '카테고리별 구매',
+                                data: Object.values(smallCategoryCount),
+                                backgroundColor: backgroundColor,
+                                borderColor: borderColor,
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: Object.values(smallCategoryCount).reduce((previous, current) => {
+                                        return previous > current ? previous : current;
+                                    }) + 1
+                                }
+                            }
+                        }
+                    }
+
+                    new Chart($("#orderedCategoryChart"), orderedCategoryChartConfig)
                 },
                 error: function (request, status, error) {
                     ajaxError(request, status, error);
-                },
-                complete: function (jqXHR, textStatus) {
                 }
             });
         });
-
-        function receiveGetData(param) {
-        }
 
         function ajaxError(request, status, error) {
             let message = "code : " + request + "\n";
@@ -110,6 +217,44 @@
             message += "error : " + error;
 
             console.log(message);
+        }
+
+        function setMemberInfo(data) {
+            $("#id").text(data["email"]);
+            $("#name").text(data["name"]);
+            if (data["gender"] == 0)
+                $("#gender").text("-");
+            else if (data["gender"] == 1)
+                $("#gender").text("남자");
+            else if (data["gender"] == 2)
+                $("#gender").text("여자");
+            $("#birth").text((new Date(data["birth"])).toLocaleDateString());
+            $("#tel").text(data["tel"]);
+
+            $("#zipcode").text(data["zipcode"]);
+            $("#address1").text(data["address1"]);
+            $("#address2").text(data["address2"]);
+
+            $("#signUpDate").text((new Date(data["signUpDate"])).toLocaleDateString())
+        }
+
+        function getSmallCategoryCount(largeCategoryCount) {
+            let smallCategoryCount = {};
+            Object.entries(largeCategoryCount).forEach((large, largeIdx) => {
+                let largeName = large[0];
+                let largeCount = large[1]['count'];
+                Object.entries(large[1]['children']).forEach((medium, mediumIdx) => {
+                    let mediumName = medium[0];
+                    let mediumCount = medium[1]['count'];
+                    Object.entries(medium[1]['children']).forEach((small, smallIdx) => {
+                        let smallName = small[0];
+                        let smallCount = small[1]['count'];
+
+                        smallCategoryCount[`${largeName} - ${mediumName} - ${smallName}`] = smallCount;
+                    });
+                })
+            });
+            return smallCategoryCount;
         }
     </script>
 </th:block>
@@ -129,10 +274,10 @@
                             <th:block th:if="false">
                                 <!-- TODO 본인 등급 강조 -->
                             </th:block>
-                            <div class="col-1">
+                            <div class="col-1" id="the-star">
                                 <span>THE STAR</span>
                             </div>
-                            <div class="col-1">
+                            <div class="col-1" id="star">
                                 <span>STAR</span>
                             </div>
                         </div>
@@ -145,36 +290,31 @@
                                     <div class="col-2 col">
                                         이름
                                     </div>
-                                    <div class="col-4">
-                                        ㅇㅇㅇ
+                                    <div class="col-4" id="name">
                                     </div>
                                     <div class="col-2 col">
                                         아이디
                                     </div>
-                                    <div class="col-4">
-                                        sampleID
+                                    <div class="col-4" id="id">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-2 col">
                                         성별
                                     </div>
-                                    <div class="col-4">
-                                        남자
+                                    <div class="col-4" id="gender">
                                     </div>
                                     <div class="col-2 col">
-                                        생년월일(나이)
+                                        생년월일
                                     </div>
-                                    <div class="col-4">
-                                        0000-00-00(00)
+                                    <div class="col-4" id="birth">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-2 col">
                                         전화번호
                                     </div>
-                                    <div class="col-4">
-                                        000-0000-00000
+                                    <div class="col-4" id="tel">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -183,18 +323,15 @@
                                     </div>
                                     <div class="col-10">
                                         <div class="row">
-                                            <div class="col-12">
-                                                00000
+                                            <div class="col-12" id="zipcode">
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-12">
-                                                서울특별시 ㅇㅇ구 ㅇㅇ로 000
+                                            <div class="col-12" id="address1">
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-12">
-                                                000
+                                            <div class="col-12" id="address2">
                                             </div>
                                         </div>
                                     </div>
@@ -203,8 +340,7 @@
                                     <div class="col-2 col">
                                         가입일
                                     </div>
-                                    <div class="col-4">
-                                        0000-00-00
+                                    <div class="col-4" id="signUpDate">
                                     </div>
                                 </div>
                             </div>
@@ -228,13 +364,13 @@
                         <div class="col-6">
                             <h6>카테고리</h6>
                             <div class="col-12 mb-3">
-                                통계 그래프
+                                <canvas id="orderedCategoryChart" style="max-height: 400px;"></canvas>
                             </div>
                         </div>
                         <div class="col-6">
                             <h6>브랜드</h6>
                             <div class="col-12 mb-3">
-                                통계 그래프
+                                <canvas id="orderedBrandChart" style="max-height: 400px;"></canvas>
                             </div>
                         </div>
                         <h5>로그인</h5>
