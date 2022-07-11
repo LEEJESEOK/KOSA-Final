@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko" layout:decorate="~{/layout/default}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" href="/css/reviewStyle.css">
+</head>
 <th:block layout:fragment="bodyWrap">
     <div id="bodyWrap" class="item_detail">
         <div class="adaptive_wrap">
@@ -718,6 +721,10 @@
                 <span class="cmt_per" id="totalStarScore" style="width: 0%;">별점</span>
             </span>
                 </div>
+                <span class="w-btn w-btn-gra1 review-btn">  긍정  </span>
+                <span th:text="|${positivePercent} %|"></span>
+                <span class="w-btn w-btn-gra2 review-btn">  부정  </span>
+                <span th:text="|${negativePercent} %|"></span>
                 <a class="btn_evaluation1905" id="customerReviewWrite">상품평 작성하기</a>
             </div>
             <!-- pop_cnt-->
@@ -1263,7 +1270,10 @@
                                     + "</span>";
                                 reviewListTag += "      </span>";
                                 reviewListTag += "</li>";
-
+                                if(review.sentiment_type === "긍정"){
+                                    reviewListTag += "<li><span class='w-btn w-btn-gra1 review-btn'>  긍정 </span></li>"
+                                }
+                                else reviewListTag += "<li><span class='w-btn w-btn-gra2 review-btn'>  부정  </span></li>"
                                 reviewListTag += "</ul>";
                                 reviewListTag += "</div>";
 
@@ -1358,7 +1368,10 @@
                                     + "</span>";
                                 reviewListTag += "      </span>";
                                 reviewListTag += "</li>";
-
+                                if(review.sentiment_type === "긍정"){
+                                    reviewListTag += "<li><span class='w-btn w-btn-gra1 review-btn'>  긍정 </span></li>"
+                                }
+                                else reviewListTag += "<li><span class='w-btn w-btn-gra2 review-btn'>  부정  </span></li>"
                                 reviewListTag += "</ul>";
                                 reviewListTag += "</div>";
 
@@ -1447,7 +1460,10 @@
                                     + "</span>";
                                 reviewListTag += "      </span>";
                                 reviewListTag += "</li>";
-
+                                if(review.sentiment_type === "긍정"){
+                                    reviewListTag += "<li><span class='w-btn w-btn-gra1 review-btn'>  긍정 </span></li>"
+                                }
+                                else reviewListTag += "<li><span class='w-btn w-btn-gra2 review-btn'>  부정  </span></li>"
                                 reviewListTag += "</ul>";
                                 reviewListTag += "</div>";
 

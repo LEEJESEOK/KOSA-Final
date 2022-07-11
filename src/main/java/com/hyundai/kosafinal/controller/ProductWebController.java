@@ -67,12 +67,25 @@ public class ProductWebController {
     }
     model.addAttribute("colorImageList", colorImageList);
 
-    //평균 상품평 계산
+    //평균 상품평 및 (긍정, 부정 평균) 계산
     List<ProductReviewDTO> reviewDTOList = productReviewService.getProductReviewAllList(productId);
     long total = 0;
     long imgCnt = 0;
     long textCnt = 0;
+    long positiveCnt = 0;
+    long negativeCnt = 0;
+    double negativeTotal = 0;
+    double positiveTotal = 0;
     for(ProductReviewDTO p : reviewDTOList){
+      if(p.getSentiment_type().equals("부정")) {
+        negativeCnt++;
+        negativeTotal += p.getSentiment_percent();
+      }
+      else{
+        positiveCnt++;
+        positiveTotal += p.getSentiment_percent();
+      }
+
       total += p.getRate();
       if(p.getImgURI() == null || p.getImgURI().equals("")){
         textCnt++;
@@ -85,6 +98,8 @@ public class ProductWebController {
     model.addAttribute("reviewCnt", reviewDTOList.size());
     model.addAttribute("imgCnt", imgCnt);
     model.addAttribute("textCnt", textCnt);
+    model.addAttribute("positivePercent", Math.round(positiveTotal/positiveCnt));
+    model.addAttribute("negativePercent", Math.round(negativeTotal/negativeCnt));
 
     if(authentication != null){
       Member2DTO member = mService.findByEmail(authentication.getName());
