@@ -68,6 +68,10 @@ public interface ProductMapper {
 
     String getColorChipByPid(@Param("colorId")String colorId);
 
+    List<ProductDTO> selectProductListBySearch(SelectProductCriteria selectProductCriteria);
+
+    int searchProductCount(SelectProductCriteria selectProductCriteria);
+
     // 타임세일 상품 가져오기
     List<SaleDTO> selectSaleProduct();
 

@@ -99,6 +99,12 @@ public interface ProductService {
 
     String getColorChip(String colorId);
 
+    List<ProductDTO> getProductSearchList(SelectProductCriteria selectProductCriteria);
+
+    int searchProductCount(SelectProductCriteria selectProductCriteria);
+
+    int updateProductInfo(ProductDTO productDTO, List<MultipartFile> files);
+
     // 타임세일 상품 가져오기
     List<SaleDTO> getSaleProduct();
 

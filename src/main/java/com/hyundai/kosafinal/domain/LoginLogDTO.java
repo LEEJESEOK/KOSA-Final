@@ -6,12 +6,12 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LogDTO implements Serializable {
+public class LoginLogDTO implements Serializable {
     private String log_id;
     private String customer_id;
-    private Date usedate;
-
+    private Date login_date;
 }

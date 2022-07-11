@@ -1,43 +1,56 @@
 package com.hyundai.kosafinal.service;
 
-import com.hyundai.kosafinal.domain.LogDTO;
+import com.hyundai.kosafinal.domain.LoginLogDTO;
 import com.hyundai.kosafinal.domain.MemberDTO;
+import com.hyundai.kosafinal.entity.DateType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.lang.reflect.Member;
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class MemberServiceTest {
     @Autowired
-    MLService service;
+    MLService mlService;
 
     @Autowired
-    MemberService mservice;
+    MemberService memberService;
+
     @Test
     void getEmailLog() {
-        List<LogDTO>  result=service.getEmailLog();
+        List<LoginLogDTO> result = mlService.getEmailLog();
         System.out.println(result.get(1));
 
 
     }
 
     @Test
-    void insertMember(){
-        MemberDTO dto=new MemberDTO();
-        boolean result=mservice.insertMember(dto);
+    void insertMember() {
+        MemberDTO dto = new MemberDTO();
+        boolean result = memberService.insertMember(dto);
     }
 
     @Test
-    void findByLog(){
-        String email="AS177253";
-        List<LogDTO> result=service.findbyLog(email);
+    void findByLog() {
+        String email = "AS177253";
+        List<LoginLogDTO> result = mlService.findbyLog(email);
         System.out.println(result);
 
+    }
+
+    @Test
+    void getLoginLogByMemberId() {
+        String id = "jadyn";
+        DateType dateType = DateType.HOUR;
+        String dateTypeStr = "HOUR";
+        System.out.println(DateType.valueOf(dateTypeStr));
+
+        Map<String, Integer> loginLogList = memberService.getLoginCountByMemberId(id, dateType);
+
+        for (String key : loginLogList.keySet()) {
+            System.out.println(key + " : " + loginLogList.get(key));
+        }
     }
 }

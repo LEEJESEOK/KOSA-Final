@@ -69,19 +69,16 @@
                                 <div class="col-3">
                                     <select onchange='setMediumCtry(this.value)' class="form-select" id="large">
                                         <option selected="">대분류</option>
-<!--                                        <option th:each="large : ${largeCtry}" th:value="${large}" th:text="${large}"></option>-->
                                     </select>
                                 </div>
                                 <div class="col-3">
                                     <select onchange='setSmallCtry(this.value)' class="form-select" id="medium">
                                         <option selected="">중분류</option>
-<!--                                        <option th:each="medium : ${mediumCtry}" th:value="${medium}" th:text="${medium}"></option>-->
                                     </select>
                                 </div>
                                 <div class="col-3">
                                     <select class="form-select" id="small">
                                         <option selected="">소분류</option>
-                                        <option th:each="small : ${smallCtry}" th:value="${small}" th:text="${small}"></option>
                                     </select>
                                 </div>
                             </div>
@@ -208,10 +205,6 @@
             const image2 = document.querySelector("#productInsertForm [name=image2]").files[0];
             const image3 = document.querySelector("#productInsertForm [name=image3]").files[0];
             const stockAmount = $("#productInsertForm [name=stockAmount]").val();
-
-            console.log(largeCtry);
-            console.log(mediumCtry);
-            console.log(smallCtry);
 
             var formData = new FormData();
             formData.append("id", pid);

@@ -25,4 +25,7 @@ public class ProductDTO {
     private String image3Uri;
     private String colorChipUri;
     private String stockAmount;
+    private String createdAt;
+    private String updatedAt;
+    private int status;
 }

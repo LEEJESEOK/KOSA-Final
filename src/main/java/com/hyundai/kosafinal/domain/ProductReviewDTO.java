@@ -3,11 +3,14 @@ package com.hyundai.kosafinal.domain;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.Date;
 
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class ProductReviewDTO {
     private int id;
     private String email;
@@ -26,4 +29,7 @@ public class ProductReviewDTO {
     private String height;
     private String bodyType;
     private String avgSize;
+    private double sentiment_percent;
+    private String sentiment_type;
+    private String grade;
 }

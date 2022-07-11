@@ -26,7 +26,7 @@ class ProductReviewMapperTest {
 
   @Test
   void getProductInfoByIdTests() throws IOException {
-    List<ProductReviewDTO> list = productReviewMapper.getProductReviewByProductId("MM2B3WJS085M");
+    List<ProductReviewDTO> list = productReviewMapper.getProductReviewAll("MM2B3WJS085M");
 
     int index=0;
     for(ProductReviewDTO p : list){
