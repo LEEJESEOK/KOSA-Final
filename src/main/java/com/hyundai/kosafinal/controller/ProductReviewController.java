@@ -70,8 +70,6 @@ public class ProductReviewController {
             p.setImgURI(S3_BUCKET_ADDRESS + p.getImgURI());
         }
 
-        System.out.println(list);
-
         PageDTO pageDTO = new PageDTO(selectProductReviewCriteria, reviewCnt);
         map.put("page", pageDTO);
         map.put("list", list);
@@ -86,7 +84,8 @@ public class ProductReviewController {
     ) {
         Map<String, Object> map = new HashMap<>();
         selectProductReviewCriteria.setProductId(productId);
-        int reviewCnt = 0;
+        int reviewCnt = productReviewService.getProductReviewCountByIdAndImg(selectProductReviewCriteria);
+
         List<ProductReviewDTO> list = productReviewService.getProductReviewByProductId(selectProductReviewCriteria);
         List<ProductReviewDTO> imageReviewList = new ArrayList<>();
         for (ProductReviewDTO p : list) {
@@ -104,8 +103,8 @@ public class ProductReviewController {
             }
             p.setImgURI(S3_BUCKET_ADDRESS + p.getImgURI());
             imageReviewList.add(p);
-            reviewCnt++;
         }
+
         PageDTO pageDTO = new PageDTO(selectProductReviewCriteria, reviewCnt);
         map.put("page", pageDTO);
         map.put("list", imageReviewList);
@@ -120,11 +119,11 @@ public class ProductReviewController {
     ) {
         Map<String, Object> map = new HashMap<>();
         selectProductReviewCriteria.setProductId(productId);
-        int reviewCnt =0;
+        int reviewCnt = productReviewService.getProductReviewCountByIdAndText(selectProductReviewCriteria);
+
         List<ProductReviewDTO> list = productReviewService.getProductReviewByProductId(selectProductReviewCriteria);
         List<ProductReviewDTO> textReviewList = new ArrayList<>();
         for (ProductReviewDTO p : list) {
-
             //사용자 등급 조회
             String grade = memberService.findGrade(productId);
             p.setGrade(grade);
@@ -135,7 +134,6 @@ public class ProductReviewController {
             if (p.getImgURI() == null || p.getImgURI().equals("")) {
                 textReviewList.add(p);
                 System.out.println(p.toString());
-                reviewCnt++;
             }
         }
 

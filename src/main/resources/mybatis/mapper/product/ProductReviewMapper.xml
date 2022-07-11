@@ -50,6 +50,24 @@
         ]]>
   </select>
 
+  <select id="getProductReviewCountByImg" resultType="int">
+    <![CDATA[
+            SELECT count(*)
+            FROM PRODUCT_REVIEW
+            WHERE PRODUCT_ID = #{productId}
+            and IMAGE_URI is not null
+        ]]>
+  </select>
+
+  <select id="getProductReviewCountByText" resultType="int">
+    <![CDATA[
+            SELECT count(*)
+            FROM PRODUCT_REVIEW
+            WHERE PRODUCT_ID = #{productId}
+            and IMAGE_URI is null
+        ]]>
+  </select>
+
   <insert id="insertProductReview" statementType="CALLABLE"
     parameterType="com.hyundai.kosafinal.domain.ProductReviewDTO">
     <![CDATA[

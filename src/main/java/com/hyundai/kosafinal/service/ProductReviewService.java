@@ -16,4 +16,8 @@ public interface ProductReviewService {
 
    int getProductReviewCountById(SelectProductReviewCriteria selectProductReviewCriteria);
 
+   int getProductReviewCountByIdAndImg(SelectProductReviewCriteria selectProductReviewCriteria);
+
+   int getProductReviewCountByIdAndText(SelectProductReviewCriteria selectProductReviewCriteria);
+
 }

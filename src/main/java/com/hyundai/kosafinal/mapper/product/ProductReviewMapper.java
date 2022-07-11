@@ -16,4 +16,9 @@ public interface ProductReviewMapper {
   void insertProductReview(ProductReviewDTO productReviewDTO);
 
   int getProductReviewCount(SelectProductReviewCriteria selectProductReviewCriteria);
+
+  int getProductReviewCountByText(SelectProductReviewCriteria selectProductReviewCriteria);
+
+  int getProductReviewCountByImg(SelectProductReviewCriteria selectProductReviewCriteria);
+
 }

@@ -55,6 +55,16 @@ public class ProductReviewServiceImpl implements ProductReviewService {
     return productReviewMapper.getProductReviewCount(selectProductReviewCriteria);
   }
 
+  @Override
+  public int getProductReviewCountByIdAndImg(SelectProductReviewCriteria selectProductReviewCriteria) {
+    return productReviewMapper.getProductReviewCountByImg(selectProductReviewCriteria);
+  }
+
+  @Override
+  public int getProductReviewCountByIdAndText(SelectProductReviewCriteria selectProductReviewCriteria) {
+    return productReviewMapper.getProductReviewCountByText(selectProductReviewCriteria);
+  }
+
   // 업로드 이미지 -> 키 값을 가져오기
   public String uploadProfileImage(
     MultipartFile image,
