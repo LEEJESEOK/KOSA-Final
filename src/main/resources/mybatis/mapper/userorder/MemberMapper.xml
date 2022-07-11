@@ -261,10 +261,10 @@
             <!-- 등급 필터링 -->
             <trim prefix="and">
                 <if test="selected == -1">
-                    grade IN (4,5)
+                    grade_id IN (4,5)
                 </if>
                 <if test="selected != -1">
-                    grade = #{selected}
+                    grade_id = #{selected}
                 </if>
             </trim>
         </where>
@@ -279,4 +279,16 @@
         values (sq_log.nextval, #{customer_id}, sysdate)
 
     </insert>
+
+    <resultMap id="LoginLogMap" type="LoginLogDTO">
+        <result property="log_id" column="LOG_ID"/>
+        <result property="customer_id" column="CUSTOMER_ID"/>
+        <result property="login_date" column="LOGIN_DATE"/>
+    </resultMap>
+    <select id="selectLoginLogByMemberId" resultMap="LoginLogMap">
+        select LOG_ID, CUSTOMER_ID, LOGIN_DATE
+        from LOGIN_LOG
+        where customer_id=#{id}
+    </select>
+
 </mapper>
