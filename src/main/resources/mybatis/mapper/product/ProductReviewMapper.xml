@@ -22,11 +22,50 @@
     <result property="height" column="height"/>
     <result property="bodyType" column="body_type"/>
     <result property="avgSize" column="avg_size"/>
+    <result property="sentiment_percent" column="sentiment_percent"/>
+    <result property="sentiment_type" column="sentiment_type"/>
   </resultMap>
 
   <select id="getProductReviewByProductId" resultMap="ProductReviewMap">
     SELECT *
+    FROM (
+      SELECT ROWNUM as rn, r.*
+      FROM TABLE(SF_REVIEW_SELECT_GET(#{productId})) r
+    <![CDATA[
+      )
+    WHERE rn BETWEEN ((#{pageNum} - 1) * #{amount} + 1) AND (#{pageNum} * #{amount})
+    ]]>
+  </select>
+
+  <select id="getProductReviewAll" resultMap="ProductReviewMap">
+    SELECT *
     FROM TABLE(SF_REVIEW_SELECT_GET(#{productId}))
+  </select>
+
+  <select id="getProductReviewCount" resultType="int">
+    <![CDATA[
+            SELECT count(*)
+            FROM PRODUCT_REVIEW
+            WHERE PRODUCT_ID = #{productId}
+        ]]>
+  </select>
+
+  <select id="getProductReviewCountByImg" resultType="int">
+    <![CDATA[
+            SELECT count(*)
+            FROM PRODUCT_REVIEW
+            WHERE PRODUCT_ID = #{productId}
+            and IMAGE_URI is not null
+        ]]>
+  </select>
+
+  <select id="getProductReviewCountByText" resultType="int">
+    <![CDATA[
+            SELECT count(*)
+            FROM PRODUCT_REVIEW
+            WHERE PRODUCT_ID = #{productId}
+            and IMAGE_URI is null
+        ]]>
   </select>
 
   <insert id="insertProductReview" statementType="CALLABLE"
