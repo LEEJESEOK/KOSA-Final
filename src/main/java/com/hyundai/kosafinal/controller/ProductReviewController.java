@@ -3,7 +3,6 @@ package com.hyundai.kosafinal.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hyundai.kosafinal.domain.PageDTO;
-import com.hyundai.kosafinal.domain.ProductDTO;
 import com.hyundai.kosafinal.domain.ProductReviewDTO;
 import com.hyundai.kosafinal.domain.SelectProductReviewCriteria;
 import com.hyundai.kosafinal.service.MemberService;
@@ -87,8 +86,7 @@ public class ProductReviewController {
     ) {
         Map<String, Object> map = new HashMap<>();
         selectProductReviewCriteria.setProductId(productId);
-        int reviewCnt = productReviewService.getProductReviewCountById(selectProductReviewCriteria);
-
+        int reviewCnt = 0;
         List<ProductReviewDTO> list = productReviewService.getProductReviewByProductId(selectProductReviewCriteria);
         List<ProductReviewDTO> imageReviewList = new ArrayList<>();
         for (ProductReviewDTO p : list) {
@@ -104,8 +102,9 @@ public class ProductReviewController {
             if (p.getImgURI() == null || p.getImgURI().equals("")) {
                 continue;
             }
-            p.setImgURI("https://kosa-aws-bucket.s3.ap-northeast-2.amazonaws.com/" + p.getImgURI());
+            p.setImgURI(S3_BUCKET_ADDRESS + p.getImgURI());
             imageReviewList.add(p);
+            reviewCnt++;
         }
         PageDTO pageDTO = new PageDTO(selectProductReviewCriteria, reviewCnt);
         map.put("page", pageDTO);
@@ -121,8 +120,7 @@ public class ProductReviewController {
     ) {
         Map<String, Object> map = new HashMap<>();
         selectProductReviewCriteria.setProductId(productId);
-        int reviewCnt = productReviewService.getProductReviewCountById(selectProductReviewCriteria);
-
+        int reviewCnt =0;
         List<ProductReviewDTO> list = productReviewService.getProductReviewByProductId(selectProductReviewCriteria);
         List<ProductReviewDTO> textReviewList = new ArrayList<>();
         for (ProductReviewDTO p : list) {
@@ -137,6 +135,7 @@ public class ProductReviewController {
             if (p.getImgURI() == null || p.getImgURI().equals("")) {
                 textReviewList.add(p);
                 System.out.println(p.toString());
+                reviewCnt++;
             }
         }
 
