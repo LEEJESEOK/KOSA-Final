@@ -15,8 +15,8 @@
     <script>
         let id = "[[${id}]]";
 
-        let dateTypeForOrder = "day";
-        let dateTypeForLogin = "day";
+        let orderChartDateType = "day";
+        let loginChartDateType = "day";
 
         $().ready(function () {
 
@@ -44,7 +44,7 @@
                 dataType: "json",
                 data: JSON.stringify({
                     id: "[[${id}]]",
-                    dateType: dateTypeForOrder
+                    dateType: orderChartDateType
                 }),
                 contentType: "application/json",
                 success: function (response) {
@@ -233,7 +233,7 @@
                 dataType: "json",
                 data: JSON.stringify({
                     id: "[[${id}]]",
-                    dateType: dateTypeForLogin
+                    dateType: loginChartDateType
                 }),
                 contentType: "application/json",
                 success: function (response) {

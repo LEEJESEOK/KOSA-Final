@@ -15,10 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author LEE JESEOK
@@ -101,7 +99,7 @@ public class BizRestController {
         return map;
     }
 
-    @GetMapping("/order/count")
+    @PostMapping("/statistics")
     public ResponseEntity<Map<String, Object>> getOrderCount(@RequestBody Map<String, Object> requestMap) {
         Map<String, Object> responseMap = new HashMap<>();
 
@@ -115,27 +113,19 @@ public class BizRestController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        responseMap.put("data", orderService.getOrderCountByTime(dateType));
-
-        return new ResponseEntity<>(responseMap, HttpStatus.OK);
-    }
-
-    @GetMapping("/order/price")
-    public ResponseEntity<Map<String, Object>> getOrderPrice(@RequestBody Map<String, Object> requestMap) {
-        Map<String, Object> responseMap = new HashMap<>();
-
-        // 예외 처리
-        // DateType 검사
-        String dateTypeStr = (String) requestMap.get("dateType");
-        DateType dateType;
-        try {
-            dateType = DateType.valueOf(dateTypeStr.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        // dataType 검사
+        String dataTypeStr = (String) requestMap.get("dataType");
+        Map<String, Integer> dataMap = null;
+        switch (dataTypeStr) {
+            case "salesCount":
+                dataMap = orderService.getOrderCountByTime(dateType);
+                break;
+            case "revenue":
+                dataMap = orderService.getOrderPriceByTime(dateType);
+                break;
         }
 
-        responseMap.put("data", orderService.getOrderPriceByTime(dateType));
-
+        responseMap.put("data", dataMap);
 
         return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
@@ -170,14 +160,44 @@ public class BizRestController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        // 최근 기간별 로그인 횟수
+        Map<String, Integer> data = memberService.getLoginCountByMemberId(id, dateType);
         Map<String, Object> responseMap = new HashMap<>();
-        responseMap.put("data", memberService.getLoginCountByMemberId(id, dateType));
+
+        // 최근 데이터만 반환
+        // 역순으로 키 정렬
+        List<String> sortedKeyList = data.keySet().stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+        int oldDateIdx = 0;
+        switch (dateType) {
+            case YEAR:
+                oldDateIdx = 5;
+                break;
+            case MONTH:
+                oldDateIdx = 12;
+                break;
+            case DAY:
+                oldDateIdx = 7;
+                break;
+            case HOUR:
+                oldDateIdx = 24;
+                break;
+            case MINUTE:
+                oldDateIdx = 60;
+                break;
+        }
+        Map<String, Integer> recentData = new HashMap<>();
+        for (int i = 0; i < oldDateIdx; ++i) {
+            recentData.put(sortedKeyList.get(i), data.get(sortedKeyList.get(i)));
+        }
+
+        responseMap.put("data", recentData);
 
         return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
 
     @PostMapping("/vip/statistics/order/price")
     public ResponseEntity<Map<String, Object>> getOrderedDateCount(@RequestBody Map<String, Object> requestMap) {
+
 
         String id = (String) requestMap.get("id");
         if (id == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -221,5 +241,6 @@ public class BizRestController {
 
         return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
+
 
 }
