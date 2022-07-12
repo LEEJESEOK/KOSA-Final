@@ -22,25 +22,27 @@
                 });
 
                 // STAR, THE STAR 일 때만 VIP 라운지 버튼 보이게
-                $.ajax({
-                    type: "POST",
-                    url: "/member/checkVIP",
-                    contentType: "application/json; charset=utf-8",
-                    success: function (result) {
-                        let btn = document.getElementById("vipBtn");
-                        if (result == true) {
-                            btn.style.display = 'block';
-                        } else {
-                            btn.style.display = 'none';
+                let status = $(".loginStatus").val();
+                if(status == "1") {
+                    $.ajax({
+                        type: "POST",
+                        url: "/member/checkVIP",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (result) {
+                            let btn = document.getElementById("vipBtn");
+                            if (result == true) {
+                                btn.style.display = 'block';
+                            } else {
+                                btn.style.display = 'none';
+                            }
+                        },
+                        error: function (request, status, error) {
+                        },
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader(csrf_header, csrf_token);
                         }
-                    },
-                    error: function (request, status, error) {
-                    },
-                    beforeSend: function (xhr) {
-                        xhr.setRequestHeader(csrf_header, csrf_token);
-                    }
-                });
-
+                    });
+                }
             });
 
             function logout() {
@@ -75,8 +77,8 @@
                     <li><span class="on"><a href="/" onclick="GA_Event('공통','탑_네비게이션','HOME')">HOME</a></span>
                     </li>
                     <!-- 로그인 상태 -->
-                    <p class="brand_menu_guide_text">아래 '브랜드' 메뉴에서 좋아하는 브랜드를 <span
-                            style="margin-top:-1px; display:inline-block;">♥</span>해주세요</p>
+                    <p class="brand_menu_guide_text">관리자 페이지 <span
+                            style="margin-top:-1px; display:inline-block;"></span></p>
                     <!-- 비로그인 상태 -->
                 </ul>
             </div>
@@ -294,11 +296,15 @@
                         </a>
                     </li>
                     <!-- 로그인/로그아웃 -->
-                    <li sec:authorize="!isAuthenticated()"><a href="/member/login">로그인</a></li>
+                    <li sec:authorize="!isAuthenticated()">
+                        <a href="/member/login">로그인</a>
+                        <input type="hidden" class="loginStatus" value="0">
+                    </li>
                     <li sec:authorize="isAuthenticated()">
                         <form id="logoutForm" th:action="@{/logout}" method="post">
                         </form>
                         <a href="javascript:void(0)" onclick="logout()" id="logoutBtn">로그아웃</a>
+                        <input type="hidden" class="loginStatus" value="1">
                     </li>
                     <li class="header_dropmemu mypage">
 
@@ -334,21 +340,7 @@
                     </li>
 
                     <li>
-                        <div class="header_dropmemu lang_switch lang_1911">
-                            <a class="btn" href="javascript:void(0);"
-                               onclick="GA_Event('공통','헤더_메뉴','LANGUAGE')">LANGUAGE</a>
-                            <div class="list"
-                                 style="display: none; height: 87px; padding-top: 0px; margin-top: 0px; padding-bottom: 0px; margin-bottom: 0px;">
-                                <ul>
-                                    <li><a href="#"
-                                           onclick="GA_Event('공통','헤더_메뉴','LANGUAGE_한국어')">한국어</a></li>
-                                    <li><a href="#"
-                                           onclick="GA_Event('공통','헤더_메뉴','LANGUAGE_ENGLISH')">ENGLISH</a></li>
-                                    <li><a href="#"
-                                           onclick="GA_Event('공통','헤더_메뉴','LANGUAGE_中文')">中文</a></li>
-                                </ul>
-                            </div>
-                        </div>
+
                     </li>
                 </ul>
             </div>

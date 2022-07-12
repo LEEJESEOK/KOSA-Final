@@ -58,7 +58,7 @@ public class ProductReviewController {
         for (ProductReviewDTO p : list) {
 
             //사용자 등급 조회
-            String grade = memberService.findGrade(productId);
+            String grade = changUserGradeForm(memberService.findGrade(p.getEmail()));
             p.setGrade(grade);
 
             String s1 = p.getEmail().substring(0, 3);
@@ -91,7 +91,7 @@ public class ProductReviewController {
         for (ProductReviewDTO p : list) {
 
             //사용자 등급 조회
-            String grade = memberService.findGrade(productId);
+            String grade = changUserGradeForm(memberService.findGrade(p.getEmail()));
             p.setGrade(grade);
 
             String s1 = p.getEmail().substring(0, 3);
@@ -125,7 +125,7 @@ public class ProductReviewController {
         List<ProductReviewDTO> textReviewList = new ArrayList<>();
         for (ProductReviewDTO p : list) {
             //사용자 등급 조회
-            String grade = memberService.findGrade(productId);
+            String grade = changUserGradeForm(memberService.findGrade(p.getEmail()));
             p.setGrade(grade);
 
             String s1 = p.getEmail().substring(0, 3);
@@ -198,7 +198,7 @@ public class ProductReviewController {
             String inputLine = null;
             StringBuffer stringBuffer = new StringBuffer();
 
-            URL url = new URL("http://localhost:5000/review"); //URL객체 생성
+            URL url = new URL("http://112.221.225.165:40101/review"); //URL객체 생성
             HttpURLConnection conn = (HttpURLConnection) url.openConnection(); //url주소를 가지고 Http 커넥션 객체 생성
             System.out.println(conn.toString());
             conn.setDoOutput(true);
@@ -238,7 +238,6 @@ public class ProductReviewController {
                 productReviewDTO.setSentiment_type("부정");
             }
 
-
             productReviewService.saveProductReview(productReviewDTO, fileList.get(0));
 
             System.out.println(stringBuffer);
@@ -260,7 +259,7 @@ public class ProductReviewController {
         String inputLine = null;
         StringBuffer stringBuffer = new StringBuffer();
 
-        URL url = new URL("http://localhost:5000/review"); //URL객체 생성
+        URL url = new URL("http://112.221.225.165:40101/review"); //URL객체 생성
         HttpURLConnection conn = (HttpURLConnection) url.openConnection(); //url주소를 가지고 Http 커넥션 객체 생성
         System.out.println(conn.toString());
         conn.setDoOutput(true);
@@ -319,5 +318,27 @@ public class ProductReviewController {
         bReader.close();
         conn.disconnect();
         return productReviewDTO;
+    }
+
+    public String changUserGradeForm(String num){
+        String s = "";
+        switch (num){
+            case "1":
+                s = "FRIEND";
+                break;
+            case "2":
+                s = "CREW";
+                break;
+            case "3":
+                s =  "MANIA";
+                break;
+            case "4":
+                s =  "STAR";
+                break;
+            case "5":
+                s = "THE STAR";
+                break;
+        }
+        return s;
     }
 }

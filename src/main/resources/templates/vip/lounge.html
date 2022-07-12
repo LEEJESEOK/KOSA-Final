@@ -21,6 +21,11 @@
     <!-- Template Main CSS File -->
     <link th:href="@{/vip/css/style.css}" rel="stylesheet">
 
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
+
     <!-- =======================================================
     * Template Name: Valera - v4.7.0
     * Template URL: https://bootstrapmade.com/valera-free-bootstrap-theme/
@@ -66,9 +71,9 @@
                     let colors = result.colors;
 
                     // 타임세일 시간 셋팅
-                    let start = new Date(sale.startDate).format("MM월 dd일 HH시 mm분");
+                    let start = new Date(sale.startDate).format("MM.dd HH:mm");
                     $("#timesale-start").text(start);
-                    let end = new Date(sale.endDate).format("MM월 dd일 HH시 mm분");
+                    let end = new Date(sale.endDate).format("MM.dd HH:mm");
                     $("#timesale-end").text(end);
 
                     // 남은 시간 타이머 셋팅
@@ -119,7 +124,8 @@
         diff -= min * (1000 * 60);
         let sec = Math.floor(diff / 1000);
 
-        let str = day + '일 ' + hour + '시간 ' + min + '분 ' + sec + "초";
+        let str = 'D - ' + day + '일 ' + hour + '시간 ' + min + '분 ' + sec + "초";
+        // let str = day + 'D ' + hour + 'H ' + min + 'M ' + sec + "S";
 
         $("#timesale-timer").text(str);
     }
@@ -161,7 +167,7 @@
     <section id="hero">
         <div class="hero-container">
             <h1 class="fadein">VIP Lounge</h1>
-            <h2 class="fadein2"><span style="margin-right: 5px">[[${#authentication.principal.name}]]</span>님 환영합니다.</h2>
+            <h2 class="fadein2"><span style="margin-right: 5px; vertical-align: top !important;">[[${#authentication.principal.name}]]</span>님 환영합니다.</h2>
             <a href="#timesale" class="btn-get-started scrollto fadein3">입장</a>
         </div>
     </section><!-- Hero Section -->
@@ -193,8 +199,8 @@
                     <p>일정한 시간에만 할인된 가격으로 판매되는 상품입니다.</p>
                 </div>
                 <div class="row content" id="timesale-time">
-                    <h3><span id="timesale-start"></span> ~ <span id="timesale-end"></span></h3>
-                    <h5>(남은 시간 : <span id="timesale-timer"></span>)</h5>
+                    <h2><span id="timesale-start"></span> ~ <span id="timesale-end"></span></h2>
+                    <h5><span id="timesale-timer"></span></h5>
                 </div>
                 <div class="row content">
                     <div class="timesale-product">

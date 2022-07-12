@@ -12,10 +12,9 @@
 
     <!-- 주문 목록 조회 -->
     <select id="getOrderedList" resultType="OrderedListDTO">
-        SELECT *
-        FROM ORDERED_LIST
-        WHERE USER_EMAIL = #{user_email}
-        ORDER BY ID DESC
+        SELECT * FROM ordered_list
+        WHERE user_email = #{user_email}
+        ORDER BY "DATE" DESC
     </select>
 
     <!-- 주문 상품 목록 조회 -->
