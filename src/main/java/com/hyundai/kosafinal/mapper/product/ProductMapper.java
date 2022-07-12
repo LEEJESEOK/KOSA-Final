@@ -1,14 +1,11 @@
 package com.hyundai.kosafinal.mapper.product;
 
-import com.hyundai.kosafinal.domain.CategoryDTO;
-import com.hyundai.kosafinal.domain.ColorDTO;
-import com.hyundai.kosafinal.domain.ProductDTO;
-import com.hyundai.kosafinal.domain.SelectProductCriteria;
-import com.hyundai.kosafinal.domain.SizeDTO;
+import com.hyundai.kosafinal.domain.*;
 import com.hyundai.kosafinal.entity.Criteria;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -74,5 +71,12 @@ public interface ProductMapper {
     List<ProductDTO> selectProductListBySearch(SelectProductCriteria selectProductCriteria);
 
     int searchProductCount(SelectProductCriteria selectProductCriteria);
+
+    // 타임세일 상품 가져오기
+    List<SaleDTO> selectSaleProduct();
+
+    // 한정상품 가져오기
+    List<LimitedProductDTO> selectLimitedProduct();
+
 
 }

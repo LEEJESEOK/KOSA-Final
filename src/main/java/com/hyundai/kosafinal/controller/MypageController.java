@@ -69,6 +69,7 @@ public class MypageController {
 
         model.addAttribute("selMonth",birth.substring(5,7));
         model.addAttribute("selDay",birth.substring(8,10));
+        System.out.println("테스트모델  "+birth.substring(8,10));
         System.out.println(birth.substring(8,10));
     }
 
