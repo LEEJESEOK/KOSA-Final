@@ -4,6 +4,7 @@ import com.hyundai.kosafinal.domain.CategoryCountDTO;
 import com.hyundai.kosafinal.domain.MemberOrderConfirmDTO;
 import com.hyundai.kosafinal.domain.OrderedListDTO;
 import com.hyundai.kosafinal.domain.ProductDTO;
+import com.hyundai.kosafinal.entity.DateType;
 import com.hyundai.kosafinal.entity.OrderProduct;
 import com.hyundai.kosafinal.entity.SearchOrderCriteria;
 import com.hyundai.kosafinal.mapper.product.ProductMapper;
@@ -199,6 +200,21 @@ public class OrderMapperTest {
         System.out.println("large count");
         for (String largeKey : categoryCountMap.keySet()) {
             System.out.println(largeKey + " : " + categoryCountMap.get(largeKey).getCount());
+        }
+    }
+
+    @Test
+    void selectOrderOnDashboard() {
+        List<HashMap<String, Object>> selectCountResult = mapper.selectWeekOrderedCount();
+
+        for (HashMap<String, Object> map : selectCountResult) {
+            System.out.println(map);
+        }
+
+        List<HashMap<String, Object>> selectTodayPrice = mapper.selectWeekOrderedPrice();
+
+        for (HashMap<String, Object> map : selectTodayPrice) {
+            System.out.println(map);
         }
     }
 }

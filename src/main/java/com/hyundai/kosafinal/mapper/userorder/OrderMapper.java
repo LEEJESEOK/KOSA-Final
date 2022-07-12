@@ -3,11 +3,13 @@ package com.hyundai.kosafinal.mapper.userorder;
 import com.hyundai.kosafinal.domain.MemberOrderConfirmDTO;
 import com.hyundai.kosafinal.domain.OrderItemDTO;
 import com.hyundai.kosafinal.domain.OrderedListDTO;
+import com.hyundai.kosafinal.entity.DateType;
 import com.hyundai.kosafinal.entity.OrderProduct;
 import com.hyundai.kosafinal.entity.SearchOrderCriteria;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Mapper
@@ -54,4 +56,10 @@ public interface OrderMapper {
 
     // 백오피스 관련 주문 검색 및 페이징 조회
     public List<OrderedListDTO> searchOrder(SearchOrderCriteria criteria);
+
+    // 백오피스 관련 단위 기간별 구매 횟수
+    List<HashMap<String, Object>> selectWeekOrderedCount();
+
+    // 백오피스 관련 단위 기간별 구매 금액
+    List<HashMap<String, Object>> selectWeekOrderedPrice();
 }

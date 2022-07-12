@@ -101,6 +101,45 @@ public class BizRestController {
         return map;
     }
 
+    @GetMapping("/order/count")
+    public ResponseEntity<Map<String, Object>> getOrderCount(@RequestBody Map<String, Object> requestMap) {
+        Map<String, Object> responseMap = new HashMap<>();
+
+        // 예외 처리
+        // DateType 검사
+        String dateTypeStr = (String) requestMap.get("dateType");
+        DateType dateType;
+        try {
+            dateType = DateType.valueOf(dateTypeStr.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        responseMap.put("data", orderService.getOrderCountByTime(dateType));
+
+        return new ResponseEntity<>(responseMap, HttpStatus.OK);
+    }
+
+    @GetMapping("/order/price")
+    public ResponseEntity<Map<String, Object>> getOrderPrice(@RequestBody Map<String, Object> requestMap) {
+        Map<String, Object> responseMap = new HashMap<>();
+
+        // 예외 처리
+        // DateType 검사
+        String dateTypeStr = (String) requestMap.get("dateType");
+        DateType dateType;
+        try {
+            dateType = DateType.valueOf(dateTypeStr.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        responseMap.put("data", orderService.getOrderPriceByTime(dateType));
+
+
+        return new ResponseEntity<>(responseMap, HttpStatus.OK);
+    }
+
     @PostMapping("/vip/detail")
     public ResponseEntity<Map<String, Object>> getMemberDetail(@RequestBody Map<String, Object> requestMap) {
         Map<String, Object> responseMap = new HashMap<>();

@@ -291,4 +291,10 @@
         where customer_id=#{id}
     </select>
 
+
+    <select id="selectLoginLogInDate">
+        SELECT LOG_ID, CUSTOMER_ID, LOGIN_DATE
+        FROM LOGIN_LOG
+        WHERE LOGIN_DATE + #{date} > SYSDATE
+    </select>
 </mapper>
