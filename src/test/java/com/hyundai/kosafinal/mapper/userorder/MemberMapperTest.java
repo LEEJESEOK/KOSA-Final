@@ -102,7 +102,7 @@ class MemberMapperTest {
 
     @Test
     void findByEmail() {
-        String email = "isaa1155";
+        String email = "jadyn";
         int login_type = 0;
         Member2DTO result = mapper.findByEmail(email);
         System.out.println(result);

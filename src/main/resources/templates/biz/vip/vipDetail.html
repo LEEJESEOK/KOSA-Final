@@ -1,95 +1,423 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{/biz/layout/popup}">
+<html lang="ko" layout:decorate="~{/biz/layout/popup}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-print-css/css/bootstrap-print.min.css"
+          media="print">
+</head>
 <th:block layout:fragment="script">
     <script>
-        console.log($(opener.document).find("#popupData :input[name=id]").val());
+        // 프린트
+        function printPage() {
+            window.print();
+        }
+    </script>
+    <script>
+        let id = "[[${id}]]";
+
+        let dateTypeForOrder = "day";
+        let dateTypeForLogin = "day";
+
+        $().ready(function () {
+
+            // 고객 기본 정보
+            $.ajax({
+                type: "POST",
+                url: "/api/biz/vip/detail",
+                dataType: "json",
+                data: JSON.stringify({
+                    id: "[[${id}]]"
+                }),
+                contentType: "application/json",
+                success: function (response) {
+                    setMemberInfo(response["data"]);
+                },
+                error: function (request, status, error) {
+                    ajaxError(request, status, error);
+                }
+            });
+
+            // 일자별 구매 통계
+            $.ajax({
+                type: "POST",
+                url: "/api/biz/vip/statistics/order/price",
+                dataType: "json",
+                data: JSON.stringify({
+                    id: "[[${id}]]",
+                    dateType: dateTypeForOrder
+                }),
+                contentType: "application/json",
+                success: function (response) {
+                    // 시간 순 정렬
+                    let orderPrice = Object.keys(response["data"]).sort().reduce((r, k) => ({
+                        ...r,
+                        [k]: response["data"][k]
+                    }), {})
+
+                    const DATA_COUNT = Object.keys(orderPrice).length;
+
+                    // 데이터 개수만큼 랜덤 색상 지정
+                    // 배경색은 a : 0.2
+                    // 테두리색은 a 값 제거
+                    let backgroundColor = Array.from({length: DATA_COUNT}, () =>
+                        (`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.2)`));
+                    let borderColor = [];
+                    Object.values(backgroundColor).forEach((rgba) => {
+                        let rgb = []
+                        rgba.split('(')[1].split(')')[0].split(',')
+                            .forEach((color) => (rgb.push(color.trim())));
+                        borderColor.push(`rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`);
+                    });
+
+                    const orderedPriceChartConfig = {
+                        type: 'bar',
+                        data: {
+                            labels: Object.keys(orderPrice),
+                            datasets: [{
+                                label: '최근 구매금액',
+                                data: Object.values(orderPrice),
+                                backgroundColor: backgroundColor,
+                                borderColor: borderColor,
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: Object.values(orderPrice).reduce((previous, current) => {
+                                        return previous > current ? previous : current;
+                                    })
+                                }
+                            }
+                        }
+                    }
+
+                    new Chart($("#orderedPriceChart"), orderedPriceChartConfig)
+
+                },
+                error: function (request, status, error) {
+                    ajaxError(request, status, error);
+                }
+            });
+
+            // 브랜드별 구매 통계
+            $.ajax({
+                type: "POST",
+                url: "/api/biz/vip/statistics/order/brand",
+                dataType: "json",
+                data: JSON.stringify({
+                    id: "[[${id}]]"
+                }),
+                contentType: "application/json",
+                success: function (response) {
+                    let brandCount = response["data"];
+
+                    const DATA_COUNT = Object.keys(brandCount).length;
+                    // const NUMBER_CFG = {count:DATA_COUNT, min:0, max:Object.values(brandCount)[0]}
+
+                    // 데이터 개수만큼 랜덤 색상 지정
+                    // 배경색은 a : 0.2
+                    // 테두리색은 a 값 제거
+                    let backgroundColor = Array.from({length: DATA_COUNT}, () =>
+                        (`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.2)`));
+                    let borderColor = [];
+                    Object.values(backgroundColor).forEach((rgba) => {
+                        let rgb = []
+                        rgba.split('(')[1].split(')')[0].split(',')
+                            .forEach((color) => (rgb.push(color.trim())));
+                        borderColor.push(`rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`);
+                    });
+
+                    const orderedBrandChartConfig = {
+                        type: 'bar',
+                        data: {
+                            labels: Object.keys(brandCount),
+                            datasets: [{
+                                label: '브랜드별 구매',
+                                data: Object.values(brandCount),
+                                backgroundColor: backgroundColor,
+                                borderColor: borderColor,
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: Object.values(brandCount).reduce((previous, current) => {
+                                        return previous > current ? previous : current;
+                                    })
+                                }
+                            }
+                        }
+                    }
+
+                    new Chart($("#orderedBrandChart"), orderedBrandChartConfig)
+                },
+                error: function (request, status, error) {
+                    ajaxError(request, status, error);
+                }
+            });
+
+            // 카테고리별 구매 통계
+            $.ajax({
+                type: "POST",
+                url: "/api/biz/vip/statistics/order/category",
+                dataType: "json",
+                data: JSON.stringify({
+                    id: "[[${id}]]"
+                }),
+                contentType: "application/json",
+                success: function (response) {
+                    let smallCategoryCount = getSmallCategoryCount(response["data"]);
+
+                    const DATA_COUNT = Object.keys(smallCategoryCount).length;
+                    // const NUMBER_CFG = {count:DATA_COUNT, min:0, max:Object.values(smallCategoryCount)[0]}
+
+                    // 데이터 개수만큼 랜덤 색상 지정
+                    // 배경색은 a : 0.2
+                    // 테두리색은 a 값 제거
+                    let backgroundColor = Array.from({length: DATA_COUNT}, () =>
+                        (`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.2)`));
+                    let borderColor = [];
+                    Object.values(backgroundColor).forEach((rgba) => {
+                        let rgb = []
+                        rgba.split('(')[1].split(')')[0].split(',')
+                            .forEach((color) => (rgb.push(color.trim())));
+                        borderColor.push(`rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`);
+                    });
+
+
+                    const orderedCategoryChartConfig = {
+                        type: 'bar',
+                        data: {
+                            labels: Object.keys(smallCategoryCount),
+                            datasets: [{
+                                label: '카테고리별 구매',
+                                data: Object.values(smallCategoryCount),
+                                backgroundColor: backgroundColor,
+                                borderColor: borderColor,
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: Object.values(smallCategoryCount).reduce((previous, current) => {
+                                        return previous > current ? previous : current;
+                                    })
+                                }
+                            }
+                        }
+                    }
+
+                    new Chart($("#orderedCategoryChart"), orderedCategoryChartConfig)
+                },
+                error: function (request, status, error) {
+                    ajaxError(request, status, error);
+                }
+            });
+
+            // 로그인 통계
+            $.ajax({
+                type: "POST",
+                url: "/api/biz/vip/statistics/login",
+                dataType: "json",
+                data: JSON.stringify({
+                    id: "[[${id}]]",
+                    dateType: dateTypeForLogin
+                }),
+                contentType: "application/json",
+                success: function (response) {
+                    let loginCount = {};
+                    Object.keys(response["data"]).sort().forEach(function (key) {
+                        loginCount[key] = response["data"][key];
+                    });
+
+                    const loginChartConfig = {
+                        type: 'line',
+                        data: {
+                            labels: Object.keys(loginCount),
+                            datasets: [{
+                                label: "최근 로그인",
+                                data: Object.values(loginCount),
+                                fill: false,
+                                borderColor: 'rgb(75, 192, 192)',
+                                tension: 0.1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: Object.values(loginCount).reduce((previous, current) => {
+                                        return previous > current ? previous : current;
+                                    })
+                                }
+                            }
+                        }
+                    };
+
+                    new Chart($("#loginLogChart"), loginChartConfig);
+                },
+                error: function (request, status, error) {
+                    ajaxError(request, status, error);
+                }
+            });
+        });
+
+        function ajaxError(request, status, error) {
+            let message = "code : " + request + "\n";
+            message += "message : " + request.responseText + "\n";
+            message += "error : " + error;
+
+            console.log(message);
+        }
+
+        function setMemberInfo(data) {
+            $("#id").text(data["email"]);
+            $("#name").text(data["name"]);
+            if (data["gender"] == 0)
+                $("#gender").text("-");
+            else if (data["gender"] == 1)
+                $("#gender").text("남자");
+            else if (data["gender"] == 2)
+                $("#gender").text("여자");
+            $("#birth").text((new Date(data["birth"])).toLocaleDateString());
+            $("#tel").text(data["tel"]);
+
+            $("#zipcode").text(data["zipcode"]);
+            $("#address1").text(data["address1"]);
+            $("#address2").text(data["address2"]);
+
+            $("#signUpDate").text((new Date(data["signUpDate"])).toLocaleDateString())
+
+            if (data["gradeId"] == 4) {
+                $("#grade").text("STAR");
+                $("#grade").addClass("grade-star");
+            } else if (data["gradeId"] == 5) {
+                $("#grade").text("THE STAR");
+                $("#grade").addClass("grade-the-star");
+            }
+        }
+
+        function getSmallCategoryCount(largeCategoryCount) {
+            let smallCategoryCount = {};
+            Object.entries(largeCategoryCount).forEach((large, largeIdx) => {
+                let largeName = large[0];
+                let largeCount = large[1]['count'];
+                Object.entries(large[1]['children']).forEach((medium, mediumIdx) => {
+                    let mediumName = medium[0];
+                    let mediumCount = medium[1]['count'];
+                    Object.entries(medium[1]['children']).forEach((small, smallIdx) => {
+                        let smallName = small[0];
+                        let smallCount = small[1]['count'];
+
+                        smallCategoryCount[`${largeName} - ${mediumName} - ${smallName}`] = smallCount;
+                    });
+                })
+            });
+            return smallCategoryCount;
+        }
     </script>
 </th:block>
 <th:block layout:fragment="content">
     <section>
-        <div class="content">
+        <div class="row mb-2 text-end no-print">
             <div class="col-12">
-                <div class="card p-3">
+                <button class="btn btn-primary m-auto" onclick="printPage()">인쇄하기</button>
+            </div>
+        </div>
+        <div class="content">
+            <div class="col-10 ms-auto me-auto">
+                <div class="card p-3 mb-3">
                     <div class="card-header text-center">제목을 입력해주세요</div>
                     <div class="card-body p-3">
                         <div class="row justify-content-end">
-                            <div class="col-1">
-                                <span>THE STAR</span>
-                            </div>
-                            <div class="col-1">
-                                <span>STAR</span>
-                            </div>
+                            <span class="col-auto">
+                                <button class="grade" id="grade"></button>
+                            </span>
                         </div>
                         <div class="row">
-                            <div class="col-3 text-center">
-                                <span>이미지or사진</span>
+                            <div class="col-1"></div>
+                            <div class="col-3 col-auto text-center">
+                                <img th:src="@{/biz/img/sample_profile.jpg}" style="max-width: 150px;">
                             </div>
-                            <div class="col-9">
-                                <div class="row mb-3">
-                                    <div class="col-2 col">
-                                        이름
-                                    </div>
-                                    <div class="col-4">
-                                        이제석
-                                    </div>
-                                    <div class="col-2 col">
-                                        아이디
-                                    </div>
-                                    <div class="col-4">
-                                        sampleID
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-2 col">
-                                        성별
-                                    </div>
-                                    <div class="col-4">
-                                        남자
-                                    </div>
-                                    <div class="col-2 col">
-                                        생년월일(나이)
-                                    </div>
-                                    <div class="col-4">
-                                        0000-00-00(00)
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-2 col">
-                                        전화번호
-                                    </div>
-                                    <div class="col-4">
-                                        000-0000-00000
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-2 col">
-                                        주소
-                                    </div>
-                                    <div class="col-10">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                00000
+                            <div class="col-8">
+                                <div class="row mb-1">
+                                    <div class="row mb-3">
+                                        <div class="col-xl-6">
+                                            <div class="row">
+                                                <div class="col-4 col">
+                                                    이름
+                                                </div>
+                                                <div class="col-8" id="name"></div>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                서울특별시 오현로 4길 12
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                000
+                                        <div class="col-xl-6">
+                                            <div class="row">
+                                                <div class="col-4 col">
+                                                    아이디
+                                                </div>
+                                                <div class="col-3" id="id"></div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-2 col">
-                                        가입일
+                                    <div class="row mb-3">
+                                        <div class="col-xl-6">
+                                            <div class="row">
+                                                <div class="col-4 col">
+                                                    성별
+                                                </div>
+                                                <div class="col-8" id="gender"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <div class="row">
+                                                <div class="col-4 col">
+                                                    생년월일
+                                                </div>
+                                                <div class="col-8" id="birth"></div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-4">
-                                        0000-00-00
+                                    <div class="row mb-3">
+                                        <div class="col-2 col">
+                                            전화번호
+                                        </div>
+                                        <div class="col-10" id="tel"></div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-2 col">
+                                            주소
+                                        </div>
+                                        <div class="col-10">
+                                            <div class="row">
+                                                <div class="col-12" id="zipcode"></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12" id="address1"></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12" id="address2"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-2 col">
+                                            가입일
+                                        </div>
+                                        <div class="col-10" id="signUpDate"></div>
                                     </div>
                                 </div>
                             </div>
@@ -101,31 +429,32 @@
                         통계
                     </div>
                     <div class="card-body p-3">
-                        <h5>탈퇴예측</h5>
-                        <div class="col-12 mb-3">
-                            통계 그래프
-                        </div>
-                        <h5>구매율</h5>
-                        <div class="col-12 mb-3">
-                            통계 그래프
-                        </div>
-                        <h5>구매선호도</h5>
-                        <div class="col-6">
-                            <h6>카테고리</h6>
-                            <div class="col-12 mb-3">
-                                통계 그래프
+                        <h5 class="mb-1">최근 구매</h5>
+                        <div class="row mb-5 ">
+                            <div class="col-12 text-center">
+                                <canvas id="orderedPriceChart" style="max-height: 300px; max-width: 80%;"></canvas>
                             </div>
                         </div>
-                        <div class="col-6">
-                            <h6>브랜드</h6>
-                            <div class="col-12 mb-3">
-                                통계 그래프
+                        <h5 class="mb-1">구매선호도</h5>
+                        <div class="row mb-5">
+                            <div class="col-xl-6 mb-1">
+                                <canvas id="orderedCategoryChart" style="max-height: 300px; max-width: 80%;"></canvas>
+                            </div>
+                            <div class="col-xl-6 mb-1">
+                                <canvas id="orderedBrandChart" style="max-height: 300px; max-width: 80%;"></canvas>
                             </div>
                         </div>
-                        <h5>로그인</h5>
-                        <div class="col-12 mb-3">
-                            통계 그래프
+                        <h5 class="mb-1">최근 로그인</h5>
+                        <div class="row mb-5">
+                            <div class="col-12 text-center">
+                                <canvas id="loginLogChart" style="max-height: 300px; max-width: 80%;"></canvas>
+                            </div>
                         </div>
+                    </div>
+                </div>
+                <div class="row mb-3 text-center no-print">
+                    <div class="col-12">
+                        <button class="btn btn-primary m-auto" onclick="printPage()">인쇄하기</button>
                     </div>
                 </div>
             </div>

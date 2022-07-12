@@ -44,4 +44,6 @@ public interface MemberMapper {
     public void insertLog(String customer_id);
 
     List<LoginLogDTO> selectLoginLogByMemberId(String memberId);
+
+    List<LoginLogDTO> selectLoginLogInDate(double date);
 }
