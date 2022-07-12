@@ -40,7 +40,7 @@ iframe.lnb{width:100%;height:100%}
 
 /* language */
 .top_nav_wrap .lang_switch{width:64px;margin-left:-1px;}
-.top_nav_wrap .lang_switch .btn{width:57px;letter-spacing: 1px;font-family:"whitneyBook";font-weight:normal;line-height:41px;}
+.top_nav_wrap .lang_switch .btn{width:57px;letter-spacing: 1px;font-family:"whitneyBook";font-weight:normal;}
 .top_nav_wrap .lang_switch img{vertical-align:middle;margin-top:-4px;padding-right:6px;}
 .top_nav_wrap .lang_switch .list{width:65px}
 .top_nav_wrap .lang_switch .list > a{width:57px;}
@@ -283,7 +283,7 @@ iframe.lnb{width:100%;height:100%}
 #footerWrap .footer .footer_cnts2 .footer_apps dd a{display:block;width:115px;height:32px;background: url("http://www.thehandsome.com/_ui/desktop/common/images/common/ico_apps.png") no-repeat;text-indent:-999em;}
 #footerWrap .footer .footer_cnts2 .footer_apps dd .googleplay{background-position:right 0;}
 
-#footerWrap .footer .copyright{padding:10px 0 0 0;font-size: 10px;color:#363636;letter-spacing: 1px;font-family:"whitneyLight"}
+#footerWrap .footer .copyright{font-size: 10px;color:#363636;letter-spacing: 1px;font-family:"whitneyLight"}
 
 /* noticeWrap----------------------------------------- */
 #noticeWrap{position:absolute;top:150px;left:60%;width:40%;height:20px}
@@ -791,7 +791,7 @@ p.amc_morebtn a::before{ content:''; position:absolute; top:-15px; left:-25px; w
 #headerWrap .gnbwarp .gnb_nav > ul > li.selectshop a i{background: url("http://cdn.thehandsome.com/_ui/desktop/common/images/pc_gnb_selectshop_icon.gif") center center no-repeat; width:53px; height:47px; display:block; position:absolute; top:-16px; left:15px;}
 
 /* header 브랜드 메뉴 가이드 텍스트 추가 (20201016) */
-#headerWrap .top_nav .top_nav_wrap .brand_menu .brand_menu_guide_text{font-size:11px; color:#363636; position:absolute; top:9px; left:72px;}
+#headerWrap .top_nav .top_nav_wrap .brand_menu .brand_menu_guide_text{font-size:11px; color:#363636; position:absolute; top:5px; left:72px;}
 
 /* 에디토리얼 검색결과 없을경우 (20210122) */
 .editorial-list-search-none{padding:115px 0;}
