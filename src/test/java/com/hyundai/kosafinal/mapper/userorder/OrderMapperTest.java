@@ -4,6 +4,7 @@ import com.hyundai.kosafinal.domain.CategoryCountDTO;
 import com.hyundai.kosafinal.domain.MemberOrderConfirmDTO;
 import com.hyundai.kosafinal.domain.OrderedListDTO;
 import com.hyundai.kosafinal.domain.ProductDTO;
+import com.hyundai.kosafinal.entity.DateType;
 import com.hyundai.kosafinal.entity.OrderProduct;
 import com.hyundai.kosafinal.entity.SearchOrderCriteria;
 import com.hyundai.kosafinal.mapper.product.ProductMapper;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -21,10 +24,9 @@ import java.util.*;
 public class OrderMapperTest {
 
     @Autowired
-    private OrderMapper mapper;
-
-    @Autowired
     ProductMapper productMapper;
+    @Autowired
+    private OrderMapper mapper;
 
 //    @Test
 //    public void getOrderedList() {
@@ -206,24 +208,44 @@ public class OrderMapperTest {
     void selectOrderOnDashboard() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new java.util.Date());
-        calendar.add(Calendar.DATE, -1);
+        calendar.add(Calendar.DATE, -7);
+        DateType dateType = DateType.DATE;
 
         List<HashMap<String, Object>> selectSalesResult = mapper.selectOrderCount(calendar.getTime());
-
         for (HashMap<String, Object> map : selectSalesResult) {
             System.out.println(map);
         }
 
         List<HashMap<String, Object>> selectRevenueResult = mapper.selectOrderRevenue(calendar.getTime());
-
         for (HashMap<String, Object> map : selectRevenueResult) {
             System.out.println(map);
         }
 
         List<HashMap<String, Object>> selectCustomerResult = mapper.selectOrderCustomer(calendar.getTime());
 
+        HashMap<String, Set<String>> processMap = new HashMap<>();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateType.toString());
         for (HashMap<String, Object> map : selectCustomerResult) {
-            System.out.println(map);
+            try {
+                String dateKey = simpleDateFormat.format(simpleDateFormat.parse((String) map.get("date")));
+                String userEmail = (String) map.get("userEmail");
+                Set<String> userSet = processMap.getOrDefault(dateKey, new HashSet<>());
+                userSet.add(userEmail);
+                processMap.put(dateKey, userSet);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                continue;
+            }
         }
+
+        HashMap<String, Integer> resultMap = new HashMap<>();
+        for (String key : processMap.keySet())
+            resultMap.put(key, (Integer) processMap.get(key).size());
+
+        for (String key : resultMap.keySet())
+            System.out.println(resultMap.get(key));
+
+
     }
 }

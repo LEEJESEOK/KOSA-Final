@@ -21,7 +21,6 @@ public class ProductController {
                                  @RequestParam(value = "minPrice", required = false) Integer minPrice, @RequestParam(value = "maxPrice", required = false) Integer maxPrice,
                                  @RequestParam(value = "sortType", required = false) Integer sortType, Model model) {
         ModelAndView mav = new ModelAndView("category");
-        System.out.println("category");
         CategoryDTO categoryDTO = new CategoryDTO(large, medium, small);
         model.addAttribute("category", categoryDTO);
         model.addAttribute("pageNum", pageNum);

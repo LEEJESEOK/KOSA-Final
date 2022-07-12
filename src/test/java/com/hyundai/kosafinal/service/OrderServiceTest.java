@@ -12,12 +12,12 @@ import java.util.Map;
 
 @SpringBootTest
 class OrderServiceTest {
+    static Calendar calendar;
     @Autowired
     OrderService orderService;
-    static Calendar calendar;
 
     @BeforeAll
-    void InitClass() {
+    static void InitClass() {
         calendar = Calendar.getInstance();
     }
 
@@ -43,9 +43,12 @@ class OrderServiceTest {
 
     @Test
     void getCustomerCount() {
+        DateType dateType = DateType.DATE;
         calendar.setTime(new Date());
-        calendar.add(Calendar.DATE, -1);
-        Map<String, Integer> priceMap = orderService.getCustomerCount(calendar.getTime(), DateType.MONTH);
+        calendar.add(Calendar.DATE, -7);
+
+
+        Map<String, Integer> priceMap = orderService.getCustomerCount(calendar.getTime(), dateType);
 
         for (String key : priceMap.keySet())
             System.out.println(key + " : " + priceMap.get(key));

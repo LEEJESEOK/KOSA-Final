@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{/biz/layout/default}">
+<html lang="ko" layout:decorate="~{/biz/layout/default}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <th:block layout:fragment="script">
     <script>
         var addComma = function (price) {
@@ -26,103 +26,17 @@
         let revenue;
         let customers;
 
+        let chartSeries = [];
+
         let salesCountDateType = "date";
-        let revenueDateType = "month";
-        let customersDateType = "year";
+        let revenueDateType = "date";
+        let customersDateType = "date";
 
         $().ready(function () {
-            // 구매 횟수
-            $.ajax({
-                type: "POST",
-                url: "/api/biz/statistics",
-                dataType: "json",
-                data: JSON.stringify({
-                    dataType: "salesCount",
-                    dateType: salesCountDateType
-                }),
-                contentType: "application/json",
-                success: function (data) {
-                    sales = data["data"];
-
-                    if (sales.length <= 0)
-                        return;
-
-                    let salesCountList = [];
-                    Object.keys(sales).sort().forEach((key) => {
-                        salesCountList.push(sales[key])
-                    })
-
-                    let [today, prev] = salesCountList.slice(-2);
-                    setSalesCard(today, prev);
-
-                },
-                error: function (request, status, error) {
-                    ajaxError(request, status, error);
-                }
-            });
-
-            // 구매 금액
-            $.ajax({
-                type: "POST",
-                url: "/api/biz/statistics",
-                dataType: "json",
-                data: JSON.stringify({
-                    dataType: "revenue",
-                    dateType: revenueDateType
-                }),
-                contentType: "application/json",
-                success: function (data) {
-                    revenue = data["data"];
-                    let revenueList = [];
-                    Object.keys(revenue).sort().forEach((key) => {
-                        revenueList.push(revenue[key])
-                    })
-
-                    let [prev, today] = revenueList.slice(-2);
-                    setRevenueCard(today, prev);
-                },
-                error: function (request, status, error) {
-                    ajaxError(request, status, error);
-                }
-            });
-
-            // 방문자 수
-            $.ajax({
-                type: "POST",
-                url: "/api/biz/statistics",
-                dataType: "json",
-                data: JSON.stringify({
-                    dataType: "customers",
-                    dateType: customersDateType
-                }),
-                contentType: "application/json",
-                success: function (data) {
-                    customers = data["data"];
-                    let customersList = [];
-                    Object.keys(customers).sort().forEach((key) => {
-                        customersList.push(customers[key])
-                    })
-
-                    let [prev, today] = customersList.slice(-2);
-                    setCustomersCard(today, prev);
-                },
-                error: function (request, status, error) {
-                    ajaxError(request, status, error);
-                }
-            })
-
             // 차트
-            new ApexCharts(document.querySelector("#reportsChart"), {
-                series: [{
-                    name: 'Sales',
-                    data: Object.values(sales)
-                }, {
-                    name: 'Revenue',
-                    data: Object.values(revenue)
-                }, {
-                    name: 'Customers',
-                    data: Object.values(customers)
-                }],
+            chartSeries.length = 3;
+            let reportsChart = new ApexCharts(document.querySelector('#reportsChart'), {
+                series: [{data:[]}, {data:[]}, {data:[]}],
                 chart: {
                     height: 450,
                     type: 'area',
@@ -150,16 +64,111 @@
                     curve: 'smooth',
                     width: 2
                 },
-                xaxis: {
-                    type: 'datetime',
-                    categories: ["2022-07-12T00:00:00.000Z", "2022-07-12T01:30:00.000Z", "2022-07-12T02:30:00.000Z", "2022-07-12T03:30:00.000Z", "2022-07-12T04:30:00.000Z", "2022-07-12T05:30:00.000Z", "2022-07-12T06:30:00.000Z"]
-                },
                 tooltip: {
                     x: {
                         format: 'dd/MM/yy HH:mm'
                     },
                 }
-            }).render();
+            });
+            reportsChart.render();
+
+            // 구매 횟수
+            $.ajax({
+                type: "POST",
+                url: "/api/biz/statistics",
+                dataType: "json",
+                data: JSON.stringify({
+                    dataType: "salesCount",
+                    dateType: salesCountDateType
+                }),
+                contentType: "application/json",
+                success: function (data) {
+                    sales = data["data"];
+
+                    if (sales.length <= 0)
+                        return;
+
+                    let salesCountList = [];
+                    Object.keys(sales).sort().forEach((key) => {
+                        salesCountList.push(sales[key])
+                    })
+
+                    let [today, prev] = salesCountList.slice(-2);
+                    setSalesCard(today, prev);
+
+                    chartSeries[0] = ({
+                        name: "sales",
+                        data: dict2Series(sales)
+                    });
+                    reportsChart.updateSeries(chartSeries);
+                },
+                error: function (request, status, error) {
+                    ajaxError(request, status, error);
+                }
+            })
+
+            // 구매 금액
+            $.ajax({
+                type: "POST",
+                url: "/api/biz/statistics",
+                dataType: "json",
+                data: JSON.stringify({
+                    dataType: "revenue",
+                    dateType: revenueDateType
+                }),
+                contentType: "application/json",
+                success: function (data) {
+                    revenue = data["data"];
+                    let revenueList = [];
+                    Object.keys(revenue).sort().forEach((key) => {
+                        revenueList.push(revenue[key])
+                    })
+
+                    let [prev, today] = revenueList.slice(-2);
+                    setRevenueCard(today, prev);
+
+                    chartSeries[1] = ({
+                        name: "revenue",
+                        data: dict2Series(revenue)
+                    });
+                    reportsChart.updateSeries(chartSeries);
+                },
+                error: function (request, status, error) {
+                    ajaxError(request, status, error);
+                }
+            })
+
+            // 방문자 수
+            $.ajax({
+                type: "POST",
+                url: "/api/biz/statistics",
+                dataType: "json",
+                data: JSON.stringify({
+                    dataType: "customers",
+                    dateType: customersDateType
+                }),
+                contentType: "application/json",
+                success: function (data) {
+                    customers = data["data"];
+                    let customersList = [];
+                    Object.keys(customers).sort().forEach((key) => {
+                        customersList.push(customers[key])
+                    })
+
+                    let [prev, today] = customersList.slice(-2);
+                    setCustomersCard(today, prev);
+
+                    chartSeries[2] = {
+                        name: "customers",
+                        data: dict2Series(customers)
+                    };
+                    reportsChart.updateSeries(chartSeries);
+                },
+                error: function (request, status, error) {
+                    ajaxError(request, status, error);
+                }
+            });
+
         });
 
         function ajaxError(request, status, error) {
@@ -174,7 +183,7 @@
             $("#salesCount").text(addComma(today));
 
             if (prev != 0) {
-                $("#salesCountChangeRate").text(addComma(Math.round(((today - prev) / prev) * 100, 2)) + "%");
+                $("#salesCountChangeRate").text(addComma(Math.floor(((today - prev) / prev) * 100)) + "%");
             } else {
                 $("#salesCountChangeRate").text(addComma(today * 100) + "%");
             }
@@ -206,7 +215,7 @@
             $("#revenue").text("₩" + addComma(today));
 
             if (prev != 0)
-                $("#revenueChangeRate").text(addComma(Math.round(((today - prev) / prev) * 100, 2)) + "%");
+                $("#revenueChangeRate").text(addComma(Math.floor(((today - prev) / prev) * 100)) + "%");
             else
                 $("#revenueChangeRate").text(addComma(today * 100) + "%");
 
@@ -233,12 +242,11 @@
             }
         }
 
-        // TODO
         function setCustomersCard(today, prev) {
             $("#customers").text(addComma(today));
 
             if (prev != 0)
-                $("#customersChangeRate").text(addComma(Math.round(((today - prev) / prev) * 100, 2)) + "%");
+                $("#customersChangeRate").text(addComma(Math.floor(((today - prev) / prev) * 100)) + "%");
             else
                 $("#customersChangeRate").text(addComma(today * 100) + "%");
 
@@ -263,6 +271,16 @@
                     $("#customersDateType").text("| Today");
                     break;
             }
+        }
+
+        function dict2Series(dict) {
+            let series = [];
+
+            Object.keys(dict).sort().forEach((key) => {
+                series.push((dict[key]));
+            });
+
+            return series;
         }
     </script>
 </th:block>
@@ -420,12 +438,6 @@
 
                                 <!-- Line Chart -->
                                 <div id="reportsChart"></div>
-
-                                <script>
-                                    $().ready(function() {
-
-                                    });
-                                </script>
                                 <!-- End Line Chart -->
 
                             </div>
