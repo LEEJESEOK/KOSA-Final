@@ -14,7 +14,7 @@
     <select id="getOrderedList" resultType="OrderedListDTO">
         SELECT * FROM ordered_list
         WHERE user_email = #{user_email}
-        ORDER BY id DESC
+        ORDER BY "DATE" DESC
     </select>
 
     <!-- 주문 상품 목록 조회 -->

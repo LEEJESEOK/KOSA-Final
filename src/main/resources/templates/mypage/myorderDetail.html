@@ -167,7 +167,7 @@
 
     </script>
 </th:block>
-<th:block th:fragment="bodyWrap">
+<th:block layout:fragment="bodyWrap">
     <!-- 주소 API Key(한섬) -->
     <input type="hidden" id="apiConfmKey" value="U01TX0FVVEgyMDE5MDYxNzE2NDczMzEwODgxNTI=">
 
@@ -215,7 +215,7 @@
                             <th scope="col" style="word-break:keep-all;">수량</th>
                             <th scope="col">판매가</th>
                             <th scope="col" style="word-break:keep-all;">실결제금액</th>
-                            <th scope="col">적립 한섬마일리지</th>
+                            <th scope="col">적립예정 포인트</th>
                             <th scope="col">주문상태</th>
                         </tr>
                         </thead>
@@ -266,7 +266,11 @@
                             </td>
                             <td>
                                 <p class="num">
-                                    결제완료<span class="sum_date" style="margin:0 auto;">([[${#dates.format(order.date, 'yyyy.MM.dd')}]])</span>
+                                    <span th:if="${order.status == 0}">결제완료</span>
+                                    <span th:if="${order.status == 1}">배송중</span>
+                                    <span th:if="${order.status == 2}">배송완료</span>
+                                    <span th:if="${order.status == 3}">주문취소</span>
+                                    <span class="sum_date" style="margin:0 auto;">([[${#dates.format(order.date, 'yyyy.MM.dd')}]])</span>
                                 </p>
                             </td>
                         </tr>

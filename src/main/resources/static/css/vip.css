@@ -110,9 +110,6 @@ a {
     text-align: left;
 }
 
-span {
-    vertical-align: center;
-}
 
 /* 로고 변경 */
 #headerWrap .gnbwarp.new201608 .logo {
@@ -233,10 +230,30 @@ span {
     /*margin-bottom: 20px !important;*/
 }
 #timesale-time {
-    padding: 3px;
+    display: inline-block;
+    padding: 10px;
+    vertical-align: middle !important;
+    text-align: center;
+    color: #363636;
+    width: 65%;
+    height: 100px;
+    transform: skew(-20deg);
+    background: #e5e5e5;
+    box-shadow: 7px 7px 0px #FFC400;
+    font-weight: 900;
+    font-family: 'Noto Sans KR', sans-serif;
 }
+
+#timesale-time h2 {
+    transform: skew(20deg);
+}
+
 #timesale-time h5 {
     color: #ed1d1d;
+    transform: skew(20deg);
+}
+span {
+    vertical-align: middle !important;
 }
 
 #imgDiv {
@@ -279,6 +296,7 @@ span {
     font-size: 12px  !important;
     text-align: left;
     color: #1a1a1a;
+    box-sizing:content-box;
 }
 
 .map_wrap a, .map_wrap a:hover, .map_wrap a:active {
@@ -454,6 +472,21 @@ span {
     font-weight: bold !important;
     cursor: default !important;
     color: #777 !important;
+}
+
+#map div {
+    text-align: center;
+}
+
+.option {
+    text-align: center;
+}
+
+/* CSS 오류 해결 */
+li, img {
+    -webkit-box-sizing: content-box !important;
+    -moz-box-sizing: content-box !important;
+    box-sizing: content-box !important;
 }
 
 

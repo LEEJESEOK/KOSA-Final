@@ -32,6 +32,7 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         memberService.insertLog(authentication.getName());
 
+
         SavedRequest savedRequest = requestCache.getRequest(request, response);
         if (savedRequest != null) {
             // 인증 받기 전 url로 이동하기

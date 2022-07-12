@@ -362,12 +362,11 @@ body {
   margin: 20px;
   font-size: 60px;
   font-weight: 600;
-  /*line-height: 56px;*/
   text-transform: uppercase;
-  color: #fff;
+  color: #e5e5e5;
 }
 #hero h2 {
-  color: #eee;
+  color: #e5e5e5;
   margin: 20px;
   font-size: 24px;
 }
@@ -395,8 +394,8 @@ body {
   border-radius: 4px;
   transition: 0.5s;
   margin-top: 30px;
-  border: 2px solid #fff;
-  color: #fff;
+  border: 2px solid #e5e5e5;
+  color: #e5e5e5;
 }
 /*#hero .btn-get-started:hover {*/
 /*  background: #FFC400;*/

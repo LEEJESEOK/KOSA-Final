@@ -82,6 +82,7 @@ public class ProductWebController {
     long textCnt = 0;
     long positiveCnt = 0;
     long negativeCnt = 0;
+    long normalCnt = 0;
     double negativeTotal = 0;
     double positiveTotal = 0;
     for(ProductReviewDTO p : reviewDTOList){
@@ -89,6 +90,9 @@ public class ProductWebController {
       if(p.getSentiment_type().equals("부정")) {
         negativeCnt++;
         negativeTotal += p.getSentiment_percent();
+      }
+      else if(p.getSentiment_type().equals("보통")){
+        normalCnt++;
       }
       else{
         positiveCnt++;
@@ -103,12 +107,14 @@ public class ProductWebController {
     imgCnt = reviewDTOList.size() - textCnt;
     double avgTotal = total / (double) reviewDTOList.size();
     avgTotal = Math.round(avgTotal*100)/100.0;
+
     model.addAttribute("avgTotal", avgTotal);
     model.addAttribute("reviewCnt", reviewDTOList.size());
     model.addAttribute("imgCnt", imgCnt);
     model.addAttribute("textCnt", textCnt);
-    model.addAttribute("positivePercent", Math.round(positiveTotal/positiveCnt));
-    model.addAttribute("negativePercent", Math.round(negativeTotal/negativeCnt));
+    model.addAttribute("positivePercent", Math.round((positiveCnt / (double) reviewDTOList.size())* 100));
+    model.addAttribute("negativePercent", Math.round((negativeCnt / (double) reviewDTOList.size())* 100));
+    model.addAttribute("normalPercent", Math.round((normalCnt / (double) reviewDTOList.size())* 100));
 
     if(authentication != null){
       Member2DTO member = mService.findByEmail(authentication.getName());
