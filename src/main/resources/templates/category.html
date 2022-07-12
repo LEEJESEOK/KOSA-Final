@@ -118,7 +118,7 @@
                             `
                         <a class="prev2" href="/category/${getFilterUri(large, medium, small, 1, brand, color, size, minPrice, maxPrice, sortType)}">처음 페이지로 이동</a>
                         <a class="prev" href="/category/${getFilterUri(large, medium, small, page.criteria.pageNum - 1, brand, color, size, minPrice, maxPrice, sortType)}">이전 페이지로 이동</a>
-                        <span class="num">\`;
+                        <span class="num">
                         `;
                         for (idx = page.startPage; idx <= page.endPage; idx++) {
                             pageHTML += `<a href="/category/${getFilterUri(large, medium, small, idx, brand, color, size, minPrice, maxPrice, sortType)}" class="pageBtn ${(idx === page.criteria.pageNum) ? "on" : ""}" pageNum=${idx}">${idx}</a>`;
