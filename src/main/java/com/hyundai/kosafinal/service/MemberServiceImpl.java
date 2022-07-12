@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
-import static com.hyundai.kosafinal.entity.DateType.DAY;
+import static java.util.Calendar.*;
+import static java.util.Calendar.HOUR;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -133,44 +133,49 @@ public class MemberServiceImpl implements MemberService {
                     resultMap.getOrDefault(simpleDateFormat.format(loginDate), 0) + 1);
         }
 
+        paddingIntegerData(resultMap, dateType);
+
+        return resultMap;
+    }
+
+    void paddingIntegerData(Map<String, Integer> data, DateType dateType) {
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateType.toString());
+
+        // 패딩 데이터 추가
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
+
+        int paddingDateIdx = 0;
+        int paddingDate = 0;
         switch (dateType) {
-            // 최근 5년
             case YEAR:
-                for (int i = 0; i < 5; ++i) {
-                    calendar.add(Calendar.YEAR, -1);
-                    String dateKey = simpleDateFormat.format(calendar.getTime());
-                    resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0));
-                }
+                paddingDateIdx = 5;
+                paddingDate = YEAR;
                 break;
-            // 최근 12개월
             case MONTH:
-                for (int i = 0; i < 12; ++i) {
-                    calendar.add(Calendar.MONTH, -1);
-                    String dateKey = simpleDateFormat.format(calendar.getTime());
-                    resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0));
-                }
+                paddingDateIdx = 12;
+                paddingDate = MONTH;
                 break;
-            // 최근 7일
-            case DAY:
-                for (int i = 0; i <= 7; i++) {
-                    calendar.add(Calendar.DATE, -1);
-                    String dateKey = simpleDateFormat.format(calendar.getTime());
-                    resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0));
-                }
+            case DATE:
+                paddingDateIdx = 7;
+                paddingDate = DATE;
                 break;
-            // 최근 24시간
             case HOUR:
-                for (int i = 0; i < 24; i++) {
-                    calendar.add(Calendar.HOUR, -1);
-                    String dateKey = simpleDateFormat.format(calendar.getTime());
-                    resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0));
-                }
+                paddingDateIdx = 24;
+                paddingDate = HOUR;
+                break;
+            case MINUTE:
+                paddingDateIdx = 60;
+                paddingDate = MINUTE;
                 break;
         }
 
+        for (int i = 0; i < paddingDateIdx; ++i) {
+            String dateKey = simpleDateFormat.format(calendar.getTime());
+            data.put(dateKey, data.getOrDefault(dateKey, 0));
+            calendar.add(paddingDate, -1);
 
-        return resultMap;
+        }
     }
 }

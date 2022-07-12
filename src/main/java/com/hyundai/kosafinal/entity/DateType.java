@@ -7,7 +7,7 @@ package com.hyundai.kosafinal.entity;
 public enum DateType {
     YEAR("yyyy"),
     MONTH("yyyy-MM"),
-    DAY("yyyy-MM-dd"),
+    DATE("yyyy-MM-dd"),
     HOUR("yyyy-MM-dd HH"),
     MINUTE("yyyy-MM-dd HH:mm");
 

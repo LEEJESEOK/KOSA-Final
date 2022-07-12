@@ -15,10 +15,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+
 
 /**
  * @author LEE JESEOK
@@ -101,45 +100,70 @@ public class BizRestController {
         return map;
     }
 
-    @GetMapping("/order/count")
-    public ResponseEntity<Map<String, Object>> getOrderCount(@RequestBody Map<String, Object> requestMap) {
+    /**
+     * dateType : 데이터 기간 단위<br>
+     * dataType : 데이터 종류(count, price)<br>
+     *
+     * @param requestMap
+     * @return
+     */
+    @PostMapping("/statistics")
+    public ResponseEntity<Map<String, Object>> getStatistics(@RequestBody Map<String, Object> requestMap) {
         Map<String, Object> responseMap = new HashMap<>();
 
         // 예외 처리
         // DateType 검사
         String dateTypeStr = (String) requestMap.get("dateType");
         DateType dateType;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+
         try {
             dateType = DateType.valueOf(dateTypeStr.toUpperCase());
+            switch (dateType) {
+                case YEAR:
+                    calendar.add(Calendar.YEAR, -5);
+                    break;
+                case MONTH:
+                    calendar.add(Calendar.MONTH, -12);
+                    break;
+                case DATE:
+                    calendar.add(Calendar.DATE, -7);
+                    break;
+                case HOUR:
+                    calendar.add(Calendar.HOUR, -24);
+                    break;
+            }
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        responseMap.put("data", orderService.getOrderCountByTime(dateType));
-
-        return new ResponseEntity<>(responseMap, HttpStatus.OK);
-    }
-
-    @GetMapping("/order/price")
-    public ResponseEntity<Map<String, Object>> getOrderPrice(@RequestBody Map<String, Object> requestMap) {
-        Map<String, Object> responseMap = new HashMap<>();
-
-        // 예외 처리
-        // DateType 검사
-        String dateTypeStr = (String) requestMap.get("dateType");
-        DateType dateType;
-        try {
-            dateType = DateType.valueOf(dateTypeStr.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        // dataType 검사
+        String dataTypeStr = (String) requestMap.get("dataType");
+        Map<String, Integer> dataMap = null;
+        switch (dataTypeStr) {
+            case "salesCount":
+                dataMap = orderService.getSalesCount(calendar.getTime(), dateType);
+                break;
+            case "revenue":
+                dataMap = orderService.getRevenue(calendar.getTime(), dateType);
+                break;
+            case "customers":
+                dataMap = orderService.getCustomerCount(calendar.getTime(), dateType);
+                break;
         }
 
-        responseMap.put("data", orderService.getOrderPriceByTime(dateType));
-
+        responseMap.put("data", dataMap);
 
         return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
 
+    /**
+     * VIP 회원 상세 정보<br>
+     *
+     * @param requestMap
+     * @return
+     */
     @PostMapping("/vip/detail")
     public ResponseEntity<Map<String, Object>> getMemberDetail(@RequestBody Map<String, Object> requestMap) {
         Map<String, Object> responseMap = new HashMap<>();
@@ -170,14 +194,44 @@ public class BizRestController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        // 최근 기간별 로그인 횟수
+        Map<String, Integer> data = memberService.getLoginCountByMemberId(id, dateType);
         Map<String, Object> responseMap = new HashMap<>();
-        responseMap.put("data", memberService.getLoginCountByMemberId(id, dateType));
+
+        // 최근 데이터만 반환
+        // 역순으로 키 정렬
+        List<String> sortedKeyList = data.keySet().stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+        int oldDateIdx = 0;
+        switch (dateType) {
+            case YEAR:
+                oldDateIdx = 5;
+                break;
+            case MONTH:
+                oldDateIdx = 12;
+                break;
+            case DATE:
+                oldDateIdx = 7;
+                break;
+            case HOUR:
+                oldDateIdx = 24;
+                break;
+            case MINUTE:
+                oldDateIdx = 60;
+                break;
+        }
+        Map<String, Integer> recentData = new HashMap<>();
+        for (int i = 0; i < oldDateIdx; ++i) {
+            recentData.put(sortedKeyList.get(i), data.get(sortedKeyList.get(i)));
+        }
+
+        responseMap.put("data", recentData);
 
         return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
 
     @PostMapping("/vip/statistics/order/price")
     public ResponseEntity<Map<String, Object>> getOrderedDateCount(@RequestBody Map<String, Object> requestMap) {
+
 
         String id = (String) requestMap.get("id");
         if (id == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -221,5 +275,6 @@ public class BizRestController {
 
         return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
+
 
 }

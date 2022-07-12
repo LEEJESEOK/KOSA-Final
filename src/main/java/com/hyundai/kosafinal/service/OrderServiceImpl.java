@@ -112,9 +112,10 @@ public class OrderServiceImpl implements OrderService {
         return mapper.searchOrder(criteria);
     }
 
+    // 단위 기간별 구매 횟수
     @Override
-    public Map<String, Integer> getOrderCountByTime(DateType dateType)  {
-        List<HashMap<String, Object>> selectMap = mapper.selectWeekOrderedCount();
+    public Map<String, Integer> getSalesCount(Date start, DateType dateType) {
+        List<HashMap<String, Object>> selectMap = mapper.selectOrderCount(start);
 
         HashMap<String, Integer> resultMap = new HashMap<>();
 
@@ -130,12 +131,15 @@ public class OrderServiceImpl implements OrderService {
             }
         }
 
+        paddingIntegerData(resultMap, dateType);
+
         return resultMap;
     }
 
+    // 단위 기간별 구매 금액
     @Override
-    public Map<String, Integer> getOrderPriceByTime(DateType dateType) {
-        List<HashMap<String, Object>> selectMap = mapper.selectWeekOrderedPrice();
+    public Map<String, Integer> getRevenue(Date start, DateType dateType) {
+        List<HashMap<String, Object>> selectMap = mapper.selectOrderRevenue(start);
 
         HashMap<String, Integer> resultMap = new HashMap<>();
 
@@ -143,13 +147,39 @@ public class OrderServiceImpl implements OrderService {
         for (HashMap<String, Object> map : selectMap) {
             try {
                 String dateKey = simpleDateFormat.format(simpleDateFormat.parse((String) map.get("date")));
-                int price = (Integer) map.get("price");
+                int price = (Integer) map.get("revenue");
                 resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0) + price);
             } catch (ParseException e) {
                 e.printStackTrace();
                 continue;
             }
         }
+
+        paddingIntegerData(resultMap, dateType);
+
+        return resultMap;
+    }
+
+    // 단위 기간별 구매자 수
+    @Override
+    public Map<String, Integer> getCustomerCount(Date start, DateType dateType) {
+        List<HashMap<String, Object>> selectMap = mapper.selectOrderCustomer(start);
+
+        HashMap<String, Integer> resultMap = new HashMap<>();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateType.toString());
+        for (HashMap<String, Object> map : selectMap) {
+            try {
+                String dateKey = simpleDateFormat.format(simpleDateFormat.parse((String) map.get("date")));
+                int count = (Integer) map.get("count");
+                resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0) + count);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                continue;
+            }
+        }
+
+        paddingIntegerData(resultMap, dateType);
 
         return resultMap;
     }
@@ -160,60 +190,17 @@ public class OrderServiceImpl implements OrderService {
         // 회원의 구매한 상품 리스트
         List<OrderedListDTO> orderedList = mapper.getOrderedList(memberId);
 
-        System.out.println("count : " + orderedList.size());
 
         Map<String, Integer> resultMap = new HashMap<>();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateType.toString());
 
         // 구매한 상품의 날짜당 가격 합계
         for (OrderedListDTO order : orderedList) {
-            System.out.println("order : " + order);
-
             Date orderDate = order.getDate();
             resultMap.put(simpleDateFormat.format(orderDate), resultMap.getOrDefault(simpleDateFormat.format(orderDate), 0) + order.getTotalPrice());
         }
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-
-        // 오늘 데이터 추가
-        String dateKey = simpleDateFormat.format(calendar.getTime());
-        resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0));
-        switch (dateType) {
-            // 최근 5년
-            case YEAR:
-                for (int i = 0; i < 5 - 1; ++i) {
-                    calendar.add(YEAR, -1);
-                    dateKey = simpleDateFormat.format(calendar.getTime());
-                    resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0));
-                }
-                break;
-            // 최근 12개월
-            case MONTH:
-                for (int i = 0; i < 12 - 1; ++i) {
-                    calendar.add(MONTH, -1);
-                    dateKey = simpleDateFormat.format(calendar.getTime());
-                    resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0));
-                }
-                break;
-            // 최근 7일
-            case DAY:
-                for (int i = 0; i <= 7 - 1; i++) {
-                    calendar.add(Calendar.DATE, -1);
-                    dateKey = simpleDateFormat.format(calendar.getTime());
-                    resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0));
-                }
-                break;
-            // 최근 24시간
-            case HOUR:
-                for (int i = 0; i < 24 - 1; i++) {
-                    calendar.add(HOUR, -1);
-                    dateKey = simpleDateFormat.format(calendar.getTime());
-                    resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0));
-                }
-                break;
-        }
-
+        paddingIntegerData(resultMap, dateType);
 
         return resultMap;
     }
@@ -266,7 +253,6 @@ public class OrderServiceImpl implements OrderService {
         Map<String, CategoryCountDTO> categoryCountMap = new HashMap<>();
 
         for (OrderProduct orderProduct : orderedProductList) {
-            System.out.println(orderProduct);
             // 상품의 카테고리 정보
             List<ProductDTO> productDTOList = productMapper.selectProductDetailById(orderProduct.getPid());
 
@@ -290,6 +276,43 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return categoryCountMap;
+    }
+
+    void paddingIntegerData(Map<String, Integer> data, DateType dateType) {
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateType.toString());
+
+        // 패딩 데이터 추가
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+
+        int paddingDateIdx = 0;
+        int paddingDate = 0;
+        switch (dateType) {
+            case YEAR:
+                paddingDateIdx = 5;
+                paddingDate = YEAR;
+                break;
+            case MONTH:
+                paddingDateIdx = 12;
+                paddingDate = MONTH;
+                break;
+            case DATE:
+                paddingDateIdx = 7;
+                paddingDate = DATE;
+                break;
+            case HOUR:
+                paddingDateIdx = 24;
+                paddingDate = HOUR;
+                break;
+        }
+
+        for (int i = 0; i < paddingDateIdx; ++i) {
+            String dateKey = simpleDateFormat.format(calendar.getTime());
+            data.put(dateKey, data.getOrDefault(dateKey, 0));
+            calendar.add(paddingDate, -1);
+
+        }
     }
 
 }

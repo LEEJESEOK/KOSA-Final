@@ -4,7 +4,6 @@ import com.hyundai.kosafinal.domain.CategoryCountDTO;
 import com.hyundai.kosafinal.domain.MemberOrderConfirmDTO;
 import com.hyundai.kosafinal.domain.OrderedListDTO;
 import com.hyundai.kosafinal.domain.ProductDTO;
-import com.hyundai.kosafinal.entity.DateType;
 import com.hyundai.kosafinal.entity.OrderProduct;
 import com.hyundai.kosafinal.entity.SearchOrderCriteria;
 import com.hyundai.kosafinal.mapper.product.ProductMapper;
@@ -205,15 +204,25 @@ public class OrderMapperTest {
 
     @Test
     void selectOrderOnDashboard() {
-        List<HashMap<String, Object>> selectCountResult = mapper.selectWeekOrderedCount();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new java.util.Date());
+        calendar.add(Calendar.DATE, -1);
 
-        for (HashMap<String, Object> map : selectCountResult) {
+        List<HashMap<String, Object>> selectSalesResult = mapper.selectOrderCount(calendar.getTime());
+
+        for (HashMap<String, Object> map : selectSalesResult) {
             System.out.println(map);
         }
 
-        List<HashMap<String, Object>> selectTodayPrice = mapper.selectWeekOrderedPrice();
+        List<HashMap<String, Object>> selectRevenueResult = mapper.selectOrderRevenue(calendar.getTime());
 
-        for (HashMap<String, Object> map : selectTodayPrice) {
+        for (HashMap<String, Object> map : selectRevenueResult) {
+            System.out.println(map);
+        }
+
+        List<HashMap<String, Object>> selectCustomerResult = mapper.selectOrderCustomer(calendar.getTime());
+
+        for (HashMap<String, Object> map : selectCustomerResult) {
             System.out.println(map);
         }
     }
