@@ -90,6 +90,7 @@ public class MypageController {
         List<OrderedListDTO> orderList = oService.getOrderedList(userEmail);
 
         model.addAttribute("orderList", orderList);
+        log.info("주문내역: " + orderList);
     }
 
     // 주문 상세보기
