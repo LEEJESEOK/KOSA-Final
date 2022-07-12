@@ -34,6 +34,7 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         memberService.insertLog(authentication.getName());
+
         // 쿠팡 둘러보기 하다가 로그인 성공 시 다시 거기로 가는 경우
         setDefaultTargetUrl("/");
 
