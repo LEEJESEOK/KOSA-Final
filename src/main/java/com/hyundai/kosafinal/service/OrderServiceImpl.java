@@ -165,19 +165,25 @@ public class OrderServiceImpl implements OrderService {
     public Map<String, Integer> getCustomerCount(Date start, DateType dateType) {
         List<HashMap<String, Object>> selectMap = mapper.selectOrderCustomer(start);
 
-        HashMap<String, Integer> resultMap = new HashMap<>();
+        HashMap<String, Set<String>> processMap = new HashMap<>();
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateType.toString());
         for (HashMap<String, Object> map : selectMap) {
             try {
                 String dateKey = simpleDateFormat.format(simpleDateFormat.parse((String) map.get("date")));
-                int count = (Integer) map.get("count");
-                resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0) + count);
+                String userEmail = (String) map.get("userEmail");
+                Set<String> userSet = processMap.getOrDefault(dateKey, new HashSet<>());
+                userSet.add(userEmail);
+                processMap.put(dateKey, userSet);
             } catch (ParseException e) {
                 e.printStackTrace();
                 continue;
             }
         }
+
+        HashMap<String, Integer> resultMap = new HashMap<>();
+        for (String key : processMap.keySet())
+            resultMap.put(key, (Integer) processMap.get(key).size());
 
         paddingIntegerData(resultMap, dateType);
 

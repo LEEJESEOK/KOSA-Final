@@ -36,7 +36,19 @@ public class BizRestController {
 
     @PostMapping("/product/register")
     public ResponseEntity<Integer> productRegister(MultipartHttpServletRequest request) {
-        ProductDTO productDTO = ProductDTO.builder().id(request.getParameter("id")).size(request.getParameter("size")).colorId(request.getParameter("colorId")).name(request.getParameter("name")).brand(request.getParameter("brand")).categoryLarge(request.getParameter("categoryLarge")).categoryMedium(request.getParameter("categoryMedium")).categorySmall(request.getParameter("categorySmall")).detail(request.getParameter("detail")).price(Integer.parseInt(request.getParameter("price"))).stockAmount(request.getParameter("stockAmount")).build();
+        ProductDTO productDTO = ProductDTO.builder()
+                .id(request.getParameter("id"))
+                .size(request.getParameter("size"))
+                .colorId(request.getParameter("colorId"))
+                .name(request.getParameter("name"))
+                .brand(request.getParameter("brand"))
+                .categoryLarge(request.getParameter("categoryLarge"))
+                .categoryMedium(request.getParameter("categoryMedium"))
+                .categorySmall(request.getParameter("categorySmall"))
+                .detail(request.getParameter("detail"))
+                .price(Integer.parseInt(request.getParameter("price")))
+                .stockAmount(request.getParameter("stockAmount"))
+                .build();
 
         List<MultipartFile> files = new ArrayList<>();
         if (!request.getFiles("image1Uri").isEmpty() && request.getFiles("image1Uri").get(0).getSize() != 0) {
@@ -141,6 +153,7 @@ public class BizRestController {
         // dataType 검사
         String dataTypeStr = (String) requestMap.get("dataType");
         Map<String, Integer> dataMap = null;
+
         switch (dataTypeStr) {
             case "salesCount":
                 dataMap = orderService.getSalesCount(calendar.getTime(), dateType);
@@ -152,6 +165,8 @@ public class BizRestController {
                 dataMap = orderService.getCustomerCount(calendar.getTime(), dateType);
                 break;
         }
+
+        System.out.println(dataMap);
 
         responseMap.put("data", dataMap);
 
@@ -200,7 +215,10 @@ public class BizRestController {
 
         // 최근 데이터만 반환
         // 역순으로 키 정렬
-        List<String> sortedKeyList = data.keySet().stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+        List<String> sortedKeyList = data.keySet()
+                .stream()
+                .sorted(Comparator.reverseOrder())
+                .collect(Collectors.toList());
         int oldDateIdx = 0;
         switch (dateType) {
             case YEAR:
@@ -231,7 +249,6 @@ public class BizRestController {
 
     @PostMapping("/vip/statistics/order/price")
     public ResponseEntity<Map<String, Object>> getOrderedDateCount(@RequestBody Map<String, Object> requestMap) {
-
 
         String id = (String) requestMap.get("id");
         if (id == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

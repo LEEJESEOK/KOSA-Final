@@ -12,7 +12,8 @@
 
     <!-- 주문 목록 조회 -->
     <select id="getOrderedList" resultType="OrderedListDTO">
-        SELECT * FROM ordered_list
+        SELECT *
+        FROM ordered_list
         WHERE user_email = #{user_email}
         ORDER BY "DATE" DESC
     </select>
@@ -273,13 +274,11 @@
 
     <resultMap id="OrderCustomerMap" type="HashMap">
         <result property="date" column="DATE"/>
-        <result property="count" column="COUNT" javaType="int"/>
+        <result property="userEmail" column="user_email"/>
     </resultMap>
     <select id="selectOrderCustomer" resultMap="OrderCustomerMap">
-        SELECT TO_CHAR("DATE", 'yyyy-MM-dd hh24:mm:ss') as "DATE", count(USER_EMAIL) as COUNT
+        SELECT TO_CHAR("DATE", 'yyyy-MM-dd hh24:mm:ss') as "DATE", USER_EMAIL
         FROM ORDERED_LIST
         WHERE "DATE" BETWEEN #{start} AND SYSDATE
-        GROUP BY TO_CHAR("DATE", 'yyyy-MM-dd hh24:mm:ss')
-        ORDER BY "DATE"
     </select>
 </mapper>
