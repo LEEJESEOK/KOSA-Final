@@ -22,25 +22,27 @@
                 });
 
                 // STAR, THE STAR 일 때만 VIP 라운지 버튼 보이게
-                $.ajax({
-                    type: "POST",
-                    url: "/member/checkVIP",
-                    contentType: "application/json; charset=utf-8",
-                    success: function (result) {
-                        let btn = document.getElementById("vipBtn");
-                        if (result == true) {
-                            btn.style.display = 'block';
-                        } else {
-                            btn.style.display = 'none';
+                let status = $(".loginStatus").val();
+                if(status == "1") {
+                    $.ajax({
+                        type: "POST",
+                        url: "/member/checkVIP",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (result) {
+                            let btn = document.getElementById("vipBtn");
+                            if (result == true) {
+                                btn.style.display = 'block';
+                            } else {
+                                btn.style.display = 'none';
+                            }
+                        },
+                        error: function (request, status, error) {
+                        },
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader(csrf_header, csrf_token);
                         }
-                    },
-                    error: function (request, status, error) {
-                    },
-                    beforeSend: function (xhr) {
-                        xhr.setRequestHeader(csrf_header, csrf_token);
-                    }
-                });
-
+                    });
+                }
             });
 
             function logout() {
@@ -294,11 +296,15 @@
                         </a>
                     </li>
                     <!-- 로그인/로그아웃 -->
-                    <li sec:authorize="!isAuthenticated()"><a href="/member/login">로그인</a></li>
+                    <li sec:authorize="!isAuthenticated()">
+                        <a href="/member/login">로그인</a>
+                        <input type="hidden" class="loginStatus" value="0">
+                    </li>
                     <li sec:authorize="isAuthenticated()">
                         <form id="logoutForm" th:action="@{/logout}" method="post">
                         </form>
                         <a href="javascript:void(0)" onclick="logout()" id="logoutBtn">로그아웃</a>
+                        <input type="hidden" class="loginStatus" value="1">
                     </li>
                     <li class="header_dropmemu mypage">
 
