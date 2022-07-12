@@ -114,8 +114,8 @@ public class OrderServiceImpl implements OrderService {
 
     // 단위 기간별 구매 횟수
     @Override
-    public Map<String, Integer> getOrderCountByTime(DateType dateType) {
-        List<HashMap<String, Object>> selectMap = mapper.selectWeekOrderedCount();
+    public Map<String, Integer> getSalesCount(Date start, DateType dateType) {
+        List<HashMap<String, Object>> selectMap = mapper.selectOrderCount(start);
 
         HashMap<String, Integer> resultMap = new HashMap<>();
 
@@ -138,8 +138,8 @@ public class OrderServiceImpl implements OrderService {
 
     // 단위 기간별 구매 금액
     @Override
-    public Map<String, Integer> getOrderPriceByTime(DateType dateType) {
-        List<HashMap<String, Object>> selectMap = mapper.selectWeekOrderedPrice();
+    public Map<String, Integer> getRevenue(Date start, DateType dateType) {
+        List<HashMap<String, Object>> selectMap = mapper.selectOrderRevenue(start);
 
         HashMap<String, Integer> resultMap = new HashMap<>();
 
@@ -147,8 +147,32 @@ public class OrderServiceImpl implements OrderService {
         for (HashMap<String, Object> map : selectMap) {
             try {
                 String dateKey = simpleDateFormat.format(simpleDateFormat.parse((String) map.get("date")));
-                int price = (Integer) map.get("price");
+                int price = (Integer) map.get("revenue");
                 resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0) + price);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                continue;
+            }
+        }
+
+        paddingIntegerData(resultMap, dateType);
+
+        return resultMap;
+    }
+
+    // 단위 기간별 구매자 수
+    @Override
+    public Map<String, Integer> getCustomerCount(Date start, DateType dateType) {
+        List<HashMap<String, Object>> selectMap = mapper.selectOrderCustomer(start);
+
+        HashMap<String, Integer> resultMap = new HashMap<>();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateType.toString());
+        for (HashMap<String, Object> map : selectMap) {
+            try {
+                String dateKey = simpleDateFormat.format(simpleDateFormat.parse((String) map.get("date")));
+                int count = (Integer) map.get("count");
+                resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0) + count);
             } catch (ParseException e) {
                 e.printStackTrace();
                 continue;
@@ -273,7 +297,7 @@ public class OrderServiceImpl implements OrderService {
                 paddingDateIdx = 12;
                 paddingDate = MONTH;
                 break;
-            case DAY:
+            case DATE:
                 paddingDateIdx = 7;
                 paddingDate = DATE;
                 break;

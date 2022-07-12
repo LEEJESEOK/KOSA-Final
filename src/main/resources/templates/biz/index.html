@@ -22,12 +22,13 @@
         };
     </script>
     <script>
-        let salesCount;
+        let sales;
         let revenue;
-        let customerCount;
+        let customers;
 
-        let salesCountDateType = "day";
-        let revenueDateType = "day";
+        let salesCountDateType = "date";
+        let revenueDateType = "month";
+        let customersDateType = "year";
 
         $().ready(function () {
             // 구매 횟수
@@ -41,24 +42,25 @@
                 }),
                 contentType: "application/json",
                 success: function (data) {
-                    salesCount = data["data"];
+                    sales = data["data"];
 
-                    if (salesCount.length <= 0)
+                    if (sales.length <= 0)
                         return;
 
                     let salesCountList = [];
-                    Object.keys(salesCount).sort().forEach((key) => {
-                        salesCountList.push(salesCount[key])
+                    Object.keys(sales).sort().forEach((key) => {
+                        salesCountList.push(sales[key])
                     })
 
                     let [today, prev] = salesCountList.slice(-2);
-                    setSalesCountCard(today, prev);
+                    setSalesCard(today, prev);
 
                 },
                 error: function (request, status, error) {
                     ajaxError(request, status, error);
                 }
             });
+
             // 구매 금액
             $.ajax({
                 type: "POST",
@@ -77,12 +79,87 @@
                     })
 
                     let [prev, today] = revenueList.slice(-2);
-                    setRevenueCountCard(today, prev);
+                    setRevenueCard(today, prev);
                 },
                 error: function (request, status, error) {
                     ajaxError(request, status, error);
                 }
             });
+
+            // 방문자 수
+            $.ajax({
+                type: "POST",
+                url: "/api/biz/statistics",
+                dataType: "json",
+                data: JSON.stringify({
+                    dataType: "customers",
+                    dateType: customersDateType
+                }),
+                contentType: "application/json",
+                success: function (data) {
+                    customers = data["data"];
+                    let customersList = [];
+                    Object.keys(customers).sort().forEach((key) => {
+                        customersList.push(customers[key])
+                    })
+
+                    let [prev, today] = customersList.slice(-2);
+                    setCustomersCard(today, prev);
+                },
+                error: function (request, status, error) {
+                    ajaxError(request, status, error);
+                }
+            })
+
+            // 차트
+            new ApexCharts(document.querySelector("#reportsChart"), {
+                series: [{
+                    name: 'Sales',
+                    data: Object.values(sales)
+                }, {
+                    name: 'Revenue',
+                    data: Object.values(revenue)
+                }, {
+                    name: 'Customers',
+                    data: Object.values(customers)
+                }],
+                chart: {
+                    height: 450,
+                    type: 'area',
+                    toolbar: {
+                        show: false
+                    },
+                },
+                markers: {
+                    size: 4
+                },
+                colors: ['#4154f1', '#2eca6a', '#ff771d'],
+                fill: {
+                    type: "gradient",
+                    gradient: {
+                        shadeIntensity: 1,
+                        opacityFrom: 0.3,
+                        opacityTo: 0.4,
+                        stops: [0, 90, 100]
+                    }
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    curve: 'smooth',
+                    width: 2
+                },
+                xaxis: {
+                    type: 'datetime',
+                    categories: ["2022-07-12T00:00:00.000Z", "2022-07-12T01:30:00.000Z", "2022-07-12T02:30:00.000Z", "2022-07-12T03:30:00.000Z", "2022-07-12T04:30:00.000Z", "2022-07-12T05:30:00.000Z", "2022-07-12T06:30:00.000Z"]
+                },
+                tooltip: {
+                    x: {
+                        format: 'dd/MM/yy HH:mm'
+                    },
+                }
+            }).render();
         });
 
         function ajaxError(request, status, error) {
@@ -93,11 +170,11 @@
             console.log(message);
         }
 
-        function setSalesCountCard(today, prev) {
+        function setSalesCard(today, prev) {
             $("#salesCount").text(addComma(today));
 
             if (prev != 0) {
-                $("#salesCountChangeRate").text(addComma(Math.round((today / prev) * 100, 2)) + "%");
+                $("#salesCountChangeRate").text(addComma(Math.round(((today - prev) / prev) * 100, 2)) + "%");
             } else {
                 $("#salesCountChangeRate").text(addComma(today * 100) + "%");
             }
@@ -111,6 +188,7 @@
                 $("#salesCountChangeRate").addClass("text-danger small pt-1 fw-bold");
                 $("#salesCountChangeText").text("decrease");
             }
+
             switch (salesCountDateType.toUpperCase()) {
                 case "YEAR":
                     $("#salesCountDateType").text("| This Year");
@@ -118,17 +196,17 @@
                 case "MONTH":
                     $("#salesCountDateType").text("| This Month");
                     break;
-                case "DAY":
+                case "DATE":
                     $("#salesCountDateType").text("| Today");
                     break;
             }
         }
 
-        function setRevenueCountCard(today, prev) {
+        function setRevenueCard(today, prev) {
             $("#revenue").text("₩" + addComma(today));
 
             if (prev != 0)
-                $("#revenueChangeRate").text(addComma(Math.round((today / prev) * 100, 2)) + "%");
+                $("#revenueChangeRate").text(addComma(Math.round(((today - prev) / prev) * 100, 2)) + "%");
             else
                 $("#revenueChangeRate").text(addComma(today * 100) + "%");
 
@@ -141,7 +219,50 @@
                 $("#revenueChangeRate").addClass("text-danger small pt-1 fw-bold");
                 $("#revenueChangeText").text("decrease");
             }
-            $("#revenueDateType").text();
+
+            switch (revenueDateType.toUpperCase()) {
+                case "YEAR":
+                    $("#revenueDateType").text("| This Year");
+                    break;
+                case "MONTH":
+                    $("#revenueDateType").text("| This Month");
+                    break;
+                case "DATE":
+                    $("#revenueDateType").text("| Today");
+                    break;
+            }
+        }
+
+        // TODO
+        function setCustomersCard(today, prev) {
+            $("#customers").text(addComma(today));
+
+            if (prev != 0)
+                $("#customersChangeRate").text(addComma(Math.round(((today - prev) / prev) * 100, 2)) + "%");
+            else
+                $("#customersChangeRate").text(addComma(today * 100) + "%");
+
+            if (today >= prev) {
+                $("#customersChangeRate").removeClass();
+                $("#customersChangeRate").addClass("text-success small pt-1 fw-bold");
+                $("#revenueChangeText").text("increase");
+            } else {
+                $("#customersChangeRate").removeClass();
+                $("#customersChangeRate").addClass("text-danger small pt-1 fw-bold");
+                $("#customersChangeText").text("decrease");
+            }
+
+            switch (customersDateType.toUpperCase()) {
+                case "YEAR":
+                    $("#customersDateType").text("| This Year");
+                    break;
+                case "MONTH":
+                    $("#customersDateType").text("| This Month");
+                    break;
+                case "DATE":
+                    $("#customersDateType").text("| Today");
+                    break;
+            }
         }
     </script>
 </th:block>
@@ -150,7 +271,7 @@
         <div class="row">
 
             <!-- Left side columns -->
-            <div class="col-lg-8">
+            <div class="col-lg-10">
                 <div class="row">
 
                     <!-- Sales Card -->
@@ -164,16 +285,17 @@
                                         <h6>Filter</h6>
                                     </li>
 
-                                    <li><a class="dropdown-item" href="#">Today</a></li>
+                                    <li><a class="dropdown-item" href="#" th:value="date">Today</a></li>
                                     <th:block th:if="false">
-                                        <li><a class="dropdown-item" href="#">This Month</a></li>
-                                        <li><a class="dropdown-item" href="#">This Year</a></li>
+                                        <!-- TODO -->
+                                        <li><a class="dropdown-item" href="#" th:value="month">This Month</a></li>
+                                        <li><a class="dropdown-item" href="#" th:value="year">This Year</a></li>
                                     </th:block>
                                 </ul>
                             </div>
 
                             <div class="card-body">
-                                <h5 class="card-title">Sales <span id="salesCountDateType">| Today</span></h5>
+                                <h5 class="card-title">Sales <span id="salesCountDateType"></span></h5>
 
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -203,16 +325,17 @@
                                         <h6>Filter</h6>
                                     </li>
 
-                                    <li><a class="dropdown-item" href="#">Today</a></li>
+                                    <li><a class="dropdown-item" href="#" th:value="date">Today</a></li>
                                     <th:block th:if="false">
-                                        <li><a class="dropdown-item" href="#">This Month</a></li>
-                                        <li><a class="dropdown-item" href="#">This Year</a></li>
+                                        <!-- TODO -->
+                                        <li><a class="dropdown-item" href="#" th:value="month">This Month</a></li>
+                                        <li><a class="dropdown-item" href="#" th:value="year">This Year</a></li>
                                     </th:block>
                                 </ul>
                             </div>
 
                             <div class="card-body">
-                                <h5 class="card-title">Revenue <span id="revenueDateType">| This Month</span></h5>
+                                <h5 class="card-title">Revenue <span id="revenueDateType"></span></h5>
 
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -244,26 +367,27 @@
                                         <h6>Filter</h6>
                                     </li>
 
-                                    <li><a class="dropdown-item" href="#">Today</a></li>
+                                    <li><a class="dropdown-item" href="#" th:value="date">Today</a></li>
                                     <th:block th:if="false">
-                                        <li><a class="dropdown-item" href="#">This Month</a></li>
-                                        <li><a class="dropdown-item" href="#">This Year</a></li>
+                                        <!-- TODO -->
+                                        <li><a class="dropdown-item" href="#" th:value="month">This Month</a></li>
+                                        <li><a class="dropdown-item" href="#" th:value="year">This Year</a></li>
                                     </th:block>
                                 </ul>
                             </div>
 
                             <div class="card-body">
-                                <h5 class="card-title">Customers <span>| This Year</span></h5>
+                                <h5 class="card-title">Customers <span id="customersDateType"></span></h5>
 
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                         <i class="bi bi-people"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6>1244</h6>
-                                        <span class="text-danger small pt-1 fw-bold">12%</span> <span
-                                            class="text-muted small pt-2 ps-1">decrease</span>
-
+                                        <h6 id="customers"></h6>
+                                        <span class="text-success small pt-1 fw-bold"
+                                              id="customersChangeRate"></span> <span
+                                            class="text-muted small pt-2 ps-1" id="customersChangeText"></span>
                                     </div>
                                 </div>
 
@@ -283,68 +407,23 @@
                                         <h6>Filter</h6>
                                     </li>
 
-                                    <li><a class="dropdown-item" href="#">Today</a></li>
-                                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                                    <li><a class="dropdown-item" href="#" th:value="date">Today</a></li>
+                                    <th:block th:if="false">
+                                        <li><a class="dropdown-item" href="#" th:value="month">This Month</a></li>
+                                        <li><a class="dropdown-item" href="#" th:value="hour">This Year</a></li>
+                                    </th:block>
                                 </ul>
                             </div>
 
                             <div class="card-body">
-                                <h5 class="card-title">Reports <span>/Today</span></h5>
+                                <h5 class="card-title">Reports <span id="chartDateType">/Today</span></h5>
 
                                 <!-- Line Chart -->
                                 <div id="reportsChart"></div>
 
                                 <script>
-                                    document.addEventListener("DOMContentLoaded", () => {
-                                        new ApexCharts(document.querySelector("#reportsChart"), {
-                                            series: [{
-                                                name: 'Sales',
-                                                data: [31, 40, 28, 51, 42, 82, 56],
-                                            }, {
-                                                name: 'Revenue',
-                                                data: [11, 32, 45, 32, 34, 52, 41]
-                                            }, {
-                                                name: 'Customers',
-                                                data: [15, 11, 32, 18, 9, 24, 11]
-                                            }],
-                                            chart: {
-                                                height: 350,
-                                                type: 'area',
-                                                toolbar: {
-                                                    show: false
-                                                },
-                                            },
-                                            markers: {
-                                                size: 4
-                                            },
-                                            colors: ['#4154f1', '#2eca6a', '#ff771d'],
-                                            fill: {
-                                                type: "gradient",
-                                                gradient: {
-                                                    shadeIntensity: 1,
-                                                    opacityFrom: 0.3,
-                                                    opacityTo: 0.4,
-                                                    stops: [0, 90, 100]
-                                                }
-                                            },
-                                            dataLabels: {
-                                                enabled: false
-                                            },
-                                            stroke: {
-                                                curve: 'smooth',
-                                                width: 2
-                                            },
-                                            xaxis: {
-                                                type: 'datetime',
-                                                categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
-                                            },
-                                            tooltip: {
-                                                x: {
-                                                    format: 'dd/MM/yy HH:mm'
-                                                },
-                                            }
-                                        }).render();
+                                    $().ready(function() {
+
                                     });
                                 </script>
                                 <!-- End Line Chart -->

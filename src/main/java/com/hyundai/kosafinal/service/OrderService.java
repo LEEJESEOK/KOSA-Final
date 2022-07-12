@@ -8,6 +8,7 @@ import com.hyundai.kosafinal.entity.DateType;
 import com.hyundai.kosafinal.entity.OrderProduct;
 import com.hyundai.kosafinal.entity.SearchOrderCriteria;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -56,11 +57,15 @@ public interface OrderService {
 
     // 백오피스 관련 기간별 전체 주문 횟수
     // 날짜 : 횟수
-    Map<String, Integer> getOrderCountByTime(DateType dateType);
+    Map<String, Integer> getSalesCount(Date start, DateType dateType);
 
     // 백오피스 관련 기간별 전체 주문 금액
     // 날짜 : 금액
-    Map<String, Integer> getOrderPriceByTime(DateType dateType);
+    Map<String, Integer> getRevenue(Date start, DateType dateType);
+
+    // 백오피스 관련 기간별 전체 주문자 수
+    // 날짜 : 주문자 수
+    Map<String, Integer> getCustomerCount(Date start, DateType dateType);
 
     // 백오피스 관련 회원의 단위기간별 구매 금액
     Map<String, Integer> getOrderedDatePriceByMemberId(String memberId, DateType dateType);

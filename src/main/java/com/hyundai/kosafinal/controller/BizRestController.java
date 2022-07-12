@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 /**
  * @author LEE JESEOK
  * @author YOU JIHOON
@@ -99,16 +100,40 @@ public class BizRestController {
         return map;
     }
 
+    /**
+     * dateType : 데이터 기간 단위<br>
+     * dataType : 데이터 종류(count, price)<br>
+     *
+     * @param requestMap
+     * @return
+     */
     @PostMapping("/statistics")
-    public ResponseEntity<Map<String, Object>> getOrderCount(@RequestBody Map<String, Object> requestMap) {
+    public ResponseEntity<Map<String, Object>> getStatistics(@RequestBody Map<String, Object> requestMap) {
         Map<String, Object> responseMap = new HashMap<>();
 
         // 예외 처리
         // DateType 검사
         String dateTypeStr = (String) requestMap.get("dateType");
         DateType dateType;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+
         try {
             dateType = DateType.valueOf(dateTypeStr.toUpperCase());
+            switch (dateType) {
+                case YEAR:
+                    calendar.add(Calendar.YEAR, -5);
+                    break;
+                case MONTH:
+                    calendar.add(Calendar.MONTH, -12);
+                    break;
+                case DATE:
+                    calendar.add(Calendar.DATE, -7);
+                    break;
+                case HOUR:
+                    calendar.add(Calendar.HOUR, -24);
+                    break;
+            }
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -118,10 +143,13 @@ public class BizRestController {
         Map<String, Integer> dataMap = null;
         switch (dataTypeStr) {
             case "salesCount":
-                dataMap = orderService.getOrderCountByTime(dateType);
+                dataMap = orderService.getSalesCount(calendar.getTime(), dateType);
                 break;
             case "revenue":
-                dataMap = orderService.getOrderPriceByTime(dateType);
+                dataMap = orderService.getRevenue(calendar.getTime(), dateType);
+                break;
+            case "customers":
+                dataMap = orderService.getCustomerCount(calendar.getTime(), dateType);
                 break;
         }
 
@@ -130,6 +158,12 @@ public class BizRestController {
         return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
 
+    /**
+     * VIP 회원 상세 정보<br>
+     *
+     * @param requestMap
+     * @return
+     */
     @PostMapping("/vip/detail")
     public ResponseEntity<Map<String, Object>> getMemberDetail(@RequestBody Map<String, Object> requestMap) {
         Map<String, Object> responseMap = new HashMap<>();
@@ -175,7 +209,7 @@ public class BizRestController {
             case MONTH:
                 oldDateIdx = 12;
                 break;
-            case DAY:
+            case DATE:
                 oldDateIdx = 7;
                 break;
             case HOUR:

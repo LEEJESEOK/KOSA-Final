@@ -157,7 +157,7 @@ public class MemberServiceImpl implements MemberService {
                 paddingDateIdx = 12;
                 paddingDate = MONTH;
                 break;
-            case DAY:
+            case DATE:
                 paddingDateIdx = 7;
                 paddingDate = DATE;
                 break;

@@ -252,25 +252,34 @@
         <result property="date" column="DATE"/>
         <result property="count" column="COUNT" javaType="int"/>
     </resultMap>
-
-    <select id="selectWeekOrderedCount" resultMap="OrderCountMap">
-        SELECT TO_CHAR("DATE", 'yyyy-MM-dd HH24') AS "DATE", COUNT(*) AS COUNT
+    <select id="selectOrderCount" resultMap="OrderCountMap">
+        SELECT TO_CHAR("DATE", 'yyyy-MM-dd hh24:mm:ss') AS "DATE", COUNT(*) as COUNT
         FROM ORDERED_LIST
-        WHERE "DATE" + 7 > SYSDATE
-        GROUP BY TO_CHAR("DATE", 'yyyy-MM-dd HH24')
+        WHERE "DATE" BETWEEN #{start} AND SYSDATE
+        GROUP BY TO_CHAR("DATE", 'yyyy-MM-dd hh24:mm:ss')
         ORDER BY "DATE"
     </select>
 
-    <resultMap id="OrderPriceMap" type="HashMap">
+    <resultMap id="OrderRevenueMap" type="HashMap">
         <result property="date" column="DATE"/>
-        <result property="price" column="PRICE" javaType="int"/>
+        <result property="revenue" column="REVENUE" javaType="int"/>
     </resultMap>
-    <select id="selectWeekOrderedPrice" resultMap="OrderPriceMap">
-        SELECT TO_CHAR("DATE", 'yyyy-MM-dd HH24') AS "DATE", SUM(TOTAL_PRICE - USED_POINT) AS PRICE
+    <select id="selectOrderRevenue" resultMap="OrderRevenueMap">
+        SELECT TO_CHAR("DATE", 'yyyy-MM-dd hh24:mm:ss') as "DATE", (TOTAL_PRICE - USED_POINT) AS REVENUE
         FROM ORDERED_LIST
-        WHERE "DATE" + 7 > SYSDATE
-        GROUP BY TO_CHAR("DATE", 'yyyy-MM-dd HH24')
+        WHERE "DATE" BETWEEN #{start} AND SYSDATE
         ORDER BY "DATE"
     </select>
 
+    <resultMap id="OrderCustomerMap" type="HashMap">
+        <result property="date" column="DATE"/>
+        <result property="count" column="COUNT" javaType="int"/>
+    </resultMap>
+    <select id="selectOrderCustomer" resultMap="OrderCustomerMap">
+        SELECT TO_CHAR("DATE", 'yyyy-MM-dd hh24:mm:ss') as "DATE", count(USER_EMAIL) as COUNT
+        FROM ORDERED_LIST
+        WHERE "DATE" BETWEEN #{start} AND SYSDATE
+        GROUP BY TO_CHAR("DATE", 'yyyy-MM-dd hh24:mm:ss')
+        ORDER BY "DATE"
+    </select>
 </mapper>
