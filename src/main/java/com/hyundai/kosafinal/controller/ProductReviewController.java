@@ -198,7 +198,7 @@ public class ProductReviewController {
             String inputLine = null;
             StringBuffer stringBuffer = new StringBuffer();
 
-            URL url = new URL("http://localhost:5000/review"); //URL객체 생성
+            URL url = new URL("http://112.221.225.165:40101/review"); //URL객체 생성
             HttpURLConnection conn = (HttpURLConnection) url.openConnection(); //url주소를 가지고 Http 커넥션 객체 생성
             System.out.println(conn.toString());
             conn.setDoOutput(true);
@@ -260,7 +260,7 @@ public class ProductReviewController {
         String inputLine = null;
         StringBuffer stringBuffer = new StringBuffer();
 
-        URL url = new URL("http://localhost:5000/review"); //URL객체 생성
+        URL url = new URL("http://112.221.225.165:40101/review"); //URL객체 생성
         HttpURLConnection conn = (HttpURLConnection) url.openConnection(); //url주소를 가지고 Http 커넥션 객체 생성
         System.out.println(conn.toString());
         conn.setDoOutput(true);
