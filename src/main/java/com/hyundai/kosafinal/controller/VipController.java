@@ -22,8 +22,9 @@ public class VipController {
     public String lounge(@AuthenticationPrincipal AuthMemberDTO authentication) {
         String userEmail = authentication.getEmail();
         int grade_id = Integer.parseInt(service.findGrade(userEmail));
+
         if(grade_id != 4 && grade_id != 5) {
-            return "redirect:/";
+            return "error/All_error";
         }
         log.info("VIP Lounge로 이동");
         return "vip/lounge";
