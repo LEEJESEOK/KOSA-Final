@@ -9,10 +9,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+
+import static com.hyundai.kosafinal.entity.DateType.DAY;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -125,14 +125,52 @@ public class MemberServiceImpl implements MemberService {
     public Map<String, Integer> getLoginCountByMemberId(String id, DateType dateType) {
         List<LoginLogDTO> loginLogList = mapper.selectLoginLogByMemberId(id);
 
-        Map<String, Integer> loginCountMap = new HashMap<>();
+        Map<String, Integer> resultMap = new HashMap<>();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateType.toString());
         for (LoginLogDTO loginLog : loginLogList) {
             Date loginDate = loginLog.getLogin_date();
-            loginCountMap.put(simpleDateFormat.format(loginDate),
-                    loginCountMap.getOrDefault(simpleDateFormat.format(loginDate), 0) + 1);
+            resultMap.put(simpleDateFormat.format(loginDate),
+                    resultMap.getOrDefault(simpleDateFormat.format(loginDate), 0) + 1);
         }
 
-        return loginCountMap;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        switch (dateType) {
+            // 최근 5년
+            case YEAR:
+                for (int i = 0; i < 5; ++i) {
+                    calendar.add(Calendar.YEAR, -1);
+                    String dateKey = simpleDateFormat.format(calendar.getTime());
+                    resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0));
+                }
+                break;
+            // 최근 12개월
+            case MONTH:
+                for (int i = 0; i < 12; ++i) {
+                    calendar.add(Calendar.MONTH, -1);
+                    String dateKey = simpleDateFormat.format(calendar.getTime());
+                    resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0));
+                }
+                break;
+            // 최근 7일
+            case DAY:
+                for (int i = 0; i <= 7; i++) {
+                    calendar.add(Calendar.DATE, -1);
+                    String dateKey = simpleDateFormat.format(calendar.getTime());
+                    resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0));
+                }
+                break;
+            // 최근 24시간
+            case HOUR:
+                for (int i = 0; i < 24; i++) {
+                    calendar.add(Calendar.HOUR, -1);
+                    String dateKey = simpleDateFormat.format(calendar.getTime());
+                    resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0));
+                }
+                break;
+        }
+
+
+        return resultMap;
     }
 }

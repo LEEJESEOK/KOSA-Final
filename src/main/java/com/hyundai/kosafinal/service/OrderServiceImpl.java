@@ -1,10 +1,7 @@
 package com.hyundai.kosafinal.service;
 
-import com.hyundai.kosafinal.domain.MemberOrderConfirmDTO;
-import com.hyundai.kosafinal.domain.OrderItemDTO;
-import com.hyundai.kosafinal.domain.OrderedListDTO;
-import com.hyundai.kosafinal.domain.ProductDTO;
-import com.hyundai.kosafinal.domain.CategoryCountDTO;
+import com.hyundai.kosafinal.domain.*;
+import com.hyundai.kosafinal.entity.DateType;
 import com.hyundai.kosafinal.entity.OrderProduct;
 import com.hyundai.kosafinal.entity.SearchOrderCriteria;
 import com.hyundai.kosafinal.mapper.product.ProductMapper;
@@ -13,10 +10,11 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+import static java.util.Calendar.*;
 
 
 @Log4j2
@@ -89,11 +87,7 @@ public class OrderServiceImpl implements OrderService {
     public boolean checkStock(String id, String psize, String pcolor, int amount) {
         int stock = mapper.getStock(id, psize, pcolor);
 
-        if (stock < amount) {
-            return false;
-        } else {
-            return true;
-        }
+        return stock >= amount;
     }
 
     @Override
@@ -118,6 +112,113 @@ public class OrderServiceImpl implements OrderService {
         return mapper.searchOrder(criteria);
     }
 
+    @Override
+    public Map<String, Integer> getOrderCountByTime(DateType dateType)  {
+        List<HashMap<String, Object>> selectMap = mapper.selectWeekOrderedCount();
+
+        HashMap<String, Integer> resultMap = new HashMap<>();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateType.toString());
+        for (HashMap<String, Object> map : selectMap) {
+            try {
+                String dateKey = simpleDateFormat.format(simpleDateFormat.parse((String) map.get("date")));
+                int count = (Integer) map.get("count");
+                resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0) + count);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                continue;
+            }
+        }
+
+        return resultMap;
+    }
+
+    @Override
+    public Map<String, Integer> getOrderPriceByTime(DateType dateType) {
+        List<HashMap<String, Object>> selectMap = mapper.selectWeekOrderedPrice();
+
+        HashMap<String, Integer> resultMap = new HashMap<>();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateType.toString());
+        for (HashMap<String, Object> map : selectMap) {
+            try {
+                String dateKey = simpleDateFormat.format(simpleDateFormat.parse((String) map.get("date")));
+                int price = (Integer) map.get("price");
+                resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0) + price);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                continue;
+            }
+        }
+
+        return resultMap;
+    }
+
+    // 회원의 단위기간별 구매 금액
+    @Override
+    public Map<String, Integer> getOrderedDatePriceByMemberId(String memberId, DateType dateType) {
+        // 회원의 구매한 상품 리스트
+        List<OrderedListDTO> orderedList = mapper.getOrderedList(memberId);
+
+        System.out.println("count : " + orderedList.size());
+
+        Map<String, Integer> resultMap = new HashMap<>();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateType.toString());
+
+        // 구매한 상품의 날짜당 가격 합계
+        for (OrderedListDTO order : orderedList) {
+            System.out.println("order : " + order);
+
+            Date orderDate = order.getDate();
+            resultMap.put(simpleDateFormat.format(orderDate), resultMap.getOrDefault(simpleDateFormat.format(orderDate), 0) + order.getTotalPrice());
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+
+        // 오늘 데이터 추가
+        String dateKey = simpleDateFormat.format(calendar.getTime());
+        resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0));
+        switch (dateType) {
+            // 최근 5년
+            case YEAR:
+                for (int i = 0; i < 5 - 1; ++i) {
+                    calendar.add(YEAR, -1);
+                    dateKey = simpleDateFormat.format(calendar.getTime());
+                    resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0));
+                }
+                break;
+            // 최근 12개월
+            case MONTH:
+                for (int i = 0; i < 12 - 1; ++i) {
+                    calendar.add(MONTH, -1);
+                    dateKey = simpleDateFormat.format(calendar.getTime());
+                    resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0));
+                }
+                break;
+            // 최근 7일
+            case DAY:
+                for (int i = 0; i <= 7 - 1; i++) {
+                    calendar.add(Calendar.DATE, -1);
+                    dateKey = simpleDateFormat.format(calendar.getTime());
+                    resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0));
+                }
+                break;
+            // 최근 24시간
+            case HOUR:
+                for (int i = 0; i < 24 - 1; i++) {
+                    calendar.add(HOUR, -1);
+                    dateKey = simpleDateFormat.format(calendar.getTime());
+                    resultMap.put(dateKey, resultMap.getOrDefault(dateKey, 0));
+                }
+                break;
+        }
+
+
+        return resultMap;
+    }
+
+    // 회원의 브랜드별 구매 횟수
     @Override
     public Map<String, Integer> getOrderedBrandCountByMemberId(String memberId) {
         List<OrderedListDTO> orderedList = mapper.getOrderedList(memberId);
@@ -144,6 +245,7 @@ public class OrderServiceImpl implements OrderService {
         return brandCountMap;
     }
 
+    // 회원의 카테고리별 구매 횟수
     @Override
     public Map<String, CategoryCountDTO> getOrderedCategoryCountByMemberId(String memberId) {
         List<OrderedListDTO> orderedList = mapper.getOrderedList(memberId);
@@ -173,16 +275,13 @@ public class OrderServiceImpl implements OrderService {
             String small = productDTOList.get(0).getCategorySmall();
 
             // 카테고리 수준별 횟수 계산
-            CategoryCountDTO largeCount = categoryCountMap.getOrDefault(large,
-                    new CategoryCountDTO(0, new HashMap<>()));
+            CategoryCountDTO largeCount = categoryCountMap.getOrDefault(large, new CategoryCountDTO(0, new HashMap<>()));
             largeCount.addCount();
 
-            CategoryCountDTO mediumCount = largeCount.getChildren().getOrDefault(medium,
-                    new CategoryCountDTO(0, new HashMap<>()));
+            CategoryCountDTO mediumCount = largeCount.getChildren().getOrDefault(medium, new CategoryCountDTO(0, new HashMap<>()));
             mediumCount.addCount();
 
-            CategoryCountDTO smallCount = mediumCount.getChildren().getOrDefault(small,
-                    new CategoryCountDTO(0, null));
+            CategoryCountDTO smallCount = mediumCount.getChildren().getOrDefault(small, new CategoryCountDTO(0, null));
             smallCount.addCount();
 
             mediumCount.getChildren().put(small, smallCount);
@@ -192,4 +291,5 @@ public class OrderServiceImpl implements OrderService {
 
         return categoryCountMap;
     }
+
 }

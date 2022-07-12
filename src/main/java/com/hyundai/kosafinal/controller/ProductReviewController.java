@@ -233,10 +233,12 @@ public class ProductReviewController {
             if (sentiment_percent > 0.5) {
                 productReviewDTO.setSentiment_percent(sentiment_percent * 100);
                 productReviewDTO.setSentiment_type("긍정");
-            } else {
+            } else if (sentiment_percent<0.75 && sentiment_percent>0.35) {
+                productReviewDTO.setSentiment_percent(sentiment_percent * 100);
+                productReviewDTO.setSentiment_type("보통");
+            } else
                 productReviewDTO.setSentiment_percent((1 - sentiment_percent) * 100);
                 productReviewDTO.setSentiment_type("부정");
-            }
 
             productReviewService.saveProductReview(productReviewDTO, fileList.get(0));
 
@@ -300,17 +302,14 @@ public class ProductReviewController {
         System.out.println("제석이형" + sentiment_percent);
         // TODO sentiment_percent int로 변경
         if (sentiment_percent > 0.5) {
-            System.out.println("248");
             productReviewDTO.setSentiment_percent(sentiment_percent * 100);
             productReviewDTO.setSentiment_type("긍정");
-
-            System.out.println(productReviewDTO);
-        } else {
-            System.out.println("253");
+        } else if (sentiment_percent<0.75 && sentiment_percent>0.35) {
+            productReviewDTO.setSentiment_percent(sentiment_percent * 100);
+            productReviewDTO.setSentiment_type("보통");
+        } else
             productReviewDTO.setSentiment_percent((1 - sentiment_percent) * 100);
-            productReviewDTO.setSentiment_type("부정");
-            System.out.println(productReviewDTO);
-        }
+        productReviewDTO.setSentiment_type("부정");
 
         // TODO sp_review insert
         productReviewService.saveProductReview(productReviewDTO, null);

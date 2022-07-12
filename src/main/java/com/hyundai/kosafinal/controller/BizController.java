@@ -7,10 +7,7 @@ import java.util.HashMap;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -215,16 +212,15 @@ public class BizController {
         return "biz/vip/vipManage";
     }
 
-    @RequestMapping(value = "/vip/vipDetail")
-    public String vipDetail(Model model, @RequestParam Map<String, Object> params) {
+    @RequestMapping(value = "/vip/{id}/detail")
+    public String vipDetail(Model model, @PathVariable("id") String id) {
         List<String> breadCrumbs = toBreadCrumbs(new String[]{
                 "VIP", "VIP 정보"
         });
         model.addAttribute("breadCrumbs", breadCrumbs);
         model.addAttribute("pageTitle", breadCrumbs.get(breadCrumbs.size() - 1));
 
-
-        model.addAttribute("id", (String) params.get("id"));
+        model.addAttribute("id", id);
 
         return "biz/vip/vipDetail";
     }

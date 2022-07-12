@@ -6,9 +6,11 @@ import com.hyundai.kosafinal.domain.PageDTO;
 import com.hyundai.kosafinal.domain.ReplyDTO;
 import com.hyundai.kosafinal.entity.SearchCriteria;
 import com.hyundai.kosafinal.entity.SearchMemberCriteria;
+import org.apache.catalina.Session;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import lombok.extern.log4j.Log4j2;
@@ -17,7 +19,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import com.hyundai.kosafinal.service.MemberService;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -114,15 +118,20 @@ public class MemberRestController {
 
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public boolean delete(@RequestBody Map<String, Object> params) {
-        for (String key : params.keySet())
-            System.out.println(key + " : " + params.get(key));
+    public boolean delete(HttpServletRequest request, @RequestBody Map<String, Object> params) {
+
+        SecurityContextHolder.clearContext();
+        HttpSession session = request.getSession();
+        if (session != null)
+            session.invalidate();
+        for (Cookie cookie : request.getCookies())
+            cookie.setMaxAge(0);
 
         return service.deleteMember((String) params.get("email"));
     }
 
     // 회원 검색
-    @RequestMapping(value="/searchMember", method = RequestMethod.POST)
+    @RequestMapping(value = "/searchMember", method = RequestMethod.POST)
     public Map<String, Object> searchMember(@RequestBody SearchMemberCriteria criteria) {
         Map<String, Object> map = new HashMap<>();
 
@@ -140,7 +149,7 @@ public class MemberRestController {
     }
 
     // 회원 검색
-    @RequestMapping(value="/searchVIP", method = RequestMethod.POST)
+    @RequestMapping(value = "/searchVIP", method = RequestMethod.POST)
     public Map<String, Object> searchVIP(@RequestBody SearchMemberCriteria criteria) {
         Map<String, Object> map = new HashMap<>();
 
@@ -156,14 +165,14 @@ public class MemberRestController {
     }
 
     // 로그인한 유저가 VIP 인지 확인
-    @RequestMapping(value="/checkVIP", method = RequestMethod.POST)
+    @RequestMapping(value = "/checkVIP", method = RequestMethod.POST)
     public ResponseEntity<Boolean> isVIP(@AuthenticationPrincipal AuthMemberDTO authentication) {
         ResponseEntity<Boolean> entry = null;
         boolean result = false;
         String userEmail = authentication.getEmail();
         int grade_id = Integer.parseInt(service.findGrade(userEmail));
 
-        if( grade_id == 4 || grade_id == 5){
+        if (grade_id == 4 || grade_id == 5) {
             result = true;
         } else {
             result = false;

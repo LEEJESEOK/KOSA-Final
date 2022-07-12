@@ -14,30 +14,42 @@
     <select id="getOrderedList" resultType="OrderedListDTO">
         SELECT * FROM ordered_list
         WHERE user_email = #{user_email}
-        ORDER BY id DESC
+        ORDER BY "DATE" DESC
     </select>
 
     <!-- 주문 상품 목록 조회 -->
     <select id="getOrderItem" resultType="com.hyundai.kosafinal.entity.OrderProduct">
-        SELECT DISTINCT oi.id, oi.pid, oi.pcolor, oi.psize, oi.amount, oi.ordered_list_id, p.name, p.price, p.brand, p.image1_uri
-        FROM order_item oi, product.product p
-        WHERE oi.ordered_list_id = #{orderedListId}
-        AND oi.pid = p.id
-        AND oi.pcolor = p.color_id
-        AND oi.psize = p."SIZE"
-        ORDER BY oi.id
+        SELECT DISTINCT OI.ID,
+                        OI.PID,
+                        OI.PCOLOR,
+                        OI.PSIZE,
+                        OI.AMOUNT,
+                        OI.ORDERED_LIST_ID,
+                        P.NAME,
+                        P.PRICE,
+                        P.BRAND,
+                        P.IMAGE1_URI
+        FROM ORDER_ITEM OI,
+             PRODUCT.PRODUCT P
+        WHERE OI.ORDERED_LIST_ID = #{orderedListId}
+          AND OI.PID = P.ID
+          AND OI.PCOLOR = P.COLOR_ID
+          AND OI.PSIZE = P."SIZE"
+        ORDER BY OI.ID
     </select>
 
     <!-- 주문 상세 조회 -->
     <select id="getOrderDetail" resultType="OrderedListDTO">
-        SELECT * FROM ordered_list
-        WHERE id = #{id}
+        SELECT *
+        FROM ORDERED_LIST
+        WHERE ID = #{id}
     </select>
 
 
     <!-- 주문 추가 -->
     <insert id="insertOrderedList" statementType="CALLABLE">
-        { CALL SP_ORDEREDLIST_INSERT(#{id}, #{zipcode}, #{address1}, #{address2}, #{receiver}, #{tel}, #{usedPoint}, #{userEmail}, #{totalPrice}, #{deliveryMsg}, #{payType}) }
+        { CALL SP_ORDEREDLIST_INSERT(#{id}, #{zipcode}, #{address1}, #{address2}, #{receiver}, #{tel}, #{usedPoint},
+                                     #{userEmail}, #{totalPrice}, #{deliveryMsg}, #{payType}) }
     </insert>
 
     <!-- 주문 아이템 추가 -->
@@ -51,7 +63,8 @@
 
     <!-- 배송정보 변경 -->
     <update id="updateOrderDelivery" statementType="CALLABLE">
-        { CALL SP_ORDER_DELIVERY_UPDATE(#{id}, #{zipcode}, #{address1}, #{address2}, #{receiver}, #{tel}, #{deliveryMsg}) }
+        { CALL SP_ORDER_DELIVERY_UPDATE(#{id}, #{zipcode}, #{address1}, #{address2}, #{receiver}, #{tel},
+                                        #{deliveryMsg}) }
     </update>
 
     <!-- 주문 상태 변경 -->
@@ -66,13 +79,17 @@
 
     <!-- 주문 재고 체크 -->
     <select id="getStock" resultType="int">
-        SELECT stock_amount FROM product.product
-        WHERE id = #{id} AND "SIZE" = #{psize} AND color_id = #{pcolor}
+        SELECT STOCK_AMOUNT
+        FROM PRODUCT.PRODUCT
+        WHERE ID = #{id}
+          AND "SIZE" = #{psize}
+          AND COLOR_ID = #{pcolor}
     </select>
 
     <!-- 마지막 주문번호 조회 -->
     <select id="getOrderId" resultType="int">
-        SELECT SQ_ORDERED_LIST.NEXTVAL FROM DUAL
+        SELECT SQ_ORDERED_LIST.NEXTVAL
+        FROM DUAL
     </select>
 
     <!-- 포인트 변경 -->
@@ -82,21 +99,17 @@
 
     <!-- 유저가 구매한 상품이 있는지 조회 + 배송 완료 -->
     <select id="getOrderConfirmByEmail" resultMap="MemberOrderProductMap">
-        select
-               ROWNUM as RNUM,
-               ol.PSIZE as PSIZE,
-               ol.PCOLOR as PCOLOR
-        from
-             (
-               select *
-               from ORDER_ITEM o,
-                    ORDERED_LIST l
-               where o.ORDERED_LIST_ID = l.ID
-                 AND o.PID = #{productId}
-                 AND l.USER_EMAIL = #{email}
-                 AND l.STATUS = 2
-            ) ol
-        where ROWNUM = 1
+        SELECT ROWNUM    AS RNUM,
+               OL.PSIZE  AS PSIZE,
+               OL.PCOLOR AS PCOLOR
+        FROM (SELECT *
+              FROM ORDER_ITEM O,
+                   ORDERED_LIST L
+              WHERE O.ORDERED_LIST_ID = L.ID
+                AND O.PID = #{productId}
+                AND L.USER_EMAIL = #{email}
+                AND L.STATUS = 2) OL
+        WHERE ROWNUM = 1
     </select>
 
     <!-- 백오피스 관련 주문 검색 결과 수 -->
@@ -122,7 +135,7 @@
                 </if>
             </if>
             <!-- 날짜 필터링 -->
-            <trim prefix = "and">
+            <trim prefix="and">
                 <if test="start_date != null and end_date != null">
                     <![CDATA[
                     TO_CHAR("DATE", 'YYYYMMDD') >= TO_CHAR(#{start_date}, 'YYYYMMDD') AND TO_CHAR("DATE", 'YYYYMMDD') <= TO_CHAR(#{end_date}, 'YYYYMMDD')
@@ -130,7 +143,7 @@
                 </if>
             </trim>
             <!-- 상품 필터링 -->
-            <trim prefix = "and">
+            <trim prefix="and">
                 <if test="product_keyword != null">
                     <if test="product_type=='id'.toString()">
                         id IN (SELECT ordered_list_id FROM order_item WHERE pid LIKE '%'||#{product_keyword}||'%')
@@ -154,7 +167,7 @@
                 </if>
             </trim>
             <!-- 배송 필터링 -->
-            <trim prefix = "and">
+            <trim prefix="and">
                 <if test="order_status != -1">
                     status = #{order_status}
                 </if>
@@ -166,9 +179,9 @@
     <select id="searchOrder" resultType="OrderedListDTO">
         SELECT *
         FROM (
-            SELECT rownum as rn, id, zipcode, address1, address2, receiver, tel, used_point, user_email,
-                   total_price, "DATE", status, delivery_msg, pay_type, order_id
-            FROM (SELECT * FROM ordered_list ORDER BY id DESC)
+        SELECT rownum as rn, id, zipcode, address1, address2, receiver, tel, used_point, user_email,
+        total_price, "DATE", status, delivery_msg, pay_type, order_id
+        FROM (SELECT * FROM ordered_list ORDER BY id DESC)
         <where>
             <!-- 주문 필터링 -->
             <if test="order_keyword != null">
@@ -186,43 +199,43 @@
                 </if>
             </if>
             <!-- 날짜 필터링 -->
-            <trim prefix = "and">
+            <trim prefix="and">
                 <if test="start_date != null and end_date != null">
-                <![CDATA[
+                    <![CDATA[
                     TO_CHAR("DATE", 'YYYYMMDD') >= TO_CHAR(#{start_date}, 'YYYYMMDD') AND TO_CHAR("DATE", 'YYYYMMDD') <= TO_CHAR(#{end_date}, 'YYYYMMDD')
                 ]]>
                 </if>
             </trim>
             <!-- 상품 필터링 -->
-            <trim prefix = "and">
+            <trim prefix="and">
                 <if test="product_keyword != null">
                     <if test="product_type=='id'.toString()">
                         id IN (
-                            SELECT ordered_list_id
-                            FROM order_item
-                            WHERE UPPER(pid) LIKE '%'||UPPER(#{product_keyword})||'%'
-                            )
+                        SELECT ordered_list_id
+                        FROM order_item
+                        WHERE UPPER(pid) LIKE '%'||UPPER(#{product_keyword})||'%'
+                        )
                     </if>
                     <if test="product_type=='name'.toString()">
                         id IN (
-                                SELECT oi.ordered_list_id
-                                FROM order_item oi, product.product p
-                                WHERE oi.pid = p.id
-                                AND UPPER(p.name) LIKE '%'||UPPER(#{product_keyword})||'%'
-                            )
+                        SELECT oi.ordered_list_id
+                        FROM order_item oi, product.product p
+                        WHERE oi.pid = p.id
+                        AND UPPER(p.name) LIKE '%'||UPPER(#{product_keyword})||'%'
+                        )
                     </if>
                     <if test="product_type=='brand'.toString()">
                         id IN (
-                                SELECT oi.ordered_list_id
-                                FROM order_item oi, product.product p
-                                WHERE oi.pid = p.id
-                                AND UPPER(p.brand) LIKE '%'||UPPER(#{product_keyword})||'%'
-                            )
+                        SELECT oi.ordered_list_id
+                        FROM order_item oi, product.product p
+                        WHERE oi.pid = p.id
+                        AND UPPER(p.brand) LIKE '%'||UPPER(#{product_keyword})||'%'
+                        )
                     </if>
                 </if>
             </trim>
             <!-- 배송 필터링 -->
-            <trim prefix = "and">
+            <trim prefix="and">
                 <if test="order_status != -1">
                     status = #{order_status}
                 </if>
@@ -232,6 +245,32 @@
             )
             WHERE rn BETWEEN ((#{pageNum} - 1) * #{amount} + 1) AND (#{pageNum} * #{amount})
         ]]>
+    </select>
+
+
+    <resultMap id="OrderCountMap" type="HashMap">
+        <result property="date" column="DATE"/>
+        <result property="count" column="COUNT" javaType="int"/>
+    </resultMap>
+
+    <select id="selectWeekOrderedCount" resultMap="OrderCountMap">
+        SELECT TO_CHAR("DATE", 'yyyy-MM-dd HH24') AS "DATE", COUNT(*) AS COUNT
+        FROM ORDERED_LIST
+        WHERE "DATE" + 7 > SYSDATE
+        GROUP BY TO_CHAR("DATE", 'yyyy-MM-dd HH24')
+        ORDER BY "DATE"
+    </select>
+
+    <resultMap id="OrderPriceMap" type="HashMap">
+        <result property="date" column="DATE"/>
+        <result property="price" column="PRICE" javaType="int"/>
+    </resultMap>
+    <select id="selectWeekOrderedPrice" resultMap="OrderPriceMap">
+        SELECT TO_CHAR("DATE", 'yyyy-MM-dd HH24') AS "DATE", SUM(TOTAL_PRICE - USED_POINT) AS PRICE
+        FROM ORDERED_LIST
+        WHERE "DATE" + 7 > SYSDATE
+        GROUP BY TO_CHAR("DATE", 'yyyy-MM-dd HH24')
+        ORDER BY "DATE"
     </select>
 
 </mapper>

@@ -1,10 +1,8 @@
 package com.hyundai.kosafinal.config;
 
 import com.hyundai.kosafinal.service.MemberService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
@@ -13,7 +11,6 @@ import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -32,11 +29,8 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
     }
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         memberService.insertLog(authentication.getName());
-
-        // 쿠팡 둘러보기 하다가 로그인 성공 시 다시 거기로 가는 경우
-        setDefaultTargetUrl("/");
 
         SavedRequest savedRequest = requestCache.getRequest(request, response);
         if (savedRequest != null) {
