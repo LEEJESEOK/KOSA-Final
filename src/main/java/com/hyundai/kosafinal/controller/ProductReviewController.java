@@ -58,7 +58,7 @@ public class ProductReviewController {
         for (ProductReviewDTO p : list) {
 
             //사용자 등급 조회
-            String grade = memberService.findGrade(productId);
+            String grade = changUserGradeForm(memberService.findGrade(p.getEmail()));
             p.setGrade(grade);
 
             String s1 = p.getEmail().substring(0, 3);
@@ -91,7 +91,7 @@ public class ProductReviewController {
         for (ProductReviewDTO p : list) {
 
             //사용자 등급 조회
-            String grade = memberService.findGrade(productId);
+            String grade = changUserGradeForm(memberService.findGrade(p.getEmail()));
             p.setGrade(grade);
 
             String s1 = p.getEmail().substring(0, 3);
@@ -125,7 +125,7 @@ public class ProductReviewController {
         List<ProductReviewDTO> textReviewList = new ArrayList<>();
         for (ProductReviewDTO p : list) {
             //사용자 등급 조회
-            String grade = memberService.findGrade(productId);
+            String grade = changUserGradeForm(memberService.findGrade(p.getEmail()));
             p.setGrade(grade);
 
             String s1 = p.getEmail().substring(0, 3);
@@ -238,7 +238,6 @@ public class ProductReviewController {
                 productReviewDTO.setSentiment_type("부정");
             }
 
-
             productReviewService.saveProductReview(productReviewDTO, fileList.get(0));
 
             System.out.println(stringBuffer);
@@ -319,5 +318,27 @@ public class ProductReviewController {
         bReader.close();
         conn.disconnect();
         return productReviewDTO;
+    }
+
+    public String changUserGradeForm(String num){
+        String s = "";
+        switch (num){
+            case "1":
+                s = "FRIEND";
+                break;
+            case "2":
+                s = "CREW";
+                break;
+            case "3":
+                s =  "MANIA";
+                break;
+            case "4":
+                s =  "STAR";
+                break;
+            case "5":
+                s = "THE STAR";
+                break;
+        }
+        return s;
     }
 }

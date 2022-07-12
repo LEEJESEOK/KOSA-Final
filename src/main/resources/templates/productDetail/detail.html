@@ -48,9 +48,14 @@
                             //처음 이미지 모두 hide 하고 하나만 기본으로 띄우기
                             var imageDivTag = $('#imageDiv').children('ul');
                             imageDivTag.hide();
-                            var firstImageTag = $('#imageDiv').children('ul:eq(0)').show();
+                            var firstImageTag = $('#imageDiv').children('ul:eq(0)');
+                            firstImageTag.show();
 
+//                            $('#imgUri').val(firstImageTag.children('img').attr("src"));
+                            var cStr = $('#imageDiv').children('ul:eq(0)').attr('id').toString().split('_');
+                            $('#colorNameVal').val(cStr[1]);
 
+                            //전체 상품평 호출
                             let param = { "pageNum": 1, "amount": amount };
                             getProductReview(param);
 
@@ -102,7 +107,6 @@
 
                         //상품 체형 입력시 hidden input에 값 넣기
                         function setReviewBody() {
-//            var bodyStr = body.getAttribute('bodyType');
                             var bodyStr = $('input[name=bodyType]:checked').val();
                             $("#reviewBody").val(bodyStr);
                         }
@@ -723,6 +727,8 @@
                 </div>
                 <span class="w-btn w-btn-gra1 review-btn">  긍정  </span>
                 <span th:text="|${positivePercent} %|"></span>
+                <span class="w-btn w-btn-gra1-2 review-btn">  보통  </span>
+                <span th:text="|${normalPercent} %|"></span>
                 <span class="w-btn w-btn-gra2 review-btn">  부정  </span>
                 <span th:text="|${negativePercent} %|"></span>
                 <a class="btn_evaluation1905" id="customerReviewWrite">상품평 작성하기</a>
@@ -1273,7 +1279,9 @@
                                 if(review.sentiment_type === "긍정"){
                                     reviewListTag += "<li><span class='w-btn w-btn-gra1 review-btn'>  긍정 </span></li>"
                                 }
+                                else if(review.sentiment_type === "보통") reviewListTag += "<li><span class='w-btn w-btn-gra1-2 review-btn'>  보통  </span></li>"
                                 else reviewListTag += "<li><span class='w-btn w-btn-gra2 review-btn'>  부정  </span></li>"
+
                                 reviewListTag += "</ul>";
                                 reviewListTag += "</div>";
 
@@ -1371,7 +1379,9 @@
                                 if(review.sentiment_type === "긍정"){
                                     reviewListTag += "<li><span class='w-btn w-btn-gra1 review-btn'>  긍정 </span></li>"
                                 }
+                                else if(review.sentiment_type === "보통") reviewListTag += "<li><span class='w-btn w-btn-gra1-2 review-btn'>  보통  </span></li>"
                                 else reviewListTag += "<li><span class='w-btn w-btn-gra2 review-btn'>  부정  </span></li>"
+
                                 reviewListTag += "</ul>";
                                 reviewListTag += "</div>";
 
@@ -1463,6 +1473,7 @@
                                 if(review.sentiment_type === "긍정"){
                                     reviewListTag += "<li><span class='w-btn w-btn-gra1 review-btn'>  긍정 </span></li>"
                                 }
+                                else if(review.sentiment_type === "보통") reviewListTag += "<li><span class='w-btn w-btn-gra1-2 review-btn'>  보통  </span></li>"
                                 else reviewListTag += "<li><span class='w-btn w-btn-gra2 review-btn'>  부정  </span></li>"
                                 reviewListTag += "</ul>";
                                 reviewListTag += "</div>";

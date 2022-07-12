@@ -212,7 +212,12 @@
 }
 
 .w-btn-gra1 {
-  background: linear-gradient(-45deg, #33ccff 0%, #ff99cc 100%);
+  background: linear-gradient(-45deg, #33ccff 0%, #3651a7 100%);
+  color: white;
+}
+
+.w-btn-gra1-2 {
+  background: linear-gradient(-45deg, #9E9E9E 0%, #BDBDBD 100%);
   color: white;
 }
 
