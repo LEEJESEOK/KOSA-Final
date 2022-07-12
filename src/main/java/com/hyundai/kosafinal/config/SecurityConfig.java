@@ -8,6 +8,7 @@ package com.hyundai.kosafinal.config;
  [코멘트: 일반 사용자 로그인, 소셜로그인 그리고 접근제한을 설정할 수 있다.]
  ***********************************************************/
 
+import com.hyundai.kosafinal.entity.MemberRole;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -50,9 +51,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .antMatchers("/cart/*").hasRole("USER")
-                .antMatchers("/order/*").hasRole("USER")
-                .antMatchers("/mypage/*").hasRole("USER");
+                .antMatchers("/cart/**").hasRole(MemberRole.USER.name())
+                .antMatchers("/order/**").hasRole(MemberRole.USER.name())
+                .antMatchers("/mypage/**").hasRole(MemberRole.USER.name())
+                .antMatchers("/biz/**").hasRole(MemberRole.ADMIN.name());
 
         //일반 사용자 로그인
         http.formLogin().loginPage("/member/login")
