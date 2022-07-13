@@ -1,17 +1,11 @@
 <!doctype html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="sidebar">
-    <!--현재 페이지 적용-->
     <script>
-        $().ready(function () {
-            $("#logoutBtn").click(function () {
-                $.ajax({
-                    type: "post",
-                    url: "/logout"
-                });
-            });
 
-        });
+        function logout() {
+            $("#logoutForm").submit();
+        }
     </script>
     <aside class="sidebar" id="sidebar">
         <ul class="sidebar-nav" id="sidebar-nav">
@@ -113,32 +107,6 @@
                 </ul>
             </li><!-- End VIP Nav -->
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#statistics-nav"
-                   data-bs-toggle="collapse" th:href="@{#}">
-                    <i class="bi bi-bar-chart"></i> <span>통계분석</span>
-                    <i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul class="nav-content collapse" data-bs-parent="#sidebar-nav"
-                    id="statistics-nav">
-                    <li>
-                        <a th:href="@{#}">
-                            <i class="bi bi-circle"></i> <span>Chart.js</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:href="@{#}">
-                            <i class="bi bi-circle"></i> <span>ApexCharts</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:href="@{#}">
-                            <i class="bi bi-circle"></i> <span>ECharts</span>
-                        </a>
-                    </li>
-                </ul>
-            </li><!-- End 통계분석 Nav -->
-
             <li class="nav-heading">Pages</li>
 
             <li class="nav-item">
@@ -148,7 +116,7 @@
             </li><!-- End F.A.Q Page Nav -->
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="" id="logoutBtn">
+                <a class="nav-link collapsed" href="javascript:void(0)" onclick="logout()" id="logoutBtn">
                     <i class="bi bi-box-arrow-in-right"></i> <span>Logout</span>
                 </a>
             </li><!-- End Login Page Nav -->
