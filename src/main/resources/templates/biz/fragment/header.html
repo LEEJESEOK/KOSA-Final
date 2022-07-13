@@ -1,6 +1,25 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<script th:src="@{/js/jquery-1.11.2.min.js}"></script>
 <th:block th:fragment="header">
+    <script>
+        $().ready(function () {
+            $.ajax({
+                url: "",
+                data: [],
+                dataType: "json",
+                contentType: "application/json",
+                success: function() {
+
+                }
+            });
+        });
+
+        function logout() {
+            $("#logoutForm").submit();
+        }
+    </script>
     <th:block th:replace="~{/fragment/csrf::csrf}"></th:block>
+    <form id="logoutForm" th:action="@{/logout}" method="post"></form>
     <header class="header fixed-top d-flex align-items-center" id="header">
         <div class="d-flex align-items-center justify-content-between">
             <a class="logo d-flex align-items-center" th:href="@{/biz}">
@@ -172,13 +191,13 @@
                        th:href="@{#}">
                         <!--관리 사용자 이미지-->
                         <img alt="Profile" class="rounded-circle" src="/biz/img/handsomee.png">
-                        <span class="d-none d-md-block dropdown-toggle ps-2">핸써미</span>
+                        <span class="d-none d-md-block dropdown-toggle ps-2" id="name"></span>
                     </a><!-- End Profile Iamge Icon -->
 
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                         <li class="dropdown-header">
                             <!--관리 사용자 이름 -->
-                            <h6>선임 핸써미</h6>
+                            <h6 id="dropdown_name">선임 핸써미</h6>
                             <span>더한섬닷컴</span>
                         </li>
                         <li>
@@ -186,7 +205,7 @@
                         </li>
 
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" th:href="users-profile.html">
+                            <a class="dropdown-item d-flex align-items-center" th:href="@{#}">
                                 <i class="bi bi-person"></i>
                                 <span>My Profile</span>
                             </a>
@@ -196,7 +215,7 @@
                         </li>
 
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" th:href="users-profile.html">
+                            <a class="dropdown-item d-flex align-items-center" th:href="@{#}">
                                 <i class="bi bi-gear"></i>
                                 <span>Account Settings</span>
                             </a>
@@ -206,7 +225,7 @@
                         </li>
 
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" th:href="pages-faq.html">
+                            <a class="dropdown-item d-flex align-items-center" th:href="@{#}">
                                 <i class="bi bi-question-circle"></i>
                                 <span>Need Help?</span>
                             </a>
@@ -216,7 +235,8 @@
                         </li>
 
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" th:href="@{#}">
+                            <a class="dropdown-item d-flex align-items-center" href="javascript:void(0)"
+                               onclick="logout()">
                                 <i class="bi bi-box-arrow-right"></i>
                                 <span>Sign Out</span>
                             </a>

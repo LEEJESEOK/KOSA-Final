@@ -242,6 +242,9 @@ h6 {
     background-color: #fff;
     color: #798eb3;
     padding: 15px;
+    font-size: 30px;
+    font-weight : bold;
+
 }
 
 .card-title {
@@ -265,6 +268,11 @@ h6 {
 .card-img-overlay {
     background-color: rgba(255, 255, 255, 0.6);
 }
+
+/*#report-chart {*/
+/*    text-align: center;*/
+/*    margin: 0 auto;*/
+/*}*/
 
 /* Alerts */
 .alert-heading {
@@ -1373,6 +1381,11 @@ h6 {
     color: #ffffff;
 }
 
+td {
+    text-align: center;
+    vertical-align: middle;
+}
+
 /*--------------------------------------------------------------
 # Popup
 --------------------------------------------------------------*/
@@ -1389,13 +1402,15 @@ h6 {
 
 #popup .col {
     font-size: 90%;
+    border-right: 1px solid;
+    border-width: 1px;
 }
 
 #popup .grade {
     position: relative;
     border: none;
     display: inline-block;
-    padding: 0px 13px;
+    padding: 3px 13px;
     border-radius: 6px;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0);
     text-decoration: none;
@@ -1417,3 +1432,74 @@ h6 {
     background: linear-gradient(-45deg, #363636, #000000);
     color: #ffc400;
 }
+
+#popup .topDiv {
+    margin: 10px auto;
+    display: inline-block;
+    position: relative;
+    page-break-inside : avoid;
+    vertical-align: middle;
+    text-align: center;
+}
+
+#popup .top-image {
+    width: 120px;
+    height: 120px;
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+#popup .top-image .topSpan {
+    font-size: 13px;
+}
+
+#popup .topDiv1 {
+    margin-bottom: 200px;
+}
+
+#popup #report-title {
+    font-size: 50px;
+    font-weight: 700;
+}
+
+
+#canvas-container {
+    width: 100%;
+    text-align:center !important;
+}
+
+canvas {
+    display: inline !important;
+}
+
+h4, h5 {
+    font-weight: 600;
+}
+
+#popup .btn {
+    background-color: #6980aa;
+    border-color: #6980aa;
+}
+#popup .btn:hover {
+    background-color: #6980aa;
+    border-color: #6980aa;
+}
+
+/* Print */
+@media print {
+    * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .btn-primary {
+        display: none;
+    }
+    .page-break {
+        page-break-before: always;
+    }
+}
+
+
+

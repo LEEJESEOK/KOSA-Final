@@ -180,9 +180,9 @@
     <select id="searchOrder" resultType="OrderedListDTO">
         SELECT *
         FROM (
-        SELECT rownum as rn, id, zipcode, address1, address2, receiver, tel, used_point, user_email,
-        total_price, "DATE", status, delivery_msg, pay_type, order_id
-        FROM (SELECT * FROM ordered_list ORDER BY id DESC)
+            SELECT rownum as rn, id, zipcode, address1, address2, receiver, tel, used_point, user_email,
+                   total_price, "DATE", status, delivery_msg, pay_type, order_id
+            FROM (SELECT * FROM ordered_list ORDER BY "DATE" DESC)
         <where>
             <!-- 주문 필터링 -->
             <if test="order_keyword != null">
