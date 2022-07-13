@@ -51,10 +51,6 @@
                             var firstImageTag = $('#imageDiv').children('ul:eq(0)');
                             firstImageTag.show();
 
-//                            $('#imgUri').val(firstImageTag.children('img').attr("src"));
-                            var cStr = $('#imageDiv').children('ul:eq(0)').attr('id').toString().split('_');
-                            $('#colorNameVal').val(cStr[1]);
-
                             //전체 상품평 호출
                             let param = { "pageNum": 1, "amount": amount };
                             getProductReview(param);
@@ -1072,13 +1068,28 @@
                 $('#amount1').val(amount);
                 $('#pPrice').val(p_price);
 
+                if(typeof pcolor == "undefined" || pcolor == null || pcolor === ""){
+                    alert("컬러를 선택해 주어야 합니다.");
+                    return;
+                }
+
+                if(typeof psize == "undefined" || psize == null || psize === ""){
+                    alert("사이즈를 선택해 주어야 합니다.");
+                    return;
+                }
+
+                if(typeof amount == "undefined" || amount == null || amount === ""){
+                    alert("수량을 선택해 주어야 합니다.");
+                    return;
+                }
+
                 $('#addToCartForm').submit();
             }
 
             //장바구니 담기 Ajax
             function addToCart() {
                 const pid = productId;
-                const p_color = $('#colorNameVal').val();
+                var p_color = $('#colorNameVal').val();
                 const p_size = $('#sizeVal').val();
                 const amount = $("#txtqty").val();
                 var getLoginUserEmail2 = $("#userEmail").val();
@@ -1090,11 +1101,23 @@
                     return;
                 }
 
+                if(typeof p_color == "undefined" || p_color == null || p_color === ""){
+                    alert("컬러를 선택해 주어야 합니다.");
+                    return;
+                }
+
+                if(typeof p_size == "undefined" || p_size == null || p_size === ""){
+                    alert("사이즈를 선택해 주어야 합니다.");
+                    return;
+                }
+
+                if(typeof amount == "undefined" || amount == null || amount === ""){
+                    alert("수량을 선택해 주어야 합니다.");
+                    return;
+                }
+
                 const csrf_token = "[[${_csrf.token}]]";
                 const csrf_header = "[[${_csrf.headerName}]]";
-
-                console.log("pcolor : " + p_color);
-                console.log("psize : " + p_size);
 
                 const data = {
                     pid: pid,

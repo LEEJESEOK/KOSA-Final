@@ -37,6 +37,30 @@
     ]]>
   </select>
 
+  <select id="getProductReviewByProductIdAndImg" resultMap="ProductReviewMap">
+    SELECT *
+    FROM (
+      SELECT ROWNUM as rn, r.*
+      FROM TABLE(SF_REVIEW_SELECT_GET(#{productId})) r
+      WHERE r.IMAGE_URI is not null
+    <![CDATA[
+      )
+    WHERE rn BETWEEN ((#{pageNum} - 1) * #{amount} + 1) AND (#{pageNum} * #{amount})
+    ]]>
+  </select>
+
+  <select id="getProductReviewByProductIdAndText" resultMap="ProductReviewMap">
+    SELECT *
+    FROM (
+      SELECT ROWNUM as rn, r.*
+      FROM TABLE(SF_REVIEW_SELECT_GET(#{productId})) r
+      WHERE r.IMAGE_URI is null
+    <![CDATA[
+      )
+    WHERE rn BETWEEN ((#{pageNum} - 1) * #{amount} + 1) AND (#{pageNum} * #{amount})
+    ]]>
+  </select>
+
   <select id="getProductReviewAll" resultMap="ProductReviewMap">
     SELECT *
     FROM TABLE(SF_REVIEW_SELECT_GET(#{productId}))

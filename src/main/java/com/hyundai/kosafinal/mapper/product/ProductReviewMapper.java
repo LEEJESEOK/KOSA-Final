@@ -11,6 +11,10 @@ public interface ProductReviewMapper {
 
   List<ProductReviewDTO> getProductReviewByProductId(SelectProductReviewCriteria selectProductReviewCriteria);
 
+  List<ProductReviewDTO> getProductReviewByProductIdAndImg(SelectProductReviewCriteria selectProductReviewCriteria);
+
+  List<ProductReviewDTO> getProductReviewByProductIdAndText(SelectProductReviewCriteria selectProductReviewCriteria);
+
   List<ProductReviewDTO> getProductReviewAll(@Param("productId") String productId);
 
   void insertProductReview(ProductReviewDTO productReviewDTO);

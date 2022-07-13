@@ -86,14 +86,16 @@ public class ProductReviewController {
         selectProductReviewCriteria.setProductId(productId);
         int reviewCnt = productReviewService.getProductReviewCountByIdAndImg(selectProductReviewCriteria);
 
-        List<ProductReviewDTO> list = productReviewService.getProductReviewByProductId(selectProductReviewCriteria);
+        List<ProductReviewDTO> list = productReviewService.getProductReviewByProductIdAndImg(selectProductReviewCriteria);
         List<ProductReviewDTO> imageReviewList = new ArrayList<>();
+
         for (ProductReviewDTO p : list) {
 
             //사용자 등급 조회
             String grade = changUserGradeForm(memberService.findGrade(p.getEmail()));
             p.setGrade(grade);
 
+            System.out.println("일반 DTO : " + p);
             String s1 = p.getEmail().substring(0, 3);
             String s2 = p.getEmail().substring(3).replaceAll("[a-z/A-Z/0-9]", "*");
             p.setEmail(s1 + s2);
@@ -103,6 +105,7 @@ public class ProductReviewController {
             }
             p.setImgURI(S3_BUCKET_ADDRESS + p.getImgURI());
             imageReviewList.add(p);
+            System.out.println("이미지 추가 할 수 있는 DTO : "+ p);
         }
 
         PageDTO pageDTO = new PageDTO(selectProductReviewCriteria, reviewCnt);
@@ -121,7 +124,7 @@ public class ProductReviewController {
         selectProductReviewCriteria.setProductId(productId);
         int reviewCnt = productReviewService.getProductReviewCountByIdAndText(selectProductReviewCriteria);
 
-        List<ProductReviewDTO> list = productReviewService.getProductReviewByProductId(selectProductReviewCriteria);
+        List<ProductReviewDTO> list = productReviewService.getProductReviewByProductIdAndText(selectProductReviewCriteria);
         List<ProductReviewDTO> textReviewList = new ArrayList<>();
         for (ProductReviewDTO p : list) {
             //사용자 등급 조회
@@ -271,7 +274,6 @@ public class ProductReviewController {
         conn.setRequestProperty("Accept-Charset", "UTF-8");
         conn.setConnectTimeout(10000);
         conn.setReadTimeout(10000);
-
 
         //데이터 전송
         BufferedWriter bWriter = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
