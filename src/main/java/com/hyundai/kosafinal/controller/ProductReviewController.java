@@ -237,11 +237,11 @@ public class ProductReviewController {
                 productReviewDTO.setSentiment_percent(sentiment_percent * 100);
                 productReviewDTO.setSentiment_type("긍정");
             }
-            else if(sentiment_percent>0.5 && sentiment_percent<0.75) {
+            else if(sentiment_percent>0.2 && sentiment_percent<0.75) {
                 productReviewDTO.setSentiment_percent(sentiment_percent * 100);
                 productReviewDTO.setSentiment_type("보통");
             }
-            else if(sentiment_percent<0.5) {
+            else if(sentiment_percent<0.2) {
                 productReviewDTO.setSentiment_percent((1 - sentiment_percent) * 100);
                 productReviewDTO.setSentiment_type("부정");
             }
@@ -309,11 +309,11 @@ public class ProductReviewController {
             productReviewDTO.setSentiment_percent(sentiment_percent * 100);
             productReviewDTO.setSentiment_type("긍정");
         }
-        else if(sentiment_percent>0.5 && sentiment_percent<0.75) {
+        else if(sentiment_percent>0.2 && sentiment_percent<0.75) {
             productReviewDTO.setSentiment_percent(sentiment_percent * 100);
             productReviewDTO.setSentiment_type("보통");
         }
-        else if(sentiment_percent<0.5) {
+        else if(sentiment_percent<0.2) {
             productReviewDTO.setSentiment_percent((1 - sentiment_percent) * 100);
             productReviewDTO.setSentiment_type("부정");
         }
