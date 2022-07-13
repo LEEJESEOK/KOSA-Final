@@ -10,6 +10,10 @@ public interface ProductReviewService {
 
    List<ProductReviewDTO> getProductReviewByProductId(SelectProductReviewCriteria selectProductReviewCriteria);
 
+   List<ProductReviewDTO> getProductReviewByProductIdAndImg(SelectProductReviewCriteria selectProductReviewCriteria);
+
+   List<ProductReviewDTO> getProductReviewByProductIdAndText(SelectProductReviewCriteria selectProductReviewCriteria);
+
    List<ProductReviewDTO> getProductReviewAllList(String productId);
 
    void saveProductReview(ProductReviewDTO productReviewDTO, MultipartFile imgFile);

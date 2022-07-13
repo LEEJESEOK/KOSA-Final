@@ -37,6 +37,16 @@ public class ProductReviewServiceImpl implements ProductReviewService {
   }
 
   @Override
+  public List<ProductReviewDTO> getProductReviewByProductIdAndImg(SelectProductReviewCriteria selectProductReviewCriteria) {
+    return productReviewMapper.getProductReviewByProductIdAndImg(selectProductReviewCriteria);
+  }
+
+  @Override
+  public List<ProductReviewDTO> getProductReviewByProductIdAndText(SelectProductReviewCriteria selectProductReviewCriteria) {
+    return productReviewMapper.getProductReviewByProductIdAndText(selectProductReviewCriteria);
+  }
+
+  @Override
   public List<ProductReviewDTO> getProductReviewAllList(String productId) {
     return productReviewMapper.getProductReviewAll(productId);
   }
