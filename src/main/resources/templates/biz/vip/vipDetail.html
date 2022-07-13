@@ -158,6 +158,16 @@
                     }
 
                     new Chart($("#orderedBrandChart"), orderedBrandChartConfig)
+
+                    // TOP3
+                    // 역순으로 정렬
+                    let arr = Object.entries(brandCount);
+                    arr.sort(((a, b) => b[1] - a[1]));
+
+                    let idx = 0;
+                    for(let i = 0; i < 3; i++) {
+                        $("#orderedBrandTop" + (i+1)).text(arr[i][0]);
+                    }
                 },
                 error: function (request, status, error) {
                     ajaxError(request, status, error);
@@ -192,6 +202,13 @@
                         borderColor.push(`rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`);
                     });
 
+                    Object.values(smallCategoryCount).forEach((brand, idx) => {
+                        console.log(idx + ": " + brand);
+                    });
+
+                    Object.keys(smallCategoryCount).forEach((brand, idx) => {
+                        console.log(idx + ": " + brand);
+                    });
 
                     const orderedCategoryChartConfig = {
                         type: 'bar',
@@ -220,6 +237,16 @@
                     }
 
                     new Chart($("#orderedCategoryChart"), orderedCategoryChartConfig)
+
+                    // TOP3
+                    // 역순으로 정렬
+                    let arr = Object.entries(smallCategoryCount);
+                    arr.sort(((a, b) => b[1] - a[1]));
+
+                    let idx = 0;
+                    for(let i = 0; i < 3; i++) {
+                        $("#orderedCategoryTop" + (i+1)).text(arr[i][0]);
+                    }
                 },
                 error: function (request, status, error) {
                     ajaxError(request, status, error);
@@ -334,14 +361,14 @@
 <th:block layout:fragment="content">
     <section>
         <div class="row mb-2 text-end no-print">
-            <div class="col-12">
+            <div class="col-10">
                 <button class="btn btn-primary m-auto" onclick="printPage()">인쇄하기</button>
             </div>
         </div>
         <div class="content">
             <div class="col-10 ms-auto me-auto">
                 <div class="card p-3 mb-3">
-                    <div class="card-header text-center">제목을 입력해주세요</div>
+                    <div id="report-title" class="card-header text-center">VIP REPORT</div>
                     <div class="card-body p-3">
                         <div class="row justify-content-end">
                             <span class="col-auto">
@@ -350,23 +377,23 @@
                         </div>
                         <div class="row">
                             <div class="col-1"></div>
-                            <div class="col-3 col-auto text-center">
-                                <img th:src="@{/biz/img/sample_profile.jpg}" style="max-width: 150px;">
+                            <div class="col-3 col-auto text-center mr-5">
+                                <img th:src="@{/biz/img/vip-profile.png}" style="max-width: 180px;">
                             </div>
                             <div class="col-8">
                                 <div class="row mb-1">
                                     <div class="row mb-3">
-                                        <div class="col-xl-6">
-                                            <div class="row">
-                                                <div class="col-4 col">
+                                        <div class="col-6">
+                                            <div class="row ">
+                                                <div class="col-4 col border-end border-1">
                                                     이름
                                                 </div>
                                                 <div class="col-8" id="name"></div>
                                             </div>
                                         </div>
-                                        <div class="col-xl-6">
+                                        <div class="col-6">
                                             <div class="row">
-                                                <div class="col-4 col">
+                                                <div class="col-4 col border-end border-1">
                                                     아이디
                                                 </div>
                                                 <div class="col-3" id="id"></div>
@@ -374,17 +401,17 @@
                                         </div>
                                     </div>
                                     <div class="row mb-3">
-                                        <div class="col-xl-6">
+                                        <div class="col-6">
                                             <div class="row">
-                                                <div class="col-4 col">
+                                                <div class="col-4 col border-end border-1">
                                                     성별
                                                 </div>
                                                 <div class="col-8" id="gender"></div>
                                             </div>
                                         </div>
-                                        <div class="col-xl-6">
+                                        <div class="col-6">
                                             <div class="row">
-                                                <div class="col-4 col">
+                                                <div class="col-4 border-end border-1">
                                                     생년월일
                                                 </div>
                                                 <div class="col-8" id="birth"></div>
@@ -392,13 +419,13 @@
                                         </div>
                                     </div>
                                     <div class="row mb-3">
-                                        <div class="col-2 col">
+                                        <div class="col-2 col border-end border-1">
                                             전화번호
                                         </div>
                                         <div class="col-10" id="tel"></div>
                                     </div>
                                     <div class="row mb-3">
-                                        <div class="col-2 col">
+                                        <div class="col-2 col border-end border-1">
                                             주소
                                         </div>
                                         <div class="col-10">
@@ -414,7 +441,7 @@
                                         </div>
                                     </div>
                                     <div class="row mb-3">
-                                        <div class="col-2 col">
+                                        <div class="col-2 col border-end border-1">
                                             가입일
                                         </div>
                                         <div class="col-10" id="signUpDate"></div>
@@ -425,30 +452,62 @@
                     </div>
                 </div>
                 <div class="card p-3">
-                    <div class="card-header">
+                    <div class="card-header text-center">
                         통계
                     </div>
-                    <div class="card-body p-3">
-                        <h5 class="mb-1">최근 구매</h5>
+                    <div class="card-body p-3 text-center" id="report-chart">
+                        <h4 class="mt-3 mb-3">최근 구매</h4>
                         <div class="row mb-5 ">
-                            <div class="col-12 text-center">
+                            <div class="col-12 text-center" id="canvas-container">
                                 <canvas id="orderedPriceChart" style="max-height: 300px; max-width: 80%;"></canvas>
                             </div>
                         </div>
-                        <h5 class="mb-1">구매선호도</h5>
+                        <h4 class="mt-3 mb-3">구매선호도</h4>
                         <div class="row mb-5">
-                            <div class="col-xl-6 mb-1">
-                                <canvas id="orderedCategoryChart" style="max-height: 300px; max-width: 80%;"></canvas>
+                            <div class="col-6 mb-1 text-center">
+                                <h5 class="mt-3 mb-3">카테고리 TOP 3</h5>
+                                <div class="topDiv">
+                                    <div class="top-image" style="background-image: url('/biz/img/top2.png'); background-size:contain;">
+                                        <span id="orderedCategoryTop2" class="topSpan"></span>
+                                    </div>
+                                </div>
+                                <div class="topDiv topDiv1">
+                                    <div class="top-image" style="background-image: url('/biz/img/top1.png'); background-size:contain;">
+                                        <span id="orderedCategoryTop1" class="topSpan"></span>
+                                    </div>
+                                </div>
+                                <div class="topDiv">
+                                    <div class="top-image" style="background-image: url('/biz/img/top3.png'); background-size:contain;">
+                                        <span id="orderedCategoryTop3" class="topSpan"></span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-xl-6 mb-1">
-                                <canvas id="orderedBrandChart" style="max-height: 300px; max-width: 80%;"></canvas>
+                            <div class="col-6 mb-1 text-center">
+                                <h5 class="mt-3 mb-3">브랜드 TOP 3</h5>
+                                <div class="topDiv">
+                                    <div class="top-image" style="background-image: url('/biz/img/top2.png'); background-size:contain;">
+                                        <span id="orderedBrandTop2" class="topSpan"></span>
+                                    </div>
+                                </div>
+                                <div class="topDiv topDiv1">
+                                    <div class="top-image" style="background-image: url('/biz/img/top1.png'); background-size:contain;">
+                                        <span id="orderedBrandTop1" class="topSpan"></span>
+                                    </div>
+                                </div>
+                                <div class="topDiv">
+                                    <div class="top-image" style="background-image: url('/biz/img/top3.png'); background-size:contain;">
+                                        <span id="orderedBrandTop3" class="topSpan"></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <h5 class="mb-1">최근 로그인</h5>
+                        <div class="page-break">
+                        <h5 class="mt-3 mb-3">최근 로그인</h5>
                         <div class="row mb-5">
                             <div class="col-12 text-center">
                                 <canvas id="loginLogChart" style="max-height: 300px; max-width: 80%;"></canvas>
                             </div>
+                        </div>
                         </div>
                     </div>
                 </div>
