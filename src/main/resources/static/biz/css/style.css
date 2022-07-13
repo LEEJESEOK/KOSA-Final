@@ -1389,6 +1389,8 @@ h6 {
 
 #popup .col {
     font-size: 90%;
+    border-right: 1px solid;
+    border-width: 1px;
 }
 
 #popup .grade {

@@ -276,14 +276,6 @@
             });
         });
 
-        function ajaxError(request, status, error) {
-            let message = "code : " + request + "\n";
-            message += "message : " + request.responseText + "\n";
-            message += "error : " + error;
-
-            console.log(message);
-        }
-
         function setMemberInfo(data) {
             $("#id").text(data["email"]);
             $("#name").text(data["name"]);
