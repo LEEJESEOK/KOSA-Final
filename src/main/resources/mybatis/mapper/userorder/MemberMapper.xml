@@ -236,7 +236,7 @@
         FROM (
         SELECT rownum as rn, email, name, gender, birth, tel, address1, address2, zipcode,
         height, weight, point, recent_login_date, sign_up_date, status, grade_id, login_type
-        FROM member
+        FROM (SELECT * FROM member ORDER BY sign_up_date DESC)
         <where>
             <!-- 검색어 필터링 -->
             <if test="keyword != null">

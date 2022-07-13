@@ -100,11 +100,11 @@
             } else {
                 row += "<td class=\"text-center\">" + data.tel + "</td>";
             }
-            if (data.gender == null) {
+            if (data.gender == 0) {
                 row += "<td class=\"text-center\">/</td>";
-            } else if (data.gender == 0) {
+            } else if (data.gender == 1) {
                 row += "<td class=\"text-center\">남</td>";
-            } else {
+            } else if (data.gender == 2) {
                 row += "<td class=\"text-center\">여</td>";
             }
             if (data.birth == null) {
@@ -127,7 +127,7 @@
             } else {
                 row += "<td class=\"text-center\">" + data.recentLoginDate.toString().substring(0, 10) + "</td>";
             }
-            row += "<td className=\"text-center\"></td>";
+            row += "<td className=\"text-center\"><button class=\"btn btn-outline-primary\" id=\"AnalyzeBtn\" type=\"button\">분석</button></td>";
             row += "<td className=\"text-center\"></td>";
 
             tbody.append(row);
