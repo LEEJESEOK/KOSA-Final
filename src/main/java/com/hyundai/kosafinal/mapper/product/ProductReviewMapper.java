@@ -25,4 +25,6 @@ public interface ProductReviewMapper {
 
   int getProductReviewCountByImg(SelectProductReviewCriteria selectProductReviewCriteria);
 
+  List<ProductReviewDTO> selectProductReviewByEmail(String email);
+
 }

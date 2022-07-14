@@ -243,7 +243,7 @@ h6 {
     color: #798eb3;
     padding: 15px;
     font-size: 30px;
-    font-weight : bold;
+    font-weight: bold;
 
 }
 
@@ -1437,7 +1437,7 @@ td {
     margin: 10px auto;
     display: inline-block;
     position: relative;
-    page-break-inside : avoid;
+    page-break-inside: avoid;
     vertical-align: middle;
     text-align: center;
 }
@@ -1466,7 +1466,7 @@ td {
 
 #canvas-container {
     width: 100%;
-    text-align:center !important;
+    text-align: center !important;
 }
 
 canvas {
@@ -1481,13 +1481,35 @@ h4, h5 {
     background-color: #6980aa;
     border-color: #6980aa;
 }
+
 #popup .btn:hover {
     background-color: #6980aa;
     border-color: #6980aa;
 }
 
+#popup .rate-sentiment {
+    display: inline-block;
+    float: left;
+    height: 25px;
+}
+
+#popup .rate-sentiment#sentiment_positive {
+    background: linear-gradient(-45deg, #33ccff 0%, #3651a7 100%);
+    color: white;
+}
+
+#popup .rate-sentiment#sentiment_normal {
+    background: linear-gradient(-45deg, #9E9E9E 0%, #BDBDBD 100%);
+    color: white;
+}
+
+#popup .rate-sentiment#sentiment_negative {
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #DC143C, #DC143C);
+    color: white;
+}
+
 /* 이탈 예측 분석 로딩바 */
-.loader{
+.loader {
     position: relative;
     width: 150px;
     height: 20px;
@@ -1506,7 +1528,7 @@ h4, h5 {
     border-color: #0a9882;
 }
 
-.loader:before{
+.loader:before {
     content: "";
     position: absolute;
     background-color: #0a9882;
@@ -1516,16 +1538,16 @@ h4, h5 {
     width: 0px;
     z-index: 0;
     opacity: 1;
-    -webkit-transform-origin:  100% 0%;
-    transform-origin:  100% 0% ;
+    -webkit-transform-origin: 100% 0%;
+    transform-origin: 100% 0%;
     -webkit-animation: loader 10s ease-in-out;
     animation: loader 10s ease-in-out;
 }
 
-.loader:after{
+.loader:after {
     content: "Analyzing...";
     color: #0a9882;
-    font-family:  Lato,"Helvetica Neue" ;
+    font-family: Lato, "Helvetica Neue";
     font-weight: 200;
     font-size: 16px;
     position: absolute;
@@ -1536,18 +1558,42 @@ h4, h5 {
     top: 0;
 }
 
-@-webkit-keyframes loader{
-    0%{width: 0px;}
-    70%{width: 100%; opacity: 1;}
-    90%{opacity: 0; width: 100%;}
-    100%{opacity: 0;width: 0px; content: "";}
+@-webkit-keyframes loader {
+    0% {
+        width: 0px;
+    }
+    70% {
+        width: 100%;
+        opacity: 1;
+    }
+    90% {
+        opacity: 0;
+        width: 100%;
+    }
+    100% {
+        opacity: 0;
+        width: 0px;
+        content: "";
+    }
 }
 
-@keyframes loader{
-    0%{width: 0px;}
-    70%{width: 100%; opacity: 1;}
-    90%{opacity: 0; width: 100%;}
-    100%{opacity: 0;width: 0px; content: "";}
+@keyframes loader {
+    0% {
+        width: 0px;
+    }
+    70% {
+        width: 100%;
+        opacity: 1;
+    }
+    90% {
+        opacity: 0;
+        width: 100%;
+    }
+    100% {
+        opacity: 0;
+        width: 0px;
+        content: "";
+    }
 }
 
 
@@ -1561,8 +1607,9 @@ h4, h5 {
     .btn-primary {
         display: none;
     }
+
     .page-break {
-        page-break-before: always;
+        page-break-after: always;
     }
 }
 
