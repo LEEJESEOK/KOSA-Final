@@ -475,6 +475,13 @@
 
         }
 
+        function goDetail() {
+            let id = $('#productModal').find("#modalId").val();
+            let form = $('#detailForm');
+            form.attr('action', '/product/detail/'+id);
+            form.submit();
+        }
+
     </script>
     <section class="section">
         <div class="row">
@@ -765,6 +772,9 @@
 <!--                                            <button type="button" class="btn btn-danger me-auto">-->
 <!--                                                삭제-->
 <!--                                            </button>-->
+                                            <form id="detailForm" method="get" class="me-auto">
+                                                <button type="button" class="btn btn-outline-primary" onclick="goDetail()">상품 상세페이지로 이동</button>
+                                            </form>
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                                 취소
                                             </button>
