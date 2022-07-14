@@ -15,8 +15,8 @@
     <script>
         let id = "[[${id}]]";
 
-        let orderChartDateType = "date";
-        let loginChartDateType = "date";
+        let orderChartDateType = "month";
+        let loginChartDateType = "month";
 
         $().ready(function () {
 
@@ -165,8 +165,8 @@
                     arr.sort(((a, b) => b[1] - a[1]));
 
                     let idx = 0;
-                    for(let i = 0; i < 3; i++) {
-                        $("#orderedBrandTop" + (i+1)).text(arr[i][0]);
+                    for (let i = 0; i < 3; i++) {
+                        $("#orderedBrandTop" + (i + 1)).text(arr[i][0]);
                     }
                 },
                 error: function (request, status, error) {
@@ -244,8 +244,8 @@
                     arr.sort(((a, b) => b[1] - a[1]));
 
                     let idx = 0;
-                    for(let i = 0; i < 3; i++) {
-                        $("#orderedCategoryTop" + (i+1)).text(arr[i][0]);
+                    for (let i = 0; i < 3; i++) {
+                        $("#orderedCategoryTop" + (i + 1)).text(arr[i][0]);
                     }
                 },
                 error: function (request, status, error) {
@@ -386,9 +386,9 @@
                                         <div class="col-6">
                                             <div class="row">
                                                 <div class="col-4 col border-end border-1">
-                                                    아이디
+                                                    성별
                                                 </div>
-                                                <div class="col-3" id="id"></div>
+                                                <div class="col-8" id="gender"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -396,9 +396,9 @@
                                         <div class="col-6">
                                             <div class="row">
                                                 <div class="col-4 col border-end border-1">
-                                                    성별
+                                                    아이디
                                                 </div>
-                                                <div class="col-8" id="gender"></div>
+                                                <div class="col-8" id="id"></div>
                                             </div>
                                         </div>
                                         <div class="col-6">
@@ -411,10 +411,22 @@
                                         </div>
                                     </div>
                                     <div class="row mb-3">
-                                        <div class="col-2 col border-end border-1">
-                                            전화번호
+                                        <div class="col-6">
+                                            <div class="row">
+                                                <div class="col-4 col border-end border-1">
+                                                    전화번호
+                                                </div>
+                                                <div class="col-8" id="tel"></div>
+                                            </div>
                                         </div>
-                                        <div class="col-10" id="tel"></div>
+                                        <div class="col-6">
+                                            <div class="row">
+                                                <div class="col-4 col border-end border-1">
+                                                    이탈 예측
+                                                </div>
+                                                <div class="col-8" id="secession"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-2 col border-end border-1">
@@ -459,17 +471,20 @@
                             <div class="col-6 mb-1 text-center">
                                 <h5 class="mt-3 mb-3">카테고리 TOP 3</h5>
                                 <div class="topDiv">
-                                    <div class="top-image" style="background-image: url('/biz/img/top2.png'); background-size:contain;">
+                                    <div class="top-image"
+                                         style="background-image: url('/biz/img/top2.png'); background-size:contain;">
                                         <span id="orderedCategoryTop2" class="topSpan"></span>
                                     </div>
                                 </div>
                                 <div class="topDiv topDiv1">
-                                    <div class="top-image" style="background-image: url('/biz/img/top1.png'); background-size:contain;">
+                                    <div class="top-image"
+                                         style="background-image: url('/biz/img/top1.png'); background-size:contain;">
                                         <span id="orderedCategoryTop1" class="topSpan"></span>
                                     </div>
                                 </div>
                                 <div class="topDiv">
-                                    <div class="top-image" style="background-image: url('/biz/img/top3.png'); background-size:contain;">
+                                    <div class="top-image"
+                                         style="background-image: url('/biz/img/top3.png'); background-size:contain;">
                                         <span id="orderedCategoryTop3" class="topSpan"></span>
                                     </div>
                                 </div>
@@ -477,29 +492,32 @@
                             <div class="col-6 mb-1 text-center">
                                 <h5 class="mt-3 mb-3">브랜드 TOP 3</h5>
                                 <div class="topDiv">
-                                    <div class="top-image" style="background-image: url('/biz/img/top2.png'); background-size:contain;">
+                                    <div class="top-image"
+                                         style="background-image: url('/biz/img/top2.png'); background-size:contain;">
                                         <span id="orderedBrandTop2" class="topSpan"></span>
                                     </div>
                                 </div>
                                 <div class="topDiv topDiv1">
-                                    <div class="top-image" style="background-image: url('/biz/img/top1.png'); background-size:contain;">
+                                    <div class="top-image"
+                                         style="background-image: url('/biz/img/top1.png'); background-size:contain;">
                                         <span id="orderedBrandTop1" class="topSpan"></span>
                                     </div>
                                 </div>
                                 <div class="topDiv">
-                                    <div class="top-image" style="background-image: url('/biz/img/top3.png'); background-size:contain;">
+                                    <div class="top-image"
+                                         style="background-image: url('/biz/img/top3.png'); background-size:contain;">
                                         <span id="orderedBrandTop3" class="topSpan"></span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="page-break">
-                        <h5 class="mt-3 mb-3">최근 로그인</h5>
-                        <div class="row mb-5">
-                            <div class="col-12 text-center">
-                                <canvas id="loginLogChart" style="max-height: 300px; max-width: 80%;"></canvas>
+                            <h5 class="mt-3 mb-3">최근 로그인</h5>
+                            <div class="row mb-5">
+                                <div class="col-12 text-center">
+                                    <canvas id="loginLogChart" style="max-height: 300px; max-width: 80%;"></canvas>
+                                </div>
                             </div>
-                        </div>
                         </div>
                     </div>
                 </div>
