@@ -294,23 +294,11 @@
                     return;
                 }
 
-                // if ( pwConfirmChk !== "Y") {
-                //     layerAlert("비밀번호가 일치하지 않습니다 ");
-                //     return;
-                // }
-
-
                 if ($("#email").val() != "") {
                     if (emailDuplChk !== "Y") {
                         layerAlert("E-mail 중복확인이 되지 않았습니다.");
                         return;
                     }
-
-                    // var email = $("#email").val()+"@"+$("#emailDomain").val();
-                    // if (!validateEmail(email)) {
-                    //     layerAlert("잘못된 E-mail 형식입니다.");
-                    //     return;
-                    // }
 
                     if (email.length > 50) {
                         layerAlert("E-mail은 최대 50자입니다.");

@@ -78,7 +78,6 @@
 
                 },
                 error: function (request, status, error) {
-                    alert(request + ", " + status + ", " + error);
                 },
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader(csrf_header, csrf_token);

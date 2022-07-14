@@ -146,8 +146,6 @@
                         location.replace("/mypage/reviewInsertComplete");
                     },
                     error: function (request, status, error) {
-                        alert("Ajax 통신 에러 발생");
-                        alert(error);
                     },
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader(csrf_header, csrf_token);
