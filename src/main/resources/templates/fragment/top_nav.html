@@ -23,7 +23,7 @@
 
                 // STAR, THE STAR 일 때만 VIP 라운지 버튼 보이게
                 let status = $(".loginStatus").val();
-                if(status == "1") {
+                if (status == "1") {
                     $.ajax({
                         type: "POST",
                         url: "/member/checkVIP",
@@ -73,17 +73,13 @@
         <div class="top_nav_wrap clearfix">
             <div class="brand_menu brand_menu1903">
                 <ul class="clearfix">
-                    <!-- 선호 브랜드 없음 -->
+
                     <li><span class="on"><a href="/" onclick="GA_Event('공통','탑_네비게이션','HOME')">HOME</a></span>
                     </li>
-                    <!-- 로그인 상태 -->
                     <th:block sec:authorize="hasRole('ADMIN')">
-                    <a href="/biz">
-                        <img src="/images/admin_logo.png" width="20" style="margin-top : 8px" />
-                    </a>
+                        <li><span class="on"><a href="/biz"><strong>Admin</strong></a></span>
+                        </li>
                     </th:block>
-<!--                       -->
-                    <!-- 비로그인 상태 -->
                 </ul>
             </div>
             <div class="gnb_sh_wrap" style="display:none;">
