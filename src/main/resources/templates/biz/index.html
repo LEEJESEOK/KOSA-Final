@@ -138,18 +138,18 @@
             } else {
                 $("#salesCountChangeRate").removeClass();
                 $("#salesCountChangeRate").addClass("text-danger small pt-1 fw-bold");
-                $("#salesCountChangeText").text("decrease");
+                $("#salesCountChangeText").text("감소");
             }
 
             switch (salesCountDateType.toUpperCase()) {
                 case "YEAR":
-                    $("#salesCountDateType").text("| 년");
+                    $("#salesCountDateType").text("| 연간");
                     break;
                 case "MONTH":
-                    $("#salesCountDateType").text("| 월");
+                    $("#salesCountDateType").text("| 월간");
                     break;
                 case "DATE":
-                    $("#salesCountDateType").text("| 일");
+                    $("#salesCountDateType").text("| 일간");
                     break;
             }
         }
@@ -174,13 +174,13 @@
 
             switch (revenueDateType.toUpperCase()) {
                 case "YEAR":
-                    $("#revenueDateType").text("| 년");
+                    $("#revenueDateType").text("| 연간");
                     break;
                 case "MONTH":
-                    $("#revenueDateType").text("| 월");
+                    $("#revenueDateType").text("| 월간");
                     break;
                 case "DATE":
-                    $("#revenueDateType").text("| 일");
+                    $("#revenueDateType").text("| 일간");
                     break;
             }
         }
@@ -205,13 +205,13 @@
 
             switch (customersDateType.toUpperCase()) {
                 case "YEAR":
-                    $("#customersDateType").text("| 년");
+                    $("#customersDateType").text("| 연간");
                     break;
                 case "MONTH":
-                    $("#customersDateType").text("| 월");
+                    $("#customersDateType").text("| 월간");
                     break;
                 case "DATE":
-                    $("#customersDateType").text("| 일");
+                    $("#customersDateType").text("| 일간");
                     break;
             }
         }
@@ -295,11 +295,11 @@
                                         <h6>Filter</h6>
                                     </li>
 
-                                    <li><a class="dropdown-item" href="#" th:value="date">Today</a></li>
+                                    <li><a class="dropdown-item" href="#" th:value="date">일간</a></li>
                                     <th:block th:if="false">
                                         <!-- TODO -->
-                                        <li><a class="dropdown-item" href="#" th:value="month">This Month</a></li>
-                                        <li><a class="dropdown-item" href="#" th:value="year">This Year</a></li>
+                                        <li><a class="dropdown-item" href="#" th:value="month">월간</a></li>
+                                        <li><a class="dropdown-item" href="#" th:value="year">연간</a></li>
                                     </th:block>
                                 </ul>
                             </div>
@@ -335,11 +335,11 @@
                                         <h6>Filter</h6>
                                     </li>
 
-                                    <li><a class="dropdown-item" href="#" th:value="date">Today</a></li>
+                                    <li><a class="dropdown-item" href="#" th:value="date">일간</a></li>
                                     <th:block th:if="false">
                                         <!-- TODO -->
-                                        <li><a class="dropdown-item" href="#" th:value="month">This Month</a></li>
-                                        <li><a class="dropdown-item" href="#" th:value="year">This Year</a></li>
+                                        <li><a class="dropdown-item" href="#" th:value="month">월간</a></li>
+                                        <li><a class="dropdown-item" href="#" th:value="year">연간</a></li>
                                     </th:block>
                                 </ul>
                             </div>
@@ -377,11 +377,11 @@
                                         <h6>Filter</h6>
                                     </li>
 
-                                    <li><a class="dropdown-item" href="#" th:value="date">Today</a></li>
+                                    <li><a class="dropdown-item" href="#" th:value="date">일간</a></li>
                                     <th:block th:if="false">
                                         <!-- TODO -->
-                                        <li><a class="dropdown-item" href="#" th:value="month">This Month</a></li>
-                                        <li><a class="dropdown-item" href="#" th:value="year">This Year</a></li>
+                                        <li><a class="dropdown-item" href="#" th:value="month">월간</a></li>
+                                        <li><a class="dropdown-item" href="#" th:value="year">연간</a></li>
                                     </th:block>
                                 </ul>
                             </div>
@@ -417,16 +417,16 @@
                                         <h6>Filter</h6>
                                     </li>
 
-                                    <li><a class="dropdown-item" href="#" th:value="date">Today</a></li>
+                                    <li><a class="dropdown-item" href="#" th:value="date">일간</a></li>
                                     <th:block th:if="false">
-                                        <li><a class="dropdown-item" href="#" th:value="month">This Month</a></li>
-                                        <li><a class="dropdown-item" href="#" th:value="hour">This Year</a></li>
+                                        <li><a class="dropdown-item" href="#" th:value="month">월간</a></li>
+                                        <li><a class="dropdown-item" href="#" th:value="hour">연간</a></li>
                                     </th:block>
                                 </ul>
                             </div>
 
                             <div class="card-body">
-                                <h5 class="card-title">Reports <span id="chartDateType">| Month</span></h5>
+                                <h5 class="card-title">Reports <span id="chartDateType">| 월간</span></h5>
 
                                 <!-- Line Chart -->
                                 <div id="reportsChart"></div>
