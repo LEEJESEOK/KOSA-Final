@@ -27,7 +27,13 @@
                         var amount = 7;
                         var imageList = {};
                         var productInfo = document.location.href.split("/");
-                        var productId = productInfo[5];
+                        var salesProduct = productInfo[5].toString().split("?");
+                        var productId = salesProduct[0];
+                        // var statusValue = '0';
+                        // if(salesProduct.length() > 1){
+                        //     statusValue = '1';
+                        //     pPrice
+                        // }
 
                         console.log(productInfo);
                         console.log(productId);
@@ -38,6 +44,8 @@
                             var changeValue = spanValue.text();
                             changeValue = "₩" + priceToString(changeValue);
                             spanValue.text(changeValue);
+
+                            //
 
                             //계산 가격 형식 바꾸기
                             var sumPriceValue = $("#sumPrice");
@@ -151,7 +159,6 @@
                                         imageBody.append(imageListTag);
                                     },
                                     error: function (request, status, error) {
-                                        alert("Ajax 통신 에러 발생");
                                     }
                                 });
                             });
@@ -1050,8 +1057,6 @@
                         }
                     },
                     error: function (request, status, error) {
-                        alert("주문 완료 조회 Ajax 통신 에러");
-                        alert(error);
                     }
                 });
             });
@@ -1069,17 +1074,17 @@
                 $('#pPrice').val(p_price);
 
                 if(typeof pcolor == "undefined" || pcolor == null || pcolor === ""){
-                    alert("컬러를 선택해 주어야 합니다.");
+                    // alert("컬러를 선택해 주어야 합니다.");
                     return;
                 }
 
                 if(typeof psize == "undefined" || psize == null || psize === ""){
-                    alert("사이즈를 선택해 주어야 합니다.");
+                    // alert("사이즈를 선택해 주어야 합니다.");
                     return;
                 }
 
                 if(typeof amount == "undefined" || amount == null || amount === ""){
-                    alert("수량을 선택해 주어야 합니다.");
+                    // alert("수량을 선택해 주어야 합니다.");
                     return;
                 }
 
@@ -1102,17 +1107,17 @@
                 }
 
                 if(typeof p_color == "undefined" || p_color == null || p_color === ""){
-                    alert("컬러를 선택해 주어야 합니다.");
+//                    alert("컬러를 선택해 주어야 합니다.");
                     return;
                 }
 
                 if(typeof p_size == "undefined" || p_size == null || p_size === ""){
-                    alert("사이즈를 선택해 주어야 합니다.");
+//                    alert("사이즈를 선택해 주어야 합니다.");
                     return;
                 }
 
                 if(typeof amount == "undefined" || amount == null || amount === ""){
-                    alert("수량을 선택해 주어야 합니다.");
+//                    alert("수량을 선택해 주어야 합니다.");
                     return;
                 }
 
@@ -1141,8 +1146,6 @@
                         location.href = "/cart/cartList";
                     },
                     error: function (request, status, error) {
-                        alert("Ajax 통신 에러 발생");
-                        alert(error);
                     }
                 });
             }
@@ -1201,8 +1204,6 @@
                         location.reload();
                     },
                     error: function (request, status, error) {
-                        alert("Ajax 통신 에러 발생");
-                        alert(error);
                     }
                 });
             }
@@ -1222,7 +1223,6 @@
 
                 $.each(files, function (idx, val) {
                     if ((val.name).match(reg)) {
-                        // alert("해당 파일은 이미지 파일입니다.");
                         reviewFileElement.val(val.name);
                         console.log("파일 이름 : " + val.name);
                     } else {
@@ -1349,7 +1349,7 @@
                         addPaginationImg(param.pageNum, page);
                     },
                     error: function (request, status, error) {
-                        alert("Ajax 통신 에러 발생");
+                        
                     }
                 });
             }
@@ -1443,7 +1443,7 @@
                         addPaginationText(param.pageNum, page);
                     },
                     error: function (request, status, error) {
-                        alert("Ajax 통신 에러 발생");
+                        
                     }
                 });
             }
@@ -1542,7 +1542,7 @@
                         addPagination(param.pageNum, page);
                     },
                     error: function (request, status, error) {
-                        alert("Ajax 통신 에러 발생");
+                        
                     }
                 });
             }
