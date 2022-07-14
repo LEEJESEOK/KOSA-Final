@@ -7,6 +7,7 @@
         let revenue;
         let customers;
 
+        let reportsChart;
         let chartSeries = [];
 
         let salesCountDateType = "month";
@@ -15,43 +16,7 @@
 
         $().ready(function () {
             // 차트
-            chartSeries.length = 3;
-            let reportsChart = new ApexCharts(document.querySelector('#reportsChart'), {
-                series: [{data: []}, {data: []}, {data: []}],
-                chart: {
-                    height: 450,
-                    type: 'area',
-                    toolbar: {
-                        show: false
-                    },
-                },
-                markers: {
-                    size: 4
-                },
-                colors: ['#4154f1', '#2eca6a', '#ff771d'],
-                fill: {
-                    type: "gradient",
-                    gradient: {
-                        shadeIntensity: 1,
-                        opacityFrom: 0.3,
-                        opacityTo: 0.4,
-                        stops: [0, 90, 100]
-                    }
-                },
-                dataLabels: {
-                    enabled: false
-                },
-                stroke: {
-                    curve: 'smooth',
-                    width: 2
-                },
-                tooltip: {
-                    x: {
-                        format: 'dd/MM/yy HH:mm'
-                    },
-                }
-            });
-            reportsChart.render();
+            initReportsChart();
 
             // 구매 횟수
             $.ajax({
@@ -109,7 +74,7 @@
                     setRevenueCard(today, prev);
 
                     let chartData = {};
-                    Object.entries(revenue).forEach((x) => chartData[x[0]]=x[1] * 0.000001);
+                    Object.entries(revenue).forEach((x) => chartData[x[0]] = x[1] * 0.000001);
 
                     chartSeries[1] = ({
                         name: "revenue",
@@ -247,6 +212,47 @@
                     $("#customersDateType").text("| Today");
                     break;
             }
+        }
+
+        function initReportsChart() {
+            // 차트
+            chartSeries.length = 3;
+            reportsChart = new ApexCharts(document.querySelector('#reportsChart'), {
+                series: [{data: []}, {data: []}, {data: []}],
+                chart: {
+                    height: 450,
+                    type: 'area',
+                    toolbar: {
+                        show: false
+                    },
+                },
+                markers: {
+                    size: 4
+                },
+                colors: ['#4154f1', '#2eca6a', '#ff771d'],
+                fill: {
+                    type: "gradient",
+                    gradient: {
+                        shadeIntensity: 1,
+                        opacityFrom: 0.3,
+                        opacityTo: 0.4,
+                        stops: [0, 90, 100]
+                    }
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    curve: 'smooth',
+                    width: 2
+                },
+                tooltip: {
+                    x: {
+                        format: 'dd/MM/yy HH:mm'
+                    },
+                }
+            });
+            reportsChart.render();
         }
 
         function dict2Series(dict) {
