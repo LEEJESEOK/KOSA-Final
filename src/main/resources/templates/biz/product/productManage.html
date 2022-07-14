@@ -70,8 +70,6 @@
                     mediumTag.html("<option selected=''>중분류</option>");
                 },
                 error: function (request, status, error) {
-                    alert("Ajax 통신 에러 발생");
-                    alert(error);
                 }
             });
 
@@ -155,7 +153,6 @@
 
                     },
                     error: function (request, status, error) {
-                        alert(request + ", " + status + ", " + error);
                     },
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader(csrf_header, csrf_token);
@@ -285,8 +282,6 @@
                     addPagination(param.pageNum, page);
                 },
                 error: function (request, status, error) {
-                    alert("Ajax 통신 에러 발생");
-                    alert(error);
                 },
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader(csrf_header, csrf_token);
@@ -400,7 +395,6 @@
 
             $.each(files, function (idx, val) {
                 if ((val.name).match(reg)) {
-                    // alert("해당 파일은 이미지 파일입니다.");
                     console.log("파일 이름 : " + val.name);
                     document.getElementById(imageTag).value = val.name;
                 } else {
@@ -476,8 +470,6 @@
                     location.reload();
                 },
                 error: function (request, status, error) {
-                    alert("Ajax 통신 에러 발생");
-                    alert(error);
                 }
             });
 
@@ -502,6 +494,7 @@
                                     </select>
                                 </div>
                                 <div class="col-6">
+                                    <input type="text" style="display:none;">
                                     <input autofocus class="form-control" id="keyword" type="text">
                                 </div>
                             </div>
