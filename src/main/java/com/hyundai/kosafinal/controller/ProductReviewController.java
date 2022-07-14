@@ -237,11 +237,11 @@ public class ProductReviewController {
                 productReviewDTO.setSentiment_percent(sentiment_percent * 100);
                 productReviewDTO.setSentiment_type("긍정");
             }
-            else if(sentiment_percent>0.2 && sentiment_percent<0.75) {
+            else if(sentiment_percent>0.45 && sentiment_percent<0.75) {
                 productReviewDTO.setSentiment_percent(sentiment_percent * 100);
                 productReviewDTO.setSentiment_type("보통");
             }
-            else if(sentiment_percent<0.2) {
+            else if(sentiment_percent<0.45) {
                 productReviewDTO.setSentiment_percent((1 - sentiment_percent) * 100);
                 productReviewDTO.setSentiment_type("부정");
             }
@@ -298,22 +298,22 @@ public class ProductReviewController {
         JsonNode jsonNode = objectMapper.readTree(stringBuffer.toString());
 
 
-        System.out.println("좆됫다"+stringBuffer.toString());
+
         Map<String, Object> resultMap = objectMapper.treeToValue(jsonNode, Map.class);
 
         double sentiment_percent = (double) resultMap.get("sentiment_percent");
 
-        System.out.println("제석이형" + sentiment_percent);
+        System.out.println("sentiment_percent: " + sentiment_percent);
         // TODO sentiment_percent int로 변경
         if (sentiment_percent > 0.75) {
             productReviewDTO.setSentiment_percent(sentiment_percent * 100);
             productReviewDTO.setSentiment_type("긍정");
         }
-        else if(sentiment_percent>0.2 && sentiment_percent<0.75) {
+        else if(sentiment_percent>0.45 && sentiment_percent<0.75) {
             productReviewDTO.setSentiment_percent(sentiment_percent * 100);
             productReviewDTO.setSentiment_type("보통");
         }
-        else if(sentiment_percent<0.2) {
+        else if(sentiment_percent<0.45) {
             productReviewDTO.setSentiment_percent((1 - sentiment_percent) * 100);
             productReviewDTO.setSentiment_type("부정");
         }
