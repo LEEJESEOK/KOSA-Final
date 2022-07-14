@@ -37,6 +37,30 @@
                 }
             });
 
+            //
+            $.ajax({
+                url: "[(@{/analysis/secession})]",
+                method: "post",
+                data: JSON.stringify({
+                    email: "[[${id}]]"
+                }),
+                dataType: 'json',
+                contentType: "application/json; charset=UTF-8",
+                success: function (response) {
+                    if (response == true) {
+                        $("#secession").text("위험");
+                        $("#secession").addClass("text-danger");
+                    } else {
+                        $("#secession").text("안정");
+                        $("#secession").addClass("text-success");
+                    }
+                },
+                error: function (request, status, error) {
+                    ajaxError(request, status, error)
+                }
+            });
+
+
             // 일자별 구매 통계
             $.ajax({
                 type: "POST",
@@ -353,7 +377,7 @@
 <th:block layout:fragment="content">
     <section>
         <div class="row mb-2 text-end no-print">
-            <div class="col-10">
+            <div class="col-11">
                 <button class="btn btn-primary m-auto" onclick="printPage()">인쇄하기</button>
             </div>
         </div>
