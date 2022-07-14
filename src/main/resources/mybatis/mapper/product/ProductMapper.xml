@@ -244,7 +244,13 @@
 
     <select id="selectLimitedProduct" resultType="LimitedProductDTO">
         <![CDATA[
-            SELECT * FROM limited_product
+            SELECT *
+            FROM (
+                SELECT rownum rn, id, "SIZE", color_id, name, brand, category_large, category_medium, category_small,
+                       detail, price, image1_uri, image2_uri, image3_uri, color_chip_uri, stock_amount, created_at,
+                       updated_at, status
+                FROM limited_product
+                 )
             WHERE rownum < 10
         ]]>
     </select>
