@@ -14,6 +14,8 @@
         let revenueDateType = "month";
         let customersDateType = "month";
 
+        const root = document.querySelector('html');
+
         $().ready(function () {
             // 차트
             initReportsChart();
@@ -233,10 +235,51 @@
                 },
                 xaxis: {
                     type: "datetime",
-                    labels:{
-                        format:'yyyy MM'
+                    labels: {
+                        format: 'yyyy MM'
                     }
                 },
+                yaxis: [
+                    {
+                        axisTicks: {
+                            show: true
+                        },
+                        labels: {
+                            style: {
+                                colors: "#000000"
+                            }
+                        },
+                        title: {
+                            text: "단위(명)",
+                            offsetX: 5,
+                            offsetY: -200,
+                            rotate: 0,
+                            style: {
+                                color: "#000000"
+                            }
+                        }
+                    },
+                    {
+                        opposite: true,
+                        axisTicks: {
+                            show: true
+                        },
+                        labels: {
+                            style: {
+                                colors: "#000000"
+                            }
+                        },
+                        title: {
+                            text: "단위(원)",
+                            offsetX: -45,
+                            offsetY: -200,
+                            rotate: 0,
+                            style: {
+                                color: "#000000"
+                            }
+                        }
+                    }
+                ],
                 markers: {
                     size: 4
                 },
