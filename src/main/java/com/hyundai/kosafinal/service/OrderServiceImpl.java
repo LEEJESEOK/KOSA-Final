@@ -64,16 +64,10 @@ public class OrderServiceImpl implements OrderService {
         return mapper.updateOrderDelivery(id, zipcode, address1, address2, receiver, tel, deliveryMsg);
     }
 
-    // 주문 상태 변경
-    @Override
-    public int updateOrderStatus(String id, String userEmail, int status) {
-        return mapper.updateOrderStatus(id, userEmail, status);
-    }
-
     // 주문 취소
     @Override
-    public int cancelOrder(String id, String userEmail) {
-        return mapper.cancelOrder(id, userEmail);
+    public int cancelOrder(String id) {
+        return mapper.cancelOrder(id);
     }
 
     // 마지막 주문번호 조회
