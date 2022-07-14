@@ -14,6 +14,8 @@
         let revenueDateType = "month";
         let customersDateType = "month";
 
+        const root = document.querySelector('html');
+
         $().ready(function () {
             // 차트
             initReportsChart();
@@ -46,6 +48,7 @@
                         name: "sales",
                         data: dict2Series(sales)
                     });
+
                     reportsChart.updateSeries(chartSeries);
                 },
                 error: function (request, status, error) {
@@ -68,17 +71,18 @@
                     let revenueList = [];
                     Object.keys(revenue).sort().forEach((key) => {
                         revenueList.push(revenue[key])
-                    })
+                    });
+
 
                     let [prev, today] = revenueList.slice(-2);
                     setRevenueCard(today, prev);
 
                     let chartData = {};
-                    Object.entries(revenue).forEach((x) => chartData[x[0]] = x[1] * 0.000001);
+                    Object.entries(revenue).forEach((x) => chartData[x[0]] = Math.round(x[1] * 0.00001));
 
                     chartSeries[1] = ({
                         name: "revenue",
-                        data: dict2Series(chartData)
+                        data: dict2Series(revenue)
                     });
                     reportsChart.updateSeries(chartSeries);
                 },
@@ -136,18 +140,18 @@
             } else {
                 $("#salesCountChangeRate").removeClass();
                 $("#salesCountChangeRate").addClass("text-danger small pt-1 fw-bold");
-                $("#salesCountChangeText").text("decrease");
+                $("#salesCountChangeText").text("감소");
             }
 
             switch (salesCountDateType.toUpperCase()) {
                 case "YEAR":
-                    $("#salesCountDateType").text("| 년");
+                    $("#salesCountDateType").text("| 연간");
                     break;
                 case "MONTH":
-                    $("#salesCountDateType").text("| 월");
+                    $("#salesCountDateType").text("| 월간");
                     break;
                 case "DATE":
-                    $("#salesCountDateType").text("| 일");
+                    $("#salesCountDateType").text("| 일간");
                     break;
             }
         }
@@ -172,13 +176,13 @@
 
             switch (revenueDateType.toUpperCase()) {
                 case "YEAR":
-                    $("#revenueDateType").text("| 년");
+                    $("#revenueDateType").text("| 연간");
                     break;
                 case "MONTH":
-                    $("#revenueDateType").text("| 월");
+                    $("#revenueDateType").text("| 월간");
                     break;
                 case "DATE":
-                    $("#revenueDateType").text("| 일");
+                    $("#revenueDateType").text("| 일간");
                     break;
             }
         }
@@ -203,13 +207,13 @@
 
             switch (customersDateType.toUpperCase()) {
                 case "YEAR":
-                    $("#customersDateType").text("| 년");
+                    $("#customersDateType").text("| 연간");
                     break;
                 case "MONTH":
-                    $("#customersDateType").text("| 월");
+                    $("#customersDateType").text("| 월간");
                     break;
                 case "DATE":
-                    $("#customersDateType").text("| 일");
+                    $("#customersDateType").text("| 일간");
                     break;
             }
         }
@@ -225,7 +229,57 @@
                     toolbar: {
                         show: false
                     },
+                    zoom: {
+                        enabled: false
+                    }
                 },
+                xaxis: {
+                    type: "datetime",
+                    labels: {
+                        format: 'yyyy MM'
+                    }
+                },
+                yaxis: [
+                    {
+                        axisTicks: {
+                            show: true
+                        },
+                        labels: {
+                            style: {
+                                colors: "#000000"
+                            }
+                        },
+                        title: {
+                            text: "단위(명)",
+                            offsetX: 5,
+                            offsetY: -200,
+                            rotate: 0,
+                            style: {
+                                color: "#000000"
+                            }
+                        }
+                    },
+                    {
+                        opposite: true,
+                        axisTicks: {
+                            show: true
+                        },
+                        labels: {
+                            style: {
+                                colors: "#000000"
+                            }
+                        },
+                        title: {
+                            text: "단위(원)",
+                            offsetX: -45,
+                            offsetY: -200,
+                            rotate: 0,
+                            style: {
+                                color: "#000000"
+                            }
+                        }
+                    }
+                ],
                 markers: {
                     size: 4
                 },
@@ -250,6 +304,9 @@
                     x: {
                         format: 'dd/MM/yy HH:mm'
                     },
+                },
+                noData: {
+                    text: 'Loading...'
                 }
             });
             reportsChart.render();
@@ -257,9 +314,8 @@
 
         function dict2Series(dict) {
             let series = [];
-
             Object.keys(dict).sort().forEach((key) => {
-                series.push((dict[key]));
+                series.push([key, dict[key]]);
             });
 
             return series;
@@ -285,11 +341,11 @@
                                         <h6>Filter</h6>
                                     </li>
 
-                                    <li><a class="dropdown-item" href="#" th:value="date">Today</a></li>
+                                    <li><a class="dropdown-item" href="#" th:value="date">일간</a></li>
                                     <th:block th:if="false">
                                         <!-- TODO -->
-                                        <li><a class="dropdown-item" href="#" th:value="month">This Month</a></li>
-                                        <li><a class="dropdown-item" href="#" th:value="year">This Year</a></li>
+                                        <li><a class="dropdown-item" href="#" th:value="month">월간</a></li>
+                                        <li><a class="dropdown-item" href="#" th:value="year">연간</a></li>
                                     </th:block>
                                 </ul>
                             </div>
@@ -325,11 +381,11 @@
                                         <h6>Filter</h6>
                                     </li>
 
-                                    <li><a class="dropdown-item" href="#" th:value="date">Today</a></li>
+                                    <li><a class="dropdown-item" href="#" th:value="date">일간</a></li>
                                     <th:block th:if="false">
                                         <!-- TODO -->
-                                        <li><a class="dropdown-item" href="#" th:value="month">This Month</a></li>
-                                        <li><a class="dropdown-item" href="#" th:value="year">This Year</a></li>
+                                        <li><a class="dropdown-item" href="#" th:value="month">월간</a></li>
+                                        <li><a class="dropdown-item" href="#" th:value="year">연간</a></li>
                                     </th:block>
                                 </ul>
                             </div>
@@ -367,11 +423,11 @@
                                         <h6>Filter</h6>
                                     </li>
 
-                                    <li><a class="dropdown-item" href="#" th:value="date">Today</a></li>
+                                    <li><a class="dropdown-item" href="#" th:value="date">일간</a></li>
                                     <th:block th:if="false">
                                         <!-- TODO -->
-                                        <li><a class="dropdown-item" href="#" th:value="month">This Month</a></li>
-                                        <li><a class="dropdown-item" href="#" th:value="year">This Year</a></li>
+                                        <li><a class="dropdown-item" href="#" th:value="month">월간</a></li>
+                                        <li><a class="dropdown-item" href="#" th:value="year">연간</a></li>
                                     </th:block>
                                 </ul>
                             </div>
@@ -407,16 +463,16 @@
                                         <h6>Filter</h6>
                                     </li>
 
-                                    <li><a class="dropdown-item" href="#" th:value="date">Today</a></li>
+                                    <li><a class="dropdown-item" href="#" th:value="date">일간</a></li>
                                     <th:block th:if="false">
-                                        <li><a class="dropdown-item" href="#" th:value="month">This Month</a></li>
-                                        <li><a class="dropdown-item" href="#" th:value="hour">This Year</a></li>
+                                        <li><a class="dropdown-item" href="#" th:value="month">월간</a></li>
+                                        <li><a class="dropdown-item" href="#" th:value="hour">연간</a></li>
                                     </th:block>
                                 </ul>
                             </div>
 
                             <div class="card-body">
-                                <h5 class="card-title">Reports <span id="chartDateType">/Today</span></h5>
+                                <h5 class="card-title">Reports <span id="chartDateType">| 월간</span></h5>
 
                                 <!-- Line Chart -->
                                 <div id="reportsChart"></div>
