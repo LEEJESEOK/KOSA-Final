@@ -539,7 +539,6 @@
                     window.location.href = "/order/orderComplete?id=" + result;
                 },
                 error: function (request, status, error) {
-                    alert(error);
                 },
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader(csrf_header, csrf_token);
