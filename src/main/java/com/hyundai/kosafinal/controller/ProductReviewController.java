@@ -7,11 +7,12 @@ import com.hyundai.kosafinal.domain.ProductReviewDTO;
 import com.hyundai.kosafinal.domain.SelectProductReviewCriteria;
 import com.hyundai.kosafinal.service.MemberService;
 import com.hyundai.kosafinal.service.ProductReviewService;
-import java.util.HashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -22,6 +23,7 @@ import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,20 +38,14 @@ public class ProductReviewController {
     @Value("${s3.bucket.address}")
     private String S3_BUCKET_ADDRESS;
 
-    public ProductReviewController(
-      ProductReviewService productReviewService,
-      MemberService memberService
-    ) {
+    public ProductReviewController(ProductReviewService productReviewService, MemberService memberService) {
         this.productReviewService = productReviewService;
         this.memberService = memberService;
     }
 
     @PostMapping("/product_review/{productId}")
     @ResponseBody
-    public Map<String, Object> getProductReviewByProductId(
-      @PathVariable("productId") String productId,
-      @RequestBody SelectProductReviewCriteria selectProductReviewCriteria
-      ) {
+    public Map<String, Object> getProductReviewByProductId(@PathVariable("productId") String productId, @RequestBody SelectProductReviewCriteria selectProductReviewCriteria) {
         Map<String, Object> map = new HashMap<>();
         selectProductReviewCriteria.setProductId(productId);
         int reviewCnt = productReviewService.getProductReviewCountById(selectProductReviewCriteria);
@@ -78,10 +74,7 @@ public class ProductReviewController {
 
     @PostMapping("/product_review/{productId}/image")
     @ResponseBody
-    public Map<String, Object> getProductReviewByProductIdAndImage(
-      @PathVariable("productId") String productId,
-      @RequestBody SelectProductReviewCriteria selectProductReviewCriteria
-    ) {
+    public Map<String, Object> getProductReviewByProductIdAndImage(@PathVariable("productId") String productId, @RequestBody SelectProductReviewCriteria selectProductReviewCriteria) {
         Map<String, Object> map = new HashMap<>();
         selectProductReviewCriteria.setProductId(productId);
         int reviewCnt = productReviewService.getProductReviewCountByIdAndImg(selectProductReviewCriteria);
@@ -105,7 +98,7 @@ public class ProductReviewController {
             }
             p.setImgURI(S3_BUCKET_ADDRESS + p.getImgURI());
             imageReviewList.add(p);
-            System.out.println("이미지 추가 할 수 있는 DTO : "+ p);
+            System.out.println("이미지 추가 할 수 있는 DTO : " + p);
         }
 
         PageDTO pageDTO = new PageDTO(selectProductReviewCriteria, reviewCnt);
@@ -116,10 +109,7 @@ public class ProductReviewController {
 
     @PostMapping("/product_review/{productId}/text")
     @ResponseBody
-    public Map<String, Object> getProductReviewByProductIdAndText(
-      @PathVariable("productId") String productId,
-      @RequestBody SelectProductReviewCriteria selectProductReviewCriteria
-    ) {
+    public Map<String, Object> getProductReviewByProductIdAndText(@PathVariable("productId") String productId, @RequestBody SelectProductReviewCriteria selectProductReviewCriteria) {
         Map<String, Object> map = new HashMap<>();
         selectProductReviewCriteria.setProductId(productId);
         int reviewCnt = productReviewService.getProductReviewCountByIdAndText(selectProductReviewCriteria);
@@ -147,10 +137,7 @@ public class ProductReviewController {
     }
 
     @PostMapping("/product_review")
-    public ProductReviewDTO saveProductReview(
-            @RequestBody ProductReviewDTO productReviewDTO,
-            @RequestPart(required = false) MultipartFile imgFile
-    ) throws JSONException, IOException {
+    public ProductReviewDTO saveProductReview(@RequestBody ProductReviewDTO productReviewDTO, @RequestPart(required = false) MultipartFile imgFile) throws JSONException, IOException {
         log.info("리뷰 입력 창 ==========================");
         log.info("리뷰 입력 정보 : " + productReviewDTO.toString());
         log.info("이미지 파일 정보 : " + imgFile.getOriginalFilename());
@@ -161,29 +148,11 @@ public class ProductReviewController {
     }
 
     @PostMapping("/product_review/insert")
-    public ProductReviewDTO sProductReview(
-            MultipartHttpServletRequest request
-    ) throws JSONException, IOException {
+    public ProductReviewDTO sProductReview(MultipartHttpServletRequest request) throws JSONException, IOException {
         log.info("리뷰 입력 창 ==========================");
         log.info("리뷰 입력 정보 : " + request.toString());
         System.out.println("리뷰삽입");
-        ProductReviewDTO productReviewDTO = ProductReviewDTO.builder()
-                .email(request.getParameter("email"))
-                .productId(request.getParameter("productId"))
-                .content(request.getParameter("content"))
-                .rate(Integer.parseInt(request.getParameter("rate")))
-                .age(request.getParameter("age"))
-                .height(request.getParameter("height"))
-                .bodyType(request.getParameter("bodyType"))
-                .editDate(Date.valueOf(LocalDate.now()))
-                .productSize(request.getParameter("productSize"))
-                .productColorId(request.getParameter("productColorId"))
-                .ctryLarge(request.getParameter("ctryLarge"))
-                .ctryMedium(request.getParameter("ctryMedium"))
-                .ctrySmall(request.getParameter("ctrySmall"))
-                .title(request.getParameter("title"))
-                .avgSize(request.getParameter("avgSize"))
-                .build();
+        ProductReviewDTO productReviewDTO = ProductReviewDTO.builder().email(request.getParameter("email")).productId(request.getParameter("productId")).content(request.getParameter("content")).rate(Integer.parseInt(request.getParameter("rate"))).age(request.getParameter("age")).height(request.getParameter("height")).bodyType(request.getParameter("bodyType")).editDate(Date.valueOf(LocalDate.now())).productSize(request.getParameter("productSize")).productColorId(request.getParameter("productColorId")).ctryLarge(request.getParameter("ctryLarge")).ctryMedium(request.getParameter("ctryMedium")).ctrySmall(request.getParameter("ctrySmall")).title(request.getParameter("title")).avgSize(request.getParameter("avgSize")).build();
 
         List<MultipartFile> fileList = new ArrayList<MultipartFile>();
 
@@ -293,10 +262,9 @@ public class ProductReviewController {
             stringBuffer.append(inputLine);
 
         }
-        System.out.println("전송된 결과를 읽어옴" +stringBuffer.toString());
+        System.out.println("전송된 결과를 읽어옴" + stringBuffer.toString());
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(stringBuffer.toString());
-
 
 
         Map<String, Object> resultMap = objectMapper.treeToValue(jsonNode, Map.class);
@@ -326,9 +294,9 @@ public class ProductReviewController {
         return productReviewDTO;
     }
 
-    public String changUserGradeForm(String num){
+    public String changUserGradeForm(String num) {
         String s = "";
-        switch (num){
+        switch (num) {
             case "1":
                 s = "FRIEND";
                 break;
@@ -336,15 +304,50 @@ public class ProductReviewController {
                 s = "CREW";
                 break;
             case "3":
-                s =  "MANIA";
+                s = "MANIA";
                 break;
             case "4":
-                s =  "STAR";
+                s = "STAR";
                 break;
             case "5":
                 s = "THE STAR";
                 break;
         }
         return s;
+    }
+
+    @PostMapping("/product_review/rate/sentiment")
+    public ResponseEntity<Map<String, Object>> getProductReviewSentimentRate(@RequestBody Map<String, Object> requestMap) {
+
+        String id = (String) requestMap.get("id");
+        if (id == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        List<ProductReviewDTO> reviewList = productReviewService.getProductReviewById(id);
+
+        int positive = 0, normal = 0, negative = 0;
+        for (ProductReviewDTO productReview : reviewList) {
+            switch (productReview.getSentiment_type()) {
+                case "긍정":
+                    positive++;
+                    break;
+                case "부정":
+                    negative++;
+                    break;
+                case "보통":
+                    normal++;
+                    break;
+            }
+        }
+
+        Map<String, Integer> sentimentRateMap = new HashMap<>();
+        sentimentRateMap.put("positive", positive);
+        sentimentRateMap.put("normal", normal);
+        sentimentRateMap.put("negative", negative);
+
+
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("data", sentimentRateMap);
+
+        return new ResponseEntity<>(responseMap, HttpStatus.OK);
     }
 }

@@ -37,7 +37,7 @@
                 }
             });
 
-            //
+            // 이탈 예측
             $.ajax({
                 url: "[(@{/analysis/secession})]",
                 method: "post",
@@ -181,7 +181,7 @@
                         }
                     }
 
-                    new Chart($("#orderedBrandChart"), orderedBrandChartConfig)
+                    // new Chart($("#orderedBrandChart"), orderedBrandChartConfig)
 
                     // TOP3
                     // 역순으로 정렬
@@ -189,7 +189,7 @@
                     arr.sort(((a, b) => b[1] - a[1]));
 
                     let idx = 0;
-                    for (let i = 0; i < 3; i++) {
+                    for (let i = 0; i < 3 && i < arr.length; i++) {
                         $("#orderedBrandTop" + (i + 1)).text(arr[i][0]);
                     }
                 },
@@ -226,14 +226,6 @@
                         borderColor.push(`rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`);
                     });
 
-                    Object.values(smallCategoryCount).forEach((brand, idx) => {
-                        console.log(idx + ": " + brand);
-                    });
-
-                    Object.keys(smallCategoryCount).forEach((brand, idx) => {
-                        console.log(idx + ": " + brand);
-                    });
-
                     const orderedCategoryChartConfig = {
                         type: 'bar',
                         data: {
@@ -260,7 +252,7 @@
                         }
                     }
 
-                    new Chart($("#orderedCategoryChart"), orderedCategoryChartConfig)
+                    // new Chart($("#orderedCategoryChart"), orderedCategoryChartConfig)
 
                     // TOP3
                     // 역순으로 정렬
@@ -268,9 +260,28 @@
                     arr.sort(((a, b) => b[1] - a[1]));
 
                     let idx = 0;
-                    for (let i = 0; i < 3; i++) {
+                    for (let i = 0; i < 3 && i < arr.length; i++) {
                         $("#orderedCategoryTop" + (i + 1)).text(arr[i][0]);
                     }
+                },
+                error: function (request, status, error) {
+                    ajaxError(request, status, error);
+                }
+            });
+
+            // 최근 상품평 분석 비율
+            $.ajax({
+                type: "POST",
+                url: "/product_review/rate/sentiment",
+                dataType: "json",
+                data: JSON.stringify({
+                    id: "[[${id}]]"
+                }),
+                contentType: "application/json",
+                success: function (response) {
+                    let {positive, normal, negative} = response["data"];
+
+                    setSentimentRate(positive, normal, negative);
                 },
                 error: function (request, status, error) {
                     ajaxError(request, status, error);
@@ -371,6 +382,18 @@
                 })
             });
             return smallCategoryCount;
+        }
+
+        function setSentimentRate(positive, normal, negative) {
+            const positiveRate = Math.round(positive / (positive + normal + negative) * 100) + "%";
+            const normalRate = Math.round(normal / (positive + normal + negative) * 100) + "%";
+            const negativeRate = Math.round(negative / (positive + normal + negative) * 100) + "%";
+            $("#sentiment_positive").width(positiveRate);
+            $("#sentiment_positive").text(positiveRate);
+            $("#sentiment_normal").width(normalRate);
+            $("#sentiment_normal").text(normalRate);
+            $("#sentiment_negative").width(negativeRate);
+            $("#sentiment_negative").text(negativeRate);
         }
     </script>
 </th:block>
@@ -484,14 +507,17 @@
                         통계
                     </div>
                     <div class="card-body p-3 text-center" id="report-chart">
+                        <!-- 최근 구매 -->
                         <h4 class="mt-3 mb-3">최근 구매</h4>
                         <div class="row mb-5 ">
                             <div class="col-12 text-center" id="canvas-container">
                                 <canvas id="orderedPriceChart" style="max-height: 300px; max-width: 80%;"></canvas>
                             </div>
-                        </div>
+                        </div><!-- end 최근 구매 -->
+                        <!-- 구매 선호도 -->
                         <h4 class="mt-3 mb-3">구매선호도</h4>
                         <div class="row mb-5">
+                            <!-- 카테고리별 3개 브랜드 -->
                             <div class="col-6 mb-1 text-center">
                                 <h5 class="mt-3 mb-3">카테고리 TOP 3</h5>
                                 <div class="topDiv">
@@ -512,7 +538,8 @@
                                         <span id="orderedCategoryTop3" class="topSpan"></span>
                                     </div>
                                 </div>
-                            </div>
+                            </div><!-- end 카테고리별 3개 브랜드 -->
+                            <!-- 브랜드별 3개 브랜드 -->
                             <div class="col-6 mb-1 text-center">
                                 <h5 class="mt-3 mb-3">브랜드 TOP 3</h5>
                                 <div class="topDiv">
@@ -533,16 +560,28 @@
                                         <span id="orderedBrandTop3" class="topSpan"></span>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+                            </div><!-- end 브랜드별 3개 브랜드 -->
+                        </div><!-- end 구매 선호도 -->
+                        <!-- 상품평 감성 분석 -->
                         <div class="page-break">
-                            <h5 class="mt-3 mb-3">최근 로그인</h5>
+                            <h4 class="mt-3 mb-3">상품평 분석</h4>
                             <div class="row mb-5">
-                                <div class="col-12 text-center">
-                                    <canvas id="loginLogChart" style="max-height: 300px; max-width: 80%;"></canvas>
+                                <div class="col-6 p-0" style="margin:0 auto;">
+                                    <div class="rate-sentiment" id="sentiment_positive"></div>
+                                    <div class="rate-sentiment" id="sentiment_normal"></div>
+                                    <div class="rate-sentiment" id="sentiment_negative"></div>
                                 </div>
                             </div>
                         </div>
+                        <!-- end 상품평 분석 비율 -->
+                        <!-- 최근 로그인 -->
+                        <h4 class="mt-3 mb-3">최근 로그인</h4>
+                        <div class="row mb-5">
+                            <div class="col-12 text-center">
+                                <canvas id="loginLogChart" style="max-height: 300px; max-width: 80%;"></canvas>
+                            </div>
+                        </div>
+                        <!-- end 최근 로그인 -->
                     </div>
                 </div>
                 <div class="row mb-3 text-center no-print">

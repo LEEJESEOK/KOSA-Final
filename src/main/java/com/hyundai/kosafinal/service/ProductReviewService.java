@@ -24,4 +24,6 @@ public interface ProductReviewService {
 
    int getProductReviewCountByIdAndText(SelectProductReviewCriteria selectProductReviewCriteria);
 
+   List<ProductReviewDTO> getProductReviewById(String id);
+
 }
