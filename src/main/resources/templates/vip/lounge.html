@@ -238,14 +238,14 @@
 
                 <ul id="special-flters" class="d-flex justify-content-center">
                     <li data-filter="*" class="filter-active">All</li>
-                    <li data-filter=".filter-app">Women</li>
-                    <li data-filter=".filter-card">Men</li>
-                    <li data-filter=".filter-web">ACC</li>
+                    <li data-filter=".filter-app">WOMEN</li>
+                    <li data-filter=".filter-card">MEN</li>
+                    <li data-filter=".filter-web">KIDS</li>
                 </ul>
 
                 <div class="row special-container justify-content-center"
                      style="position: relative; height: 1281.56px;">
-                    <div class="col-lg-4 col-md-6 special-item filter-app">
+                    <div class="col-lg-4 col-md-6 special-item filter-card">
                         <a id="special-link1">
                             <div class="special-img">
                                 <img id="special-img1" src="" class="img-fluid" alt="">
@@ -330,7 +330,7 @@
                         </a>
                     </div>
 
-                    <div class="col-lg-4 col-md-6 special-item filter-app">
+                    <div class="col-lg-4 col-md-6 special-item filter-card">
                         <a id="special-link6">
                             <div class="special-img">
                                 <img id="special-img6" src="" class="img-fluid" alt="">
@@ -347,7 +347,7 @@
                         </a>
                     </div>
 
-                    <div class="col-lg-4 col-md-6 special-item filter-card">
+                    <div class="col-lg-4 col-md-6 special-item filter-app">
                         <a id="special-link7">
                             <div class="special-img">
                                 <img id="special-img7" src="" class="img-fluid" alt="">
@@ -364,7 +364,7 @@
                         </a>
                     </div>
 
-                    <div class="col-lg-4 col-md-6 special-item filter-card">
+                    <div class="col-lg-4 col-md-6 special-item filter-app">
                         <a id="special-link8">
                             <div class="special-img">
                                 <img id="special-img8" src="" class="img-fluid" alt="">
@@ -558,7 +558,6 @@
             var keyword = document.getElementById('keyword').value;
 
             if (!keyword.replace(/^\s+|\s+$/g, '')) {
-                alert('키워드를 입력해주세요!');
                 return false;
             }
 
@@ -579,12 +578,10 @@
 
             } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
 
-                alert('검색 결과가 존재하지 않습니다.');
                 return;
 
             } else if (status === kakao.maps.services.Status.ERROR) {
 
-                alert('검색 결과 중 오류가 발생했습니다.');
                 return;
 
             }

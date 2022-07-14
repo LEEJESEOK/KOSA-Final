@@ -47,7 +47,8 @@ public class VipRestController {
             return null;
         } else {
             String pid  = saleDTO.get(0).getPid();
-            List<ProductDTO> productDTO = productMapper.selectProductDetailById(pid);
+            String pcolor = saleDTO.get(0).getPcolor();
+            List<ProductDTO> productDTO = productMapper.selectProductByIdAndColor(pid, pcolor);
 
             // 해당 상품 컬러 가져오기
             List<ProductDTO> colorList = productMapper.selectColors(pid);

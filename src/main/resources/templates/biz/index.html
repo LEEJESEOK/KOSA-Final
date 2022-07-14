@@ -134,7 +134,7 @@
             if (today >= prev) {
                 $("#salesCountChangeRate").removeClass();
                 $("#salesCountChangeRate").addClass("text-success small pt-1 fw-bold");
-                $("#salesCountChangeText").text("increase");
+                $("#salesCountChangeText").text("증가");
             } else {
                 $("#salesCountChangeRate").removeClass();
                 $("#salesCountChangeRate").addClass("text-danger small pt-1 fw-bold");
@@ -143,13 +143,13 @@
 
             switch (salesCountDateType.toUpperCase()) {
                 case "YEAR":
-                    $("#salesCountDateType").text("| This Year");
+                    $("#salesCountDateType").text("| 년");
                     break;
                 case "MONTH":
-                    $("#salesCountDateType").text("| This Month");
+                    $("#salesCountDateType").text("| 월");
                     break;
                 case "DATE":
-                    $("#salesCountDateType").text("| Today");
+                    $("#salesCountDateType").text("| 일");
                     break;
             }
         }
@@ -165,22 +165,22 @@
             if (today >= prev) {
                 $("#revenueChangeRate").removeClass();
                 $("#revenueChangeRate").addClass("text-success small pt-1 fw-bold");
-                $("#revenueChangeText").text("increase");
+                $("#revenueChangeText").text("증가");
             } else {
                 $("#revenueChangeRate").removeClass();
                 $("#revenueChangeRate").addClass("text-danger small pt-1 fw-bold");
-                $("#revenueChangeText").text("decrease");
+                $("#revenueChangeText").text("감소");
             }
 
             switch (revenueDateType.toUpperCase()) {
                 case "YEAR":
-                    $("#revenueDateType").text("| This Year");
+                    $("#revenueDateType").text("| 년");
                     break;
                 case "MONTH":
-                    $("#revenueDateType").text("| This Month");
+                    $("#revenueDateType").text("| 월");
                     break;
                 case "DATE":
-                    $("#revenueDateType").text("| Today");
+                    $("#revenueDateType").text("| 일");
                     break;
             }
         }
@@ -196,22 +196,22 @@
             if (today >= prev) {
                 $("#customersChangeRate").removeClass();
                 $("#customersChangeRate").addClass("text-success small pt-1 fw-bold");
-                $("#revenueChangeText").text("increase");
+                $("#revenueChangeText").text("증가");
             } else {
                 $("#customersChangeRate").removeClass();
                 $("#customersChangeRate").addClass("text-danger small pt-1 fw-bold");
-                $("#customersChangeText").text("decrease");
+                $("#customersChangeText").text("감소");
             }
 
             switch (customersDateType.toUpperCase()) {
                 case "YEAR":
-                    $("#customersDateType").text("| This Year");
+                    $("#customersDateType").text("| 년");
                     break;
                 case "MONTH":
-                    $("#customersDateType").text("| This Month");
+                    $("#customersDateType").text("| 월");
                     break;
                 case "DATE":
-                    $("#customersDateType").text("| Today");
+                    $("#customersDateType").text("| 일");
                     break;
             }
         }
@@ -305,7 +305,7 @@
                             </div>
 
                             <div class="card-body">
-                                <h5 class="card-title">Sales <span id="salesCountDateType"></span></h5>
+                                <h5 class="card-title">판매 건수 <span id="salesCountDateType"></span></h5>
 
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -345,7 +345,7 @@
                             </div>
 
                             <div class="card-body">
-                                <h5 class="card-title">Revenue <span id="revenueDateType"></span></h5>
+                                <h5 class="card-title">판매 금액 <span id="revenueDateType"></span></h5>
 
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -387,7 +387,7 @@
                             </div>
 
                             <div class="card-body">
-                                <h5 class="card-title">Customers <span id="customersDateType"></span></h5>
+                                <h5 class="card-title">구매자 수 <span id="customersDateType"></span></h5>
 
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
