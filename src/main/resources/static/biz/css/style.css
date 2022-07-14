@@ -1539,8 +1539,18 @@ h4, h5 {
 
 .analysis-td {
     font-weight: 700;
-    padding: 10px;
 }
+
+.analysis-td.danger {
+    color: red;
+    padding: 15px;
+}
+
+.analysis-td.rest {
+    color: #0a9882;
+    padding: 15px;
+}
+
 
 @-webkit-keyframes loader{
     0%{width: 0px;}

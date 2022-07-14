@@ -229,13 +229,13 @@
                         let ani = document.querySelector(".loader");
                         ani.addEventListener("animationend", function(e) {
                             td.text("위험");
-                            td.style.color = "red";
+                            td.addClass("danger");
                         }, false);
                     } else {
                         let ani = document.querySelector(".loader");
                         ani.addEventListener("animationend", function(e) {
                             td.text("안정");
-                            td.style.color = "green";
+                            td.addClass("rest");
                         }, false);
                     }
 
