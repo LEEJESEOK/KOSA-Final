@@ -1376,6 +1376,7 @@ h6 {
 
 .modal-footer {
     border: none;
+    display: flex;
 }
 
 .modal-title {
@@ -1590,6 +1591,11 @@ h4, h5 {
     100%{opacity: 0;width: 0px;}
 }
 
+#detailForm .btn {
+    float: left;
+    text-align: left;
+    margin-right: auto;
+}
 
 
 
@@ -1607,6 +1613,11 @@ h4, h5 {
     .page-break {
         page-break-after: always;
     }
+}
+
+@page {
+    size: auto;
+    margin: 10mm;
 }
 
 
