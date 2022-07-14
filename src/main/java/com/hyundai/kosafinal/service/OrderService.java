@@ -32,11 +32,8 @@ public interface OrderService {
     // 배송정보 변경
     public int updateOrderDelivery(String id, String zipcode, String address1, String address2, String receiver, String tel, String deliveryMsg);
 
-    // 주문 상태 변경
-    public int updateOrderStatus(String id, String userEmail, int status);
-
     // 주문 취소
-    public int cancelOrder(String id, String userEmail);
+    public int cancelOrder(String id);
 
     // 마지막 주문번호 조회
     public int getOrderId();

@@ -24,7 +24,7 @@
                     </div>
 
                     <script type="text/javascript">
-                        var amount = 7;
+                        var amount = 5;
                         var imageList = {};
                         var productInfo = document.location.href.split("/");
                         var salesProduct = productInfo[5].toString().split("?");
@@ -961,6 +961,11 @@
                                 - 마일리지 지급에 대한 상세 내용은 마이페이지&gt;내 상품평 페이지에서 확인 부탁드립니다.<br>
                                 &nbsp;&nbsp;(마일리지 적립은 오프라인 구매 및 간편회원 제외)</p>
                         </div>
+                        <!--로딩바-->
+                        <div id="loading" style="margin-left: 0px; display:none; text-align: center;">
+                            <img src="/images/common/loading.gif">
+                            <p>분석중입니다.</p>
+                        </div>
                         <div class="btnwrap mt40">
                             <input type="button" onclick="popUpCloseInputForm()" id="reviewCancle" value="취소하기"
                                    class="btn wt">
@@ -1150,6 +1155,9 @@
 
             //상품 입력 처리 Ajax
             function reviewInsertForm() {
+                // 로딩바 띄우기
+                $("#loading").show();
+
                 const age = $("#reviewForm [name=reviewAge]").val();
                 const height = $("#reviewForm [name=height]").val();
                 const avgSize = $("#reviewForm [name=enjoySize]").val();

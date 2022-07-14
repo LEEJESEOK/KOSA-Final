@@ -226,19 +226,17 @@
 
 
                     if(result == true) {
-                        // td.append("<div class='analysis-rslt' style='display: none'>위험</div>");
-                        // let ani = document.querySelector(".loader");
-                        // ani.addEventListener("animationend", function(e) {
-                        //     alert("위험");
-                        //     td.querySelector('.loader').content("위험");
-                        // }, false);
+                        let ani = document.querySelector(".loader");
+                        ani.addEventListener("animationend", function(e) {
+                            td.text("위험");
+                            td.style.color = "red";
+                        }, false);
                     } else {
-                        // td.append("<div class='analysis-rslt' style='display: none'>안정</div>");
-                        // let ani = document.querySelector(".loader");
-                        // ani.addEventListener("animationend", function(e) {
-                        //     alert("안정");
-                        //     td.querySelector('.loader').content("안정");
-                        // }, false);
+                        let ani = document.querySelector(".loader");
+                        ani.addEventListener("animationend", function(e) {
+                            td.text("안정");
+                            td.style.color = "green";
+                        }, false);
                     }
 
                 },

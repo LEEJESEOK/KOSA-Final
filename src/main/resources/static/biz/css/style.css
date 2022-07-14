@@ -1303,13 +1303,14 @@ h6 {
 
 .btn-outline-danger {
     color: #fff;
-    background-color: #da9529;
-    border-color: #da9529;
+    background-color: #dc3545;
+    border-color: #dc3545;
 }
 
 .btn-outline-danger:hover {
-    background-color: #ba6519;
-    border-color: #ba6519;
+    background-color: #fff;
+    color: #dc3545;
+    border-color: #dc3545;
 }
 
 .btn-check:focus + .btn-outline-primary,
@@ -1518,12 +1519,12 @@ h4, h5 {
     opacity: 1;
     -webkit-transform-origin:  100% 0%;
     transform-origin:  100% 0% ;
-    -webkit-animation: loader 10s ease-in-out;
-    animation: loader 10s ease-in-out;
+    -webkit-animation: loader 5s ease-in-out;
+    animation: loader 5s ease-in-out;
 }
 
 .loader:after{
-    content: "Analyzing...";
+    /*content: "Analyzing...";*/
     color: #0a9882;
     font-family:  Lato,"Helvetica Neue" ;
     font-weight: 200;
@@ -1536,19 +1537,26 @@ h4, h5 {
     top: 0;
 }
 
+.analysis-td {
+    font-weight: 700;
+    padding: 10px;
+}
+
 @-webkit-keyframes loader{
     0%{width: 0px;}
     70%{width: 100%; opacity: 1;}
     90%{opacity: 0; width: 100%;}
-    100%{opacity: 0;width: 0px; content: "";}
+    100%{opacity: 0;width: 0px;}
 }
 
 @keyframes loader{
     0%{width: 0px;}
     70%{width: 100%; opacity: 1;}
     90%{opacity: 0; width: 100%;}
-    100%{opacity: 0;width: 0px; content: "";}
+    100%{opacity: 0;width: 0px;}
 }
+
+
 
 
 /* Print */
