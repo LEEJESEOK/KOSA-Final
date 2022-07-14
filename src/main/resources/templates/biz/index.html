@@ -74,7 +74,7 @@
                         salesCountList.push(sales[key])
                     })
 
-                    let [today, prev] = salesCountList.slice(-2);
+                    let [prev, today] = salesCountList.slice(-2);
                     setSalesCard(today, prev);
 
                     chartSeries[0] = ({
@@ -108,9 +108,12 @@
                     let [prev, today] = revenueList.slice(-2);
                     setRevenueCard(today, prev);
 
+                    let chartData = {};
+                    Object.entries(revenue).forEach((x) => chartData[x[0]]=x[1] * 0.000001);
+
                     chartSeries[1] = ({
                         name: "revenue",
-                        data: dict2Series(revenue)
+                        data: dict2Series(chartData)
                     });
                     reportsChart.updateSeries(chartSeries);
                 },
