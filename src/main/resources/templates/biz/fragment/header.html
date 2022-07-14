@@ -1,4 +1,4 @@
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <script th:src="@{/js/jquery-1.11.2.min.js}"></script>
 <th:block th:fragment="header">
     <script>
@@ -8,7 +8,7 @@
                 data: [],
                 dataType: "json",
                 contentType: "application/json",
-                success: function() {
+                success: function () {
 
                 }
             });
@@ -191,13 +191,14 @@
                        th:href="@{#}">
                         <!--관리 사용자 이미지-->
                         <img alt="Profile" class="rounded-circle" src="/biz/img/handsomee.png">
-                        <span class="d-none d-md-block dropdown-toggle ps-2" id="name"></span>
+                        <span class="d-none d-md-block dropdown-toggle ps-2" id="name"
+                              sec:authentication="principal.name"></span>
                     </a><!-- End Profile Iamge Icon -->
 
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                         <li class="dropdown-header">
                             <!--관리 사용자 이름 -->
-                            <h6 id="dropdown_name">선임 핸써미</h6>
+                            <h6 id="dropdown_name" sec:authentication="principal.name"></h6>
                             <span>더한섬닷컴</span>
                         </li>
                         <li>
