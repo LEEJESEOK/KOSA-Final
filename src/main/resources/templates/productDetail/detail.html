@@ -914,8 +914,8 @@
                                     <th scope="row">
                                         <strong class="reqd" style="margin-top:6px;">*</strong>
                                         <label style="margin-top:6px;">상품평<br>
-                                            <span class="subtxt_1905">자
-                                            (20자 이상<br>&nbsp;200자 이하)</span>
+                                            <span class="subtxt_1905">
+                                            (20자 이상<br>&nbsp;200자 이하)</span>믿ㄳ
                                         </label>
                                     </th>
                                     <td colspan="3">
@@ -1052,11 +1052,11 @@
                             modal2.style.top = '50%';
                             modal2.style.top = '50%';
                         } else if (results.confirm === 0) {
-                            alert("주문 완료 또는 배송이 완료되지 않았습니다.");
+                            layerAlert("주문 완료 또는 배송이 완료되지 않았습니다.");
                         } else if (results.confirm === 2) {
-                            alert("이미 상품평을 작성하셨습니다.")
+                            layerAlert("이미 상품평을 작성하셨습니다.")
                         } else {
-                            alert("주문 완료후 7일 이내에만 작성이 가능합니다.")
+                            layerAlert("주문 완료후 7일 이내에만 작성이 가능합니다.")
                         }
                     },
                     error: function (request, status, error) {
@@ -1077,17 +1077,17 @@
                 $('#pPrice').val(p_price);
 
                 if(typeof pcolor == "undefined" || pcolor == null || pcolor === ""){
-                    alert("컬러를 선택해 주어야 합니다.");
+                    layerAlert("컬러를 선택해 주어야 합니다.");
                     return;
                 }
 
                 if(typeof psize == "undefined" || psize == null || psize === ""){
-                    alert("사이즈를 선택해 주어야 합니다.");
+                    layerAlert("사이즈를 선택해 주어야 합니다.");
                     return;
                 }
 
                 if(typeof amount == "undefined" || amount == null || amount === ""){
-                    alert("수량을 선택해 주어야 합니다.");
+                    layerAlert("수량을 선택해 주어야 합니다.");
                     return;
                 }
 
@@ -1110,17 +1110,17 @@
                 }
 
                 if(typeof p_color == "undefined" || p_color == null || p_color === ""){
-                    alert("컬러를 선택해 주어야 합니다.");
+                    layerAlert("컬러를 선택해 주어야 합니다.");
                     return;
                 }
 
                 if(typeof p_size == "undefined" || p_size == null || p_size === ""){
-                    alert("사이즈를 선택해 주어야 합니다.");
+                    layerAlert("사이즈를 선택해 주어야 합니다.");
                     return;
                 }
 
                 if(typeof amount == "undefined" || amount == null || amount === ""){
-                    alert("수량을 선택해 주어야 합니다.");
+                    layerAlert("수량을 선택해 주어야 합니다.");
                     return;
                 }
 
@@ -1232,7 +1232,7 @@
                         reviewFileElement.val(val.name);
                         console.log("파일 이름 : " + val.name);
                     } else {
-                        alert("해당 파일은 이미지 파일이 아닙니다.");
+                        layerAlert("해당 파일은 이미지 파일이 아닙니다.");
                         //파일 초기화
                         $("#reviewFile").val("");
                     }

@@ -245,10 +245,13 @@ a {
 }
 
 #timesale-time h2 {
+    font-weight: bold;
     transform: skew(20deg);
 }
 
 #timesale-time h5 {
+    font-weight: bold;
+    font-size: 30px;
     color: #ed1d1d;
     transform: skew(20deg);
 }

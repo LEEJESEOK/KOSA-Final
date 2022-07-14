@@ -1566,11 +1566,13 @@ h4, h5 {
 .analysis-td.danger {
     color: red;
     padding: 15px;
+    font-size: 18px;
 }
 
 .analysis-td.rest {
     color: #0a9882;
     padding: 15px;
+    font-size: 18px;
 }
 
 
