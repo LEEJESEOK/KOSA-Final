@@ -188,7 +188,7 @@
             row += "<td class=\"text-center\">" + data.category + "</td>";
             row += "<td class=\"text-center\" data-bs-toggle=\"modal\" data-bs-target=\"#reviewModal\" data-id='" + data.id + "'>" + data.title + "</td>";
             if (data.status == 0) { // 0이면 답변대기, 1이면 답변완료
-                row += "<td class=\"text-center\" style=\"color: #DA9529; font-weight: bold;\">답변대기</td>";
+                row += "<td class=\"text-center text-primary\" style=\"font-weight: bold;\">답변대기</td>";
             } else {
                 row += "<td class=\"text-center\">답변완료</td>";
             }

@@ -68,14 +68,9 @@
                                         #{deliveryMsg}) }
     </update>
 
-    <!-- 주문 상태 변경 -->
-    <update id="updateOrderStatus" statementType="CALLABLE">
-        { CALL SP_ORDER_UPDATE_STATUS(#{id}, #{userEmail}, #{status}) }
-    </update>
-
     <!-- 주문 취소 -->
     <update id="cancelOrder" statementType="CALLABLE">
-        { CALL SP_ORDER_CANCEL(#{id}, #{userEmail}) }
+        { CALL SP_ORDER_CANCEL(#{id}) }
     </update>
 
     <!-- 주문 재고 체크 -->

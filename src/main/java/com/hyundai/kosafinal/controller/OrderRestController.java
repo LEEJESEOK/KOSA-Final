@@ -158,12 +158,11 @@ public class OrderRestController {
 
     // 주문 취소
     @PostMapping("/cancel")
-    public ResponseEntity<Boolean> cancelOrder(@RequestParam String id, @AuthenticationPrincipal AuthMemberDTO authentication) {
+    public ResponseEntity<Boolean> cancelOrder(@RequestParam String id) {
 
         ResponseEntity<Boolean> entry = null;
-        String userEmail = authentication.getEmail();
-        log.info("주문 취소 : " + id + " " + userEmail);
-        int result = oService.cancelOrder(id, userEmail);
+        log.info("주문 취소 : " + id);
+        int result = oService.cancelOrder(id);
         entry = new ResponseEntity<>(true, HttpStatus.OK);
 
         return entry;
