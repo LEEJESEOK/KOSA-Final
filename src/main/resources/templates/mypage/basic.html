@@ -530,7 +530,6 @@
                                     data: paramDatas,
                                     dataType: "json",
                                     error: function (request, status, error) {
-                                        alert(error);
                                     },
                                     success: function (result) {
 
@@ -548,7 +547,6 @@
                                                 dataType: "json",
                                                 async: false,
                                                 error: function (request, status, error) {
-                                                    alert(error);
                                                 },
                                                 success: function (result) {
                                                     var html = "";
@@ -596,7 +594,6 @@
                                 data: paramDatas,
                                 dataType: "json",
                                 error: function (request, status, error) {
-                                    alert(error)
                                 },
                                 success: function (result) {
 
@@ -624,8 +621,6 @@
                             dataType: "json",
                             cache: false,
                             error: function (request, status, error) {
-                                alert(error);
-                                //console.log( "code:" + request.status+"\n" + "message:" + request.responseText+"\n" + "error:" + error );
                             },
                             success: function (result) {
 
@@ -707,7 +702,6 @@
                             cache: false,
                             async: false,
                             error: function (request, status, error) {
-                                alert(error);
                             },
                             success: function (result) {
                                 if (result.data.entries == null) {

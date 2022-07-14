@@ -103,7 +103,6 @@
 
                 },
                 error: function (request, status, error) {
-                    alert(request + ", " + status + ", " + error);
                 },
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader(csrf_header, csrf_token);
@@ -165,7 +164,6 @@
                     });
                 },
                 error: function (request, status, error) {
-                    alert(request + ", " + status + ", " + error);
                 },
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader(csrf_header, csrf_token);
@@ -252,7 +250,6 @@
                     window.location.reload();
                 },
                 error: function (request, status, error) {
-                    alert(error);
                 },
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader(csrf_header, csrf_token);
