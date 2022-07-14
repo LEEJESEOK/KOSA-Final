@@ -122,12 +122,12 @@
             }
             row += "<td class=\"text-center\">" + data.signUpDate.toString().substring(0, 10) + "</td>";
             if (data.recentLoginDate == null) {
-                row += "<td className=\"text-center\"></td>";
+                row += "<td class=\"text-center\"></td>";
             } else {
                 row += "<td class=\"text-center\">" + data.recentLoginDate.toString().substring(0, 10) + "</td>";
             }
-            row += "<td className=\"text-center\"><button class=\"btn btn-outline-primary\" id=\"AnalyzeBtn\" type=\"button\">분석</button></td>";
-            row += "<td className=\"text-center\"></td>";
+            row += "<td class=\"text-center analysis-td\"><button class=\"btn btn-outline-primary\" id=\"analyzeBtn\" type=\"button\" onclick='setAnalysis(this)' data-email='" + data.email + "'>분석</button></td>";
+            row += "<td class=\"text-center\"></td>";
 
             tbody.append(row);
         }
@@ -169,14 +169,12 @@
                 "pageNum": pageNum, "amount": amount
             };
 
-            // 주문 키워드 검색
             let type = $("#type option:selected").val();
             let keyword = $("#keyword").val();
             if (keyword != "") {
                 param.type = type;
                 param.keyword = keyword;
             }
-            // 주문 키워드 검색
             let grade = $(":input:radio[name=grade]:checked").val();
             if (grade != -1) {
                 param.selected = grade;
@@ -208,6 +206,58 @@
             return inputTAG;
         }
 
+        function setAnalysis(btn) {
+
+            // 분석 결과 받아오기
+            let email = $(btn).data('email');
+            $.ajax({
+                url: "[(@{/analysis/secession})]",
+                method: "post",
+                data: JSON.stringify({
+                    email: email
+                }),
+                dataType: 'json',
+                contentType: "application/json; charset=UTF-8",
+                success: function (result) {
+                    // 로딩바 출력
+                    let td = $(btn).parent();
+                    $(btn).hide();
+                    td.append("<div class=\"loader\"></div>");
+
+
+                    if(result == true) {
+                        // td.append("<div class='analysis-rslt' style='display: none'>위험</div>");
+                        // let ani = document.querySelector(".loader");
+                        // ani.addEventListener("animationend", function(e) {
+                        //     alert("위험");
+                        //     td.querySelector('.loader').content("위험");
+                        // }, false);
+                    } else {
+                        // td.append("<div class='analysis-rslt' style='display: none'>안정</div>");
+                        // let ani = document.querySelector(".loader");
+                        // ani.addEventListener("animationend", function(e) {
+                        //     alert("안정");
+                        //     td.querySelector('.loader').content("안정");
+                        // }, false);
+
+
+
+
+                },
+                error: function (request, status, error) {
+
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(csrf_header, csrf_token);
+                }
+            });
+
+
+
+
+
+        }
+
     </script>
 </th:block>
 <th:block layout:fragment="content">
@@ -216,7 +266,7 @@
             <div class="col-12">
                 <div class="card p-3">
                     <div class="card-body">
-                        <form class="row">
+                        <form class="row" onsubmit="return false">
                             <div class="row mb-3">
                                 <div class="col-2">
                                     <label class="form-label" for="keyword">검색어</label>
@@ -229,6 +279,7 @@
                                     </select>
                                 </div>
                                 <div class="col-8">
+                                    <input type="text" style="display:none;">
                                     <input autofocus class="form-control" id="keyword" type="text">
                                 </div>
                             </div>

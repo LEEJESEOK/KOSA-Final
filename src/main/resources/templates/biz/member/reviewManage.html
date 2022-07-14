@@ -106,6 +106,7 @@
                 contentType: "application/json; charset=UTF-8",
                 success: function (data) {
                     $('#reviewModal').modal('hide');
+                    window.location.reload();
                 },
                 error: function (request, status, error) {
                 },
@@ -280,6 +281,7 @@
                                     </select>
                                 </div>
                                 <div class="col-7">
+                                    <input type="text" style="display:none;">
                                     <input class="form-control" type="text" id="reviewKeyword" autofocus>
                                 </div>
                             </div>
