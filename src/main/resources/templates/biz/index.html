@@ -46,6 +46,7 @@
                         name: "sales",
                         data: dict2Series(sales)
                     });
+
                     reportsChart.updateSeries(chartSeries);
                 },
                 error: function (request, status, error) {
@@ -68,17 +69,18 @@
                     let revenueList = [];
                     Object.keys(revenue).sort().forEach((key) => {
                         revenueList.push(revenue[key])
-                    })
+                    });
+
 
                     let [prev, today] = revenueList.slice(-2);
                     setRevenueCard(today, prev);
 
                     let chartData = {};
-                    Object.entries(revenue).forEach((x) => chartData[x[0]] = x[1] * 0.000001);
+                    Object.entries(revenue).forEach((x) => chartData[x[0]] = Math.round(x[1] * 0.00001));
 
                     chartSeries[1] = ({
                         name: "revenue",
-                        data: dict2Series(chartData)
+                        data: dict2Series(revenue)
                     });
                     reportsChart.updateSeries(chartSeries);
                 },
@@ -225,6 +227,12 @@
                     toolbar: {
                         show: false
                     },
+                    zoom: {
+                        enabled: false
+                    }
+                },
+                xaxis: {
+                    type: "datetime"
                 },
                 markers: {
                     size: 4
@@ -250,6 +258,9 @@
                     x: {
                         format: 'dd/MM/yy HH:mm'
                     },
+                },
+                noData: {
+                    text: 'Loading...'
                 }
             });
             reportsChart.render();
@@ -257,9 +268,8 @@
 
         function dict2Series(dict) {
             let series = [];
-
             Object.keys(dict).sort().forEach((key) => {
-                series.push((dict[key]));
+                series.push([key, dict[key]]);
             });
 
             return series;
@@ -416,7 +426,7 @@
                             </div>
 
                             <div class="card-body">
-                                <h5 class="card-title">Reports <span id="chartDateType">/Today</span></h5>
+                                <h5 class="card-title">Reports <span id="chartDateType">| Month</span></h5>
 
                                 <!-- Line Chart -->
                                 <div id="reportsChart"></div>
